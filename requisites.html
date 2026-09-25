@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="darkreader-lock">
+<script>try{var t=localStorage.getItem('vdp_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1d1f22">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/fira-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/fira-sans-condensed-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/fira-sans-700.woff2" as="font" type="font/woff2" crossorigin>
+<title>Реквизиты — Всё для Победы</title>
+<meta name="description" content="Банковские реквизиты фонда «Народный Фронт. Всё для Победы» для перевода пожертвования.">
+<link rel="stylesheet" href="css/style.css?v=416a351b4c">
+<style>
+  .req-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-l); margin-bottom: 16px; overflow: clip; }
+  .req-card > h3 { margin: 0; padding: 14px 20px; font-family: var(--cond); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); font-weight: 700; }
+  ul.req-rows { list-style: none; margin: 0; padding: 0; }
+  .req-row { display: grid; grid-template-columns: 1fr auto; column-gap: 10px; row-gap: 3px; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--line); }
+  .req-row:last-child { border-bottom: 0; }
+  .req-label { grid-column: 1; font-size: 12px; color: var(--muted); }
+  .req-value { grid-column: 1; font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }
+  .req-value.num { font-family: var(--cond); font-weight: 600; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+  .req-copy { grid-column: 2; grid-row: 1 / span 2; width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; border: 1px solid var(--line); background: transparent; color: var(--muted); display: grid; place-items: center; cursor: pointer; }
+  .req-copy:hover { color: var(--accent); border-color: var(--accent); }
+  .req-copy.done { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .req-purpose { background: var(--accent-soft); }
+  .req-purpose .req-label { color: var(--accent); font-weight: 700; }
+  details.req-card summary { list-style: none; cursor: pointer; padding: 15px 20px; font-weight: 700; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+  details.req-card summary::-webkit-details-marker { display: none; }
+  details.req-card summary::after { content: "+"; font-size: 20px; color: var(--muted); font-weight: 400; }
+  details[open].req-card summary::after { content: "\2212"; }
+  details[open].req-card summary { border-bottom: 1px solid var(--line); }
+  @media (min-width: 560px) {
+    .req-row { grid-template-columns: 220px 1fr auto; row-gap: 0; }
+    .req-label { grid-column: 1; grid-row: 1; }
+    .req-value { grid-column: 2; grid-row: 1; }
+    .req-copy { grid-column: 3; grid-row: 1; }
+  }
+</style>
+</head>
+<body class="funnel-page">
+<div class="demo-ribbon" role="note"><span class="ribbon-text">Демо-макет редизайна: суммы, лента пожертвований и оплата — примеры, платежи не принимаются. <a href="https://pobeda.onf.ru/" rel="noopener">Официальный сайт →</a></span><span class="theme-switch" role="group" aria-label="Тема оформления"><button type="button" data-theme-set="dark" aria-pressed="false"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>Тёмная</button><button type="button" data-theme-set="light" aria-pressed="false"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Светлая</button></span></div>
+
+<div class="funnel-shell">
+  <header class="funnel-header">
+    <div class="container bar">
+      <a class="back-link" href="/">&larr; На главную</a>
+      <a href="/" class="brand" aria-label="Всё для Победы — Народный фронт, на главную"><picture><img class="brand-motto" src="img/logo-vdp.svg" width="155" height="79" alt=""></picture><img class="brand-title" src="img/logo-portal.svg" width="190" height="69" alt=""></a>
+    </div>
+  </header>
+
+  <main class="funnel-main">
+    <div class="funnel-wrap is-wide">
+      <p class="eyebrow">Реквизиты</p>
+      <h1 class="h-display" style="font-size:24px;margin-bottom:8px">Реквизиты для пожертвования</h1>
+      <p style="color:var(--muted);font-size:14.5px;margin:0 0 22px">Нажмите на значок рядом с полем, чтобы скопировать его значение.</p>
+
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px">
+        <button class="btn btn-primary" data-copy-all>Скопировать все реквизиты</button>
+        <a class="btn btn-ghost" href="https://storage.onf.ru/doc/pobeda/docs/rekvisity.pdf" target="_blank" rel="noopener">Открыть карточку (PDF)</a>
+      </div>
+
+      <div class="req-card">
+        <h3>Для перевода</h3>
+        <ul class="req-rows">
+          <li class="req-row" data-copy-row data-label="Получатель" data-copy="Благотворительный фонд «Народный Фронт. Всё для Победы»">
+            <span class="req-label">Получатель</span>
+            <span class="req-value">Благотворительный фонд «Народный Фронт. Всё для Победы»</span>
+            <button class="req-copy" data-copy="Благотворительный фонд «Народный Фронт. Всё для Победы»" aria-label="Скопировать получателя">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="Расчётный счёт" data-copy="40703810700000003587">
+            <span class="req-label">Расчётный счёт</span>
+            <span class="req-value num">40703810700000003587</span>
+            <button class="req-copy" data-copy="40703810700000003587" aria-label="Скопировать расчётный счёт">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="Банк" data-copy="ПАО «ПРОМСВЯЗЬБАНК», г. Москва">
+            <span class="req-label">Банк</span>
+            <span class="req-value">ПАО «ПРОМСВЯЗЬБАНК», г. Москва</span>
+            <button class="req-copy" data-copy="ПАО «ПРОМСВЯЗЬБАНК», г. Москва" aria-label="Скопировать банк">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="БИК" data-copy="044525555">
+            <span class="req-label">БИК</span>
+            <span class="req-value num">044525555</span>
+            <button class="req-copy" data-copy="044525555" aria-label="Скопировать БИК">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="Корр. счёт" data-copy="30101810400000000555">
+            <span class="req-label">Корр. счёт</span>
+            <span class="req-value num">30101810400000000555</span>
+            <button class="req-copy" data-copy="30101810400000000555" aria-label="Скопировать корреспондентский счёт">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="ИНН" data-copy="7729452720">
+            <span class="req-label">ИНН</span>
+            <span class="req-value num">7729452720</span>
+            <button class="req-copy" data-copy="7729452720" aria-label="Скопировать ИНН">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="КПП" data-copy="772901001">
+            <span class="req-label">КПП</span>
+            <span class="req-value num">772901001</span>
+            <button class="req-copy" data-copy="772901001" aria-label="Скопировать КПП">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row req-purpose" data-copy-row data-label="Назначение платежа" data-copy="Благотворительное пожертвование на уставную деятельность">
+            <span class="req-label">Назначение платежа</span>
+            <span class="req-value">Благотворительное пожертвование на уставную деятельность</span>
+            <button class="req-copy" data-copy="Благотворительное пожертвование на уставную деятельность" aria-label="Скопировать назначение платежа">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <details class="req-card">
+        <summary>Юридические данные организации</summary>
+        <ul class="req-rows">
+          <li class="req-row" data-copy-row data-label="Адрес" data-copy="119285, г. Москва, ул. Мосфильмовская, д. 40">
+            <span class="req-label">Юридический и почтовый адрес</span>
+            <span class="req-value">119285, г. Москва, ул. Мосфильмовская, д. 40</span>
+            <button class="req-copy" data-copy="119285, г. Москва, ул. Мосфильмовская, д. 40" aria-label="Скопировать адрес">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="Телефон" data-copy="(495) 981-56-99">
+            <span class="req-label">Телефон</span>
+            <span class="req-value num">(495) 981-56-99</span>
+            <button class="req-copy" data-copy="(495) 981-56-99" aria-label="Скопировать телефон">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="ОГРН" data-copy="1147799011766">
+            <span class="req-label">ОГРН</span>
+            <span class="req-value num">1147799011766</span>
+            <button class="req-copy" data-copy="1147799011766" aria-label="Скопировать ОГРН">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="Дата регистрации" data-copy="25.07.2014, УФНС по г. Москве">
+            <span class="req-label">Дата регистрации</span>
+            <span class="req-value">25.07.2014, УФНС по г. Москве</span>
+            <button class="req-copy" data-copy="25.07.2014, УФНС по г. Москве" aria-label="Скопировать дату регистрации">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="ОКПО" data-copy="33687207">
+            <span class="req-label">ОКПО</span>
+            <span class="req-value num">33687207</span>
+            <button class="req-copy" data-copy="33687207" aria-label="Скопировать ОКПО">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+          <li class="req-row" data-copy-row data-label="ОКАТО" data-copy="45268584000">
+            <span class="req-label">ОКАТО</span>
+            <span class="req-value num">45268584000</span>
+            <button class="req-copy" data-copy="45268584000" aria-label="Скопировать ОКАТО">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+            </button>
+          </li>
+        </ul>
+      </details>
+    </div>
+  </main>
+  <footer class="funnel-footer">
+    <div class="container">
+      <nav aria-label="Документы фонда">
+        <a href="https://storage.onf.ru/doc/pobeda/docs/0BA210C13C4A3E7BD662B317216C9C4B" target="_blank" rel="noopener">Публичная оферта</a>
+        <a href="/documents/terms" target="_blank" rel="noopener">Пользовательское соглашение</a>
+        <a href="/documents/cookies" target="_blank" rel="noopener">Политика cookies</a>
+        <a href="https://storage.onf.ru/doc/pobeda/docs/utsav_vdp.pdf" target="_blank" rel="noopener">Устав фонда</a>
+        <a href="/documents">Все документы</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+
+<div class="toast" data-toast role="status" aria-live="polite" style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:opacity .18s;z-index:60"></div>
+
+<div class="cookie-note" data-cookie hidden role="region" aria-label="Уведомление о cookies"><p><b>Мы ценим вашу конфиденциальность.</b> Пользуясь сайтом, вы соглашаетесь с использованием <a href="/documents/cookies" target="_blank" rel="noopener">cookies</a>.</p><button class="btn btn-primary" type="button" data-cookie-accept>Согласен</button></div>
+<script src="js/site.js?v=18084fa8e2" defer></script>
+</body>
+</html>
