@@ -8,4 +8,3 @@
   Новая статья: добавить .md → `node build.mjs` → commit + push.
 - Форма заявки → `https://api.rebornlab.ru/lead` (служба `reborn-leads` на сервере vpn-nl) → Telegram Нику.
 - Яндекс Метрика: вписать номер счётчика в `SITE.metrikaId` (src/data.mjs) и пересобрать.
-- Старый демо-макет «Всё для Победы» — ветка `archive-pobeda-demo`.
