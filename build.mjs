@@ -7,7 +7,7 @@ import { SITE, PROJECTS, SERVICES, PROBLEMS, MARKET, START_SMALL, JOURNAL_CATEGO
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname)
 const OUT = ROOT
-const GENERATED_DIRS = ['services', 'projects', 'journal', 'about', 'contact', 'assets']
+const GENERATED_DIRS = ['services', 'projects', 'journal', 'about', 'contact', 'privacy', 'consent', 'assets']
 const today = new Date().toISOString().slice(0, 10)
 
 // ---------- helpers ----------
@@ -58,7 +58,7 @@ const NAV = [['/projects/', 'Проекты'], ['/services/', 'Услуги'], [
 
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '' }) {
   const url = SITE.url + canonical
-  const metrika = SITE.metrikaId ? `<script>window.RL_METRIKA=${SITE.metrikaId};(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(${SITE.metrikaId},'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true});</script>` : ''
+  const metrika = SITE.metrikaId ? `<script>window.RL_METRIKA=${SITE.metrikaId};window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=${SITE.metrikaId}','ym');ym(${SITE.metrikaId},'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>` : ''
   return `<!doctype html>
 <html lang="ru">
 <head>
@@ -88,7 +88,7 @@ ${metrika}
 <body>
 <header class="hdr"><div class="wrap">
   ${LOGO}
-  <nav class="nav" aria-label="Основное меню">${NAV.map(([h, t]) => `<a href="${h}"${current === h ? ' aria-current="page"' : ''}>${t}</a>`).join('')}</nav>
+  <nav class="nav" aria-label="Основное меню">${NAV.map(([h, t]) => `<a href="${h}"${current === h ? ' aria-current="page"' : ''}>${t}</a>`).join('')}<a class="nav-cta" href="/contact/" data-goal="cta_menu">Обсудить идею →</a></nav>
   <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
   <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
 </div></header>
@@ -96,10 +96,11 @@ ${metrika}
 ${body}
 </main>
 <footer class="ftr"><div class="wrap">
-  <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p>© ${new Date().getFullYear()} REBORN LAB</p></div>
+  <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p>© ${new Date().getFullYear()} REBORN LAB · <a href="/privacy/">Политика конфиденциальности</a> · <a href="/consent/">Согласие на обработку данных</a></p></div>
   <div><a href="/projects/">Проекты</a><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
-  <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="https://github.com/balibudda" rel="noopener" target="_blank">GitHub</a><a href="/rss.xml">RSS журнала</a></div>
+  <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="https://github.com/balibudda" rel="noopener" target="_blank">GitHub</a><a href="/rss.xml">RSS журнала</a><a href="https://balibudda.github.io/svoya-liniya/" rel="noopener" target="_blank" data-goal="svoya_liniya_footer">Своя линия — свободная сеть</a></div>
 </div></footer>
+<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
 <script src="/assets/main.js" defer></script>
 </body>
 </html>`
@@ -123,12 +124,14 @@ function leadForm(id, label = 'Разобрать задачу') {
   return `<form data-lead id="${id}" novalidate>
     <div class="chips" data-chips>${['Есть идея', 'Нужен сайт', 'Автоматизировать бизнес', 'Нужен AI', 'Нужно продвижение', 'Другая задача'].map((c) => `<button type="button" class="chip">${c}</button>`).join('')}</div>
     <label class="sr" for="${id}-t">Опишите задачу</label>
-    <textarea id="${id}-t" name="text" placeholder="Опишите проблему или идею обычными словами. Например: «заявок много, менеджеры не успевают отвечать»"></textarea>
-    <div class="form-row"><label class="sr" for="${id}-c">Контакт</label><input type="text" id="${id}-c" name="contact" placeholder="Telegram, телефон или email — как с вами связаться" style="flex:1;min-width:220px"></div>
+    <textarea class="ym-disable-keys" id="${id}-t" name="text" placeholder="Опишите проблему или идею обычными словами. Например: «заявок много, менеджеры не успевают отвечать»"></textarea>
+    <div class="form-row"><label class="sr" for="${id}-c">Контакт</label><input class="ym-disable-keys" type="text" id="${id}-c" name="contact" placeholder="Telegram, телефон или email — как с вами связаться" style="flex:1;min-width:220px"></div>
     <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <label class="agree"><input type="checkbox" name="agree" required> <span>Даю <a href="/consent/" target="_blank">согласие на обработку персональных данных</a> и принимаю <a href="/privacy/" target="_blank">политику конфиденциальности</a></span></label>
     <div class="form-row"><button class="btn btn-acc" type="submit" data-label="${label} →">${label} <span class="arrow">→</span></button><a class="btn btn-ghost" href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener" data-goal="telegram">Написать в Telegram</a></div>
     <p class="ok-msg">Получили ✓ Разберём задачу и ответим вам лично.</p>
     <p class="hint">Отвечаем лично. Без спама и обязательств — сначала разбираемся, потом предлагаем.</p>
+    <p class="err-msg">Отметьте согласие на обработку данных — без него мы не можем принять заявку.</p>
   </form>`
 }
 
@@ -180,9 +183,18 @@ const home = shell({
   <div class="grid-proj">
     ${projCard(featured[0], true)}
     ${featured.slice(1).map((p) => projCard(p)).join('\n')}
-    ${projCard(byslug['telegram-subscription'])}
+    ${projCard(byslug['svoya-liniya'])}
   </div>
   <p style="margin-top:26px" class="rv"><a class="btn btn-ghost" href="/projects/">Все проекты <span class="arrow">→</span></a></p>
+</div></section>
+
+<section class="sec" style="padding-top:10px"><div class="wrap">
+  <a class="sl-band rv" href="${byslug['svoya-liniya'].url}" target="_blank" rel="noopener" data-goal="svoya_liniya">
+    <img src="/assets/svoya-liniya-logo.jpg" alt="Своя линия" width="88" height="88" loading="lazy">
+    <div><div class="kicker">Наш сервис · свободная сеть</div><h3>Своя линия — интернет, который <em>просто работает</em></h3>
+      <p>Настраиваем личное стабильное подключение для работы, общения и поездок: телефон, ноутбук, несколько устройств. Частный круг, по рекомендации.</p></div>
+    <span class="card-link">Узнать подробнее <span class="arrow">↗</span></span>
+  </a>
 </div></section>
 
 <section class="sec" style="padding-top:20px"><div class="wrap">
@@ -358,6 +370,62 @@ write('contact/index.html', shell({
   <div style="height:80px"></div>`,
 }))
 
+
+// ---------- LEGAL (152-ФЗ) ----------
+const OPERATOR = SITE.operator ? `${SITE.operator}${SITE.operatorInn ? ', ИНН ' + SITE.operatorInn : ''} (владелец сайта rebornlab.ru)` : 'владелец сайта rebornlab.ru (REBORN LAB)'
+const LEGAL_DATE = '05.10.2026'
+write('privacy/index.html', shell({
+  title: 'Политика конфиденциальности — REBORN LAB',
+  description: 'Как REBORN LAB обрабатывает и защищает персональные данные посетителей сайта rebornlab.ru.',
+  canonical: '/privacy/',
+  jsonLd: [crumbsLd([['Главная', '/'], ['Политика конфиденциальности', '/privacy/']])],
+  body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Политика конфиденциальности', '']])}<h1>Политика <span style="color:var(--acc)">конфиденциальности</span></h1><p class="sub">Редакция от ${LEGAL_DATE}. Политика в отношении обработки персональных данных по Федеральному закону № 152-ФЗ «О персональных данных».</p></div>
+  <div class="wrap"><div class="prose">
+  <h2>1. Кто обрабатывает данные</h2>
+  <p>Оператор персональных данных — ${esc(OPERATOR)}. Связаться по любым вопросам о данных: Telegram <a href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener">@${SITE.telegram}</a>.</p>
+  <h2>2. Какие данные мы получаем</h2>
+  <ul><li><strong>Из формы заявки:</strong> контакт, который вы указали (Telegram, телефон или email), текст задачи и выбранные темы.</li>
+  <li><strong>Технические данные:</strong> IP-адрес, адрес страницы, с которой отправлена заявка, дата и время — для защиты от спама и злоупотреблений.</li>
+  <li><strong>Статистика посещений:</strong> cookie и данные о посещении через сервис Яндекс Метрика (ООО «Яндекс», Россия): просмотренные страницы, источник перехода, тип устройства, а также запись действий на странице (Вебвизор: движения мыши, клики, прокрутка; содержимое полей форм не записывается). Подключается только после того, как вы нажали «Согласен».</li></ul>
+  <p>Мы не просим и не обрабатываем специальные категории данных (здоровье, убеждения и т. п.) и биометрию. Пожалуйста, не указывайте их в тексте заявки.</p>
+  <h2>3. Зачем</h2>
+  <ul><li>чтобы ответить на вашу заявку, обсудить задачу и подготовить предложение;</li><li>чтобы защищать сайт от спама и атак;</li><li>чтобы понимать, какие страницы полезны, и улучшать сайт (статистика).</li></ul>
+  <p>Мы не продаём данные, не передаём их для рекламы и не делаем рассылок без вашей просьбы.</p>
+  <h2>4. Основание</h2>
+  <p>Ваше согласие (п. 1 ч. 1 ст. 6 152-ФЗ), которое вы даёте, отмечая галочку в форме, а для cookie — нажимая «Согласен». <a href="/consent/">Текст согласия</a>.</p>
+  <h2>5. Как и где хранятся данные</h2>
+  <p>Заявка передаётся по защищённому соединению (HTTPS), сохраняется на сервере оператора и пересылается оператору в мессенджер Telegram для ответа. Доступ к заявкам есть только у оператора. Сайт размещён на сервисе GitHub Pages, который ведёт технические журналы запросов (IP-адрес, время).</p>
+  <p>Сервер, сервис GitHub Pages и мессенджер Telegram находятся за пределами Российской Федерации, поэтому обработка включает трансграничную передачу данных. Отправляя заявку с согласием, вы соглашаетесь и на эту передачу.</p>
+  <h2>6. Сколько храним</h2>
+  <p>Заявки — до достижения цели (обсуждение задачи и сотрудничество), но не дольше 3 лет с момента последнего общения, либо до отзыва согласия. Технические журналы — не дольше 12 месяцев. После этого данные удаляются.</p>
+  <h2>7. Ваши права</h2>
+  <p>Вы можете узнать, какие ваши данные у нас есть, попросить исправить или удалить их, отозвать согласие. Напишите в Telegram <a href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener">@${SITE.telegram}</a> — ответим и выполним запрос в течение 10 рабочих дней. Вы также вправе обратиться в Роскомнадзор.</p>
+  <h2>8. Cookie</h2>
+  <p>Cookie нужны для статистики посещений (Яндекс Метрика, включая Вебвизор). Они не подключаются, пока вы не нажали «Согласен». Отключить cookie можно в настройках браузера — сайт продолжит работать.</p>
+  <h2>9. Изменения</h2>
+  <p>Политика может обновляться; актуальная редакция всегда на этой странице.</p>
+  </div></div><div style="height:80px"></div>`,
+}))
+write('consent/index.html', shell({
+  title: 'Согласие на обработку персональных данных — REBORN LAB',
+  description: 'Текст согласия на обработку персональных данных при отправке заявки на сайте rebornlab.ru.',
+  canonical: '/consent/',
+  jsonLd: [crumbsLd([['Главная', '/'], ['Согласие на обработку данных', '/consent/']])],
+  body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Согласие на обработку данных', '']])}<h1>Согласие на обработку <span style="color:var(--acc)">персональных данных</span></h1><p class="sub">Редакция от ${LEGAL_DATE}.</p></div>
+  <div class="wrap"><div class="prose">
+  <p>Отправляя заявку на сайте rebornlab.ru и отмечая галочку согласия, я свободно, своей волей и в своём интересе даю согласие оператору — ${esc(OPERATOR)} — на обработку моих персональных данных на следующих условиях.</p>
+  <ol>
+  <li><strong>Данные:</strong> контакт для связи (имя или ник в Telegram, номер телефона или адрес электронной почты), текст заявки, а также технические данные: IP-адрес, адрес страницы, дата и время отправки.</li>
+  <li><strong>Цель:</strong> рассмотрение заявки, связь со мной, обсуждение задачи и подготовка предложения; защита сайта от спама.</li>
+  <li><strong>Действия:</strong> сбор, запись, систематизация, хранение, уточнение, использование, передача (предоставление доступа) в пределах указанной цели, удаление и уничтожение — с использованием средств автоматизации и без них.</li>
+  <li><strong>Трансграничная передача:</strong> я согласен(на), что данные хранятся на сервере оператора за пределами РФ и передаются оператору через мессенджер Telegram, а сайт размещён на сервисе GitHub Pages.</li>
+  <li><strong>Срок:</strong> согласие действует до достижения цели обработки, но не дольше 3 лет с момента последнего общения, либо до его отзыва.</li>
+  <li><strong>Отзыв:</strong> я могу отозвать согласие в любой момент, написав оператору в Telegram <a href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener">@${SITE.telegram}</a>. После отзыва данные будут удалены в течение 10 рабочих дней.</li>
+  </ol>
+  <p>Подробнее о том, как обрабатываются данные, — в <a href="/privacy/">политике конфиденциальности</a>.</p>
+  </div></div><div style="height:80px"></div>`,
+}))
+
 write('404.html', shell({ title: 'Страница не найдена — REBORN LAB', description: 'Такой страницы нет.', canonical: '/404.html',
   body: `<div class="wrap page-hd"><div class="kicker">404</div><h1>Такой страницы <span style="color:var(--acc)">нет</span></h1><p class="sub">Зато есть <a href="/projects/" style="color:var(--acc)">проекты</a>, <a href="/journal/" style="color:var(--acc)">журнал</a> и <a href="/contact/" style="color:var(--acc)">форма для вашей задачи</a>.</p></div><div style="height:120px"></div>` }))
 
@@ -366,7 +434,7 @@ for (const d of ['assets', 'assets/projects']) mkdirSync(path.join(OUT, d), { re
 copyFileSync(path.join(ROOT, 'src/styles.css'), path.join(OUT, 'assets/styles.css'))
 copyFileSync(path.join(ROOT, 'src/main.js'), path.join(OUT, 'assets/main.js'))
 for (const f of readdirSync(path.join(ROOT, 'src/assets/projects'))) copyFileSync(path.join(ROOT, 'src/assets/projects', f), path.join(OUT, 'assets/projects', f))
-for (const f of ['favicon.svg', 'og.jpg', 'logo.png']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
+for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
 const urls = [['/', today, '1.0'], ['/projects/', today, '0.9'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...PROJECTS.map((p) => [`/projects/${p.slug}/`, today, '0.7']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]

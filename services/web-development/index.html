@@ -24,12 +24,12 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://rebornlab.ru/"},{"@type":"ListItem","position":2,"name":"Услуги","item":"https://rebornlab.ru/services/"},{"@type":"ListItem","position":3,"name":"Цифровые продукты","item":"https://rebornlab.ru/services/web-development/"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Разработка сайтов и веб-сервисов под задачу","description":"Сайты, которые продают, и сервисы, которые работают: от лендинга до SaaS с оплатами и личным кабинетом.","provider":{"@type":"Organization","name":"REBORN LAB","url":"https://rebornlab.ru"},"areaServed":"RU","serviceType":"Цифровые продукты"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Сколько стоит сайт или сервис?","acceptedAnswer":{"@type":"Answer","text":"Зависит от задачи: лендинг и веб-сервис с оплатами — разные проекты. После короткого разбора задачи мы называем вилку и предлагаем, с чего начать дешевле всего."}},{"@type":"Question","name":"Можно начать с малого?","acceptedAnswer":{"@type":"Answer","text":"Да. Часто лучший старт — прототип или MVP за пару недель: проверяем идею на реальных людях и только потом вкладываемся в развитие."}}]}</script>
-
+<script>window.RL_METRIKA=113418511;window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113418511','ym');ym(113418511,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>
 </head>
 <body>
 <header class="hdr"><div class="wrap">
   <a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a>
-  <nav class="nav" aria-label="Основное меню"><a href="/projects/">Проекты</a><a href="/services/" aria-current="page">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a></nav>
+  <nav class="nav" aria-label="Основное меню"><a href="/projects/">Проекты</a><a href="/services/" aria-current="page">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a class="nav-cta" href="/contact/" data-goal="cta_menu">Обсудить идею →</a></nav>
   <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
   <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
 </div></header>
@@ -53,19 +53,22 @@
     <section class="sec" id="task" style="padding-top:0"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Расскажите, <em>что нужно</em></h2><form data-lead id="f-web-development" novalidate>
     <div class="chips" data-chips><button type="button" class="chip">Есть идея</button><button type="button" class="chip">Нужен сайт</button><button type="button" class="chip">Автоматизировать бизнес</button><button type="button" class="chip">Нужен AI</button><button type="button" class="chip">Нужно продвижение</button><button type="button" class="chip">Другая задача</button></div>
     <label class="sr" for="f-web-development-t">Опишите задачу</label>
-    <textarea id="f-web-development-t" name="text" placeholder="Опишите проблему или идею обычными словами. Например: «заявок много, менеджеры не успевают отвечать»"></textarea>
-    <div class="form-row"><label class="sr" for="f-web-development-c">Контакт</label><input type="text" id="f-web-development-c" name="contact" placeholder="Telegram, телефон или email — как с вами связаться" style="flex:1;min-width:220px"></div>
+    <textarea class="ym-disable-keys" id="f-web-development-t" name="text" placeholder="Опишите проблему или идею обычными словами. Например: «заявок много, менеджеры не успевают отвечать»"></textarea>
+    <div class="form-row"><label class="sr" for="f-web-development-c">Контакт</label><input class="ym-disable-keys" type="text" id="f-web-development-c" name="contact" placeholder="Telegram, телефон или email — как с вами связаться" style="flex:1;min-width:220px"></div>
     <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <label class="agree"><input type="checkbox" name="agree" required> <span>Даю <a href="/consent/" target="_blank">согласие на обработку персональных данных</a> и принимаю <a href="/privacy/" target="_blank">политику конфиденциальности</a></span></label>
     <div class="form-row"><button class="btn btn-acc" type="submit" data-label="Разобрать задачу →">Разобрать задачу <span class="arrow">→</span></button><a class="btn btn-ghost" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="telegram">Написать в Telegram</a></div>
     <p class="ok-msg">Получили ✓ Разберём задачу и ответим вам лично.</p>
     <p class="hint">Отвечаем лично. Без спама и обязательств — сначала разбираемся, потом предлагаем.</p>
+    <p class="err-msg">Отметьте согласие на обработку данных — без него мы не можем принять заявку.</p>
   </form></div></div></section>
 </main>
 <footer class="ftr"><div class="wrap">
-  <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p>© 2026 REBORN LAB</p></div>
+  <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p>© 2026 REBORN LAB · <a href="/privacy/">Политика конфиденциальности</a> · <a href="/consent/">Согласие на обработку данных</a></p></div>
   <div><a href="/projects/">Проекты</a><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
-  <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="https://github.com/balibudda" rel="noopener" target="_blank">GitHub</a><a href="/rss.xml">RSS журнала</a></div>
+  <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="https://github.com/balibudda" rel="noopener" target="_blank">GitHub</a><a href="/rss.xml">RSS журнала</a><a href="https://balibudda.github.io/svoya-liniya/" rel="noopener" target="_blank" data-goal="svoya_liniya_footer">Своя линия — свободная сеть</a></div>
 </div></footer>
+<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
 <script src="/assets/main.js" defer></script>
 </body>
 </html>
