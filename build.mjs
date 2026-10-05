@@ -56,7 +56,7 @@ const LOGO = `<a class="logo" href="/" aria-label="REBORN LAB — на глав�
 
 const NAV = [['/projects/', 'Проекты'], ['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории']]
 
-function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '' }) {
+function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
   const url = SITE.url + canonical
   const metrika = SITE.metrikaId ? `<script>window.RL_METRIKA=${SITE.metrikaId};window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=${SITE.metrikaId}','ym');ym(${SITE.metrikaId},'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>` : ''
   return `<!doctype html>
@@ -66,7 +66,7 @@ function shell({ title, description, canonical, body, jsonLd = [], ogType = 'web
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
-<link rel="canonical" href="${url}">
+${noindex ? '<meta name="robots" content="noindex, nofollow, noarchive">' : `<link rel="canonical" href="${url}">`}
 <meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="REBORN LAB">
 <meta property="og:locale" content="${SITE.locale}">
@@ -114,7 +114,7 @@ const crumbs = (items) => `<div class="crumbs">${items.map(([n, u], i) => i < it
 const byslug = Object.fromEntries(PROJECTS.map((p) => [p.slug, p]))
 function projCard(p, big = false) {
   const shot = p.image ? `<img src="/assets/projects/${p.image}" alt="${esc(p.name)} — скриншот" loading="lazy" width="1200" height="750">` : `<svg width="120" height="80" viewBox="0 0 120 80" aria-hidden="true"><rect x="22" y="8" width="76" height="64" rx="12" fill="none" stroke="#2a2e33"/><path d="M40 40h14" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="60" cy="40" r="3" fill="#c6f24e"/><path d="M66 40c6 0 8-12 16-12" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`
-  return `<a class="proj rv${big ? ' big' : ''}" href="/projects/${p.slug}/" data-goal="project_${p.slug}">
+  return `<a class="proj rv${big ? ' big' : ''}" href="/projects/${p.slug}/" data-goal="project_${p.slug}"${p.private ? ' rel="nofollow" data-nosnippet' : ''}>
     <div class="shot${p.image ? '' : ' empty'}">${p.status ? `<span class="status">${esc(p.status)}</span>` : ''}${shot}</div>
     <div class="body"><div class="kind">${esc(p.kind)}</div><h3>${esc(p.name)}</h3><p>${esc(p.lead)}</p>
       <div class="tags">${p.stack.slice(0, big ? 8 : 4).map((s) => `<span class="tag">${esc(s)}</span>`).join('')}</div>
@@ -189,7 +189,7 @@ const home = shell({
 </div></section>
 
 <section class="sec" style="padding-top:10px"><div class="wrap">
-  <a class="sl-band rv" href="/projects/svoya-liniya/" data-goal="svoya_liniya">
+  <a class="sl-band rv" href="/projects/svoya-liniya/" rel="nofollow" data-nosnippet data-goal="svoya_liniya">
     <img src="/assets/svoya-liniya-logo.jpg" alt="Своя линия" width="88" height="88" loading="lazy">
     <div><div class="kicker">Наш сервис · свободная сеть</div><h3>Своя линия — интернет, который <em>просто работает</em></h3>
       <p>Настраиваем личное стабильное подключение для работы, общения и поездок: телефон, ноутбук, несколько устройств. Частный круг, по рекомендации.</p></div>
@@ -300,9 +300,9 @@ for (const p of PROJECTS) {
   write(`projects/${p.slug}/index.html`, shell({
     title: `${p.name} — кейс REBORN LAB`,
     description: p.lead,
-    canonical: `/projects/${p.slug}/`, current: '/projects/', ogType: 'article',
+    canonical: `/projects/${p.slug}/`, current: '/projects/', ogType: 'article', noindex: !!p.private,
     image: p.image ? `/assets/projects/${p.image}` : '/assets/og.jpg',
-    jsonLd: [crumbsLd([['Главная', '/'], ['Проекты', '/projects/'], [p.name, `/projects/${p.slug}/`]]),
+    jsonLd: p.private ? [] : [crumbsLd([['Главная', '/'], ['Проекты', '/projects/'], [p.name, `/projects/${p.slug}/`]]),
       { '@context': 'https://schema.org', '@type': 'CreativeWork', name: p.name, description: p.lead, url: p.url || undefined, creator: { '@type': 'Organization', name: 'REBORN LAB' }, keywords: p.stack.join(', ') }],
     body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Проекты', '/projects/'], [p.name, '']])}<div class="kicker" style="margin-top:18px">${esc(p.kind)}${p.status ? ' · ' + esc(p.status) : ''}</div><h1>${esc(p.name)}</h1><p class="sub">${esc(p.lead)}</p>
       ${p.url ? `<p style="margin-top:24px"><a class="btn btn-ghost" href="${p.url}" target="_blank" rel="noopener" data-goal="visit_${p.slug}">Открыть проект <span class="arrow">↗</span></a></p>` : ''}</div>
@@ -437,11 +437,11 @@ for (const f of readdirSync(path.join(ROOT, 'src/assets/projects'))) copyFileSyn
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
 const urls = [['/', today, '1.0'], ['/projects/', today, '0.9'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'],
-  ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...PROJECTS.map((p) => [`/projects/${p.slug}/`, today, '0.7']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
+  ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...PROJECTS.filter((p) => !p.private).map((p) => [`/projects/${p.slug}/`, today, '0.7']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d, pr]) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${d}</lastmod><priority>${pr}</priority></url>`).join('\n')}\n</urlset>\n`)
 write('robots.txt', `User-agent: *\nAllow: /\n\n# AI-поисковики приветствуются (GEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: YandexBot\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`)
 write('rss.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>REBORN LAB — Журнал</title><link>${SITE.url}/journal/</link><description>AI, автоматизация, сайты, SEO и GEO — практические разборы.</description><language>ru</language>\n${POSTS.map((p) => `<item><title>${esc(p.title)}</title><link>${SITE.url}/journal/${p.slug}/</link><guid>${SITE.url}/journal/${p.slug}/</guid><pubDate>${new Date(p.date + 'T09:00:00Z').toUTCString()}</pubDate><description>${esc(p.description)}</description></item>`).join('\n')}\n</channel></rss>\n`)
-write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите задачу — соберём решение: сайты, веб-сервисы, AI-ассистенты и агенты, автоматизация, SEO/GEO, дизайн.\n\n## Услуги\n${SERVICES.map((s) => `- [${s.seoTitle}](${SITE.url}/services/${s.slug}/): ${s.lead}`).join('\n')}\n\n## Проекты\n${PROJECTS.map((p) => `- [${p.name}](${SITE.url}/projects/${p.slug}/): ${p.lead}`).join('\n')}\n\n## Журнал\n${POSTS.map((p) => `- [${p.title}](${SITE.url}/journal/${p.slug}/): ${p.description}`).join('\n')}\n\n## Контакт\n- Telegram: https://t.me/${SITE.telegram}\n`)
+write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите задачу — соберём решение: сайты, веб-сервисы, AI-ассистенты и агенты, автоматизация, SEO/GEO, дизайн.\n\n## Услуги\n${SERVICES.map((s) => `- [${s.seoTitle}](${SITE.url}/services/${s.slug}/): ${s.lead}`).join('\n')}\n\n## Проекты\n${PROJECTS.filter((p) => !p.private).map((p) => `- [${p.name}](${SITE.url}/projects/${p.slug}/): ${p.lead}`).join('\n')}\n\n## Журнал\n${POSTS.map((p) => `- [${p.title}](${SITE.url}/journal/${p.slug}/): ${p.description}`).join('\n')}\n\n## Контакт\n- Telegram: https://t.me/${SITE.telegram}\n`)
 writeFileSync(path.join(OUT, 'CNAME'), 'rebornlab.ru\n')
 writeFileSync(path.join(OUT, '.nojekyll'), '')
 console.log(`built: ${urls.length} urls · ${POSTS.length} posts · ${PROJECTS.length} projects · ${SERVICES.length} services`)
