@@ -101,14 +101,31 @@
       var ok = f.querySelector('.ok-msg'), btn = f.querySelector('button[type=submit]');
       if (text.trim().length < 5 && !topics.length) { f.querySelector('textarea').focus(); return; }
       if (contact.trim().length < 3) { var ci = f.querySelector('input[name=contact]'); ci && ci.focus(); return; }
+      var ag = f.querySelector('input[name=agree]');
+      if (ag && !ag.checked) { f.classList.add('need-agree'); ag.focus(); return; }
+      f.classList.remove('need-agree');
       btn.disabled = true; btn.textContent = 'Отправляю…';
-      var payload = { topics: topics, text: text.trim(), contact: contact.trim(), page: location.pathname, hp: (f.querySelector('input[name=company]') || {}).value || '' };
+      var payload = { topics: topics, text: text.trim(), contact: contact.trim(), page: location.pathname, agree: true, hp: (f.querySelector('input[name=company]') || {}).value || '' };
       fetch('https://api.rebornlab.ru/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
         .then(function (r) { if (!r.ok) throw 0; ok.style.display = 'block'; f.reset(); f.querySelectorAll('.chip.on').forEach(function (c) { c.classList.remove('on'); }); if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'lead'); })
         .catch(function () { window.open('https://t.me/Reborn_Lab', '_blank'); })
         .then(function () { btn.disabled = false; btn.textContent = btn.getAttribute('data-label'); });
     });
   });
+  document.querySelectorAll('input[name=agree]').forEach(function (a) { a.addEventListener('change', function () { if (a.checked) a.closest('form').classList.remove('need-agree'); }); });
+
+  // ---------- cookie consent: Metrika loads only after «Согласен» ----------
+  var ck = document.getElementById('cookie'), agreed = false;
+  try { agreed = localStorage.getItem('rl_cookie_ok') === '1'; } catch (e) {}
+  if (agreed) { window.RL_LOAD_METRIKA && window.RL_LOAD_METRIKA(); }
+  else if (ck) {
+    ck.hidden = false;
+    document.getElementById('cookie-ok').addEventListener('click', function () {
+      try { localStorage.setItem('rl_cookie_ok', '1'); } catch (e) {}
+      ck.hidden = true; window.RL_LOAD_METRIKA && window.RL_LOAD_METRIKA();
+    });
+  }
+
   document.querySelectorAll('[data-goal]').forEach(function (a) {
     a.addEventListener('click', function () { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', a.getAttribute('data-goal')); });
   });
