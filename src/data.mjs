@@ -133,6 +133,7 @@ export const PROJECTS = [
   },
   {
     slug: 'svoya-liniya',
+    private: true, // Ник 05.10.2026: о сервисе не должно быть ничего для поисковиков — noindex, нет в sitemap/llms.txt, ссылки nofollow
     name: 'Своя линия',
     url: '',
     kind: 'Свободная сеть · Telegram-бот',
