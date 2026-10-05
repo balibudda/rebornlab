@@ -1,2 +1,16 @@
 User-agent: *
-Disallow: /
+Allow: /
+
+# AI-поисковики приветствуются (GEO)
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: YandexBot
+Allow: /
+
+Sitemap: https://rebornlab.ru/sitemap.xml
