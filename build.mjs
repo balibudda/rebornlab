@@ -183,18 +183,12 @@ const home = shell({
   <div class="grid-proj">
     ${projCard(featured[0], true)}
     ${featured.slice(1).map((p) => projCard(p)).join('\n')}
-    ${projCard(byslug['svoya-liniya'])}
   </div>
   <p style="margin-top:26px" class="rv"><a class="btn btn-ghost" href="/projects/">Все проекты <span class="arrow">→</span></a></p>
 </div></section>
 
 <section class="sec" style="padding-top:10px"><div class="wrap">
-  <a class="sl-band rv" href="/projects/svoya-liniya/" rel="nofollow" data-nosnippet data-goal="svoya_liniya">
-    <img src="/assets/svoya-liniya-logo.jpg" alt="Своя линия" width="88" height="88" loading="lazy">
-    <div><div class="kicker">Наш сервис · свободная сеть</div><h3>Своя линия — интернет, который <em>просто работает</em></h3>
-      <p>Настраиваем личное стабильное подключение для работы, общения и поездок: телефон, ноутбук, несколько устройств. Частный круг, по рекомендации.</p></div>
-    <span class="card-link">Узнать подробнее <span class="arrow">→</span></span>
-  </a>
+  <div class="sl-logo rv"><img src="/assets/svoya-liniya-logo.jpg" alt="" width="88" height="88" loading="lazy"></div>
 </div></section>
 
 <section class="sec" style="padding-top:20px"><div class="wrap">
