@@ -4,6 +4,7 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, copyFileSync, rmSync } from 'node:fs'
 import path from 'node:path'
 import { SITE, PROJECTS, SERVICES, PROBLEMS, MARKET, START_SMALL, JOURNAL_CATEGORIES } from './src/data.mjs'
+import { SERVICE_SEO } from './src/services-seo.mjs'
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname)
 const OUT = ROOT
@@ -297,21 +298,34 @@ write('services/index.html', shell({
 }))
 for (const s of SERVICES) {
   const proofs = s.proof.map((k) => byslug[k]).filter(Boolean)
+  const x = SERVICE_SEO[s.slug] || {}
+  const faq = [...(x.faq || []), ...s.faq]
+  const offers = (x.terms || []).map(([n, v]) => [n, (v.match(/^([\d ]+) ₽/) || [])[1]]).filter(([, p]) => p).map(([n, p]) => ({ '@type': 'Offer', name: n, price: p.replace(/ /g, ''), priceCurrency: 'RUB' }))
+  const related = (x.related || []).map((k) => SERVICES.find((z) => z.slug === k)).filter(Boolean)
+  const ctaTop = s.slug === 'site-fix' ? '<a class="btn btn-acc" href="/proverka-sajta/" data-goal="cta_service_proverka">Проверить сайт бесплатно <span class="arrow">→</span></a><a class="btn btn-ghost" href="#task">Обсудить задачу</a>'
+    : s.slug === 'redesign' ? '<a class="btn btn-acc" href="#task" data-goal="cta_service_demo">Получить бесплатное демо <span class="arrow">→</span></a>'
+    : '<a class="btn btn-acc" href="#task" data-goal="cta_service">Обсудить задачу <span class="arrow">→</span></a>'
   write(`services/${s.slug}/index.html`, shell({
-    title: `${s.seoTitle} — REBORN LAB`,
-    description: s.lead,
+    title: x.title ? `${x.title} | REBORN LAB` : `${s.seoTitle} — REBORN LAB`,
+    description: x.description || s.lead,
     canonical: `/services/${s.slug}/`, current: '/services/',
     jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/services/'], [s.title, `/services/${s.slug}/`]]),
-      { '@context': 'https://schema.org', '@type': 'Service', name: s.seoTitle, description: s.lead, provider: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url }, areaServed: 'RU', serviceType: s.title },
-      { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: s.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }],
-    body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/services/'], [s.title, '']])}<div class="kicker sv-k" style="margin-top:18px">${svIcon(s)} ${s.code} · ${esc(s.short)}</div><h1>${esc(s.seoTitle)}</h1><p class="sub">${esc(s.lead)}</p>${svPains(s).replace('sv-pain', 'sv-pain big')}<p style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap">${s.slug === 'site-fix' ? '<a class="btn btn-acc" href="/proverka-sajta/" data-goal="cta_service_proverka">Проверить сайт бесплатно <span class="arrow">→</span></a><a class="btn btn-ghost" href="#task">Обсудить задачу</a>' : s.slug === 'redesign' ? '<a class="btn btn-acc" href="#task" data-goal="cta_service_demo">Получить бесплатное демо <span class="arrow">→</span></a>' : '<a class="btn btn-acc" href="#task" data-goal="cta_service">Обсудить задачу <span class="arrow">→</span></a>'}</p></div>
-    <section class="sec" style="padding-top:30px"><div class="wrap"><div class="kicker rv">Что входит</div><div class="wants rv">${s.items.map((i) => `<span>${esc(i)}</span>`).join('')}</div></div></section>
+      { '@context': 'https://schema.org', '@type': 'Service', name: s.seoTitle, description: x.description || s.lead, provider: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url },
+        areaServed: 'RU', serviceType: s.title, url: `${SITE.url}/services/${s.slug}/`, ...(offers.length ? { offers } : {}) },
+      { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }],
+    body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/services/'], [s.title, '']])}<div class="kicker sv-k" style="margin-top:18px">${svIcon(s)} ${s.code} · ${esc(s.short)}</div><h1>${esc(s.seoTitle)}</h1><p class="sub">${esc(s.lead)}</p>${svPains(s).replace('sv-pain', 'sv-pain big')}<p style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap">${ctaTop}</p></div>
+    ${x.about ? `<section class="sec" style="padding-top:20px"><div class="wrap" style="max-width:860px"><h2 class="rv" style="font-size:clamp(26px,3.2vw,38px)">${esc(x.h2)}</h2>${x.about.map((t) => `<p class="rv sv-p">${esc(t)}</p>`).join('')}</div></section>` : ''}
+    ${x.included ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Что входит</div><h2>${esc(s.title)}: <em>что мы делаем</em></h2></div></div>
+      <div class="sv-inc">${x.included.map(([t, d]) => `<div class="rv"><b>${esc(t)}</b>${d ? `<span>${esc(d)}</span>` : ''}</div>`).join('')}</div></div></section>`
+      : `<section class="sec" style="padding-top:30px"><div class="wrap"><div class="kicker rv">Что входит</div><div class="wants rv">${s.items.map((i) => `<span>${esc(i)}</span>`).join('')}</div></div></section>`}
+    ${x.steps ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="sv-flow rv"><div class="kicker" style="margin-bottom:14px">Как работаем</div><ol style="grid-template-columns:repeat(${x.steps.length},1fr)">${x.steps.map(([t, d]) => `<li><b>${esc(t)}</b><span>${esc(d)}</span></li>`).join('')}</ol></div></div></section>` : ''}
+    ${x.terms ? `<section class="sec" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="kicker rv">Сроки и стоимость</div><div class="sv-terms rv">${x.terms.map(([n, v]) => `<div><span>${esc(n)}</span><b>${esc(v)}</b></div>`).join('')}</div></div></section>` : ''}
     ${proofs.length ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Доказательства</div><h2>Как мы это <em>уже делали</em></h2></div></div><div class="grid-proj">${proofs.map((p) => projCard(p)).join('')}</div></div></section>` : ''}
-    <section class="sec" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="kicker rv">Частые вопросы</div><div class="faq rv">${s.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div></div></section>
+    <section class="sec" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="kicker rv">Частые вопросы</div><div class="faq rv">${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div></div></section>
+    ${related.length ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="kicker rv" style="margin-bottom:14px">Ещё может пригодиться</div><div class="sv-rel">${related.map((r) => `<a class="rv" href="/services/${r.slug}/">${svIcon(r)}<span><b>${esc(r.title)}</b><i>${esc(r.short)}</i></span></a>`).join('')}${s.slug !== 'site-fix' ? `<a class="rv" href="/proverka-sajta/">${svIcon(SERVICES.find((z) => z.slug === 'site-fix'))}<span><b>Бесплатная проверка сайта</b><i>152-ФЗ, техника, доступность в России</i></span></a>` : ''}</div></div></section>` : ''}
     <section class="sec" id="task" style="padding-top:0"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Расскажите, <em>что нужно</em></h2>${leadForm('f-' + s.slug)}</div></div></section>`,
   }))
 }
-
 
 // ---------- ПРОВЕРКА САЙТА (лендинг, 19.10.2026) ----------
 {
