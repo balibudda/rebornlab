@@ -277,3 +277,17 @@ form.need-agree .agree { color: #ff8a7a; }
   .hdr.open .nav .nav-cta { display: block; margin-top: 10px; text-align: center; background: var(--acc); color: #0b0c0d; border-radius: 999px; padding: 13px 0; font-weight: 600; }
 }
 .page-hd h1, .prose h2 { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+
+/* Проверка сайта — промо на главной и в услугах (19.10.2026) */
+.pv-promo { display: flex; align-items: center; gap: 18px; margin: 30px 0 6px; max-width: 900px; padding: 16px 18px; border-radius: 18px; text-decoration: none; color: var(--text);
+  background: linear-gradient(155deg, rgba(198,242,78,.14), rgba(198,242,78,.03)); border: 1px solid rgba(198,242,78,.4); transition: border-color .2s, transform .2s; }
+.pv-promo:hover { border-color: var(--acc); transform: translateY(-1px); }
+.pv-new { flex: none; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; background: var(--acc); color: #0b0c0d; padding: 5px 9px; border-radius: 999px; }
+.pv-promo-t { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.pv-promo-t b { font-size: 17px; } .pv-promo-t span { color: #c9c7c0; font-size: 14px; }
+.pv-promo .btn { flex: none; min-height: 44px; padding: 0 18px; font-size: 15px; }
+.nav a[href="/proverka-sajta/"] { color: var(--acc); }
+@media (max-width: 700px) { .pv-promo { flex-wrap: wrap; } .pv-promo .btn { width: 100%; justify-content: center; } }
+.pv-pill { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; padding: 6px 14px 6px 6px; border-radius: 999px; border: 1px solid rgba(198,242,78,.4);
+  background: rgba(198,242,78,.07); color: var(--text); text-decoration: none; font-size: 14px; transition: border-color .2s; }
+.pv-pill:hover { border-color: var(--acc); }

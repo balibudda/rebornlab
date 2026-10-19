@@ -54,7 +54,7 @@ function frontMatter(raw) {
 const MARK = `<svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`
 const LOGO = `<a class="logo" href="/" aria-label="REBORN LAB — на главную">${MARK}<b>REBORN</b><span>LAB</span></a>`
 
-const NAV = [['/projects/', 'Проекты'], ['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории']]
+const NAV = [['/proverka-sajta/', 'Проверка сайта'], ['/projects/', 'Проекты'], ['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории']]
 
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
   const url = SITE.url + canonical
@@ -97,7 +97,7 @@ ${body}
 </main>
 <footer class="ftr"><div class="wrap">
   <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p>© ${new Date().getFullYear()} REBORN LAB · <a href="/privacy/">Политика конфиденциальности</a> · <a href="/consent/">Согласие на обработку данных</a></p></div>
-  <div><a href="/projects/">Проекты</a><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
+  <div><a href="/proverka-sajta/">Проверка сайта</a><a href="/projects/">Проекты</a><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
   <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="https://github.com/balibudda" rel="noopener" target="_blank">GitHub</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
@@ -166,6 +166,7 @@ const home = shell({
 <section class="hero" aria-labelledby="h1">
   <canvas id="lab" aria-hidden="true"></canvas>
   <div class="wrap">
+    <a class="pv-pill" href="/proverka-sajta/" data-goal="pill_proverka"><span class="pv-new">Новое</span> Бесплатная проверка сайта на штрафы 152-ФЗ <span class="arrow">→</span></a>
     <div class="kicker">Digital laboratory · идея → система → продукт</div>
     <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
     <p class="sub">Сайты, веб-сервисы, AI, автоматизация, SEO и внутренние системы — придумываем и собираем под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
@@ -173,6 +174,7 @@ const home = shell({
       <a class="btn btn-acc" href="#task" data-goal="cta_hero">Разобрать задачу <span class="arrow">→</span></a>
       <a class="btn btn-ghost" href="#made">Что мы уже сделали</a>
     </div>
+    <a class="pv-promo rv" href="/proverka-sajta/" data-goal="promo_proverka"><span class="pv-new">Новое</span><span class="pv-promo-t"><b>Проверим ваш сайт на штрафы по 152-ФЗ — бесплатно</b><span>Формы без согласия, Google Analytics, политика — штраф до 6 млн ₽. Документы под сайт — 999 ₽, перенос с Tilda — 1 999 ₽.</span></span><span class="btn btn-acc">Проверить сайт <span class="arrow">→</span></span></a>
     <div class="hero-meta"><span><i>●</i> ${PROJECTS.length} реальных проектов</span><span>AI · Web · Automation · SEO/GEO · Design</span><span>от прототипа до продукта</span></div>
   </div>
 </section>
@@ -259,7 +261,7 @@ write('services/index.html', shell({
   canonical: '/services/', current: '/services/',
   jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/services/']])],
   body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/services/']])}<h1>Что мы <span style="color:var(--acc)">собираем</span></h1><p class="sub">Под каждую задачу — своя связка. Выберите направление или просто опишите задачу.</p></div>
-  <div class="wrap"><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/"><span class="code">${s.code}</span><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p><ul>${s.items.slice(0, 5).map((i) => `<li>${esc(i)}</li>`).join('')}</ul></a>`).join('')}
+  <div class="wrap"><a class="pv-promo rv" href="/proverka-sajta/" data-goal="promo_proverka_services"><span class="pv-new">Новое</span><span class="pv-promo-t"><b>Проверим ваш сайт на штрафы по 152-ФЗ — бесплатно</b><span>Формы без согласия, Google Analytics, политика — штраф до 6 млн ₽. Документы под сайт — 999 ₽, перенос с Tilda — 1 999 ₽.</span></span><span class="btn btn-acc">Проверить сайт <span class="arrow">→</span></span></a><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/"><span class="code">${s.code}</span><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p><ul>${s.items.slice(0, 5).map((i) => `<li>${esc(i)}</li>`).join('')}</ul></a>`).join('')}
   <a class="cap ask rv" href="/contact/"><span class="code">06</span><h3>Другая задача</h3><p>Опишите её — предложим решение.</p></a></div></div>
   <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Не знаете, что выбрать? <em>Опишите задачу.</em></h2>${leadForm('f-svc')}</div></div></section>`,
 }))
@@ -316,6 +318,10 @@ for (const s of SERVICES) {
 .pv-steps p{margin:0;color:#c9c7c0;font-size:15px}.pv-me{display:flex;gap:20px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px}
 .pv-me img{width:88px;height:88px;border-radius:50%;object-fit:cover;flex:none}.pv-me p{margin:4px 0 0;color:#c9c7c0}
 .pv-calc{font-family:var(--mono);font-size:14px;color:var(--muted);margin-top:8px}
+.pv-price{min-height:100%}.pv-prod{display:grid;gap:10px;margin:18px 0 6px}.pv-prod label{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;color:#c9c7c0;font-size:15px}
+.pv-prod label:has(input:checked){border-color:rgba(198,242,78,.6)}.pv-prod b{color:var(--text);font-size:16px}.pv-prod input{margin-top:4px;accent-color:#c6f24e}
+.pv-order input[type=text],.pv-order input[type=email]{min-height:52px;border-radius:14px;border:1px solid var(--line-2);background:var(--bg);color:var(--text);padding:0 16px;font:inherit}
+.pv-alt{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:22px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted)}
 @media (max-width:900px){.pv-grid,.pv-steps{grid-template-columns:1fr 1fr}}@media (max-width:620px){.pv-grid,.pv-steps{grid-template-columns:1fr}.pv-me{flex-direction:column;text-align:center}}
 </style>`
   const form = (id) => `<form data-lead id="${id}" novalidate>
@@ -349,8 +355,27 @@ for (const s of SERVICES) {
   <section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Как это работает</div><h2>Четыре шага, <em>без созвонов</em></h2></div></div>
   <div class="pv-steps rv"><div><p>Присылаете адрес сайта — или мы уже прислали вам отчёт на почту.</p></div><div><p>Смотрите отчёт: что нарушено, на какой странице, какой штраф.</p></div><div><p>Заказываете документы за 999 ₽ — готовим под ваш сайт в течение дня.</p></div><div><p>Вставляете по инструкции за 15 минут. Нет времени — внедрим сами.</p></div></div></div></section>
   <section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Цены</div><h2>Без абонентской платы — <em>один раз</em></h2></div></div>
-  <div class="pv-grid">${PRICES.map(([p, t, items, hl]) => `<div class="pv-price rv${hl ? ' hl' : ''}"><div class="kicker">${esc(t)}</div><div class="p">${p}</div><ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>`).join('')}</div>
+  <div class="pv-grid">${PRICES.map(([p, t, items, hl], i) => `<div class="pv-price rv${hl ? ' hl' : ''}"><div class="kicker">${esc(t)}</div><div class="p">${p}</div><ul>${items.map((x) => `<li>${esc(x)}</li>`).join('')}</ul><div style="margin-top:auto;padding-top:10px">${i === 0 ? '<a class="btn btn-ghost" href="#task">Проверить бесплатно</a>' : `<a class="btn ${hl ? 'btn-acc' : 'btn-ghost'}" href="#order" data-product="${i === 1 ? 'docs' : 'tilda'}" data-goal="cta_pay_${i === 1 ? 'docs' : 'tilda'}">Оплатить ${p}</a>`}</div></div>`).join('')}</div>
   <p class="pv-calc rv">Tilda стоит 500–1250 ₽ в месяц, то есть 6–15 тыс. ₽ в год. Перенос за 1 999 ₽ окупается за 3–4 месяца.</p></div></section>
+  <section class="sec" id="order" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="final-box rv">
+  <h2 style="font-size:clamp(28px,3.6vw,44px)">Заказать — <em>как удобнее</em></h2>
+  <form class="pv-order" method="post" action="https://proverka.rebornlab.ru/pay">
+    <div class="pv-prod"><label><input type="radio" name="product" value="docs" checked> <span><b>Документы под сайт — 999 ₽</b><br>политика, согласие, тексты для форм и cookie, инструкция</span></label>
+    <label><input type="radio" name="product" value="tilda"> <span><b>Перенос с Tilda — 1 999 ₽</b><br>тот же сайт на бесплатном хостинге, заявки на почту или в Telegram</span></label></div>
+    <div class="form-row"><input class="ym-disable-keys" type="text" name="site" required placeholder="Адрес сайта, например mysite.ru" style="flex:1;min-width:220px"><input class="ym-disable-keys" type="email" name="email" required placeholder="Почта — сюда пришлём документы" style="flex:1;min-width:220px"></div>
+    <div class="form-row"><input class="ym-disable-keys" type="text" name="contact" placeholder="Telegram или телефон — по желанию" style="flex:1;min-width:220px"></div>
+    <input type="hidden" name="t" value=""><input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <label class="agree"><input type="checkbox" name="agree" required> <span>Даю <a href="/consent/" target="_blank">согласие на обработку персональных данных</a> и принимаю <a href="/privacy/" target="_blank">политику конфиденциальности</a></span></label>
+    <div class="form-row"><button class="btn btn-acc" type="submit" data-goal="pay_submit">Перейти к оплате <span class="arrow">→</span></button></div>
+    <p class="pv-calc" style="margin-top:12px">Оплата картой или СБП через ЮKassa. Документы пришлём на почту в течение рабочего дня.</p>
+  </form>
+  <div class="pv-alt"><span>Или напишите — ответим и оформим сами:</span><a class="btn btn-ghost" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="order_tg">Telegram</a><a class="btn btn-ghost" href="mailto:balibudda1@gmail.com?subject=%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" data-goal="order_mail">Почта</a></div>
+  </div></div></section>
+  <script>(function(){var q=new URLSearchParams(location.search),f=document.querySelector('.pv-order');if(!f)return;
+  if(q.get('site'))f.site.value=q.get('site');if(q.get('t'))f.t.value=q.get('t');
+  var pick=function(v){var r=f.querySelector('input[name=product][value="'+v+'"]');if(r)r.checked=true};if(q.get('p'))pick(q.get('p'));
+  document.querySelectorAll('[data-product]').forEach(function(a){a.addEventListener('click',function(){pick(a.getAttribute('data-product'))})});
+  f.addEventListener('submit',function(e){if(!f.agree.checked){e.preventDefault();f.classList.add('need-agree');f.agree.focus()}});})();</script>
   <section class="sec" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="pv-me rv"><img src="/assets/nick.jpg" alt="Николай Чечельницкий" width="88" height="88" loading="lazy"><div><b style="font-size:19px">Николай Чечельницкий</b><p>Занимаюсь сайтами с 2010 года. REBORN LAB — цифровая лаборатория: сайты, сервисы, AI и автоматизация. Проверку делает наша программа, документы и перенос — мы сами.</p></div></div></div></section>
   <section class="sec" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="kicker rv">Частые вопросы</div><div class="faq rv">${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div></div></section>
   <section class="sec" id="task" style="padding-top:0"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Проверим ваш сайт — <em>бесплатно</em></h2>${form('f-proverka')}</div></div></section>`,
