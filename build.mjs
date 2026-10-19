@@ -262,6 +262,33 @@ write('services/index.html', shell({
   canonical: '/services/', current: '/services/',
   jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/services/']])],
   body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/services/']])}<h1>Что мы <span style="color:var(--acc)">собираем</span></h1><p class="sub">Под каждую задачу — своя связка. Выберите направление или просто опишите задачу.</p></div>
+  <section class="sec" style="padding-top:10px"><div class="wrap">
+  <div class="sv-info rv">
+    <div class="sv-big"><div class="kicker">Живая статистика нашей проверки</div><div class="sv-num"><span id="sv-pct">56</span>%</div>
+      <p>сайтов нарушают закон о персональных данных — из <b id="sv-n">689</b> проверенных нами на <span id="sv-d">19.10.2026</span></p>
+      <a class="btn btn-acc" href="/proverka-sajta/" data-goal="sv_info_proverka">Проверить свой сайт бесплатно <span class="arrow">→</span></a></div>
+    <div class="sv-bars" id="sv-bars">
+      <div class="sv-bar" data-code="consent_not_separate"><span>Согласие не отдельным документом</span><i style="--w:28%"></i><b>28%</b></div>
+      <div class="sv-bar" data-code="foreign_trackers"><span>Google Analytics — данные уходят за границу</span><i style="--w:25%"></i><b>25%</b></div>
+      <div class="sv-bar" data-code="form_no_consent"><span>Форма заявки без согласия</span><i style="--w:17%"></i><b>17%</b></div>
+      <div class="sv-bar" data-code="no_policy"><span>Нет политики обработки данных</span><i style="--w:8%"></i><b>8%</b></div>
+      <div class="sv-bar" data-code="meta_logo" hidden><span>Значки Instagram / Facebook</span><i style="--w:0%"></i><b>0%</b></div>
+      <div class="sv-bar" data-code="whatsapp" hidden><span>Кнопка WhatsApp, которая не работает в РФ</span><i style="--w:0%"></i><b>0%</b></div>
+      <div class="sv-bar" data-code="hosting_risk"><span>Сайт за Cloudflare — может не открываться</span><i style="--w:3%"></i><b>3%</b></div>
+    </div>
+  </div>
+  <div class="sv-flow rv"><div class="kicker" style="margin-bottom:14px">Как работаем — без риска для вас</div><ol>
+    <li><b>Бесплатная проверка</b><span>законы, техника, доступность в России</span></li>
+    <li><b>Отчёт</b><span>что не так, на какой странице и почему</span></li>
+    <li><b>Бесплатное демо</b><span>новый дизайн на вашем же контенте</span></li>
+    <li><b>Делаем</b><span>быстро: от 999 ₽ и от пары дней</span></li>
+    <li><b>Сопровождаем</b><span>обновления, законы, доступность</span></li></ol></div>
+  <div class="sv-prices rv"><a href="/proverka-sajta/"><b>0 ₽</b><span>проверка сайта</span></a><a href="/proverka-sajta/#order"><b>999 ₽</b><span>документы по 152-ФЗ</span></a>
+    <a href="/proverka-sajta/#order"><b>1 999 ₽</b><span>перенос с Tilda</span></a><a href="/services/redesign/"><b>Демо бесплатно</b><span>редизайн сайта</span></a></div>
+  </div></section>
+  <script>fetch('https://proverka.rebornlab.ru/stats.json').then(function(r){return r.json()}).then(function(d){if(!d||!d.checked)return;
+  document.getElementById('sv-pct').textContent=d.violations_pct;document.getElementById('sv-n').textContent=d.checked;document.getElementById('sv-d').textContent=d.date;
+  d.items.forEach(function(it){var el=document.querySelector('.sv-bar[data-code="'+it.code+'"]');if(!el)return;el.hidden=!it.pct;el.querySelector('i').style.setProperty('--w',it.pct+'%');el.querySelector('b').textContent=it.pct+'%'})}).catch(function(){})</script>
   <div class="wrap"><a class="pv-promo rv" href="/proverka-sajta/" data-goal="promo_proverka_services"><span class="pv-new">Новое</span><span class="pv-promo-t"><b>Проверим ваш сайт на штрафы по 152-ФЗ — бесплатно</b><span>Формы без согласия, Google Analytics, политика — штраф до 6 млн ₽. Документы под сайт — 999 ₽, перенос с Tilda — 1 999 ₽.</span></span><span class="btn btn-acc">Проверить сайт <span class="arrow">→</span></span></a><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/"><span class="code">${s.code}</span><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p><ul>${s.items.slice(0, 5).map((i) => `<li>${esc(i)}</li>`).join('')}</ul></a>`).join('')}
   <a class="cap ask rv" href="/contact/"><span class="code">06</span><h3>Другая задача</h3><p>Опишите её — предложим решение.</p></a></div></div>
   <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Не знаете, что выбрать? <em>Опишите задачу.</em></h2>${leadForm('f-svc')}</div></div></section>`,
