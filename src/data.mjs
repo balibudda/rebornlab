@@ -12,6 +12,9 @@ export const SITE = {
   // (ИП или самозанятый) — пока пусто, в документах стоит «владелец сайта rebornlab.ru».
   operator: '',
   operatorInn: '',
+  operatorOgrn: '',      // ОГРНИП — вписать по слову Ника
+  operatorAddress: '',   // адрес оператора (для согласия обязателен, ч. 4 ст. 9 152-ФЗ)
+  pdEmail: 'balibudda1@gmail.com',
   locale: 'ru_RU',
 }
 
