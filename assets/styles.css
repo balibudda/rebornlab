@@ -291,3 +291,27 @@ form.need-agree .agree { color: #ff8a7a; }
 .pv-pill { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; padding: 6px 14px 6px 6px; border-radius: 999px; border: 1px solid rgba(198,242,78,.4);
   background: rgba(198,242,78,.07); color: var(--text); text-decoration: none; font-size: 14px; transition: border-color .2s; }
 .pv-pill:hover { border-color: var(--acc); }
+
+/* Услуги: инфографика (19.10.2026) */
+.sv-info { display: grid; grid-template-columns: 1fr 1.25fr; gap: 28px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 28px; }
+.sv-num { font-size: clamp(72px, 10vw, 120px); font-weight: 800; line-height: .95; letter-spacing: -.04em; color: var(--acc); margin: 10px 0 6px; }
+.sv-big p { color: #c9c7c0; margin: 0 0 18px; max-width: 26em; }
+.sv-bars { display: grid; gap: 12px; }
+.sv-bar { display: grid; grid-template-columns: 1fr 56px; gap: 4px 12px; align-items: center; }
+.sv-bar span { grid-column: 1 / -1; font-size: 14px; color: #c9c7c0; }
+.sv-bar i { display: block; height: 12px; border-radius: 999px; background: rgba(237,235,230,.07); position: relative; overflow: hidden; }
+.sv-bar i::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--w); min-width: 6px; border-radius: 999px; background: linear-gradient(90deg, #ff6b6b, #f5a524); transition: width 1s; }
+.sv-bar b { font-size: 15px; text-align: right; }
+.sv-flow { margin-top: 18px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px 28px; }
+.sv-flow ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; counter-reset: f; }
+.sv-flow li { position: relative; padding: 14px 14px 14px; border-radius: 14px; background: rgba(237,235,230,.03); border: 1px solid var(--line); counter-increment: f; }
+.sv-flow li::before { content: counter(f); display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--acc); color: #0b0c0d; font-weight: 800; margin-bottom: 10px; }
+.sv-flow li:not(:last-child)::after { content: "→"; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); color: var(--acc); font-weight: 700; z-index: 1; }
+.sv-flow b { display: block; font-size: 16px; } .sv-flow span { display: block; font-size: 13px; color: var(--muted); margin-top: 4px; }
+.sv-prices { margin-top: 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.sv-prices a { text-decoration: none; color: var(--text); background: linear-gradient(155deg, rgba(198,242,78,.10), rgba(198,242,78,.02)); border: 1px solid rgba(198,242,78,.3); border-radius: 16px; padding: 16px 18px; transition: border-color .2s; }
+.sv-prices a:hover { border-color: var(--acc); } .sv-prices b { display: block; font-size: 24px; letter-spacing: -.02em; } .sv-prices span { color: #c9c7c0; font-size: 14px; }
+@media (max-width: 900px) { .sv-info { grid-template-columns: 1fr; } .sv-flow ol { grid-template-columns: 1fr 1fr; } .sv-flow li::after { display: none; } .sv-prices { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .sv-flow ol, .sv-prices { grid-template-columns: 1fr; } }
+.sv-bar[hidden] { display: none; }
+.sv-info + .sv-flow + .sv-prices + * { margin-top: 10px; }
