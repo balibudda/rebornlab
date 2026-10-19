@@ -326,3 +326,17 @@ form.need-agree .agree { color: #ff8a7a; }
 .sv-pain li::before { content: "•"; position: absolute; left: 3px; color: #ff9b9b; }
 .sv-pain.big { max-width: 640px; margin-top: 22px; font-size: 16px; } .sv-pain.big li { font-size: 16px; }
 .sv-k { display: flex; align-items: center; gap: 10px; } .sv-k .sv-ico { width: 38px; height: 38px; padding: 6px; }
+
+/* Страницы услуг — полные (19.10.2026) */
+.sv-p { font-size: 18px; color: #c9c7c0; line-height: 1.6; margin: 14px 0 0; }
+.sv-inc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.sv-inc div { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; }
+.sv-inc b { display: block; font-size: 17px; } .sv-inc span { display: block; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.sv-terms { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; margin-top: 12px; }
+.sv-terms div { display: flex; justify-content: space-between; gap: 16px; padding: 14px 20px; border-top: 1px solid var(--line); }
+.sv-terms div:first-child { border-top: 0; } .sv-terms span { color: #c9c7c0; } .sv-terms b { text-align: right; color: var(--acc); }
+.sv-rel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.sv-rel a { display: flex; gap: 12px; align-items: center; text-decoration: none; color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; transition: border-color .2s; }
+.sv-rel a:hover { border-color: rgba(198,242,78,.5); } .sv-rel b { display: block; font-size: 15px; } .sv-rel i { display: block; font-style: normal; color: var(--muted); font-size: 13px; }
+@media (max-width: 900px) { .sv-inc, .sv-rel { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .sv-inc, .sv-rel { grid-template-columns: 1fr; } .sv-flow ol { grid-template-columns: 1fr !important; } }
