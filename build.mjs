@@ -178,7 +178,7 @@ const home = shell({
       <a class="btn btn-acc" href="#task" data-goal="cta_hero">Разобрать задачу <span class="arrow">→</span></a>
       <a class="btn btn-ghost" href="#made">Что мы уже сделали</a>
     </div>
-    <a class="pv-promo rv" href="/proverka-sajta/" data-goal="promo_proverka"><span class="pv-new">Новое</span><span class="pv-promo-t"><b>Проверим ваш сайт на штрафы по 152-ФЗ — бесплатно</b><span>Формы без согласия, Google Analytics, политика — штраф до 6 млн ₽. Документы под сайт — 999 ₽, перенос с Tilda — 1 999 ₽.</span></span><span class="btn btn-acc">Проверить сайт <span class="arrow">→</span></span></a>
+    <a class="pv-promo rv" href="/proverka-sajta/" data-goal="promo_proverka"><span class="pv-new">Новое</span><span class="pv-promo-t"><b>Проверим ваш сайт по закону о персональных данных — бесплатно</b><span>Политика, согласие в формах, Google Analytics, реестр РКН — со ссылками на закон. Документы под сайт — 999 ₽, перенос с Tilda — 1 999 ₽.</span></span><span class="btn btn-acc">Проверить сайт <span class="arrow">→</span></span></a>
     <div class="hero-meta"><span><i>●</i> ${PROJECTS.length} реальных проектов</span><span>AI · Web · Automation · SEO/GEO · Design</span><span>от прототипа до продукта</span></div>
   </div>
 </section>
@@ -292,7 +292,7 @@ write('services/index.html', shell({
   <script>fetch('https://proverka.rebornlab.ru/stats.json').then(function(r){return r.json()}).then(function(d){if(!d||!d.checked)return;
   document.getElementById('sv-pct').textContent=d.violations_pct;document.getElementById('sv-n').textContent=d.checked;document.getElementById('sv-d').textContent=d.date;
   d.items.forEach(function(it){var el=document.querySelector('.sv-bar[data-code="'+it.code+'"]');if(!el)return;el.hidden=!it.pct;el.querySelector('i').style.setProperty('--w',it.pct+'%');el.querySelector('b').textContent=it.pct+'%'})}).catch(function(){})</script>
-  <div class="wrap"><a class="pv-promo rv" href="/proverka-sajta/" data-goal="promo_proverka_services"><span class="pv-new">Новое</span><span class="pv-promo-t"><b>Проверим ваш сайт на штрафы по 152-ФЗ — бесплатно</b><span>Формы без согласия, Google Analytics, политика — штраф до 6 млн ₽. Документы под сайт — 999 ₽, перенос с Tilda — 1 999 ₽.</span></span><span class="btn btn-acc">Проверить сайт <span class="arrow">→</span></span></a><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/"><div class="sv-top">${svIcon(s)}<span class="code">${s.code} · ${esc(s.short)}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}<ul>${s.items.slice(0, 4).map((i) => `<li>${esc(i)}</li>`).join('')}</ul><span class="card-link">Подробнее <span class="arrow">→</span></span></a>`).join('')}
+  <div class="wrap"><a class="pv-promo rv" href="/proverka-sajta/" data-goal="promo_proverka_services"><span class="pv-new">Новое</span><span class="pv-promo-t"><b>Проверим ваш сайт по закону о персональных данных — бесплатно</b><span>Политика, согласие в формах, Google Analytics, реестр РКН — со ссылками на закон. Документы под сайт — 999 ₽, перенос с Tilda — 1 999 ₽.</span></span><span class="btn btn-acc">Проверить сайт <span class="arrow">→</span></span></a><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/"><div class="sv-top">${svIcon(s)}<span class="code">${s.code} · ${esc(s.short)}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}<ul>${s.items.slice(0, 4).map((i) => `<li>${esc(i)}</li>`).join('')}</ul><span class="card-link">Подробнее <span class="arrow">→</span></span></a>`).join('')}
   <a class="cap ask rv" href="/contact/"><span class="code">06</span><h3>Другая задача</h3><p>Опишите её — предложим решение.</p></a></div></div>
   <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Не знаете, что выбрать? <em>Опишите задачу.</em></h2>${leadForm('f-svc')}</div></div></section>`,
 }))
@@ -329,23 +329,25 @@ for (const s of SERVICES) {
 
 // ---------- ПРОВЕРКА САЙТА (лендинг, 19.10.2026) ----------
 {
+  // 21.10.2026: тон и точность — как в новом отчёте (статусы, диапазоны по закону, ст. 13.11 сверена с ред. 04.08.2026)
   const CHECKS = [
-    ['Форма без согласия на обработку данных', 'Имя и телефон собираются, а галочки и текста согласия нет — самое частое нарушение.', '300–700 тыс. ₽', 'ч. 2 ст. 13.11 КоАП'],
-    ['Согласие не отдельным документом', 'С 1 сентября 2025 года согласие должно быть отдельно от политики. Галочка «согласен с политикой» уже не подходит.', '300–700 тыс. ₽', 'ч. 2 ст. 13.11 КоАП'],
-    ['Google Analytics, пиксель Facebook', 'Данные посетителей записываются в зарубежные базы — РКН считает это нарушением требования о локализации.', '1–6 млн ₽', 'ч. 8 ст. 13.11 КоАП'],
-    ['Нет уведомления в Роскомнадзор', 'Прежде чем собирать данные, оператор подаёт уведомление в РКН. Проверим по реестру при подготовке документов.', '100–300 тыс. ₽', 'ч. 10 ст. 13.11 КоАП'],
-    ['Нет политики обработки данных', 'Документ обязан быть опубликован и доступен с сайта — не спрятан и не только в PDF без ссылки.', '30–60 тыс. ₽', 'ч. 3 ст. 13.11 КоАП'],
-    ['Форма без https', 'Данные из формы идут по сети открытым текстом. Если утекут данные 1000+ человек — штраф по числу пострадавших.', '3–5 млн ₽', 'ч. 12 ст. 13.11 КоАП'],
+    ['Политика обработки данных', 'Должна быть опубликована и доступна с сайта по ссылке (ч. 2 ст. 18.1 закона № 152-ФЗ). Ищем на главной, в подвале и по типовым адресам.', 'организации 30–60 тыс. ₽', 'ч. 3 ст. 13.11 КоАП'],
+    ['Согласие в формах', 'Нужно ли согласие, зависит от целей обработки. Если нужно — с 1 сентября 2025 года оно оформляется отдельно от политики (ст. 9). Такие пункты помечаем «требует ручной проверки».', 'зависит от обстоятельств', 'ст. 6, 9 закона № 152-ФЗ'],
+    ['Google Analytics, пиксель Meta', 'Счётчик может записывать данные посетителей сначала в зарубежные базы — Роскомнадзор считает это нарушением локализации (ч. 5 ст. 18).', 'организации и ИП 1–6 млн ₽', 'ч. 8 ст. 13.11 КоАП'],
+    ['Уведомление в Роскомнадзор', 'Ищем компанию в открытом реестре операторов по ИНН, указанному на сайте (ст. 22 закона № 152-ФЗ).', 'организации 100–300 тыс. ₽', 'ч. 10 ст. 13.11 КоАП'],
+    ['Формы без https', 'Отдельного штрафа за это нет, но данные из формы идут по сети открытым текстом. Ответственность наступает, если данные утекут.', 'только при утечке', 'ст. 19 152-ФЗ, ч. 12 ст. 13.11'],
+    ['Техника и доступность', 'Сайт закрыт от поисковиков, истекает сертификат, нет мобильной версии, устаревший WordPress, заблокированные в России виджеты.', 'без штрафов — про заявки', 'поиск, скорость, доверие'],
   ]
   const PRICES = [
-    ['0 ₽', 'Проверка', ['отчёт по вашему сайту', 'что нарушено и где именно', 'суммы штрафов по КоАП'], false],
+    ['0 ₽', 'Проверка', ['отчёт по вашему сайту', 'что найдено и где именно', 'ссылки на нормы закона'], false],
     ['999 ₽', 'Документы под ваш сайт', ['политика обработки данных', 'отдельное согласие', 'текст для форм и cookie', 'инструкция для Tilda, WordPress, Битрикс'], true],
     ['1 999 ₽', 'Перенос с Tilda', ['тот же дизайн и адрес', 'бесплатный хостинг', 'заявки на почту или в Telegram', 'Tilda больше не платить'], false],
   ]
   const FAQ = [
-    ['Откуда суммы штрафов?', 'Из статьи 13.11 КоАП РФ в действующей редакции (с изменениями от 30.05.2025). В отчёте у каждого пункта указана часть статьи — можно проверить самостоятельно.'],
+    ['Это проверка Роскомнадзора?', 'Нет. REBORN LAB — независимая цифровая лаборатория. Проверка автоматическая, по открытым страницам сайта, как их видит любой посетитель. Это не уведомление госоргана.'],
+    ['Откуда суммы штрафов?', 'Из статьи 13.11 КоАП РФ в действующей редакции; в отчёте у каждого пункта — ссылка на статью на КонсультантПлюс. Это диапазон по закону, а не сумма, которая грозит именно вам: ответственность зависит от обстоятельств, а автоматическая проверка нарушение не устанавливает.'],
     ['Это юридическая консультация?', 'Нет. Это техническая проверка открытых страниц сайта и готовые типовые документы. Если у вас сложная обработка данных (медицина, биометрия, большие базы клиентов) — советуем показать документы юристу.'],
-    ['Как вы нашли мой сайт и почему написали?', 'Мы проверяем сайты из открытых источников и пишем один раз, только если нашли конкретные нарушения. Повторных писем и рассылок нет.'],
+    ['Как вы нашли мой сайт и почему написали?', 'Сайты берём из открытого каталога организаций, адрес почты — со страниц самого сайта. Пишем один раз, только если нашли конкретные замечания. Повторных писем и рассылок нет.'],
     ['Что если всё уже в порядке?', 'Тогда отчёт так и покажет — в блоке «Что уже в порядке». Платить ни за что не нужно.'],
     ['Куда переезжает сайт с Tilda и не пропадёт ли он?', 'Сайт выгружается целиком и размещается на бесплатном хостинге со стабильным доступом из России, адрес остаётся вашим. Формы заявок настраиваем заново. Цена 1 999 ₽ — для лендинга и небольшого сайта; корзину, оплату и личный кабинет считаем отдельно.'],
     ['Почему мой сайт может не открываться у клиентов?', 'В 2026 году мобильные операторы ограничивают зарубежные сети (Cloudflare, Vercel и другие): страница начинает грузиться и обрывается. Онлайн-сервисы проверки этого не видят. В отчёте отмечаем, если сайт в зоне риска.'],
@@ -353,7 +355,7 @@ for (const s of SERVICES) {
   const css = `<style>
 .pv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.pv-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
 .pv-card h3{font-size:19px;margin:0 0 8px}.pv-card p{margin:0;color:var(--muted);font-size:15px}.pv-fine{margin-top:14px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.pv-fine b{color:#ff6b6b;font-size:22px}.pv-fine span{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.pv-fine b{color:var(--text);font-size:17px}.pv-fine span{font-family:var(--mono);font-size:12px;color:var(--muted)}
 .pv-price{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;display:flex;flex-direction:column;gap:10px}
 .pv-price.hl{border-color:rgba(198,242,78,.5);background:linear-gradient(155deg,rgba(198,242,78,.10),rgba(198,242,78,.02))}
 .pv-price .p{font-size:40px;font-weight:700;letter-spacing:-.02em}.pv-price ul{margin:4px 0 0;padding-left:18px;color:#c9c7c0}.pv-price li{margin:4px 0}
@@ -379,8 +381,8 @@ for (const s of SERVICES) {
     <p class="err-msg">Отметьте согласие на обработку данных — без него мы не можем принять заявку.</p>
   </form>`
   write('proverka-sajta/index.html', shell({
-    title: 'Проверка сайта на штрафы по 152-ФЗ — бесплатно | REBORN LAB',
-    description: 'Бесплатно проверим сайт на нарушения закона о персональных данных: формы без согласия, Google Analytics, политика, уведомление в РКН. Документы под ваш сайт — 999 ₽.',
+    title: 'Проверка сайта по 152-ФЗ — бесплатно | REBORN LAB',
+    description: 'Бесплатно проверим сайт по закону о персональных данных: политика, согласие в формах, Google Analytics, реестр операторов РКН — со ссылками на нормы. Документы под ваш сайт — 999 ₽.',
     canonical: '/proverka-sajta/', current: '/services/',
     jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/services/'], ['Проверка сайта', '/proverka-sajta/']]),
       { '@context': 'https://schema.org', '@type': 'Service', name: 'Проверка сайта на соответствие 152-ФЗ', provider: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url }, areaServed: 'RU',
@@ -388,16 +390,16 @@ for (const s of SERVICES) {
       { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }],
     body: `${css}<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/services/'], ['Проверка сайта', '']])}
   <div class="kicker" style="margin-top:18px">Проверка сайта · 152-ФЗ · доступность в России</div>
-  <h1>Штраф за сайт — <span style="color:var(--acc)">до 6 млн ₽</span>. Проверим бесплатно</h1>
-  <p class="sub">С 30 мая 2025 года штрафы за персональные данные выросли в десятки раз, а Роскомнадзор проверяет сайты автоматически. Найдём, что нарушено на вашем сайте, и исправим за 999 ₽.</p>
+  <h1>Проверим сайт по закону о персональных данных — <span style="color:var(--acc)">бесплатно</span></h1>
+  <p class="sub">Робот проверяет открытые страницы: формы, документы, счётчики, реестр операторов и техническое состояние. В отчёте — что именно найдено, на какой странице и на какой норме основан вывод. Документы под ваш сайт — 999 ₽.</p>
   <p style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn-acc" href="#task" data-goal="cta_proverka">Проверить сайт <span class="arrow">→</span></a><a class="btn btn-ghost" href="#checks">Что проверяем</a></p></div>
-  <section class="sec" id="checks" style="padding-top:20px"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Что проверяем</div><h2>Шесть нарушений, за которые <em>штрафуют чаще всего</em></h2></div></div>
+  <section class="sec" id="checks" style="padding-top:20px"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Что проверяем</div><h2>Что смотрим <em>в первую очередь</em></h2></div></div>
   <div class="pv-grid">${CHECKS.map(([t, d, f, law]) => `<div class="pv-card rv"><h3>${esc(t)}</h3><p>${esc(d)}</p><div class="pv-fine"><b>${f}</b><span>${law}</span></div></div>`).join('')}</div>
-  <p class="pv-calc rv">Суммы — для организаций, по действующей редакции ст. 13.11 КоАП РФ. Для ИП по ряду составов меньше.</p></div></section>
+  <p class="pv-calc rv">Диапазоны — по ст. 13.11 КоАП РФ в действующей редакции. Это пределы по закону, а не сумма для вашего сайта: ответственность зависит от фактических обстоятельств.</p></div></section>
   <section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">И ещё</div><h2>Ваш сайт <em>открывается у клиентов?</em></h2></div></div>
   <div class="pv-card rv" style="max-width:860px"><p style="color:#c9c7c0;font-size:17px">В 2026 году мобильный интернет в России ограничивают в десятках регионов, а сети Cloudflare, Vercel и похожие операторы режут: страница начинает грузиться и обрывается. Онлайн-проверки доступности этого не видят — они смотрят не с мобильного интернета. Мы проверяем, где на самом деле размещён сайт, и если он в зоне риска — переносим туда, где он открывается.</p></div></div></section>
   <section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Как это работает</div><h2>Четыре шага, <em>без созвонов</em></h2></div></div>
-  <div class="pv-steps rv"><div><p>Присылаете адрес сайта — или мы уже прислали вам отчёт на почту.</p></div><div><p>Смотрите отчёт: что нарушено, на какой странице, какой штраф.</p></div><div><p>Заказываете документы за 999 ₽ — готовим под ваш сайт в течение дня.</p></div><div><p>Вставляете по инструкции за 15 минут. Нет времени — внедрим сами.</p></div></div></div></section>
+  <div class="pv-steps rv"><div><p>Присылаете адрес сайта — или мы уже прислали вам отчёт на почту.</p></div><div><p>Смотрите отчёт: что найдено, на какой странице и на какой норме основан вывод.</p></div><div><p>Заказываете документы за 999 ₽ — готовим под ваш сайт в течение дня.</p></div><div><p>Вставляете тексты по инструкции. Нет времени — разместим сами, отдельно.</p></div></div></div></section>
   <section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Цены</div><h2>Без абонентской платы — <em>один раз</em></h2></div></div>
   <div class="pv-grid">${PRICES.map(([p, t, items, hl], i) => `<div class="pv-price rv${hl ? ' hl' : ''}"><div class="kicker">${esc(t)}</div><div class="p">${p}</div><ul>${items.map((x) => `<li>${esc(x)}</li>`).join('')}</ul><div style="margin-top:auto;padding-top:10px">${i === 0 ? '<a class="btn btn-ghost" href="#task">Проверить бесплатно</a>' : `<a class="btn ${hl ? 'btn-acc' : 'btn-ghost'}" href="#order" data-product="${i === 1 ? 'docs' : 'tilda'}" data-goal="cta_pay_${i === 1 ? 'docs' : 'tilda'}">Оплатить ${p}</a>`}</div></div>`).join('')}</div>
   <p class="pv-calc rv">Tilda стоит 500–1250 ₽ в месяц, то есть 6–15 тыс. ₽ в год. Перенос за 1 999 ₽ окупается за 3–4 месяца.</p></div></section>
