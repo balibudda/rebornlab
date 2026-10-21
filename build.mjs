@@ -413,7 +413,7 @@ for (const s of SERVICES) {
     <div class="form-row"><button class="btn btn-acc" type="submit" data-goal="pay_submit">Перейти к оплате <span class="arrow">→</span></button></div>
     <p class="pv-calc" style="margin-top:12px">Оплата картой или СБП через ЮKassa. Документы пришлём на почту в течение рабочего дня.${HAS_SELLER ? ' Оплачивая, вы принимаете <a href="/oferta/">публичную оферту</a>.' : ''}</p>
   </form>
-  <div class="pv-alt"><span>Или напишите — ответим и оформим сами:</span><a class="btn btn-ghost" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="order_tg">Telegram</a><a class="btn btn-ghost" href="mailto:balibudda1@gmail.com?subject=%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" data-goal="order_mail">Почта</a></div>
+  <div class="pv-alt"><span>Или напишите — ответим и оформим сами:</span><a class="btn btn-ghost" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="order_tg">Telegram</a><a class="btn btn-ghost" href="mailto:nchechelnitskiy@yandex.ru?subject=%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" data-goal="order_mail">Почта</a></div>
   </div></div></section>
   <script>(function(){var q=new URLSearchParams(location.search),f=document.querySelector('.pv-order');if(!f)return;
   if(q.get('site'))f.site.value=q.get('site');if(q.get('t'))f.t.value=q.get('t');

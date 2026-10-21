@@ -14,7 +14,7 @@ export const SITE = {
   operatorInn: '',
   operatorOgrn: '',      // ОГРНИП — вписать по слову Ника
   operatorAddress: '',   // адрес оператора (для согласия обязателен, ч. 4 ст. 9 152-ФЗ)
-  pdEmail: 'balibudda1@gmail.com',
+  pdEmail: 'nchechelnitskiy@yandex.ru',
   locale: 'ru_RU',
 }
 
