@@ -60,9 +60,9 @@ section { padding: 72px 0; }
 
 /* первый экран */
 .hero { position: relative; min-height: min(88vh, 760px); display: flex; align-items: flex-end; color: #fff; padding: 0; overflow: hidden; }
-.hero::before { content: ""; position: absolute; inset: 0; background: url(img/photo_7.webp) center 30%/cover no-repeat; transform: scale(1.02); }
-.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(35, 20, 50, .05) 30%, rgba(35, 20, 50, .78)); }
-@media (max-width: 760px) { .hero::before { background-position: 72% 30%; } }
+.hero::before { content: ""; position: absolute; inset: 0; background: url(img/hero.webp) 50% 42%/cover no-repeat; }
+.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(35, 20, 50, 0) 40%, rgba(35, 20, 50, .72)); }
+@media (max-width: 760px) { .hero::before { background-position: 62% 40%; } }
 .hero .wrap { position: relative; z-index: 1; padding-bottom: 64px; width: 100%; }
 .hero .kicker { font-size: 13px; letter-spacing: .25em; text-transform: uppercase; opacity: .9; }
 .hero h1 { font-size: clamp(44px, 8vw, 96px); font-weight: 200; letter-spacing: .06em; margin: 10px 0 8px; }
