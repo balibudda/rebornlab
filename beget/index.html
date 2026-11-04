@@ -46,6 +46,16 @@
   .tabs button.on { background: var(--text); color: var(--bg); }
   .cta { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
   .cta p { margin: 6px 0 0; color: var(--muted); }
+  .top-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 26px 0 6px; }
+  .top-cta a { display: flex; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r);
+    padding: 16px 18px; color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s; }
+  .top-cta a:hover { border-color: var(--acc); transform: translateY(-1px); }
+  .top-cta .ic { font-size: 26px; flex: none; }
+  .top-cta b { display: block; font-size: 16px; } .top-cta span { color: var(--muted); font-size: 13.5px; line-height: 1.35; display: block; margin-top: 2px; }
+  .top-cta a.acc { border-color: var(--acc); background: linear-gradient(135deg, rgba(198,242,78,.12), rgba(198,242,78,.02)); }
+  .delta { font: 13px var(--mono); margin-top: 6px; color: var(--muted); } .delta.up { color: var(--acc); }
+  .live.busy .dot { background: var(--cool); }
+  @media (max-width: 640px) { .top-cta { grid-template-columns: 1fr } .bw { padding-top: 26px } .kpi .v { font-size: 36px } }
   .sub-form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
   .sub-form input { flex: 1; min-width: 220px; background: var(--bg-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 12px; padding: 13px 15px; font: 16px var(--font); }
   .sub-form input:focus { outline: none; border-color: var(--acc); }
@@ -57,12 +67,16 @@
 <main class="bw">
   <a href="/" class="live" style="text-decoration:none">← REBORN LAB</a>
   <h1>Как оживает Beget</h1>
-  <p class="lead">После атаки хостинг Beget включает серверы по одному. Мы раз в 15 минут проверяем сети Beget и 200 реальных сайтов на их хостинге — здесь видно, сколько уже работает. <a href="#watch">Подпишитесь на свой сайт</a> — сообщим в Telegram, когда он откроется.</p>
-  <div class="live" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
+  <p class="lead">После атаки хостинг Beget включает серверы по одному. Мы каждые 5 минут проверяем сети Beget и 200 реальных сайтов на их хостинге — здесь видно, сколько уже работает. <a href="#watch">Подпишитесь на свой сайт</a> — сообщим в Telegram, когда он откроется.</p>
+  <div class="live" id="livebox" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
+  <div class="top-cta">
+    <a class="acc" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener"><span class="ic">🔔</span><div><b>Сообщим, когда ваш сайт заработает</b><span>Бот @rebornlab_bot — пришлите адрес сайта, проверяем каждые 5 минут. Бесплатно.</span></div></a>
+    <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="telegram"><span class="ic">🛠</span><div><b>Сайт нужен срочно?</b><span>Поднимем из копий и архива и перенесём на надёжный сервер. Напишите — ответим лично.</span></div></a>
+  </div>
 
   <div class="kpis">
-    <div class="kpi"><div class="v" id="k-sites">—</div><div class="l">сайтов из 200 открываются</div><div class="bar"><i id="b-sites" style="width:0"></i></div></div>
-    <div class="kpi"><div class="v" id="k-host">—</div><div class="l">серверов хостинга отвечают (из <span id="k-ips">~1500</span> адресов в 6 сетях)</div></div>
+    <div class="kpi"><div class="v" id="k-sites">—</div><div class="l">сайтов из 200 открываются</div><div class="delta" id="d-sites"></div><div class="bar"><i id="b-sites" style="width:0"></i></div></div>
+    <div class="kpi"><div class="v" id="k-host">—</div><div class="l">серверов хостинга отвечают (из <span id="k-ips">~1500</span> адресов в 6 сетях)</div><div class="delta" id="d-host"></div></div>
     <div class="kpi"><div class="v" id="k-srv">—</div><div class="l">серверов с проверяемыми сайтами уже работают</div><div class="bar"><i id="b-srv" style="width:0"></i></div></div>
   </div>
 
@@ -102,7 +116,7 @@
     <a class="btn btn-acc" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="telegram">Написать в Telegram <span class="arrow">→</span></a>
   </div>
 
-  <p class="note">Источник: наши проверки с сервера в Джакарте. «Сервер хостинга работает» — сервер Beget отвечает своей стандартной страницей; это не значит, что открывается каждый сайт на нём. Сеть 45.130.40–43.x, 5.101.152.x, 87.236.16.x — сети Beget по данным RIPE (AS198610). Страница не связана с Beget.</p>
+  <p class="note">Источник: наши проверки с сервера в Джакарте каждые 5 минут. «Сервер хостинга работает» — сервер Beget отвечает своей стандартной страницей; это не значит, что открывается каждый сайт на нём. Сеть 45.130.40–43.x, 5.101.152.x, 87.236.16.x — сети Beget по данным RIPE (AS198610). Страница не связана с Beget.</p>
 </main>
 <script>
 (function () {
@@ -129,7 +143,7 @@
       '<p class="sub">Пока нет</p>';
   }
   function render() {
-    $('upd').textContent = 'обновлено ' + fmt(data.updated) + ' · следующая проверка через 15 минут';
+    tick();
     $('k-sites').innerHTML = data.sites_up + '<small> / ' + data.sites_total + '</small>';
     $('b-sites').style.width = (100 * data.sites_up / data.sites_total) + '%';
     $('k-host').textContent = data.hosting_up; $('k-ips').textContent = data.ips_total;
@@ -140,6 +154,20 @@
       return '<div class="net"><div class="n">' + esc(n.net) + '</div><div class="stack"><div class="h" style="width:' + (100 * n.hosting / t) + '%"></div><div class="o" style="width:' + (100 * n.other / t) + '%"></div><div class="d" style="flex:1"></div></div><div class="c">' + n.hosting + ' хостинг · ' + n.other + ' др.</div></div>';
     }).join('');
     chart(data.history); sites();
+    // изменения за последний час: сравниваем с точкой истории ~60 минут назад
+    var h = data.history, ref = null;
+    for (var i = h.length - 1; i >= 0; i--) { if (data.updated - h[i].t >= 3300) { ref = h[i]; break; } }
+    function dl(id, now, was) { var e = $(id); if (!ref) { e.textContent = 'изменения за час появятся через час наблюдений'; e.className = 'delta'; return; }
+      var d = now - was; e.textContent = (d > 0 ? '▲ +' + d : d < 0 ? '▼ ' + d : '— без изменений') + ' за последний час'; e.className = 'delta' + (d > 0 ? ' up' : ''); }
+    dl('d-sites', data.sites_up, ref && ref.s); dl('d-host', data.hosting_up, ref && ref.h);
+  }
+  function tick() {   // «обновлено N мин назад · следующая проверка через M мин» / «идёт проверка…»
+    if (!data) return;
+    var now = Date.now() / 1000, ago = Math.max(0, Math.round((now - data.updated) / 60)), every = data.every || 300,
+        left = Math.round((data.updated + every + 90 - now) / 60), box = $('livebox');
+    var a = ago < 1 ? 'обновлено только что' : 'обновлено ' + ago + ' мин назад';
+    if (left > 0) { box.classList.remove('busy'); $('upd').textContent = a + ' · следующая проверка через ' + left + ' мин'; }
+    else { box.classList.add('busy'); $('upd').textContent = a + ' · идёт проверка серверов и сайтов…'; }
   }
   document.querySelectorAll('.tabs button').forEach(function (b) {
     b.onclick = function () { document.querySelectorAll('.tabs button').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); filter = b.dataset.f; if (data) sites(); };
@@ -153,7 +181,7 @@
     var b = btoa(unescape(encodeURIComponent(d))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     window.open('https://t.me/rebornlab_bot?start=w_' + b.slice(0, 62), '_blank');
   };
-  load(); setInterval(load, 5 * 60 * 1000);
+  load(); setInterval(load, 60 * 1000); setInterval(tick, 15 * 1000);
 })();
 </script>
 </body>
