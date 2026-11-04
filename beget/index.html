@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Восстановление Beget — мониторинг в реальном времени · REBORN LAB</title>
-<meta name="description" content="Как оживает хостинг Beget после атаки: сколько серверов и сайтов уже работает. Проверка раз в 15 минут.">
+<title>Beget не работает? Статус восстановления хостинга онлайн</title>
+<meta name="description" content="Не работает сайт на Beget? Каждые 5 минут проверяем 1500 серверов и 1000 сайтов Beget: сколько уже открывается, график восстановления. Бесплатный бот сообщит, когда заработает ваш сайт.">
 <link rel="canonical" href="https://rebornlab.ru/beget/">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<meta property="og:title" content="Восстановление Beget — мониторинг">
+<meta property="og:title" content="Beget не работает? Статус восстановления онлайн">
 <meta property="og:description" content="Сколько серверов и сайтов Beget уже работает. Обновляется каждые 15 минут.">
 <meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
 <link rel="stylesheet" href="/assets/styles.css">
@@ -61,14 +61,21 @@
   .sub-form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
   .sub-form input { flex: 1; min-width: 220px; background: var(--bg-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 12px; padding: 13px 15px; font: 16px var(--font); }
   .sub-form input:focus { outline: none; border-color: var(--acc); }
+  .qa { border-top: 1px solid var(--line); padding: 12px 0; } .qa:first-of-type { border-top: 0; }
+  .qa summary { cursor: pointer; font-size: 17px; font-weight: 600; list-style: none; } .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after { content: '+'; float: right; color: var(--acc); font-size: 20px; } .qa[open] summary::after { content: '−'; }
+  .qa p { color: var(--muted); margin: 10px 0 2px; line-height: 1.6; }
+  .feed { display: flex; gap: 8px; flex-wrap: wrap; } .feed .s { flex: none; }
+  .feed .ago { font: 11px var(--mono); color: rgba(11,12,13,.55); margin-left: 6px; }
   .note { color: var(--dim); font-size: 13px; margin-top: 26px; line-height: 1.6; }
   @media (max-width: 640px) { .net { grid-template-columns: 1fr; gap: 4px } .net .c { text-align: left } .cta { grid-template-columns: 1fr } }
 </style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Почему не работает Beget?", "acceptedAnswer": {"@type": "Answer", "text": "По сообщению Beget, после атаки они включают серверы виртуального хостинга по одному: вручную проверяют каждый сервер, очищают от вредоносного кода, проверяют целостность данных и только потом запускают сайты. Поэтому сайты оживают постепенно, а не все сразу."}}, {"@type": "Question", "name": "Когда заработает мой сайт?", "acceptedAnswer": {"@type": "Answer", "text": "Точного срока Beget не называет. На этой странице видно, сколько сайтов из нашей выборки уже открывается и как быстро растёт это число. Чтобы не проверять вручную, напишите адрес сайта боту @rebornlab_bot — он сообщит в Telegram, как только сайт откроется."}}, {"@type": "Question", "name": "Как проверить, работает ли мой сайт на Beget?", "acceptedAnswer": {"@type": "Answer", "text": "Пришлите адрес сайта боту @rebornlab_bot: он сразу проверит, открывается ли сайт, и дальше будет проверять каждые 5 минут. Бот отличает настоящий сайт от заглушки хостинга или регистратора."}}, {"@type": "Question", "name": "Сервер Beget включился, а сайт не открывается — что это значит?", "acceptedAnswer": {"@type": "Answer", "text": "Сервер хостинга может уже отвечать, а отдельные сайты на нём — ещё нет: Beget поднимает их постепенно. Бот присылает отдельное уведомление, когда включился сервер вашего сайта, и ещё одно — когда откроется сам сайт."}}, {"@type": "Question", "name": "Это официальная страница Beget?", "acceptedAnswer": {"@type": "Answer", "text": "Нет. Это независимый бесплатный мониторинг: мы сами проверяем сети Beget (AS198610) и реальные сайты на их хостинге. Данные обновляются каждые 5 минут."}}]}</script>
 </head>
 <body>
 <main class="bw">
   <a href="/" class="live" style="text-decoration:none">← REBORN LAB</a>
-  <h1>Как оживает Beget</h1>
+  <h1>Beget не работает? Статус восстановления</h1>
   <p class="lead">После атаки хостинг Beget включает серверы по одному. Мы каждые 5 минут проверяем сети Beget и <span class="n-sites">1000</span> реальных сайтов на их хостинге — здесь видно, сколько уже работает. <a href="#watch">Подпишитесь на свой сайт</a> — сообщим в Telegram, когда он откроется.</p>
   <div class="live" id="livebox" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
   <div class="top-cta">
@@ -79,6 +86,12 @@
     <div class="kpi"><div class="v" id="k-sites">—</div><div class="l">сайтов из <span class="n-sites">1000</span> открываются</div><div class="delta" id="d-sites"></div><div class="bar"><i id="b-sites" style="width:0"></i></div></div>
     <div class="kpi"><div class="v" id="k-host">—</div><div class="l">серверов хостинга отвечают (из <span id="k-ips">~1500</span> адресов в 6 сетях)</div><div class="delta" id="d-host"></div></div>
     <div class="kpi"><div class="v" id="k-srv">—</div><div class="l">серверов с проверяемыми сайтами уже работают</div><div class="bar"><i id="b-srv" style="width:0"></i></div></div>
+  </div>
+
+  <div class="card" id="revived-card">
+    <h2>Только что ожили</h2>
+    <p class="sub">Сайты, которые не открывались на прошлой проверке и открылись сейчас. За последний час: <b id="rev-hour">—</b></p>
+    <div class="feed" id="revived"></div>
   </div>
 
   <div class="card" id="watch">
@@ -109,6 +122,15 @@
     <div class="tabs"><button class="on" data-f="all">Все</button><button data-f="ok">Работают</button><button data-f="down">Не открываются</button></div>
     <div class="grid" id="sites"></div>
     <div style="text-align:center;margin-top:16px"><button class="btn btn-ghost" id="more" type="button" style="display:none"></button></div>
+  </div>
+
+  <div class="card" id="faq">
+    <h2>Частые вопросы</h2>
+    <details class="qa"><summary>Почему не работает Beget?</summary><p>По сообщению Beget, после атаки они включают серверы виртуального хостинга по одному: вручную проверяют каждый сервер, очищают от вредоносного кода, проверяют целостность данных и только потом запускают сайты. Поэтому сайты оживают постепенно, а не все сразу.</p></details>
+    <details class="qa"><summary>Когда заработает мой сайт?</summary><p>Точного срока Beget не называет. На этой странице видно, сколько сайтов из нашей выборки уже открывается и как быстро растёт это число. Чтобы не проверять вручную, напишите адрес сайта боту @rebornlab_bot — он сообщит в Telegram, как только сайт откроется.</p></details>
+    <details class="qa"><summary>Как проверить, работает ли мой сайт на Beget?</summary><p>Пришлите адрес сайта боту @rebornlab_bot: он сразу проверит, открывается ли сайт, и дальше будет проверять каждые 5 минут. Бот отличает настоящий сайт от заглушки хостинга или регистратора.</p></details>
+    <details class="qa"><summary>Сервер Beget включился, а сайт не открывается — что это значит?</summary><p>Сервер хостинга может уже отвечать, а отдельные сайты на нём — ещё нет: Beget поднимает их постепенно. Бот присылает отдельное уведомление, когда включился сервер вашего сайта, и ещё одно — когда откроется сам сайт.</p></details>
+    <details class="qa"><summary>Это официальная страница Beget?</summary><p>Нет. Это независимый бесплатный мониторинг: мы сами проверяем сети Beget (AS198610) и реальные сайты на их хостинге. Данные обновляются каждые 5 минут.</p></details>
   </div>
 
   <p class="note">Источник: наши проверки с сервера в Джакарте каждые 5 минут. «Сервер хостинга работает» — сервер Beget отвечает своей стандартной страницей; это не значит, что открывается каждый сайт на нём. Сеть 45.130.40–43.x, 5.101.152.x, 87.236.16.x — сети Beget по данным RIPE (AS198610). Страница не связана с Beget. Мониторинг и бот бесплатны, без рекламы. «Работает» — сайт открылся сам, а не заглушка хостинга.</p>
@@ -171,6 +193,12 @@
       var t = n.hosting + n.other + n.down;
       return '<div class="net"><div class="n">' + esc(n.net) + '</div><div class="stack"><div class="h" style="width:' + (100 * n.hosting / t) + '%"></div><div class="o" style="width:' + (100 * n.other / t) + '%"></div><div class="d" style="flex:1"></div></div><div class="c">' + n.hosting + ' хостинг · ' + n.other + ' др.</div></div>';
     }).join('');
+    var rv = data.revived || [];
+    $('rev-hour').textContent = (data.revived_hour || 0) + ' сайтов';
+    $('revived').innerHTML = rv.length ? rv.slice(0, 24).map(function (r) {
+      var m = Math.max(1, Math.round((Date.now() / 1000 - r.t) / 60));
+      return '<div class="s ok">' + esc(r.d) + '<span class="ago">' + (m < 60 ? m + ' мин' : Math.round(m / 60) + ' ч') + '</span></div>';
+    }).join('') : '<p class="sub" style="margin:0">Пока никто — лента обновляется каждые 5 минут</p>';
     chart(data.history); sites();
     // изменения за последний час: сравниваем с точкой истории ~60 минут назад
     var h = data.history, ref = null;
