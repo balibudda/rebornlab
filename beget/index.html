@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Восстановление Beget — мониторинг в реальном времени · REBORN LAB</title>
+<meta name="description" content="Как оживает хостинг Beget после атаки: сколько серверов и сайтов уже работает. Проверка раз в 15 минут.">
+<link rel="canonical" href="https://rebornlab.ru/beget/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Восстановление Beget — мониторинг">
+<meta property="og:description" content="Сколько серверов и сайтов Beget уже работает. Обновляется каждые 15 минут.">
+<meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
+<link rel="stylesheet" href="/assets/styles.css">
+<style>
+  /* страница-монитор (ручная, build.mjs её не трогает) */
+  .bw { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; }
+  .bw h1 { font-size: clamp(30px, 5vw, 54px); letter-spacing: -.03em; line-height: 1.05; margin: 14px 0 12px; }
+  .bw .lead { color: var(--muted); font-size: 18px; max-width: 46em; }
+  .bw .live { display: inline-flex; align-items: center; gap: 8px; font: 13px var(--mono); color: var(--muted); }
+  .bw .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 0 0 var(--acc-dim); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198,242,78,.5) } 70% { box-shadow: 0 0 0 10px rgba(198,242,78,0) } 100% { box-shadow: 0 0 0 0 rgba(198,242,78,0) } }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 34px 0; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px 22px; }
+  .kpi .v { font-size: 42px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+  .kpi .v small { font-size: 18px; color: var(--muted); font-weight: 500; }
+  .kpi .l { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  .bar { height: 8px; background: var(--card-2); border-radius: 4px; overflow: hidden; margin-top: 14px; }
+  .bar i { display: block; height: 100%; background: var(--acc); border-radius: 4px; transition: width .6s; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; margin: 18px 0; }
+  .card h2 { font-size: 22px; margin: 0 0 4px; letter-spacing: -.01em; }
+  .card .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+  .chart { width: 100%; height: 230px; display: block; }
+  .legend { display: flex; gap: 18px; font-size: 13px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+  .legend b { display: inline-block; width: 12px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+  .nets { display: grid; gap: 10px; }
+  .net { display: grid; grid-template-columns: 150px 1fr 120px; gap: 12px; align-items: center; font-size: 14px; }
+  .net .n { font-family: var(--mono); color: var(--muted); }
+  .stack { display: flex; height: 22px; border-radius: 6px; overflow: hidden; background: var(--card-2); }
+  .stack .h { background: var(--acc); } .stack .o { background: var(--cool); } .stack .d { background: rgba(237,235,230,.08); }
+  .net .c { text-align: right; font-family: var(--mono); font-size: 13px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+  .s { font: 12px var(--mono); padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .s.ok { color: #0b0c0d; background: var(--acc); border-color: var(--acc); }
+  .tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tabs button { background: var(--card-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 999px; padding: 7px 14px; font: 14px var(--font); cursor: pointer; }
+  .tabs button.on { background: var(--text); color: var(--bg); }
+  .cta { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+  .cta p { margin: 6px 0 0; color: var(--muted); }
+  .note { color: var(--dim); font-size: 13px; margin-top: 26px; line-height: 1.6; }
+  @media (max-width: 640px) { .net { grid-template-columns: 1fr; gap: 4px } .net .c { text-align: left } .cta { grid-template-columns: 1fr } }
+</style>
+</head>
+<body>
+<main class="bw">
+  <a href="/" class="live" style="text-decoration:none">← REBORN LAB</a>
+  <h1>Как оживает Beget</h1>
+  <p class="lead">После атаки хостинг Beget включает серверы по одному. Мы раз в 15 минут проверяем сети Beget и 200 реальных сайтов на их хостинге — здесь видно, сколько уже работает.</p>
+  <div class="live" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="v" id="k-sites">—</div><div class="l">сайтов из 200 открываются</div><div class="bar"><i id="b-sites" style="width:0"></i></div></div>
+    <div class="kpi"><div class="v" id="k-host">—</div><div class="l">серверов хостинга отвечают (из <span id="k-ips">~1500</span> адресов в 6 сетях)</div></div>
+    <div class="kpi"><div class="v" id="k-srv">—</div><div class="l">серверов с проверяемыми сайтами уже работают</div><div class="bar"><i id="b-srv" style="width:0"></i></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Динамика</h2>
+    <p class="sub">Сколько сайтов открывается и сколько серверов хостинга отвечает — по времени</p>
+    <svg class="chart" id="chart" viewBox="0 0 1000 230" preserveAspectRatio="none"></svg>
+    <div class="legend"><span><b style="background:var(--acc)"></b>сайты (из 200)</span><span><b style="background:var(--cool)"></b>серверы хостинга</span><span id="range"></span></div>
+  </div>
+
+  <div class="card">
+    <h2>Сети Beget</h2>
+    <p class="sub">Каждый адрес проверяется одним обычным запросом. <span style="color:var(--acc)">■</span> сервер хостинга работает · <span style="color:var(--cool)">■</span> другой сервер (VPS) · <span style="color:var(--dim)">■</span> молчит или адрес не занят</p>
+    <div class="nets" id="nets"></div>
+  </div>
+
+  <div class="card">
+    <h2>Сайты на хостинге Beget</h2>
+    <p class="sub">200 сайтов из разных серверов. Адреса частично скрыты — нам важна общая картина, а не конкретные компании.</p>
+    <div class="tabs"><button class="on" data-f="all">Все</button><button data-f="ok">Работают</button><button data-f="down">Не открываются</button></div>
+    <div class="grid" id="sites"></div>
+  </div>
+
+  <div class="card cta">
+    <div>
+      <h2>Сайт лежит, а клиенты уходят?</h2>
+      <p>Срочно поднимем сайт из резервных копий, веб-архива и кэша поисковиков и перенесём на надёжный сервер, который открывается в России. Так мы за сутки вернули сайт оптового магазина тканей, пока его хостинг стоял.</p>
+    </div>
+    <a class="btn btn-acc" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="telegram">Написать в Telegram <span class="arrow">→</span></a>
+  </div>
+
+  <p class="note">Источник: наши проверки с сервера в Джакарте. «Сервер хостинга работает» — сервер Beget отвечает своей стандартной страницей; это не значит, что открывается каждый сайт на нём. Сеть 45.130.40–43.x, 5.101.152.x, 87.236.16.x — сети Beget по данным RIPE (AS198610). Страница не связана с Beget.</p>
+</main>
+<script>
+(function () {
+  var API = 'https://api.rebornlab.ru/beget.json', data = null, filter = 'all';
+  function $(id) { return document.getElementById(id); }
+  function fmt(t) { var d = new Date(t * 1000); return d.toLocaleString('ru-RU', {timeZone: 'Europe/Moscow', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) + ' МСК'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+  function chart(h) {
+    var svg = $('chart'), W = 1000, H = 230, P = 26;
+    if (h.length < 2) { svg.innerHTML = '<text x="500" y="120" fill="#6a6862" font-size="16" text-anchor="middle">История копится — график появится после следующей проверки</text>'; return; }
+    var t0 = h[0].t, t1 = h[h.length - 1].t, max = Math.max(200, Math.max.apply(null, h.map(function (x) { return x.h; })));
+    function X(t) { return P + (W - 2 * P) * (t - t0) / Math.max(1, t1 - t0); }
+    function Y(v) { return H - P - (H - 2 * P) * v / max; }
+    function path(k) { return h.map(function (x, i) { return (i ? 'L' : 'M') + X(x.t).toFixed(1) + ' ' + Y(x[k]).toFixed(1); }).join(' '); }
+    var g = '';
+    [0, .5, 1].forEach(function (f) { var y = Y(max * f); g += '<line x1="' + P + '" x2="' + (W - P) + '" y1="' + y + '" y2="' + y + '" stroke="rgba(237,235,230,.08)"/><text x="' + (W - P) + '" y="' + (y - 4) + '" fill="#6a6862" font-size="12" text-anchor="end">' + Math.round(max * f) + '</text>'; });
+    svg.innerHTML = g + '<path d="' + path('h') + '" fill="none" stroke="#7aa7ff" stroke-width="2.5" vector-effect="non-scaling-stroke"/>' +
+      '<path d="' + path('s') + '" fill="none" stroke="#c6f24e" stroke-width="3" vector-effect="non-scaling-stroke"/>';
+    $('range').textContent = fmt(t0) + ' — ' + fmt(t1);
+  }
+  function sites() {
+    var list = data.sites.filter(function (s) { return filter === 'all' || (filter === 'ok') === s.ok; });
+    $('sites').innerHTML = list.map(function (s) { return '<div class="s' + (s.ok ? ' ok' : '') + '" title="' + esc(s.net) + '.x">' + esc(s.d) + '</div>'; }).join('') ||
+      '<p class="sub">Пока нет</p>';
+  }
+  function render() {
+    $('upd').textContent = 'обновлено ' + fmt(data.updated) + ' · следующая проверка через 15 минут';
+    $('k-sites').innerHTML = data.sites_up + '<small> / ' + data.sites_total + '</small>';
+    $('b-sites').style.width = (100 * data.sites_up / data.sites_total) + '%';
+    $('k-host').textContent = data.hosting_up; $('k-ips').textContent = data.ips_total;
+    $('k-srv').innerHTML = data.servers_with_sites_up + '<small> / ' + data.servers_with_sites + '</small>';
+    $('b-srv').style.width = (100 * data.servers_with_sites_up / data.servers_with_sites) + '%';
+    $('nets').innerHTML = data.nets.map(function (n) {
+      var t = n.hosting + n.other + n.down;
+      return '<div class="net"><div class="n">' + esc(n.net) + '</div><div class="stack"><div class="h" style="width:' + (100 * n.hosting / t) + '%"></div><div class="o" style="width:' + (100 * n.other / t) + '%"></div><div class="d" style="flex:1"></div></div><div class="c">' + n.hosting + ' хостинг · ' + n.other + ' др.</div></div>';
+    }).join('');
+    chart(data.history); sites();
+  }
+  document.querySelectorAll('.tabs button').forEach(function (b) {
+    b.onclick = function () { document.querySelectorAll('.tabs button').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); filter = b.dataset.f; if (data) sites(); };
+  });
+  function load() { fetch(API, {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (d) { data = d; render(); })
+    .catch(function () { $('upd').textContent = 'не удалось загрузить данные — попробуйте обновить страницу'; }); }
+  load(); setInterval(load, 5 * 60 * 1000);
+})();
+</script>
+</body>
+</html>
