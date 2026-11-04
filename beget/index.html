@@ -109,6 +109,7 @@
     <p class="sub"><span class="n-sites">1000</span> сайтов с <span id="n-srv">400</span> разных серверов. Адреса частично скрыты — нам важна общая картина, а не конкретные компании.</p>
     <div class="tabs"><button class="on" data-f="all">Все</button><button data-f="ok">Работают</button><button data-f="down">Не открываются</button></div>
     <div class="grid" id="sites"></div>
+    <div style="text-align:center;margin-top:16px"><button class="btn btn-ghost" id="more" type="button" style="display:none"></button></div>
   </div>
 
   <div class="card cta">
@@ -157,10 +158,14 @@
       $('range').textContent = 'Наблюдаем с ' + fmt(a.t) + ' · обновляется каждые 5 минут';
     }
   }
+  var shown = 60;   // плитки сайтов — порциями, «Показать ещё»
   function sites() {
     var list = data.sites.filter(function (s) { return filter === 'all' || (filter === 'ok') === s.ok; });
-    $('sites').innerHTML = list.map(function (s) { return '<div class="s' + (s.ok ? ' ok' : '') + '" title="' + esc(s.net) + '.x">' + esc(s.d) + '</div>'; }).join('') ||
+    $('sites').innerHTML = list.slice(0, shown).map(function (s) { return '<div class="s' + (s.ok ? ' ok' : '') + '" title="' + esc(s.net) + '.x">' + esc(s.d) + '</div>'; }).join('') ||
       '<p class="sub">Пока нет</p>';
+    var more = $('more'), rest = list.length - shown;
+    more.style.display = rest > 0 ? '' : 'none';
+    more.textContent = 'Показать ещё ' + Math.min(rest, 120) + ' (осталось ' + rest + ')';
   }
   function render() {
     tick();
@@ -192,7 +197,7 @@
     else { box.classList.add('busy'); $('upd').textContent = a + ' · идёт проверка серверов и сайтов…'; }
   }
   document.querySelectorAll('.tabs button').forEach(function (b) {
-    b.onclick = function () { document.querySelectorAll('.tabs button').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); filter = b.dataset.f; if (data) sites(); };
+    b.onclick = function () { document.querySelectorAll('.tabs button').forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); filter = b.dataset.f; shown = 60; if (data) sites(); };
   });
   function load() { fetch(API, {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (d) { data = d; render(); })
     .catch(function () { $('upd').textContent = 'не удалось загрузить данные — попробуйте обновить страницу'; }); }
@@ -203,6 +208,7 @@
     var b = btoa(unescape(encodeURIComponent(d))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     window.open('https://t.me/rebornlab_bot?start=w_' + b.slice(0, 62), '_blank');
   };
+  $('more').onclick = function () { shown += 120; sites(); };
   load(); setInterval(load, 60 * 1000); setInterval(tick, 15 * 1000);
 })();
 </script>
