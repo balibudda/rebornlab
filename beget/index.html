@@ -46,6 +46,9 @@
   .tabs button.on { background: var(--text); color: var(--bg); }
   .cta { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
   .cta p { margin: 6px 0 0; color: var(--muted); }
+  .sub-form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .sub-form input { flex: 1; min-width: 220px; background: var(--bg-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 12px; padding: 13px 15px; font: 16px var(--font); }
+  .sub-form input:focus { outline: none; border-color: var(--acc); }
   .note { color: var(--dim); font-size: 13px; margin-top: 26px; line-height: 1.6; }
   @media (max-width: 640px) { .net { grid-template-columns: 1fr; gap: 4px } .net .c { text-align: left } .cta { grid-template-columns: 1fr } }
 </style>
@@ -54,13 +57,21 @@
 <main class="bw">
   <a href="/" class="live" style="text-decoration:none">← REBORN LAB</a>
   <h1>Как оживает Beget</h1>
-  <p class="lead">После атаки хостинг Beget включает серверы по одному. Мы раз в 15 минут проверяем сети Beget и 200 реальных сайтов на их хостинге — здесь видно, сколько уже работает.</p>
+  <p class="lead">После атаки хостинг Beget включает серверы по одному. Мы раз в 15 минут проверяем сети Beget и 200 реальных сайтов на их хостинге — здесь видно, сколько уже работает. <a href="#watch">Подпишитесь на свой сайт</a> — сообщим в Telegram, когда он откроется.</p>
   <div class="live" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
 
   <div class="kpis">
     <div class="kpi"><div class="v" id="k-sites">—</div><div class="l">сайтов из 200 открываются</div><div class="bar"><i id="b-sites" style="width:0"></i></div></div>
     <div class="kpi"><div class="v" id="k-host">—</div><div class="l">серверов хостинга отвечают (из <span id="k-ips">~1500</span> адресов в 6 сетях)</div></div>
     <div class="kpi"><div class="v" id="k-srv">—</div><div class="l">серверов с проверяемыми сайтами уже работают</div><div class="bar"><i id="b-srv" style="width:0"></i></div></div>
+  </div>
+
+  <div class="card" id="watch">
+    <h2>Ждёте свой сайт? Сообщим, когда заработает</h2>
+    <p class="sub">Впишите адрес — бот REBORN LAB в Telegram проверит его сейчас, будет проверять каждые 5 минут и напишет, как только сайт откроется. Подписка бесплатная, отписаться — одной кнопкой.</p>
+    <form class="sub-form" id="subf"><input id="subd" type="text" inputmode="url" placeholder="например, mysite.ru" autocomplete="off" required>
+      <button class="btn btn-acc" type="submit">Сообщить в Telegram <span class="arrow">→</span></button></form>
+    <p class="sub" style="margin:12px 0 0">Или просто напишите адрес боту <a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">@rebornlab_bot</a>. Для уведомлений храним только ваш Telegram ID и адрес сайта.</p>
   </div>
 
   <div class="card">
@@ -135,6 +146,13 @@
   });
   function load() { fetch(API, {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (d) { data = d; render(); })
     .catch(function () { $('upd').textContent = 'не удалось загрузить данные — попробуйте обновить страницу'; }); }
+  document.getElementById('subf').onsubmit = function (e) {
+    e.preventDefault();
+    var d = document.getElementById('subd').value.trim().toLowerCase().replace(/^[a-z]+:\/\//, '').split('/')[0].replace(/^www\./, '');
+    if (!/\./.test(d)) { document.getElementById('subd').focus(); return; }
+    var b = btoa(unescape(encodeURIComponent(d))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    window.open('https://t.me/rebornlab_bot?start=w_' + b.slice(0, 62), '_blank');
+  };
   load(); setInterval(load, 5 * 60 * 1000);
 })();
 </script>
