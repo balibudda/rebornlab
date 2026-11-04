@@ -48,7 +48,7 @@
   .tabs button.on { background: var(--text); color: var(--bg); }
   .cta { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
   .cta p { margin: 6px 0 0; color: var(--muted); }
-  .top-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 26px 0 6px; }
+  .top-cta { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 26px 0 6px; }
   .top-cta a { display: flex; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r);
     padding: 16px 18px; color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s; }
   .top-cta a:hover { border-color: var(--acc); transform: translateY(-1px); }
@@ -73,7 +73,6 @@
   <div class="live" id="livebox" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
   <div class="top-cta">
     <a class="acc" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener"><span class="ic">🔔</span><div><b>Сообщим, когда ваш сайт заработает</b><span>Бот @rebornlab_bot — пришлите адрес сайта, проверяем каждые 5 минут. Бесплатно.</span></div></a>
-    <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="telegram"><span class="ic">🛠</span><div><b>Сайт нужен срочно?</b><span>Поднимем из копий и архива и перенесём на надёжный сервер. Напишите — ответим лично.</span></div></a>
   </div>
 
   <div class="kpis">
@@ -112,15 +111,7 @@
     <div style="text-align:center;margin-top:16px"><button class="btn btn-ghost" id="more" type="button" style="display:none"></button></div>
   </div>
 
-  <div class="card cta">
-    <div>
-      <h2>Сайт лежит, а клиенты уходят?</h2>
-      <p>Срочно поднимем сайт из резервных копий, веб-архива и кэша поисковиков и перенесём на надёжный сервер, который открывается в России. Так мы за сутки вернули сайт оптового магазина тканей, пока его хостинг стоял.</p>
-    </div>
-    <a class="btn btn-acc" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="telegram">Написать в Telegram <span class="arrow">→</span></a>
-  </div>
-
-  <p class="note">Источник: наши проверки с сервера в Джакарте каждые 5 минут. «Сервер хостинга работает» — сервер Beget отвечает своей стандартной страницей; это не значит, что открывается каждый сайт на нём. Сеть 45.130.40–43.x, 5.101.152.x, 87.236.16.x — сети Beget по данным RIPE (AS198610). Страница не связана с Beget.</p>
+  <p class="note">Источник: наши проверки с сервера в Джакарте каждые 5 минут. «Сервер хостинга работает» — сервер Beget отвечает своей стандартной страницей; это не значит, что открывается каждый сайт на нём. Сеть 45.130.40–43.x, 5.101.152.x, 87.236.16.x — сети Beget по данным RIPE (AS198610). Страница не связана с Beget. Мониторинг и бот бесплатны, без рекламы. «Работает» — сайт открылся сам, а не заглушка хостинга.</p>
 </main>
 <script>
 (function () {
