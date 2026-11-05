@@ -10,7 +10,8 @@
 <link rel="stylesheet" href="/assets/styles.css?v=73d1e1dc">
 <style>
   /* ручная страница (build.mjs её не трогает) */
-  .bw { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; }
+  .bw { max-width: var(--max); margin: 0 auto; padding: 40px 22px 80px; }   /* край — как у подвала */
+  .bw > * { max-width: 820px; }
   .bw h1 { font-size: clamp(28px, 4.6vw, 46px); letter-spacing: -.03em; line-height: 1.08; margin: 14px 0 12px; }
   .bw h2 { font-size: 22px; margin: 0 0 10px; }
   .bw .lead { color: var(--muted); font-size: 18px; }
