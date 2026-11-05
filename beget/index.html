@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Beget не работает? Статус восстановления хостинга онлайн</title>
-<meta name="description" content="Не работает сайт на Beget? Каждые 5 минут проверяем 1500 серверов и 1000 сайтов Beget: сколько уже открывается, график восстановления. Бесплатный бот сообщит, когда заработает ваш сайт.">
+<meta name="description" content="Не работает сайт на Beget? Каждые 15 минут проверяем 1500 серверов и 1000 сайтов Beget: сколько уже открывается, график восстановления. Бесплатный бот сообщит, когда заработает ваш сайт.">
 <link rel="canonical" href="https://rebornlab.ru/beget/">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <meta property="og:title" content="Beget не работает? Статус восстановления онлайн">
@@ -77,9 +77,8 @@
 <main class="bw">
   <a href="/" class="live" style="text-decoration:none">← REBORN LAB</a>
   <h1>Beget не работает? Статус восстановления</h1>
-  <p class="lead">После атаки хостинг Beget включает серверы по одному. Мы каждые 5 минут проверяем сети Beget и <span class="n-sites">1000</span> реальных сайтов на их хостинге — здесь видно, сколько уже работает. <a href="#watch">Подпишитесь на свой сайт</a> — сообщим в Telegram, когда он откроется.</p>
+  <p class="lead">После атаки хостинг Beget включает серверы по одному. Мы каждые 15 минут проверяем сети Beget и <span class="n-sites">1000</span> реальных сайтов на их хостинге — здесь видно, сколько уже работает. <a href="#watch">Подпишитесь на свой сайт</a> — сообщим в Telegram, когда он откроется.</p>
   <div class="live" id="livebox" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
-  <p class="card" style="margin-top:16px;padding:14px 18px;color:var(--muted)"><b style="color:var(--text)">5 ноября, 17:30 МСК:</b> общий мониторинг 1000 сайтов, серверов и VPS Beget поставлен на паузу — цифры ниже на момент последнего замера. Бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> работает как обычно: проверяет ваши сайты каждые 5 минут и пишет, когда они заработают.</p>
   <div class="top-cta">
     <a class="acc" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener"><span class="ic">🔔</span><div><b>Сообщим, когда ваш сайт заработает</b><span>Бот @rebornlab_bot — пришлите адрес сайта, проверяем каждые 5 минут. Бесплатно.</span></div></a>
   </div>
@@ -107,7 +106,7 @@
 
   <div class="card">
     <h2>Динамика</h2>
-    <p class="sub">Каждая точка — проверка раз в 5 минут. Шкала у каждого графика своя, чтобы был виден даже небольшой рост.</p>
+    <p class="sub">Каждая точка — проверка раз в 15 минут (до вечера 5 ноября — раз в 5 минут). Шкала у каждого графика своя, чтобы был виден даже небольшой рост.</p>
     <div class="ch"><div class="ch-h"><b>Сайты открываются</b> <span class="delta" id="g-s"></span></div><svg class="chart" id="chart-s" viewBox="0 0 1000 170"></svg></div>
     <div class="ch"><div class="ch-h"><b>Серверы хостинга отвечают</b> <span class="delta" id="g-h"></span></div><svg class="chart" id="chart-h" viewBox="0 0 1000 170"></svg></div>
     <div class="ch" id="ch-vps" style="display:none"><div class="ch-h"><b>VPS на Beget отвечают</b> <span class="delta" id="g-v"></span></div><svg class="chart" id="chart-v" viewBox="0 0 1000 170"></svg></div>
@@ -145,7 +144,7 @@
   </div>
 
   <p class="note" style="font-size:15px"><a href="/beget/pravila/" style="color:var(--acc)">Правила мониторинга и бота</a> — как и что мы проверяем (всё в рамках закона), что публикуем, без рекламы, какие данные хранит бот и как их удалить.</p>
-  <p class="note">Источник: наши проверки с сервера в Джакарте каждые 5 минут. «Сервер хостинга работает» — сервер Beget отвечает своей стандартной страницей; это не значит, что открывается каждый сайт на нём. Сеть 45.130.40–43.x, 5.101.152.x, 87.236.16.x — сети Beget по данным RIPE (AS198610). Страница не связана с Beget. Мониторинг и бот бесплатны, без рекламы. «Работает» — сайт открылся сам, а не заглушка хостинга.</p>
+  <p class="note">Источник: наши проверки с сервера в Джакарте каждые 15 минут. «Сервер хостинга работает» — сервер Beget отвечает своей стандартной страницей; это не значит, что открывается каждый сайт на нём. Сеть 45.130.40–43.x, 5.101.152.x, 87.236.16.x — сети Beget по данным RIPE (AS198610). Страница не связана с Beget. Мониторинг и бот бесплатны, без рекламы. «Работает» — сайт открылся сам, а не заглушка хостинга.</p>
 </main>
 <footer class="ftr"><div class="wrap">
   <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© 2026 REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a></div></div>
@@ -191,7 +190,7 @@
       if (hv.length) { $('ch-vps').style.display = ''; chart1($('chart-v'), hv, 'v', '#ffb454');
         if (hv.length > 1) { var av = hv[0]; var e = $('g-v'), dv = hv[hv.length - 1].v - av.v;
           e.textContent = (dv > 0 ? '▲ +' + dv : dv < 0 ? '▼ ' + dv : 'без изменений') + ' VPS с ' + tm(av.t); e.className = 'delta' + (dv > 0 ? ' up' : ''); } }
-      $('range').textContent = 'Наблюдаем с ' + fmt(a.t) + ' · обновляется каждые 5 минут';
+      $('range').textContent = 'Наблюдаем с ' + fmt(a.t) + ' · обновляется каждые 15 минут';
     }
   }
   var shown = 60;   // плитки сайтов — порциями, «Показать ещё»
@@ -223,7 +222,7 @@
     $('revived').innerHTML = rv.length ? rv.slice(0, 24).map(function (r) {
       var m = Math.max(1, Math.round((Date.now() / 1000 - r.t) / 60));
       return '<div class="s ok">' + esc(r.d) + '<span class="ago">' + (m < 60 ? m + ' мин' : Math.round(m / 60) + ' ч') + '</span></div>';
-    }).join('') : '<p class="sub" style="margin:0">Пока никто — лента обновляется каждые 5 минут</p>';
+    }).join('') : '<p class="sub" style="margin:0">Пока никто — лента обновляется каждые 15 минут</p>';
     chart(data.history); sites();
     // изменения за последний час: сравниваем с точкой истории ~60 минут назад
     var h = data.history, ref = null;
@@ -238,7 +237,8 @@
     var now = Date.now() / 1000, ago = Math.max(0, Math.round((now - data.updated) / 60)), every = data.every || 300,
         left = Math.round((data.updated + every + 90 - now) / 60), box = $('livebox');
     var a = ago < 1 ? 'обновлено только что' : 'обновлено ' + ago + ' мин назад';
-    if (left > 0) { box.classList.remove('busy'); $('upd').textContent = a + ' · следующая проверка через ' + left + ' мин'; }
+    if (now - data.updated > 3 * every) { box.classList.remove('busy'); $('upd').textContent = a + ' · мониторинг временно приостановлен, бот работает'; }
+    else if (left > 0) { box.classList.remove('busy'); $('upd').textContent = a + ' · следующая проверка через ' + left + ' мин'; }
     else { box.classList.add('busy'); $('upd').textContent = a + ' · идёт проверка серверов и сайтов…'; }
   }
   document.querySelectorAll('.tabs button').forEach(function (b) {
