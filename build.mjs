@@ -489,7 +489,7 @@ copyFileSync(path.join(ROOT, 'src/main.js'), path.join(OUT, 'assets/main.js'))
 for (const f of readdirSync(path.join(ROOT, 'src/assets/projects'))) copyFileSync(path.join(ROOT, 'src/assets/projects', f), path.join(OUT, 'assets/projects', f))
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
-const urls = [['/', today, '1.0'], ['/projects/', today, '0.9'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'],
+const urls = [['/', today, '1.0'], ['/projects/', today, '0.9'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/pravila/', today, '0.4'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...PROJECTS.filter((p) => !p.private).map((p) => [`/projects/${p.slug}/`, today, '0.7']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d, pr]) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${d}</lastmod><priority>${pr}</priority></url>`).join('\n')}\n</urlset>\n`)
 write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /demo/\n\n# AI-поисковики приветствуются (GEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: YandexBot\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`)
