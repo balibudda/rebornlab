@@ -86,6 +86,7 @@
     <div class="kpi"><div class="v" id="k-sites">—</div><div class="l">сайтов из <span class="n-sites">1000</span> открываются</div><div class="delta" id="d-sites"></div><div class="bar"><i id="b-sites" style="width:0"></i></div></div>
     <div class="kpi"><div class="v" id="k-host">—</div><div class="l">серверов хостинга отвечают (из <span id="k-ips">~1500</span> адресов в 6 сетях)</div><div class="delta" id="d-host"></div></div>
     <div class="kpi"><div class="v" id="k-srv">—</div><div class="l">серверов с проверяемыми сайтами уже работают</div><div class="bar"><i id="b-srv" style="width:0"></i></div></div>
+    <div class="kpi" id="kpi-vps" style="display:none"><div class="v" id="k-vps">—</div><div class="l">VPS (облачных серверов) на Beget отвечают</div><div class="delta" id="d-vps"></div><div class="bar"><i id="b-vps" style="width:0"></i></div></div>
   </div>
 
   <div class="card" id="revived-card">
@@ -107,6 +108,7 @@
     <p class="sub">Каждая точка — проверка раз в 5 минут. Шкала у каждого графика своя, чтобы был виден даже небольшой рост.</p>
     <div class="ch"><div class="ch-h"><b>Сайты открываются</b> <span class="delta" id="g-s"></span></div><svg class="chart" id="chart-s" viewBox="0 0 1000 170"></svg></div>
     <div class="ch"><div class="ch-h"><b>Серверы хостинга отвечают</b> <span class="delta" id="g-h"></span></div><svg class="chart" id="chart-h" viewBox="0 0 1000 170"></svg></div>
+    <div class="ch" id="ch-vps" style="display:none"><div class="ch-h"><b>VPS на Beget отвечают</b> <span class="delta" id="g-v"></span></div><svg class="chart" id="chart-v" viewBox="0 0 1000 170"></svg></div>
     <div class="legend"><span id="range"></span></div>
   </div>
 
@@ -174,6 +176,10 @@
       var a = h[0], z = h[h.length - 1];
       function gd(id, d, word) { var e = $(id); e.textContent = (d > 0 ? '▲ +' + d : d < 0 ? '▼ ' + d : 'без изменений') + ' ' + word + ' с ' + tm(a.t); e.className = 'delta' + (d > 0 ? ' up' : ''); }
       gd('g-s', z.s - a.s, 'сайтов'); gd('g-h', z.h - a.h, 'серверов');
+      var hv = h.filter(function (x) { return x.v != null; });   // VPS считаем с 5 ноября — своя история
+      if (hv.length) { $('ch-vps').style.display = ''; chart1($('chart-v'), hv, 'v', '#ffb454');
+        if (hv.length > 1) { var av = hv[0]; var e = $('g-v'), dv = hv[hv.length - 1].v - av.v;
+          e.textContent = (dv > 0 ? '▲ +' + dv : dv < 0 ? '▼ ' + dv : 'без изменений') + ' VPS с ' + tm(av.t); e.className = 'delta' + (dv > 0 ? ' up' : ''); } }
       $('range').textContent = 'Наблюдаем с ' + fmt(a.t) + ' · обновляется каждые 5 минут';
     }
   }
@@ -195,6 +201,8 @@
     $('k-host').textContent = data.hosting_up; $('k-ips').textContent = data.ips_total;
     $('k-srv').innerHTML = data.servers_with_sites_up + '<small> / ' + data.servers_with_sites + '</small>';
     $('b-srv').style.width = (100 * data.servers_with_sites_up / data.servers_with_sites) + '%';
+    if (data.vps_total) { $('kpi-vps').style.display = ''; $('k-vps').innerHTML = data.vps_up + '<small> / ' + data.vps_total + '</small>';
+      $('b-vps').style.width = (100 * data.vps_up / data.vps_total) + '%'; }
     $('nets').innerHTML = data.nets.map(function (n) {
       var t = n.hosting + n.other + n.down;
       return '<div class="net"><div class="n">' + esc(n.net) + '</div><div class="stack"><div class="h" style="width:' + (100 * n.hosting / t) + '%"></div><div class="o" style="width:' + (100 * n.other / t) + '%"></div><div class="d" style="flex:1"></div></div><div class="c">' + n.hosting + ' хостинг · ' + n.other + ' др.</div></div>';
@@ -212,6 +220,7 @@
     function dl(id, now, was) { var e = $(id); if (!ref) { e.textContent = 'изменения за час появятся через час наблюдений'; e.className = 'delta'; return; }
       var d = now - was; e.textContent = (d > 0 ? '▲ +' + d : d < 0 ? '▼ ' + d : '— без изменений') + ' за последний час'; e.className = 'delta' + (d > 0 ? ' up' : ''); }
     dl('d-sites', data.sites_up, ref && ref.s); dl('d-host', data.hosting_up, ref && ref.h);
+    if (data.vps_total) { if (ref && ref.v != null) dl('d-vps', data.vps_up, ref.v); else { $('d-vps').textContent = 'считаем с 5 ноября — изменения за час появятся через час'; $('d-vps').className = 'delta'; } }
   }
   function tick() {   // «обновлено N мин назад · следующая проверка через M мин» / «идёт проверка…»
     if (!data) return;

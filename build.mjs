@@ -8,7 +8,7 @@ import { SERVICE_SEO } from './src/services-seo.mjs'
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname)
 const OUT = ROOT
-const GENERATED_DIRS = ['oferta', 'consent-order', 'proverka-sajta', 'services', 'projects', 'journal', 'about', 'contact', 'privacy', 'consent', 'assets']
+const GENERATED_DIRS = ['oferta', 'consent-order', 'services', 'projects', 'journal', 'about', 'contact', 'privacy', 'consent', 'assets']
 const today = new Date().toISOString().slice(0, 10)
 
 // ---------- helpers ----------
@@ -58,7 +58,7 @@ const LOGO = `<a class="logo" href="/" aria-label="REBORN LAB — на глав�
 const svIcon = (s) => `<svg class="sv-ico" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${s.icon || ''}</svg>`
 const svPains = (s) => s.pains ? `<div class="sv-pain"><b>Если у вас:</b><ul>${s.pains.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''
 const HAS_SELLER = !!(SITE.operator && SITE.operatorInn)   // оферта и данные продавца — только с реквизитами
-const NAV = [['/proverka-sajta/', 'Проверка сайта'], ['/projects/', 'Проекты'], ['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории']]
+const NAV = [['/projects/', 'Проекты'], ['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории']]
 
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
   const url = SITE.url + canonical
@@ -101,7 +101,7 @@ ${body}
 </main>
 <footer class="ftr"><div class="wrap">
   <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p>© ${new Date().getFullYear()} REBORN LAB · <a href="/privacy/">Политика конфиденциальности</a> · <a href="/consent/">Согласие на обработку данных</a></p></div>
-  <div><a href="/proverka-sajta/">Проверка сайта</a><a href="/projects/">Проекты</a><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
+  <div><a href="/projects/">Проекты</a><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
   <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="https://github.com/balibudda" rel="noopener" target="_blank">GitHub</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
@@ -170,7 +170,6 @@ const home = shell({
 <section class="hero" aria-labelledby="h1">
   <canvas id="lab" aria-hidden="true"></canvas>
   <div class="wrap">
-    <a class="pv-pill" href="/proverka-sajta/" data-goal="pill_proverka"><span class="pv-new">Новое</span> Бесплатная проверка сайта на штрафы 152-ФЗ <span class="arrow">→</span></a>
     <div class="kicker">Digital laboratory · идея → система → продукт</div>
     <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
     <p class="sub">Сайты, веб-сервисы, AI, автоматизация, SEO и внутренние системы — придумываем и собираем под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
@@ -178,7 +177,6 @@ const home = shell({
       <a class="btn btn-acc" href="#task" data-goal="cta_hero">Разобрать задачу <span class="arrow">→</span></a>
       <a class="btn btn-ghost" href="#made">Что мы уже сделали</a>
     </div>
-    <a class="pv-promo rv" href="/proverka-sajta/" data-goal="promo_proverka"><span class="pv-new">Новое</span><span class="pv-promo-t"><b>Проверим ваш сайт по закону о персональных данных — бесплатно</b><span>Политика, согласие в формах, Google Analytics, реестр РКН — со ссылками на закон. Документы под сайт — 999 ₽, перенос с Tilda — 1 999 ₽.</span></span><span class="btn btn-acc">Проверить сайт <span class="arrow">→</span></span></a>
     <div class="hero-meta"><span><i>●</i> ${PROJECTS.length} реальных проектов</span><span>AI · Web · Automation · SEO/GEO · Design</span><span>от прототипа до продукта</span></div>
   </div>
 </section>
@@ -266,33 +264,12 @@ write('services/index.html', shell({
   jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/services/']])],
   body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/services/']])}<h1>Что мы <span style="color:var(--acc)">собираем</span></h1><p class="sub">Под каждую задачу — своя связка. Выберите направление или просто опишите задачу.</p></div>
   <section class="sec" style="padding-top:10px"><div class="wrap">
-  <div class="sv-info rv">
-    <div class="sv-big"><div class="kicker">Живая статистика нашей проверки</div><div class="sv-num"><span id="sv-pct">56</span>%</div>
-      <p>сайтов нарушают закон о персональных данных — из <b id="sv-n">689</b> проверенных нами на <span id="sv-d">19.10.2026</span></p>
-      <a class="btn btn-acc" href="/proverka-sajta/" data-goal="sv_info_proverka">Проверить свой сайт бесплатно <span class="arrow">→</span></a></div>
-    <div class="sv-bars" id="sv-bars">
-      <div class="sv-bar" data-code="consent_not_separate"><span>Согласие не отдельным документом</span><i style="--w:28%"></i><b>28%</b></div>
-      <div class="sv-bar" data-code="foreign_trackers"><span>Google Analytics — данные уходят за границу</span><i style="--w:25%"></i><b>25%</b></div>
-      <div class="sv-bar" data-code="form_no_consent"><span>Форма заявки без согласия</span><i style="--w:17%"></i><b>17%</b></div>
-      <div class="sv-bar" data-code="no_policy"><span>Нет политики обработки данных</span><i style="--w:8%"></i><b>8%</b></div>
-      <div class="sv-bar" data-code="meta_logo" hidden><span>Значки Instagram / Facebook</span><i style="--w:0%"></i><b>0%</b></div>
-      <div class="sv-bar" data-code="whatsapp" hidden><span>Кнопка WhatsApp, которая не работает в РФ</span><i style="--w:0%"></i><b>0%</b></div>
-      <div class="sv-bar" data-code="hosting_risk"><span>Сайт за Cloudflare — может не открываться</span><i style="--w:3%"></i><b>3%</b></div>
-    </div>
-  </div>
   <div class="sv-flow rv"><div class="kicker" style="margin-bottom:14px">Как работаем — без риска для вас</div><ol>
-    <li><b>Бесплатная проверка</b><span>законы, техника, доступность в России</span></li>
-    <li><b>Отчёт</b><span>что не так, на какой странице и почему</span></li>
+    <li><b>Разбор задачи</b><span>бесплатно: что нужно и как лучше сделать</span></li>
     <li><b>Бесплатное демо</b><span>новый дизайн на вашем же контенте</span></li>
     <li><b>Делаем</b><span>быстро: от 999 ₽ и от пары дней</span></li>
     <li><b>Сопровождаем</b><span>обновления, законы, доступность</span></li></ol></div>
-  <div class="sv-prices rv"><a href="/proverka-sajta/"><b>0 ₽</b><span>проверка сайта</span></a><a href="/proverka-sajta/#order"><b>999 ₽</b><span>документы по 152-ФЗ</span></a>
-    <a href="/proverka-sajta/#order"><b>1 999 ₽</b><span>перенос с Tilda</span></a><a href="/services/redesign/"><b>Демо бесплатно</b><span>редизайн сайта</span></a></div>
   </div></section>
-  <script>fetch('https://proverka.rebornlab.ru/stats.json').then(function(r){return r.json()}).then(function(d){if(!d||!d.checked)return;
-  document.getElementById('sv-pct').textContent=d.violations_pct;document.getElementById('sv-n').textContent=d.checked;document.getElementById('sv-d').textContent=d.date;
-  d.items.forEach(function(it){var el=document.querySelector('.sv-bar[data-code="'+it.code+'"]');if(!el)return;el.hidden=!it.pct;el.querySelector('i').style.setProperty('--w',it.pct+'%');el.querySelector('b').textContent=it.pct+'%'})}).catch(function(){})</script>
-  <div class="wrap"><a class="pv-promo rv" href="/proverka-sajta/" data-goal="promo_proverka_services"><span class="pv-new">Новое</span><span class="pv-promo-t"><b>Проверим ваш сайт по закону о персональных данных — бесплатно</b><span>Политика, согласие в формах, Google Analytics, реестр РКН — со ссылками на закон. Документы под сайт — 999 ₽, перенос с Tilda — 1 999 ₽.</span></span><span class="btn btn-acc">Проверить сайт <span class="arrow">→</span></span></a><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/"><div class="sv-top">${svIcon(s)}<span class="code">${s.code} · ${esc(s.short)}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}<ul>${s.items.slice(0, 4).map((i) => `<li>${esc(i)}</li>`).join('')}</ul><span class="card-link">Подробнее <span class="arrow">→</span></span></a>`).join('')}
   <a class="cap ask rv" href="/contact/"><span class="code">06</span><h3>Другая задача</h3><p>Опишите её — предложим решение.</p></a></div></div>
   <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Не знаете, что выбрать? <em>Опишите задачу.</em></h2>${leadForm('f-svc')}</div></div></section>`,
 }))
@@ -302,7 +279,7 @@ for (const s of SERVICES) {
   const faq = [...(x.faq || []), ...s.faq]
   const offers = (x.terms || []).map(([n, v]) => [n, (v.match(/^([\d ]+) ₽/) || [])[1]]).filter(([, p]) => p).map(([n, p]) => ({ '@type': 'Offer', name: n, price: p.replace(/ /g, ''), priceCurrency: 'RUB' }))
   const related = (x.related || []).map((k) => SERVICES.find((z) => z.slug === k)).filter(Boolean)
-  const ctaTop = s.slug === 'site-fix' ? '<a class="btn btn-acc" href="/proverka-sajta/" data-goal="cta_service_proverka">Проверить сайт бесплатно <span class="arrow">→</span></a><a class="btn btn-ghost" href="#task">Обсудить задачу</a>'
+  const ctaTop = s.slug === 'site-fix' ? '<a class="btn btn-acc" href="#task" data-goal="cta_service">Обсудить задачу <span class="arrow">→</span></a>'
     : s.slug === 'redesign' ? '<a class="btn btn-acc" href="#task" data-goal="cta_service_demo">Получить бесплатное демо <span class="arrow">→</span></a>'
     : '<a class="btn btn-acc" href="#task" data-goal="cta_service">Обсудить задачу <span class="arrow">→</span></a>'
   write(`services/${s.slug}/index.html`, shell({
@@ -322,111 +299,12 @@ for (const s of SERVICES) {
     ${x.terms ? `<section class="sec" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="kicker rv">Сроки и стоимость</div><div class="sv-terms rv">${x.terms.map(([n, v]) => `<div><span>${esc(n)}</span><b>${esc(v)}</b></div>`).join('')}</div></div></section>` : ''}
     ${proofs.length ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Доказательства</div><h2>Как мы это <em>уже делали</em></h2></div></div><div class="grid-proj">${proofs.map((p) => projCard(p)).join('')}</div></div></section>` : ''}
     <section class="sec" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="kicker rv">Частые вопросы</div><div class="faq rv">${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div></div></section>
-    ${related.length ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="kicker rv" style="margin-bottom:14px">Ещё может пригодиться</div><div class="sv-rel">${related.map((r) => `<a class="rv" href="/services/${r.slug}/">${svIcon(r)}<span><b>${esc(r.title)}</b><i>${esc(r.short)}</i></span></a>`).join('')}${s.slug !== 'site-fix' ? `<a class="rv" href="/proverka-sajta/">${svIcon(SERVICES.find((z) => z.slug === 'site-fix'))}<span><b>Бесплатная проверка сайта</b><i>152-ФЗ, техника, доступность в России</i></span></a>` : ''}</div></div></section>` : ''}
+    ${related.length ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="kicker rv" style="margin-bottom:14px">Ещё может пригодиться</div><div class="sv-rel">${related.map((r) => `<a class="rv" href="/services/${r.slug}/">${svIcon(r)}<span><b>${esc(r.title)}</b><i>${esc(r.short)}</i></span></a>`).join('')}</div></div></section>` : ''}
     <section class="sec" id="task" style="padding-top:0"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Расскажите, <em>что нужно</em></h2>${leadForm('f-' + s.slug)}</div></div></section>`,
   }))
 }
 
-// ---------- ПРОВЕРКА САЙТА (лендинг, 19.10.2026) ----------
-{
-  // 21.10.2026: тон и точность — как в новом отчёте (статусы, диапазоны по закону, ст. 13.11 сверена с ред. 04.08.2026)
-  const CHECKS = [
-    ['Политика обработки данных', 'Должна быть опубликована и доступна с сайта по ссылке (ч. 2 ст. 18.1 закона № 152-ФЗ). Ищем на главной, в подвале и по типовым адресам.', 'организации 30–60 тыс. ₽', 'ч. 3 ст. 13.11 КоАП'],
-    ['Согласие в формах', 'Нужно ли согласие, зависит от целей обработки. Если нужно — с 1 сентября 2025 года оно оформляется отдельно от политики (ст. 9). Такие пункты помечаем «требует ручной проверки».', 'зависит от обстоятельств', 'ст. 6, 9 закона № 152-ФЗ'],
-    ['Google Analytics, пиксель Meta', 'Счётчик может записывать данные посетителей сначала в зарубежные базы — Роскомнадзор считает это нарушением локализации (ч. 5 ст. 18).', 'организации и ИП 1–6 млн ₽', 'ч. 8 ст. 13.11 КоАП'],
-    ['Уведомление в Роскомнадзор', 'Ищем компанию в открытом реестре операторов по ИНН, указанному на сайте (ст. 22 закона № 152-ФЗ).', 'организации 100–300 тыс. ₽', 'ч. 10 ст. 13.11 КоАП'],
-    ['Формы без https', 'Отдельного штрафа за это нет, но данные из формы идут по сети открытым текстом. Ответственность наступает, если данные утекут.', 'только при утечке', 'ст. 19 152-ФЗ, ч. 12 ст. 13.11'],
-    ['Техника и доступность', 'Сайт закрыт от поисковиков, истекает сертификат, нет мобильной версии, устаревший WordPress, заблокированные в России виджеты.', 'без штрафов — про заявки', 'поиск, скорость, доверие'],
-  ]
-  const PRICES = [
-    ['0 ₽', 'Проверка', ['отчёт по вашему сайту', 'что найдено и где именно', 'ссылки на нормы закона'], false],
-    ['999 ₽', 'Документы под ваш сайт', ['политика обработки данных', 'отдельное согласие', 'текст для форм и cookie', 'инструкция для Tilda, WordPress, Битрикс'], true],
-    ['1 999 ₽', 'Перенос с Tilda', ['тот же дизайн и адрес', 'бесплатный хостинг', 'заявки на почту или в Telegram', 'Tilda больше не платить'], false],
-  ]
-  const FAQ = [
-    ['Это проверка Роскомнадзора?', 'Нет. REBORN LAB — независимая цифровая лаборатория. Проверка автоматическая, по открытым страницам сайта, как их видит любой посетитель. Это не уведомление госоргана.'],
-    ['Откуда суммы штрафов?', 'Из статьи 13.11 КоАП РФ в действующей редакции; в отчёте у каждого пункта — ссылка на статью на КонсультантПлюс. Это диапазон по закону, а не сумма, которая грозит именно вам: ответственность зависит от обстоятельств, а автоматическая проверка нарушение не устанавливает.'],
-    ['Это юридическая консультация?', 'Нет. Это техническая проверка открытых страниц сайта и готовые типовые документы. Если у вас сложная обработка данных (медицина, биометрия, большие базы клиентов) — советуем показать документы юристу.'],
-    ['Как вы нашли мой сайт и почему написали?', 'Сайты берём из открытого каталога организаций, адрес почты — со страниц самого сайта. Пишем один раз, только если нашли конкретные замечания. Повторных писем и рассылок нет.'],
-    ['Что если всё уже в порядке?', 'Тогда отчёт так и покажет — в блоке «Что уже в порядке». Платить ни за что не нужно.'],
-    ['Куда переезжает сайт с Tilda и не пропадёт ли он?', 'Сайт выгружается целиком и размещается на бесплатном хостинге со стабильным доступом из России, адрес остаётся вашим. Формы заявок настраиваем заново. Цена 1 999 ₽ — для лендинга и небольшого сайта; корзину, оплату и личный кабинет считаем отдельно.'],
-    ['Почему мой сайт может не открываться у клиентов?', 'В 2026 году мобильные операторы ограничивают зарубежные сети (Cloudflare, Vercel и другие): страница начинает грузиться и обрывается. Онлайн-сервисы проверки этого не видят. В отчёте отмечаем, если сайт в зоне риска.'],
-  ]
-  const css = `<style>
-.pv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.pv-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
-.pv-card h3{font-size:19px;margin:0 0 8px}.pv-card p{margin:0;color:var(--muted);font-size:15px}.pv-fine{margin-top:14px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.pv-fine b{color:var(--text);font-size:17px}.pv-fine span{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.pv-price{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;display:flex;flex-direction:column;gap:10px}
-.pv-price.hl{border-color:rgba(198,242,78,.5);background:linear-gradient(155deg,rgba(198,242,78,.10),rgba(198,242,78,.02))}
-.pv-price .p{font-size:40px;font-weight:700;letter-spacing:-.02em}.pv-price ul{margin:4px 0 0;padding-left:18px;color:#c9c7c0}.pv-price li{margin:4px 0}
-.pv-steps{counter-reset:s;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.pv-steps div{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
-.pv-steps div::before{counter-increment:s;content:counter(s);display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--acc);color:#0b0c0d;font-weight:700;margin-bottom:10px}
-.pv-steps p{margin:0;color:#c9c7c0;font-size:15px}.pv-me{display:flex;gap:20px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px}
-.pv-me img{width:88px;height:88px;border-radius:50%;object-fit:cover;flex:none}.pv-me p{margin:4px 0 0;color:#c9c7c0}
-.pv-calc{font-family:var(--mono);font-size:14px;color:var(--muted);margin-top:8px}
-.pv-price{min-height:100%}.pv-prod{display:grid;gap:10px;margin:18px 0 6px}.pv-prod label{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;color:#c9c7c0;font-size:15px}
-.pv-prod label:has(input:checked){border-color:rgba(198,242,78,.6)}.pv-prod b{color:var(--text);font-size:16px}.pv-prod input{margin-top:4px;accent-color:#c6f24e}
-.pv-order input[type=text],.pv-order input[type=email]{min-height:52px;border-radius:14px;border:1px solid var(--line-2);background:var(--bg);color:var(--text);padding:0 16px;font:inherit}
-.pv-alt{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:22px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted)}
-@media (max-width:900px){.pv-grid,.pv-steps{grid-template-columns:1fr 1fr}}@media (max-width:620px){.pv-grid,.pv-steps{grid-template-columns:1fr}.pv-me{flex-direction:column;text-align:center}}
-</style>`
-  const form = (id) => `<form data-lead id="${id}" novalidate>
-    <label class="sr" for="${id}-t">Адрес сайта</label>
-    <textarea class="ym-disable-keys" id="${id}-t" name="text" rows="2" placeholder="Адрес вашего сайта, например mysite.ru — и что нужно: проверка, документы или перенос с Tilda"></textarea>
-    <div class="form-row"><label class="sr" for="${id}-c">Контакт</label><input class="ym-disable-keys" type="text" id="${id}-c" name="contact" placeholder="Telegram, телефон или email — куда прислать отчёт" style="flex:1;min-width:220px"></div>
-    <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
-    <label class="agree"><input type="checkbox" name="agree" required> <span>Даю <a href="/consent/" target="_blank">согласие на обработку персональных данных</a> и принимаю <a href="/privacy/" target="_blank">политику конфиденциальности</a></span></label>
-    <div class="form-row"><button class="btn btn-acc" type="submit" data-goal="lead_proverka" data-label="Проверить сайт бесплатно →">Проверить сайт бесплатно <span class="arrow">→</span></button></div>
-    <p class="ok-msg">Получили ✓ Проверим сайт и пришлём отчёт по указанному контакту.</p>
-    <p class="err-msg">Отметьте согласие на обработку данных — без него мы не можем принять заявку.</p>
-  </form>`
-  write('proverka-sajta/index.html', shell({
-    title: 'Проверка сайта по 152-ФЗ — бесплатно | REBORN LAB',
-    description: 'Бесплатно проверим сайт по закону о персональных данных: политика, согласие в формах, Google Analytics, реестр операторов РКН — со ссылками на нормы. Документы под ваш сайт — 999 ₽.',
-    canonical: '/proverka-sajta/', current: '/services/',
-    jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/services/'], ['Проверка сайта', '/proverka-sajta/']]),
-      { '@context': 'https://schema.org', '@type': 'Service', name: 'Проверка сайта на соответствие 152-ФЗ', provider: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url }, areaServed: 'RU',
-        offers: [{ '@type': 'Offer', name: 'Документы под сайт', price: '999', priceCurrency: 'RUB' }, { '@type': 'Offer', name: 'Перенос с Tilda', price: '1999', priceCurrency: 'RUB' }] },
-      { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }],
-    body: `${css}<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/services/'], ['Проверка сайта', '']])}
-  <div class="kicker" style="margin-top:18px">Проверка сайта · 152-ФЗ · доступность в России</div>
-  <h1>Проверим сайт по закону о персональных данных — <span style="color:var(--acc)">бесплатно</span></h1>
-  <p class="sub">Робот проверяет открытые страницы: формы, документы, счётчики, реестр операторов и техническое состояние. В отчёте — что именно найдено, на какой странице и на какой норме основан вывод. Документы под ваш сайт — 999 ₽.</p>
-  <p style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap"><a class="btn btn-acc" href="#task" data-goal="cta_proverka">Проверить сайт <span class="arrow">→</span></a><a class="btn btn-ghost" href="#checks">Что проверяем</a></p></div>
-  <section class="sec" id="checks" style="padding-top:20px"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Что проверяем</div><h2>Что смотрим <em>в первую очередь</em></h2></div></div>
-  <div class="pv-grid">${CHECKS.map(([t, d, f, law]) => `<div class="pv-card rv"><h3>${esc(t)}</h3><p>${esc(d)}</p><div class="pv-fine"><b>${f}</b><span>${law}</span></div></div>`).join('')}</div>
-  <p class="pv-calc rv">Диапазоны — по ст. 13.11 КоАП РФ в действующей редакции. Это пределы по закону, а не сумма для вашего сайта: ответственность зависит от фактических обстоятельств.</p></div></section>
-  <section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">И ещё</div><h2>Ваш сайт <em>открывается у клиентов?</em></h2></div></div>
-  <div class="pv-card rv" style="max-width:860px"><p style="color:#c9c7c0;font-size:17px">В 2026 году мобильный интернет в России ограничивают в десятках регионов, а сети Cloudflare, Vercel и похожие операторы режут: страница начинает грузиться и обрывается. Онлайн-проверки доступности этого не видят — они смотрят не с мобильного интернета. Мы проверяем, где на самом деле размещён сайт, и если он в зоне риска — переносим туда, где он открывается.</p></div></div></section>
-  <section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Как это работает</div><h2>Четыре шага, <em>без созвонов</em></h2></div></div>
-  <div class="pv-steps rv"><div><p>Присылаете адрес сайта — или мы уже прислали вам отчёт на почту.</p></div><div><p>Смотрите отчёт: что найдено, на какой странице и на какой норме основан вывод.</p></div><div><p>Заказываете документы за 999 ₽ — готовим под ваш сайт в течение дня.</p></div><div><p>Вставляете тексты по инструкции. Нет времени — разместим сами, отдельно.</p></div></div></div></section>
-  <section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Цены</div><h2>Без абонентской платы — <em>один раз</em></h2></div></div>
-  <div class="pv-grid">${PRICES.map(([p, t, items, hl], i) => `<div class="pv-price rv${hl ? ' hl' : ''}"><div class="kicker">${esc(t)}</div><div class="p">${p}</div><ul>${items.map((x) => `<li>${esc(x)}</li>`).join('')}</ul><div style="margin-top:auto;padding-top:10px">${i === 0 ? '<a class="btn btn-ghost" href="#task">Проверить бесплатно</a>' : `<a class="btn ${hl ? 'btn-acc' : 'btn-ghost'}" href="#order" data-product="${i === 1 ? 'docs' : 'tilda'}" data-goal="cta_pay_${i === 1 ? 'docs' : 'tilda'}">Оплатить ${p}</a>`}</div></div>`).join('')}</div>
-  <p class="pv-calc rv">Tilda стоит 500–1250 ₽ в месяц, то есть 6–15 тыс. ₽ в год. Перенос за 1 999 ₽ окупается за 3–4 месяца.</p></div></section>
-  <section class="sec" id="order" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="final-box rv">
-  <h2 style="font-size:clamp(28px,3.6vw,44px)">Заказать — <em>как удобнее</em></h2>
-  <form class="pv-order" method="post" action="https://proverka.rebornlab.ru/pay">
-    <div class="pv-prod"><label><input type="radio" name="product" value="docs" checked> <span><b>Документы под сайт — 999 ₽</b><br>политика, согласие, тексты для форм и cookie, инструкция</span></label>
-    <label><input type="radio" name="product" value="tilda"> <span><b>Перенос с Tilda — 1 999 ₽</b><br>тот же сайт на бесплатном хостинге, заявки на почту или в Telegram</span></label></div>
-    <div class="form-row"><input class="ym-disable-keys" type="text" name="site" required placeholder="Адрес сайта, например mysite.ru" style="flex:1;min-width:220px"><input class="ym-disable-keys" type="email" name="email" required placeholder="Почта — сюда пришлём документы" style="flex:1;min-width:220px"></div>
-    <div class="form-row"><input class="ym-disable-keys" type="text" name="contact" placeholder="Telegram или телефон — по желанию" style="flex:1;min-width:220px"></div>
-    <input type="hidden" name="t" value=""><input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
-    <label class="agree"><input type="checkbox" name="agree" required> <span>Даю <a href="/consent-order/" target="_blank">согласие на обработку персональных данных для заказа</a> и принимаю <a href="/privacy/" target="_blank">политику обработки персональных данных</a></span></label>
-    <div class="form-row"><button class="btn btn-acc" type="submit" data-goal="pay_submit">Перейти к оплате <span class="arrow">→</span></button></div>
-    <p class="pv-calc" style="margin-top:12px">Оплата картой или СБП через ЮKassa. Документы пришлём на почту в течение рабочего дня.${HAS_SELLER ? ' Оплачивая, вы принимаете <a href="/oferta/">публичную оферту</a>.' : ''}</p>
-  </form>
-  <div class="pv-alt"><span>Или напишите — ответим и оформим сами:</span><a class="btn btn-ghost" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="order_tg">Telegram</a><a class="btn btn-ghost" href="mailto:nchechelnitskiy@yandex.ru?subject=%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" data-goal="order_mail">Почта</a></div>
-  </div></div></section>
-  <script>(function(){var q=new URLSearchParams(location.search),f=document.querySelector('.pv-order');if(!f)return;
-  if(q.get('site'))f.site.value=q.get('site');if(q.get('t'))f.t.value=q.get('t');
-  var pick=function(v){var r=f.querySelector('input[name=product][value="'+v+'"]');if(r)r.checked=true};if(q.get('p'))pick(q.get('p'));
-  document.querySelectorAll('[data-product]').forEach(function(a){a.addEventListener('click',function(){pick(a.getAttribute('data-product'))})});
-  f.addEventListener('submit',function(e){if(!f.agree.checked){e.preventDefault();f.classList.add('need-agree');f.agree.focus()}});})();</script>
-  <section class="sec" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="pv-me rv"><img src="/assets/nick.jpg" alt="Николай Чечельницкий" width="88" height="88" loading="lazy"><div><b style="font-size:19px">Николай Чечельницкий</b><p>Занимаюсь сайтами с 2010 года. REBORN LAB — цифровая лаборатория: сайты, сервисы, AI и автоматизация. Проверку делает наша программа, документы и перенос — мы сами.</p></div></div></div></section>
-  <section class="sec" style="padding-top:0"><div class="wrap" style="max-width:860px"><div class="kicker rv">Частые вопросы</div><div class="faq rv">${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div></div></section>
-  <section class="sec" id="task" style="padding-top:0"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Проверим ваш сайт — <em>бесплатно</em></h2>${form('f-proverka')}</div></div></section>`,
-  }))
-}
+// ---------- ПРОВЕРКА САЙТА — закрыта 05.11.2026 (Ник: «отключи вообще и удали с сайта»), лендинг убран ----------
 
 // ---------- PROJECTS ----------
 write('projects/index.html', shell({
@@ -539,7 +417,8 @@ write('privacy/index.html', shell({
   <h2>3. Что мы делаем с данными</h2>
   <p>Сбор, запись, систематизация, накопление, хранение, уточнение, извлечение, использование, передача (предоставление доступа) лицам из раздела 5, блокирование, удаление и уничтожение — с использованием средств автоматизации. Данные не продаём, для рекламы третьим лицам не передаём, решений, порождающих юридические последствия, только на основе автоматической обработки не принимаем.</p>
   <h2>4. Проверка сайтов и письма владельцам</h2>
-  <p>Сервис проверки сайтов (proverka.rebornlab.ru) автоматически просматривает открытые страницы сайтов организаций. Источники адресов сайтов — открытые данные (в том числе OpenStreetMap). Если находим нарушения, отправляем <b>одно</b> письмо на общий адрес организации, опубликованный на её сайте (например, info@…). Личные адреса сотрудников не используем. Повторных писем и рассылок нет. По ссылке в письме можно отказаться — адрес попадёт в список «не писать», и мы не напишем на него никогда.</p>
+  <p><b>Сервис закрыт 5 ноября 2026 года</b>: проверки и письма больше не делаются; раздел описывает обработку до этой даты и хранение уже собранных данных.</p>
+  <p>Сервис проверки сайтов (proverka.rebornlab.ru) автоматически просматривал открытые страницы сайтов организаций. Источники адресов сайтов — открытые данные (в том числе OpenStreetMap). Если находим нарушения, отправляем <b>одно</b> письмо на общий адрес организации, опубликованный на её сайте (например, info@…). Личные адреса сотрудников не используем. Повторных писем и рассылок нет. По ссылке в письме можно отказаться — адрес попадёт в список «не писать», и мы не напишем на него никогда.</p>
   <h2>5. Кому передаются данные</h2>
   <ul><li>ООО НКО «ЮМани» (сервис ЮKassa, Россия) — приём оплаты;</li>
   <li>ООО «Яндекс» (Россия) — Яндекс Метрика, после вашего согласия;</li>
@@ -610,7 +489,7 @@ copyFileSync(path.join(ROOT, 'src/main.js'), path.join(OUT, 'assets/main.js'))
 for (const f of readdirSync(path.join(ROOT, 'src/assets/projects'))) copyFileSync(path.join(ROOT, 'src/assets/projects', f), path.join(OUT, 'assets/projects', f))
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
-const urls = [['/', today, '1.0'], ['/projects/', today, '0.9'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/proverka-sajta/', today, '0.9'], ['/beget/', today, '0.9'],
+const urls = [['/', today, '1.0'], ['/projects/', today, '0.9'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...PROJECTS.filter((p) => !p.private).map((p) => [`/projects/${p.slug}/`, today, '0.7']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d, pr]) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${d}</lastmod><priority>${pr}</priority></url>`).join('\n')}\n</urlset>\n`)
 write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /demo/\n\n# AI-поисковики приветствуются (GEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: YandexBot\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`)
