@@ -1,6 +1,7 @@
 // REBORN LAB static site generator — no dependencies. `node build.mjs` → writes the site into ./ (GitHub Pages root).
 // Sources: src/data.mjs (projects, services…), content/journal/*.md (articles with front matter), src/styles.css, src/main.js.
 // New article = new .md file in content/journal → `node build.mjs` → commit + push.
+import { createHash } from 'node:crypto'
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, copyFileSync, rmSync } from 'node:fs'
 import path from 'node:path'
 import { SITE, PROJECTS, SERVICES, PROBLEMS, MARKET, START_SMALL, JOURNAL_CATEGORIES } from './src/data.mjs'
@@ -10,6 +11,7 @@ const ROOT = path.dirname(new URL(import.meta.url).pathname)
 const OUT = ROOT
 const GENERATED_DIRS = ['oferta', 'consent-order', 'services', 'projects', 'journal', 'about', 'contact', 'privacy', 'consent', 'assets']
 const today = new Date().toISOString().slice(0, 10)
+const ASSET_V = createHash('md5').update(readFileSync(path.join(ROOT, 'src/styles.css'))).update(readFileSync(path.join(ROOT, 'src/main.js'))).digest('hex').slice(0, 8)
 
 // ---------- helpers ----------
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
@@ -58,7 +60,8 @@ const LOGO = `<a class="logo" href="/" aria-label="REBORN LAB — на глав�
 const svIcon = (s) => `<svg class="sv-ico" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${s.icon || ''}</svg>`
 const svPains = (s) => s.pains ? `<div class="sv-pain"><b>Если у вас:</b><ul>${s.pains.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''
 const HAS_SELLER = !!(SITE.operator && SITE.operatorInn)   // оферта и данные продавца — только с реквизитами
-const NAV = [['/projects/', 'Проекты'], ['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории']]
+// 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
+const NAV = [['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории']]
 
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
   const url = SITE.url + canonical
@@ -85,7 +88,7 @@ ${noindex ? '<meta name="robots" content="noindex, nofollow, noarchive">' : `<li
 <meta name="theme-color" content="#08090a">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="alternate" type="application/rss+xml" title="REBORN LAB — Журнал" href="/rss.xml">
-<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/styles.css?v=${ASSET_V}">
 ${jsonLd.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join('\n')}
 ${metrika}
 </head>
@@ -101,11 +104,11 @@ ${body}
 </main>
 <footer class="ftr"><div class="wrap">
   <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© ${new Date().getFullYear()} REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a></div></div>
-  <div><a href="/projects/">Проекты</a><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
+  <div><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
   <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
-<script src="/assets/main.js" defer></script>
+<script src="/assets/main.js?v=${ASSET_V}" defer></script>
 </body>
 </html>`
 }
@@ -175,21 +178,12 @@ const home = shell({
     <p class="sub">Сайты, веб-сервисы, AI, автоматизация, SEO и внутренние системы — придумываем и собираем под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
     <div class="row">
       <a class="btn btn-acc" href="#task" data-goal="cta_hero">Разобрать задачу <span class="arrow">→</span></a>
-      <a class="btn btn-ghost" href="#made">Что мы уже сделали</a>
     </div>
-    <div class="hero-meta"><span><i>●</i> ${PROJECTS.length} реальных проектов</span><span>AI · Web · Automation · SEO/GEO · Design</span><span>от прототипа до продукта</span></div>
+    <div class="hero-meta"><span>AI · Web · Automation · SEO/GEO · Design</span><span>от прототипа до продукта</span></div>
   </div>
 </section>
 <div class="rline"></div>
 
-<section class="sec" id="made"><div class="wrap">
-  <div class="sec-hd rv"><div><div class="kicker">Made by Reborn Lab</div><h2>Уже работает <em>вживую</em></h2></div><p>Не макеты для портфолио, а продукты с пользователями, оплатами, приложениями и трафиком из поиска. Нажмите на проект — расскажем, как сделано.</p></div>
-  <div class="grid-proj">
-    ${projCard(featured[0], true)}
-    ${featured.slice(1).map((p) => projCard(p)).join('\n')}
-  </div>
-  <p style="margin-top:26px" class="rv"><a class="btn btn-ghost" href="/projects/">Все проекты <span class="arrow">→</span></a></p>
-</div></section>
 
 <section class="sec" style="padding-top:10px"><div class="wrap">
   <div class="sl-logo rv"><img src="/assets/svoya-liniya-logo.jpg" alt="" width="88" height="88" loading="lazy"></div>
@@ -274,7 +268,7 @@ write('services/index.html', shell({
   <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Не знаете, что выбрать? <em>Опишите задачу.</em></h2>${leadForm('f-svc')}</div></div></section>`,
 }))
 for (const s of SERVICES) {
-  const proofs = s.proof.map((k) => byslug[k]).filter(Boolean)
+  const proofs = []   // 05.11: проекты не показываем
   const x = SERVICE_SEO[s.slug] || {}
   const faq = [...(x.faq || []), ...s.faq]
   const offers = (x.terms || []).map(([n, v]) => [n, (v.match(/^([\d ]+) ₽/) || [])[1]]).filter(([, p]) => p).map(([n, p]) => ({ '@type': 'Offer', name: n, price: p.replace(/ /g, ''), priceCurrency: 'RUB' }))
@@ -306,36 +300,7 @@ for (const s of SERVICES) {
 
 // ---------- ПРОВЕРКА САЙТА — закрыта 05.11.2026 (Ник: «отключи вообще и удали с сайта»), лендинг убран ----------
 
-// ---------- PROJECTS ----------
-write('projects/index.html', shell({
-  title: 'Проекты REBORN LAB — реальные продукты, сайты и сервисы',
-  description: 'Реальные проекты REBORN LAB: AI-продукт с приложением, справочники на сотни страниц, SaaS с платежами, Telegram-сервисы и сайты. Задача, решение, стек.',
-  canonical: '/projects/', current: '/projects/',
-  jsonLd: [crumbsLd([['Главная', '/'], ['Проекты', '/projects/']])],
-  body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Проекты', '/projects/']])}<h1>Made by <span style="color:var(--acc)">Reborn Lab</span></h1><p class="sub">Только реальные проекты: что было нужно, что сделали и на чём. Многие работают прямо сейчас — по ссылке можно зайти.</p></div>
-  <div class="wrap"><div class="grid-proj">${projCard(PROJECTS[0], true)}${PROJECTS.slice(1).map((p) => projCard(p)).join('')}</div></div>
-  <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Хотите так же? <em>Покажите задачу.</em></h2>${leadForm('f-proj', 'Показать задачу')}</div></div></section>`,
-}))
-for (const p of PROJECTS) {
-  write(`projects/${p.slug}/index.html`, shell({
-    title: `${p.name} — кейс REBORN LAB`,
-    description: p.lead,
-    canonical: `/projects/${p.slug}/`, current: '/projects/', ogType: 'article', noindex: !!p.private,
-    image: p.image ? `/assets/projects/${p.image}` : '/assets/og.jpg',
-    jsonLd: p.private ? [] : [crumbsLd([['Главная', '/'], ['Проекты', '/projects/'], [p.name, `/projects/${p.slug}/`]]),
-      { '@context': 'https://schema.org', '@type': 'CreativeWork', name: p.name, description: p.lead, url: p.url || undefined, creator: { '@type': 'Organization', name: 'REBORN LAB' }, keywords: p.stack.join(', ') }],
-    body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Проекты', '/projects/'], [p.name, '']])}<div class="kicker" style="margin-top:18px">${esc(p.kind)}${p.status ? ' · ' + esc(p.status) : ''}</div><h1>${esc(p.name)}</h1><p class="sub">${esc(p.lead)}</p>
-      ${p.url ? `<p style="margin-top:24px"><a class="btn btn-ghost" href="${p.url}" target="_blank" rel="noopener" data-goal="visit_${p.slug}">Открыть проект <span class="arrow">↗</span></a></p>` : ''}</div>
-    <div class="wrap">${p.image ? `<div class="cover rv"><img src="/assets/projects/${p.image}" alt="${esc(p.name)}" width="1200" height="750"></div>` : ''}
-      <div class="case">
-        <div class="rv"><h3>Задача</h3><p style="margin:0;color:#d9d7d0">${esc(p.task)}</p></div>
-        <div class="rv"><h3>Результат</h3><p style="margin:0;color:#d9d7d0">${esc(p.result)}</p></div>
-        <div class="full rv"><h3>Решение</h3><ul>${p.solution.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
-        <div class="full rv"><h3>Stack</h3><div class="tags">${p.stack.map((s) => `<span class="tag">${esc(s)}</span>`).join('')}</div></div>
-      </div></div>
-    <section class="sec" style="padding-top:30px"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Нужно что-то похожее? <em>Обсудим.</em></h2>${leadForm('f-' + p.slug, 'Обсудить идею')}</div></div></section>`,
-  }))
-}
+// ---------- PROJECTS — убраны 05.11.2026 ----------
 
 // ---------- JOURNAL ----------
 write('journal/index.html', shell({
@@ -371,11 +336,11 @@ write('about/index.html', shell({
   body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['О лаборатории', '']])}<h1>Место, куда можно принести <span style="color:var(--acc)">цифровую проблему</span></h1><p class="sub">И получить работающий продукт.</p></div>
   <div class="wrap"><div class="prose">
   <p>REBORN LAB — не веб-студия с прайсом на «сайт за N рублей». Мы работаем как лаборатория: сначала разбираемся в задаче, потом подбираем решение — и только потом пишем код.</p>
-  <p>Иногда задаче нужен лендинг. Иногда — AI-ассистент, который разгружает менеджеров. Иногда — Telegram-бот, который полностью заменяет CRM. А иногда — всё вместе: продукт с приложением, оплатами и сотнями страниц, которые приводят людей из поиска. Мы такие продукты уже собирали — <a href="/projects/">посмотрите проекты</a>.</p>
+  <p>Иногда задаче нужен лендинг. Иногда — AI-ассистент, который разгружает менеджеров. Иногда — Telegram-бот, который полностью заменяет CRM. А иногда — всё вместе: продукт с приложением, оплатами и сотнями страниц, которые приводят людей из поиска. Мы такие продукты уже собирали.</p>
   <h2>Как мы работаем</h2>
   <ol><li><strong>Разбор.</strong> Вы описываете задачу обычными словами — мы задаём вопросы и предлагаем варианты.</li><li><strong>Прототип.</strong> Начинаем с малого: быстро показываем, как это будет работать.</li><li><strong>Сборка.</strong> Дизайн, разработка, AI, интеграции — одной командой, без потерь на стыках.</li><li><strong>Запуск и рост.</strong> Аналитика, SEO, контент — чтобы продукт находили и он развивался.</li></ol>
   <h2>Чего мы не делаем</h2>
-  <ul><li>Не придумываем клиентов, награды и цифры — в портфолио только реальные проекты.</li><li>Не продаём пакеты «всё включено» — начинаем с того, что нужно сейчас.</li><li>Не прячем технологии: вы знаете, на чём и как сделан ваш продукт.</li></ul>
+  <ul><li>Не придумываем клиентов, награды и цифры.</li><li>Не продаём пакеты «всё включено» — начинаем с того, что нужно сейчас.</li><li>Не прячем технологии: вы знаете, на чём и как сделан ваш продукт.</li></ul>
   </div></div>
   <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Есть задача? <em>Давайте соберём.</em></h2>${leadForm('f-about', 'Обсудить идею')}</div></div></section>`,
 }))
@@ -480,21 +445,31 @@ if (HAS_SELLER) write('oferta/index.html', shell({
 }))
 
 write('404.html', shell({ title: 'Страница не найдена — REBORN LAB', description: 'Такой страницы нет.', canonical: '/404.html',
-  body: `<div class="wrap page-hd"><div class="kicker">404</div><h1>Такой страницы <span style="color:var(--acc)">нет</span></h1><p class="sub">Зато есть <a href="/projects/" style="color:var(--acc)">проекты</a>, <a href="/journal/" style="color:var(--acc)">журнал</a> и <a href="/contact/" style="color:var(--acc)">форма для вашей задачи</a>.</p></div><div style="height:120px"></div>` }))
+  body: `<div class="wrap page-hd"><div class="kicker">404</div><h1>Такой страницы <span style="color:var(--acc)">нет</span></h1><p class="sub">Зато есть <a href="/services/" style="color:var(--acc)">услуги</a>, <a href="/journal/" style="color:var(--acc)">журнал</a> и <a href="/contact/" style="color:var(--acc)">форма для вашей задачи</a>.</p></div><div style="height:120px"></div>` }))
 
 // ---------- assets, sitemap, robots, rss ----------
-for (const d of ['assets', 'assets/projects']) mkdirSync(path.join(OUT, d), { recursive: true })
+for (const d of ['assets']) mkdirSync(path.join(OUT, d), { recursive: true })
 copyFileSync(path.join(ROOT, 'src/styles.css'), path.join(OUT, 'assets/styles.css'))
 copyFileSync(path.join(ROOT, 'src/main.js'), path.join(OUT, 'assets/main.js'))
-for (const f of readdirSync(path.join(ROOT, 'src/assets/projects'))) copyFileSync(path.join(ROOT, 'src/assets/projects', f), path.join(OUT, 'assets/projects', f))
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
-const urls = [['/', today, '1.0'], ['/projects/', today, '0.9'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/pravila/', today, '0.4'],
-  ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...PROJECTS.filter((p) => !p.private).map((p) => [`/projects/${p.slug}/`, today, '0.7']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
+const urls = [['/', today, '1.0'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/pravila/', today, '0.4'],
+  ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d, pr]) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${d}</lastmod><priority>${pr}</priority></url>`).join('\n')}\n</urlset>\n`)
 write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /demo/\n\n# AI-поисковики приветствуются (GEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: YandexBot\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`)
 write('rss.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>REBORN LAB — Журнал</title><link>${SITE.url}/journal/</link><description>AI, автоматизация, сайты, SEO и GEO — практические разборы.</description><language>ru</language>\n${POSTS.map((p) => `<item><title>${esc(p.title)}</title><link>${SITE.url}/journal/${p.slug}/</link><guid>${SITE.url}/journal/${p.slug}/</guid><pubDate>${new Date(p.date + 'T09:00:00Z').toUTCString()}</pubDate><description>${esc(p.description)}</description></item>`).join('\n')}\n</channel></rss>\n`)
-write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите задачу — соберём решение: сайты, веб-сервисы, AI-ассистенты и агенты, автоматизация, SEO/GEO, дизайн.\n\n## Услуги\n${SERVICES.map((s) => `- [${s.seoTitle}](${SITE.url}/services/${s.slug}/): ${s.lead}`).join('\n')}\n\n## Проекты\n${PROJECTS.filter((p) => !p.private).map((p) => `- [${p.name}](${SITE.url}/projects/${p.slug}/): ${p.lead}`).join('\n')}\n\n## Журнал\n${POSTS.map((p) => `- [${p.title}](${SITE.url}/journal/${p.slug}/): ${p.description}`).join('\n')}\n\n## Контакт\n- Telegram: https://t.me/${SITE.telegram}\n`)
+write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите задачу — соберём решение: сайты, веб-сервисы, AI-ассистенты и агенты, автоматизация, SEO/GEO, дизайн.\n\n## Услуги\n${SERVICES.map((s) => `- [${s.seoTitle}](${SITE.url}/services/${s.slug}/): ${s.lead}`).join('\n')}\n\n## Журнал\n${POSTS.map((p) => `- [${p.title}](${SITE.url}/journal/${p.slug}/): ${p.description}`).join('\n')}\n\n## Контакт\n- Telegram: https://t.me/${SITE.telegram}\n`)
+{
+  const home = readFileSync(path.join(OUT, 'index.html'), 'utf8')
+  const foot = home.match(/<footer class="ftr">[\s\S]*?<\/footer>/)[0]
+  for (const f of ['beget/index.html', 'beget/pravila/index.html']) {
+    const fp = path.join(OUT, f)
+    if (!existsSync(fp)) continue
+    const html = readFileSync(fp, 'utf8').replace(/<footer class="ftr">[\s\S]*?<\/footer>/, () => foot)
+      .replace(/\/assets\/styles\.css(\?v=\w+)?"/, `/assets/styles.css?v=${ASSET_V}"`).replace(/\/assets\/main\.js(\?v=\w+)?"/, `/assets/main.js?v=${ASSET_V}"`)
+    writeFileSync(fp, html)
+  }
+}
 writeFileSync(path.join(OUT, 'CNAME'), 'rebornlab.ru\n')
 writeFileSync(path.join(OUT, '.nojekyll'), '')
 console.log(`built: ${urls.length} urls · ${POSTS.length} posts · ${PROJECTS.length} projects · ${SERVICES.length} services`)
