@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Правила мониторинга Beget и бота @rebornlab_bot</title>
+<meta name="description" content="Как работает независимый мониторинг Beget и бот @rebornlab_bot: что и как часто проверяем, что публикуем, какие данные хранит бот и как их удалить. Бесплатно и без рекламы.">
+<link rel="canonical" href="https://rebornlab.ru/beget/pravila/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/styles.css">
+<style>
+  /* ручная страница (build.mjs её не трогает) */
+  .bw { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; }
+  .bw h1 { font-size: clamp(28px, 4.6vw, 46px); letter-spacing: -.03em; line-height: 1.08; margin: 14px 0 12px; }
+  .bw h2 { font-size: 22px; margin: 0 0 10px; }
+  .bw .lead { color: var(--muted); font-size: 18px; }
+  .bw .live { display: inline-flex; align-items: center; gap: 8px; font: 13px var(--mono); color: var(--muted); text-decoration: none; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; margin: 18px 0; }
+  .card p, .card li { color: var(--muted); line-height: 1.65; }
+  .card ul { padding-left: 20px; margin: 8px 0; } .card li { margin: 6px 0; }
+  .card b { color: var(--text); }
+  .card a { color: var(--acc); }
+  .note { color: var(--dim); font-size: 13px; margin-top: 26px; line-height: 1.6; }
+</style>
+<script>window.RL_METRIKA=113418511;window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113418511','ym');ym(113418511,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>
+</head>
+<body>
+<main class="bw">
+  <a href="/beget/" class="live">← Статус восстановления Beget</a>
+  <h1>Правила мониторинга и бота</h1>
+  <p class="lead">Страница <a href="/beget/" style="color:var(--acc)">rebornlab.ru/beget</a> и бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> — бесплатный независимый проект REBORN LAB. Мы сделали его, чтобы помочь владельцам сайтов, пока Beget восстанавливается после атаки. Здесь — честно и по пунктам: что мы проверяем, что публикуем и что хранит бот.</p>
+
+  <div class="card">
+    <h2>1. Кто мы</h2>
+    <p>Мы не связаны с Beget и не говорим от его имени. Цифры на странице — результаты наших собственных проверок, а не официальные данные хостинга. Они могут отличаться от того, что видит Beget изнутри.</p>
+  </div>
+
+  <div class="card">
+    <h2>2. Как мы проверяем</h2>
+    <p>Мы смотрим только то, что открыто всем в интернете, — так же, как это делает обычный посетитель или сервисы проверки доступности сайтов.</p>
+    <ul>
+      <li><b>Сайты.</b> Открываем главную страницу сайта, как любой посетитель: один запрос на сайт раз в 5 минут.</li>
+      <li><b>Серверы хостинга.</b> Открываем адрес сервера и смотрим его стандартную публичную страницу («Домен не прилинкован…»), которую Beget сам показывает всем: один запрос на адрес раз в 5 минут.</li>
+      <li><b>VPS.</b> Только проверка «отвечает ли машина» (ping), раз в 15 минут.</li>
+      <li><b>Никуда не входим.</b> Не вводим пароли, не пытаемся войти в панели, по SSH или в базы данных, не ищем скрытые страницы и уязвимости.</li>
+      <li><b>Не прячемся.</b> В каждом запросе подписываемся: «rebornlab.ru beget status monitor».</li>
+      <li><b>Нагрузка мизерная:</b> несколько тысяч обычных запросов на всю сеть раз в 5 минут — меньше, чем делает любой поисковый робот.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>3. Что мы публикуем</h2>
+    <ul>
+      <li>Только количество: сколько серверов и сайтов отвечает, сколько нет, и графики за время наблюдения.</li>
+      <li>Адреса сетей вида 45.130.41.0/24 — это открытые данные: Beget сам публикует их в реестре RIPE (AS198610).</li>
+      <li>Домены сайтов частично скрыты (например, ca***.pro). Ни устройства серверов, ни данных клиентов хостинга мы не публикуем.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>4. Без рекламы</h2>
+    <p>Страница и бот <b>бесплатные и без рекламы</b>. Мы не продаём услуги через бота, не присылаем рекламу и не передаём ваши данные рекламодателям.</p>
+    <p>В уведомлении «сайт снова работает» есть кнопка «Сказать спасибо». Благодарность — добровольная: реквизиты бот показывает, только если вы сами нажали кнопку. Нажимать не обязательно, на работу бота это никак не влияет.</p>
+  </div>
+
+  <div class="card">
+    <h2>5. Какие данные хранит бот и зачем</h2>
+    <p>Чтобы присылать уведомления, боту нужно знать, кому и о каком сайте писать. Поэтому он хранит:</p>
+    <ul>
+      <li>ваш Telegram ID и имя или @username — как они указаны в Telegram;</li>
+      <li>адреса сайтов, за которыми вы попросили следить, и когда подписались;</li>
+      <li>служебный журнал: подписки, отписки, нажатия кнопок — чтобы бот работал без ошибок.</li>
+    </ul>
+    <p><b>Зачем:</b> только чтобы проверять ваши сайты и присылать уведомления о них. Данные обрабатываются по вашей просьбе — вы сами прислали адрес сайта (п. 5 ч. 1 ст. 6 закона № 152-ФЗ «О персональных данных»).</p>
+    <p><b>Чего не делаем:</b> не продаём и не передаём данные третьим лицам, не публикуем, не используем для рассылок. Первыми пишем только уведомления о ваших сайтах и уточнения по ним.</p>
+    <p><b>Как хранятся:</b> на нашем сервере, в закрытой папке; доступ — только у администратора. Резервные копии — зашифрованные, чтобы подписки не потерялись при сбое.</p>
+  </div>
+
+  <div class="card">
+    <h2>6. Как отписаться и удалить данные</h2>
+    <ul>
+      <li><b>/list</b> — список ваших сайтов, у каждого кнопка «отписаться».</li>
+      <li><b>/delete</b> — удалить все ваши данные из бота сразу: подписки, имя и ID. После этого бот вам больше не напишет.</li>
+      <li>Заблокировали бота — он перестаёт вам писать.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>7. Связаться с нами</h2>
+    <p>Вопросы, ошибки в данных или просьба что-то убрать — напишите через <a href="/contact/">форму на сайте</a>. Если вы представляете Beget и у вас есть замечания к мониторингу — тоже пишите, ответим и, если нужно, поправим.</p>
+    <p>Общая политика обработки данных REBORN LAB — <a href="/privacy/">rebornlab.ru/privacy</a>.</p>
+  </div>
+
+  <p class="note">Редакция от 5 ноября 2026 года.</p>
+</main>
+<footer class="ftr"><div class="wrap">
+  <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p>© 2026 REBORN LAB · <a href="/privacy/">Политика конфиденциальности</a> · <a href="/consent/">Согласие на обработку данных</a> · <a href="/beget/pravila/">Правила мониторинга Beget и бота</a></p></div>
+  <div><a href="/projects/">Проекты</a><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
+  <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="https://github.com/balibudda" rel="noopener" target="_blank">GitHub</a><a href="/rss.xml">RSS журнала</a></div>
+</div></footer>
+<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
+<script src="/assets/main.js" defer></script>
+</body>
+</html>
