@@ -178,6 +178,8 @@ textarea:focus, input[type=text]:focus { outline: none; border-color: var(--acc)
 .ftr .wrap { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 24px; }
 .ftr a { color: var(--muted); text-decoration: none; display: block; margin: 0 0 8px; }
 .ftr a:hover { color: var(--text); }
+.ftr-copy { margin: 14px 0 10px; }
+.ftr-legal a { font-size: 13px; color: var(--dim); margin: 0 0 6px; }
 
 /* inner pages */
 .page-hd { padding-top: 72px; padding-bottom: 40px; }
