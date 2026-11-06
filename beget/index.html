@@ -95,7 +95,7 @@
 
   <p class="sub" style="margin:0 0 10px"><b>Выборка — общая картина по хостингу.</b> 1000 случайных сайтов на Beget, не больше пяти с одного сервера. Ниже на странице — отдельно сайты, которые ждут живые люди.</p>
   <div class="kpis">
-    <div class="kpi"><div class="v" id="k-sites">—</div><div class="l">сайтов из <span class="n-sites">1000</span> открываются</div><div class="delta" id="d-sites"></div><div class="bar"><i id="b-sites" style="width:0"></i></div></div>
+    <div class="kpi"><div class="v" id="k-sites">—</div><div class="l">сайтов из <span class="n-sites">1000</span> открываются на Beget</div><div class="delta" id="d-sites"></div><div class="delta" id="d-moved" style="color:#7aa7ff"></div><div class="bar"><i id="b-sites" style="width:0"></i></div></div>
     <div class="kpi"><div class="v" id="k-host">—</div><div class="l">серверов хостинга отвечают (из <span id="k-ips">~1500</span> адресов в 6 сетях)</div><div class="delta" id="d-host"></div></div>
     <div class="kpi"><div class="v" id="k-srv">—</div><div class="l">серверов с проверяемыми сайтами уже работают</div><div class="bar"><i id="b-srv" style="width:0"></i></div></div>
     <div class="kpi" id="kpi-vps" style="display:none"><div class="v" id="k-vps">—</div><div class="l">VPS (облачных серверов) на Beget отвечают</div><div class="delta" id="d-vps"></div><div class="bar"><i id="b-vps" style="width:0"></i></div></div>
@@ -130,7 +130,7 @@
 
   <div class="card">
     <h2>Динамика</h2>
-    <p class="sub">Каждая точка — проверка раз в 15 минут (до вечера 5 ноября — раз в 5 минут). Шкала у каждого графика своя, чтобы был виден даже небольшой рост.</p>
+    <p class="sub">Каждая точка — проверка раз в 15 минут (до вечера 5 ноября — раз в 5 минут). Шкала у каждого графика своя, чтобы был виден даже небольшой рост. <b>С ночи на 7 ноября</b> сайты, которые владельцы сами подняли у другого хостинга, не считаются «открывшимися на Beget» — поэтому на графике сайтов ступенька вниз примерно на 65.</p>
     <div class="ch"><div class="ch-h"><b>Сайты открываются</b> <span class="delta" id="g-s"></span></div><svg class="chart" id="chart-s" viewBox="0 0 1000 170"></svg></div>
     <div class="ch"><div class="ch-h"><b>Серверы хостинга отвечают</b> <span class="delta" id="g-h"></span></div><svg class="chart" id="chart-h" viewBox="0 0 1000 170"></svg></div>
     <div class="ch" id="ch-vps" style="display:none"><div class="ch-h"><b>VPS на Beget отвечают</b> <span class="delta" id="g-v"></span></div><svg class="chart" id="chart-v" viewBox="0 0 1000 170"></svg></div>
@@ -241,7 +241,7 @@
   var shown = 60;   // плитки сайтов — порциями, «Показать ещё»
   function sites() {
     var list = data.sites.filter(function (s) { return filter === 'all' || (filter === 'ok') === s.ok; });
-    $('sites').innerHTML = list.slice(0, shown).map(function (s) { return '<div class="s' + (s.ok ? ' ok' : '') + '" title="' + esc(s.net) + '.x">' + esc(s.d) + '</div>'; }).join('') ||
+    $('sites').innerHTML = list.slice(0, shown).map(function (s) { return '<div class="s' + (s.ok ? ' ok' : '') + '" title="' + esc(s.net) + '.x' + (s.mv ? ' — переехал на другой хостинг' : '') + '"' + (s.mv ? ' style="color:#7aa7ff"' : '') + '>' + esc(s.d) + (s.mv ? ' ↗' : '') + '</div>'; }).join('') ||
       '<p class="sub">Пока нет</p>';
     var more = $('more'), rest = list.length - shown;
     more.style.display = rest > 0 ? '' : 'none';
@@ -251,6 +251,7 @@
     tick();
     document.querySelectorAll('.n-sites').forEach(function (e) { e.textContent = data.sites_total; });
     if ($('n-srv')) $('n-srv').textContent = data.servers_with_sites;
+    $('d-moved').textContent = data.sites_moved ? '+ ' + data.sites_moved + ' переехали на другой хостинг — не считаем' : '';
     $('k-sites').innerHTML = data.sites_up + '<small> / ' + data.sites_total + '</small>';
     $('b-sites').style.width = (100 * data.sites_up / data.sites_total) + '%';
     $('k-host').textContent = data.hosting_up; $('k-ips').textContent = data.ips_total;
