@@ -21,6 +21,11 @@ function write(rel, html) {
   writeFileSync(f, html)
 }
 const ru = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+// 06.11.2026 Ник: у новостей — время публикации по Москве (front matter `time: ЧЧ:ММ`)
+const ruDT = (p) => ru(p.date) + (p.time ? `, ${p.time} МСК` : '')
+const isoDT = (p) => (p.time ? `${p.date}T${p.time}:00+03:00` : p.date)
+// 06.11.2026 Ник: во всех новостях о Бегет (Beget) — ссылка на бота
+const BOT_BOX = `<div class="bot-box" style="margin:0 0 28px;padding:18px 20px;border:1px solid var(--acc);border-radius:16px;background:rgba(198,242,78,.06)"><b>🔔 Ждёте свой сайт на Бегет (Beget)?</b><br>Бесплатный Telegram-бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> проверяет ваш сайт каждые 5 минут и пишет, когда включится сервер и когда сайт откроется. Живая статистика восстановления — <a href="/beget/" style="color:var(--acc)">rebornlab.ru/beget</a>.</div>`
 
 // tiny markdown → html (headings, paragraphs, lists, quotes, bold/italic/code/links)
 function md(src) {
@@ -146,9 +151,11 @@ function leadForm(id, label = 'Разобрать задачу') {
 const JDIR = path.join(ROOT, 'content', 'journal')
 const POSTS = (existsSync(JDIR) ? readdirSync(JDIR).filter((f) => f.endsWith('.md')) : []).map((f) => {
   const { meta, body } = frontMatter(readFileSync(path.join(JDIR, f), 'utf8'))
-  return { ...meta, slug: meta.slug || f.replace(/\.md$/, ''), html: md(body), words: body.split(/\s+/).length }
-}).filter((p) => p.date <= today && p.draft !== 'true').sort((a, b) => (a.date < b.date ? 1 : -1))
-const postCard = (p) => `<a class="post rv" href="/journal/${p.slug}/"><div class="meta">${esc(JOURNAL_CATEGORIES[p.category] || p.category)} · ${ru(p.date)}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p></a>`
+  const slug = meta.slug || f.replace(/\.md$/, '')
+  const img = existsSync(path.join(ROOT, 'src/assets/journal', slug + '.jpg')) ? `/assets/journal/${slug}.jpg` : ''   // 06.11: обложка статьи
+  return { ...meta, slug, image: meta.image || img, html: md(body), words: body.split(/\s+/).length }
+}).filter((p) => p.date <= today && p.draft !== 'true').sort((a, b) => (isoDT(a) < isoDT(b) ? 1 : -1))
+const postCard = (p) => `<a class="post rv" href="/journal/${p.slug}/">${p.image ? `<img src="${p.image}" alt="" loading="lazy" width="1200" height="630" style="display:block;width:100%;height:auto;border-radius:12px;margin:0 0 14px">` : ''}<div class="meta">${esc(JOURNAL_CATEGORIES[p.category] || p.category)} · ${ruDT(p)}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p></a>`
 
 // ---------- HOME ----------
 const SYS_NODES = [
@@ -317,11 +324,11 @@ for (const p of POSTS) {
   write(`journal/${p.slug}/index.html`, shell({
     title: `${p.title} — REBORN LAB`,
     description: p.description,
-    canonical: `/journal/${p.slug}/`, current: '/journal/', ogType: 'article',
+    canonical: `/journal/${p.slug}/`, current: '/journal/', ogType: 'article', ...(p.image ? { image: p.image } : {}),
     jsonLd: [crumbsLd([['Главная', '/'], ['Журнал', '/journal/'], [p.title, `/journal/${p.slug}/`]]),
-      { '@context': 'https://schema.org', '@type': 'Article', headline: p.title, description: p.description, datePublished: p.date, dateModified: p.updated || p.date, inLanguage: 'ru', author: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url }, publisher: { '@type': 'Organization', name: 'REBORN LAB', logo: { '@type': 'ImageObject', url: SITE.url + '/assets/logo.png' } }, mainEntityOfPage: SITE.url + `/journal/${p.slug}/`, image: SITE.url + '/assets/og.jpg', articleSection: JOURNAL_CATEGORIES[p.category] || p.category, wordCount: p.words }],
-    body: `<article><div class="wrap page-hd">${crumbs([['Главная', '/'], ['Журнал', '/journal/'], [p.title, '']])}<div class="kicker" style="margin-top:18px">${esc(JOURNAL_CATEGORIES[p.category] || p.category)} · ${ru(p.date)} · ${Math.max(1, Math.round(p.words / 180))} мин</div><h1 style="max-width:20ch">${esc(p.title)}</h1><p class="sub">${esc(p.description)}</p></div>
-    <div class="wrap"><div class="prose">${p.html}</div></div></article>
+      { '@context': 'https://schema.org', '@type': 'Article', headline: p.title, description: p.description, datePublished: isoDT(p), dateModified: p.updated || isoDT(p), inLanguage: 'ru', author: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url }, publisher: { '@type': 'Organization', name: 'REBORN LAB', logo: { '@type': 'ImageObject', url: SITE.url + '/assets/logo.png' } }, mainEntityOfPage: SITE.url + `/journal/${p.slug}/`, image: SITE.url + (p.image || '/assets/og.jpg'), articleSection: JOURNAL_CATEGORIES[p.category] || p.category, wordCount: p.words }],
+    body: `<article><div class="wrap page-hd">${crumbs([['Главная', '/'], ['Журнал', '/journal/'], [p.title, '']])}<div class="kicker" style="margin-top:18px">${esc(JOURNAL_CATEGORIES[p.category] || p.category)} · ${ruDT(p)} · ${Math.max(1, Math.round(p.words / 180))} мин</div><h1 style="max-width:20ch">${esc(p.title)}</h1><p class="sub">${esc(p.description)}</p>${p.image ? `<img src="${p.image}" alt="${esc(p.title)}" width="1200" height="630" style="display:block;width:100%;max-width:900px;height:auto;border-radius:16px;margin-top:22px">` : ''}</div>
+    <div class="wrap"><div class="prose">${p.slug.startsWith('beget') ? BOT_BOX : ''}${p.html}</div></div></article>
     <section class="sec"><div class="wrap"><div class="final-box rv"><div class="kicker">Применим к вашей задаче</div><h2 style="font-size:clamp(30px,4vw,52px)">Хотите так же? <em>Разберём бесплатно.</em></h2>${leadForm('f-post')}</div></div></section>
     ${related.length ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="kicker rv">Читайте также</div><div class="posts" style="margin-top:18px">${related.map(postCard).join('')}</div></div></section>` : ''}`,
   }))
@@ -451,13 +458,17 @@ write('404.html', shell({ title: 'Страница не найдена — REBOR
 for (const d of ['assets']) mkdirSync(path.join(OUT, d), { recursive: true })
 copyFileSync(path.join(ROOT, 'src/styles.css'), path.join(OUT, 'assets/styles.css'))
 copyFileSync(path.join(ROOT, 'src/main.js'), path.join(OUT, 'assets/main.js'))
+if (existsSync(path.join(ROOT, 'src/assets/journal'))) {   // 06.11: обложки статей
+  mkdirSync(path.join(OUT, 'assets/journal'), { recursive: true })
+  for (const f of readdirSync(path.join(ROOT, 'src/assets/journal'))) copyFileSync(path.join(ROOT, 'src/assets/journal', f), path.join(OUT, 'assets/journal', f))
+}
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
 const urls = [['/', today, '1.0'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/pravila/', today, '0.4'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d, pr]) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${d}</lastmod><priority>${pr}</priority></url>`).join('\n')}\n</urlset>\n`)
 write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /demo/\n\n# AI-поисковики приветствуются (GEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: YandexBot\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`)
-write('rss.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>REBORN LAB — Журнал</title><link>${SITE.url}/journal/</link><description>AI, автоматизация, сайты, SEO и GEO — практические разборы.</description><language>ru</language>\n${POSTS.map((p) => `<item><title>${esc(p.title)}</title><link>${SITE.url}/journal/${p.slug}/</link><guid>${SITE.url}/journal/${p.slug}/</guid><pubDate>${new Date(p.date + 'T09:00:00Z').toUTCString()}</pubDate><description>${esc(p.description)}</description></item>`).join('\n')}\n</channel></rss>\n`)
+write('rss.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>REBORN LAB — Журнал</title><link>${SITE.url}/journal/</link><description>AI, автоматизация, сайты, SEO и GEO — практические разборы.</description><language>ru</language>\n${POSTS.map((p) => `<item><title>${esc(p.title)}</title><link>${SITE.url}/journal/${p.slug}/</link><guid>${SITE.url}/journal/${p.slug}/</guid><pubDate>${new Date(p.time ? isoDT(p) : p.date + 'T09:00:00Z').toUTCString()}</pubDate><description>${esc(p.description)}</description></item>`).join('\n')}\n</channel></rss>\n`)
 write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите задачу — соберём решение: сайты, веб-сервисы, AI-ассистенты и агенты, автоматизация, SEO/GEO, дизайн.\n\n## Услуги\n${SERVICES.map((s) => `- [${s.seoTitle}](${SITE.url}/services/${s.slug}/): ${s.lead}`).join('\n')}\n\n## Журнал\n${POSTS.map((p) => `- [${p.title}](${SITE.url}/journal/${p.slug}/): ${p.description}`).join('\n')}\n\n## Контакт\n- Telegram: https://t.me/${SITE.telegram}\n`)
 {
   const home = readFileSync(path.join(OUT, 'index.html'), 'utf8')
@@ -465,7 +476,9 @@ write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите зад�
   for (const f of ['beget/index.html', 'beget/pravila/index.html']) {
     const fp = path.join(OUT, f)
     if (!existsSync(fp)) continue
+    const news = POSTS.filter((x) => x.slug.startsWith('beget')).map((x) => `<a class="news-card" href="/journal/${x.slug}/">${x.image ? `<img src="${x.image}" alt="" loading="lazy" width="1200" height="630">` : ''}<span class="news-dt">${ruDT(x)}</span><b>${esc(x.title)}</b><span class="news-d">${esc(x.description)}</span></a>`).join('')
     const html = readFileSync(fp, 'utf8').replace(/<footer class="ftr">[\s\S]*?<\/footer>/, () => foot)
+      .replace(/<!--NEWS:START-->[\s\S]*?<!--NEWS:END-->/, () => `<!--NEWS:START--><div class="news-grid">${news}</div><!--NEWS:END-->`)
       .replace(/\/assets\/styles\.css(\?v=\w+)?"/, `/assets/styles.css?v=${ASSET_V}"`).replace(/\/assets\/main\.js(\?v=\w+)?"/, `/assets/main.js?v=${ASSET_V}"`)
     writeFileSync(fp, html)
   }
