@@ -307,7 +307,7 @@
       $('p-wait').textContent = 'ещё у ' + b.server_up_waiting + ' сервер уже включился';
       var h = (b.history || []).filter(function (x) { return x.n >= 20; });
       chart1($('chart-p'), h, 'ok', '#c6f24e');
-      if (h.length > 1) { var e = $('p-g'), d = h[h.length - 1].ok - h[0].ok; e.textContent = '▲ +' + d + ' с ' + tm(h[0].t); e.className = 'delta up'; }
+      if (h.length > 1) { var e = $('p-g'), d = h[h.length - 1].ok - h[0].ok; e.textContent = '▲ +' + d + ' с ' + fmt(h[0].t); e.className = 'delta up'; }
       $('p-upd').textContent = 'Обновлено ' + fmt(b.updated) + '. График растёт и от вернувшихся сайтов, и от новых подписчиков, чьи сайты уже работали.';
     }).catch(function () {});
   }
