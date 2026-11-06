@@ -115,7 +115,7 @@
 
   <div class="card">
     <h2>Сети Beget</h2>
-    <p class="sub">Каждый адрес проверяется одним обычным запросом. <span style="color:var(--acc)">■</span> сервер хостинга работает · <span style="color:var(--cool)">■</span> другой сервер (VPS) · <span style="color:var(--dim)">■</span> молчит или адрес не занят</p>
+    <p class="sub">С 6 ноября следим ещё за тремя сетями (пометка «новая»): туда Beget в том числе переносит аккаунты на новые серверы. В счётчики и графики вверху они не входят, чтобы цифры шли без скачка. Каждый адрес проверяется одним обычным запросом. <span style="color:var(--acc)">■</span> сервер хостинга работает · <span style="color:var(--cool)">■</span> другой сервер (VPS) · <span style="color:var(--dim)">■</span> молчит или адрес не занят</p>
     <div class="nets" id="nets"></div>
   </div>
 
@@ -216,7 +216,7 @@
       $('b-vps').style.width = (100 * data.vps_up / data.vps_total) + '%'; }
     $('nets').innerHTML = data.nets.map(function (n) {
       var t = n.hosting + n.other + n.down;
-      return '<div class="net"><div class="n">' + esc(n.net) + '</div><div class="stack"><div class="h" style="width:' + (100 * n.hosting / t) + '%"></div><div class="o" style="width:' + (100 * n.other / t) + '%"></div><div class="d" style="flex:1"></div></div><div class="c">' + n.hosting + ' хостинг · ' + n.other + ' др.</div></div>';
+      return '<div class="net"><div class="n">' + esc(n.net) + (n.new ? ' <span style="color:var(--acc);font-size:11px">новая</span>' : '') + '</div><div class="stack"><div class="h" style="width:' + (100 * n.hosting / t) + '%"></div><div class="o" style="width:' + (100 * n.other / t) + '%"></div><div class="d" style="flex:1"></div></div><div class="c">' + n.hosting + ' хостинг · ' + n.other + ' др.</div></div>';
     }).join('');
     var rv = data.revived || [];
     $('rev-hour').textContent = (data.revived_hour || 0) + ' сайтов';
