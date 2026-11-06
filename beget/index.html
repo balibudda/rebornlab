@@ -275,7 +275,8 @@
     for (var i = h.length - 1; i >= 0; i--) { if (data.updated - h[i].t >= 3300) { ref = h[i]; break; } }
     function dl(id, now, was) { var e = $(id); if (!ref) { e.textContent = 'изменения за час появятся через час наблюдений'; e.className = 'delta'; return; }
       var d = now - was; e.textContent = (d > 0 ? '▲ +' + d : d < 0 ? '▼ ' + d : '— без изменений') + ' за последний час'; e.className = 'delta' + (d > 0 ? ' up' : ''); }
-    dl('d-sites', data.sites_up, ref && ref.s); dl('d-host', data.hosting_up, ref && ref.h);
+    // 07.11: до пересчёта (в истории нет sm) переехавшие входили в s — сравниваем одинаково посчитанное, иначе «▼ -63 за час»
+    dl('d-sites', data.sites_up + (ref && ref.sm == null ? (data.sites_moved || 0) : 0), ref && ref.s); dl('d-host', data.hosting_up, ref && ref.h);
     if (data.vps_total) { if (ref && ref.v != null) dl('d-vps', data.vps_up, ref.v); else { $('d-vps').textContent = 'считаем с 5 ноября — изменения за час появятся через час'; $('d-vps').className = 'delta'; } }
   }
   function tick() {   // «обновлено N мин назад · следующая проверка через M мин» / «идёт проверка…»
