@@ -342,3 +342,9 @@ form.need-agree .agree { color: #ff8a7a; }
 .sv-rel a:hover { border-color: rgba(198,242,78,.5); } .sv-rel b { display: block; font-size: 15px; } .sv-rel i { display: block; font-style: normal; color: var(--muted); font-size: 13px; }
 @media (max-width: 900px) { .sv-inc, .sv-rel { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .sv-inc, .sv-rel { grid-template-columns: 1fr; } .sv-flow ol { grid-template-columns: 1fr !important; } }
+
+/* 06.11.2026: пункт меню «Статус Beget» — живой мониторинг, с мигающей точкой */
+.nav a[href="/beget/"] { color: var(--acc); display: inline-flex; align-items: center; gap: 7px; }
+.nav a[href="/beget/"]::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 0 0 rgba(61,220,132,.6); animation: beget-pulse 1.8s infinite; }
+@keyframes beget-pulse { 0% { box-shadow: 0 0 0 0 rgba(61,220,132,.55); } 70% { box-shadow: 0 0 0 7px rgba(61,220,132,0); } 100% { box-shadow: 0 0 0 0 rgba(61,220,132,0); } }
+@media (prefers-reduced-motion: reduce) { .nav a[href="/beget/"]::before { animation: none; } }

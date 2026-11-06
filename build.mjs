@@ -61,7 +61,7 @@ const svIcon = (s) => `<svg class="sv-ico" width="28" height="28" viewBox="0 0 2
 const svPains = (s) => s.pains ? `<div class="sv-pain"><b>Если у вас:</b><ul>${s.pains.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''
 const HAS_SELLER = !!(SITE.operator && SITE.operatorInn)   // оферта и данные продавца — только с реквизитами
 // 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
-const NAV = [['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории']]
+const NAV = [['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget']]
 
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
   const url = SITE.url + canonical
