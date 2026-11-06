@@ -114,13 +114,12 @@
 
   <div class="card" id="people">
     <h2>Сайты, которые ждут люди</h2>
-    <p class="sub">Это не наша выборка, а сайты, которые владельцы сами прислали боту <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a>. Почти все пришли, когда их сайт уже лежал, поэтому доля работающих здесь ниже, чем в выборке. Адреса не публикуем — только общие цифры, обновление раз в 15 минут.</p>
+    <p class="sub" style="margin-bottom:14px">Это не наша выборка, а сайты, которые владельцы сами прислали боту <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a>. Почти все пришли, когда их сайт уже лежал, поэтому доля работающих здесь ниже, чем в выборке. Адреса не публикуем — только общие цифры, обновление раз в 15 минут.</p>
     <div class="kpis">
       <div class="kpi"><div class="v" id="p-people">—</div><div class="l">человек следят за своими сайтами через бота</div></div>
-      <div class="kpi"><div class="v" id="p-sites">—</div><div class="l">сайтов прислали <span id="p-beget"></span></div></div>
+      <div class="kpi"><div class="v" id="p-sites">—</div><div class="l">сайтов прислали</div><div class="delta" id="p-beget"></div></div>
       <div class="kpi"><div class="v" id="p-ret">—</div><div class="l">сайтов уже вернулись — бот написал «снова работает»</div><div class="delta up" id="p-ret24"></div></div>
-      <div class="kpi"><div class="v" id="p-ok">—</div><div class="l">открываются прямо сейчас</div><div class="bar"><i id="p-bar" style="width:0"></i></div></div>
-      <div class="kpi"><div class="v" id="p-wait">—</div><div class="l">сервер уже включился — сайт вот-вот вернётся</div></div>
+      <div class="kpi"><div class="v" id="p-ok">—</div><div class="l">открываются прямо сейчас</div><div class="delta" id="p-wait"></div><div class="bar"><i id="p-bar" style="width:0"></i></div></div>
     </div>
     <div class="ch"><div class="ch-h"><b>Сколько сайтов из бота открывается</b> <span class="delta" id="p-g"></span></div><svg class="chart" id="chart-p" viewBox="0 0 1000 170"></svg></div>
     <p class="sub" id="p-upd" style="margin:6px 0 0"></p>
@@ -302,14 +301,14 @@
   function people() {
     fetch('https://api.rebornlab.ru/bot-stats.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (b) {
       $('p-people').textContent = b.people; $('p-sites').textContent = b.sites;
-      $('p-beget').textContent = '(из них ' + b.on_beget + ' на Beget)';
+      $('p-beget').textContent = 'из них ' + b.on_beget + ' на Beget';
       $('p-ret').textContent = b.returned_total; $('p-ret24').textContent = '▲ +' + b.returned_24h + ' за сутки';
       $('p-ok').innerHTML = b.ok + '<small> / ' + b.sites + '</small>'; $('p-bar').style.width = (100 * b.ok / Math.max(1, b.sites)) + '%';
-      $('p-wait').textContent = b.server_up_waiting;
+      $('p-wait').textContent = 'ещё у ' + b.server_up_waiting + ' сервер уже включился';
       var h = (b.history || []).filter(function (x) { return x.n >= 20; });
       chart1($('chart-p'), h, 'ok', '#c6f24e');
       if (h.length > 1) { var e = $('p-g'), d = h[h.length - 1].ok - h[0].ok; e.textContent = '▲ +' + d + ' с ' + tm(h[0].t); e.className = 'delta up'; }
-      $('p-upd').textContent = 'Обновлено ' + fmt(b.updated) + '. Сайтов в боте всё больше: многие приходят уже после падения — поэтому график растёт и от новых подписчиков, и от вернувшихся сайтов.';
+      $('p-upd').textContent = 'Обновлено ' + fmt(b.updated) + '. График растёт и от вернувшихся сайтов, и от новых подписчиков, чьи сайты уже работали.';
     }).catch(function () {});
   }
   people(); setInterval(people, 5 * 60 * 1000);
