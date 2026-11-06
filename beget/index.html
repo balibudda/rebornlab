@@ -236,7 +236,8 @@
     if (!data) return;
     var now = Date.now() / 1000, ago = Math.max(0, Math.round((now - data.updated) / 60)), every = data.every || 300,
         left = Math.round((data.updated + every + 90 - now) / 60), box = $('livebox');
-    var a = ago < 1 ? 'обновлено только что' : 'обновлено ' + ago + ' мин назад';
+    var msk = ''; try { msk = new Date(data.updated * 1000).toLocaleTimeString('ru-RU', { timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit' }); } catch (e) {}
+    var a = (ago < 1 ? 'обновлено только что' : 'обновлено ' + ago + ' мин назад') + (msk ? ' (в ' + msk + ' МСК)' : '');
     if (now - data.updated > 3 * every) { box.classList.remove('busy'); $('upd').textContent = a + ' · мониторинг временно приостановлен, бот работает'; }
     else if (left > 0) { box.classList.remove('busy'); $('upd').textContent = a + ' · следующая проверка через ' + left + ' мин'; }
     else { box.classList.add('busy'); $('upd').textContent = a + ' · идёт проверка серверов и сайтов…'; }
