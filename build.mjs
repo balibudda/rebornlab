@@ -475,7 +475,7 @@ if (existsSync(path.join(ROOT, 'src/assets/journal'))) {   // 06.11: облож�
 }
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
-const urls = [['/', today, '1.0'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/pravila/', today, '0.4'],
+const urls = [['/', today, '1.0'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/pravila/', today, '0.4'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d, pr]) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${d}</lastmod><priority>${pr}</priority></url>`).join('\n')}\n</urlset>\n`)
 write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /demo/\n\n# AI-поисковики приветствуются (GEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: YandexBot\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`)
@@ -484,7 +484,7 @@ write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите зад�
 {
   const home = readFileSync(path.join(OUT, 'index.html'), 'utf8')
   const foot = home.match(/<footer class="ftr">[\s\S]*?<\/footer>/)[0]
-  for (const f of ['beget/index.html', 'beget/pravila/index.html']) {
+  for (const f of ['beget/index.html', 'beget/server/index.html', 'beget/pravila/index.html']) {
     const fp = path.join(OUT, f)
     if (!existsSync(fp)) continue
     const news = POSTS.filter((x) => x.slug.startsWith('beget')).map((x) => `<a class="news-card" href="/journal/${x.slug}/">${x.image ? `<img src="${x.image}" alt="" loading="lazy" width="1200" height="630">` : ''}<span class="news-dt">${ruDT(x)}</span><b>${esc(x.title)}</b><span class="news-d">${esc(x.description)}</span></a>`).join('')

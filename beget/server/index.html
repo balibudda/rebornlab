@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверить сервер Бегет (Beget) по IP: включён ли сервер, очередь восстановления</title>
+<meta name="description" content="Введите IP или адрес сайта — покажем, включил ли Бегет (Beget) ваш сервер после атаки, что с соседними серверами и сколько ещё ждать. Карта очереди восстановления по 9 сетям, обновление каждые 15 минут.">
+<link rel="canonical" href="https://rebornlab.ru/beget/server/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Проверить сервер Бегет (Beget) по IP — включён ли он">
+<meta property="og:description" content="Карта очереди восстановления Бегет: какие серверы уже включены. Проверка по IP или адресу сайта.">
+<meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
+<link rel="stylesheet" href="/assets/styles.css?v=51303007">
+<style>
+  /* страница-монитор (ручная, build.mjs её не трогает) */
+  .bw { max-width: var(--max); margin: 0 auto; padding: 40px 22px 80px; }   /* ширина как у шапки и подвала (.wrap) — края ровные */
+  .bw h1 { font-size: clamp(30px, 5vw, 54px); letter-spacing: -.03em; line-height: 1.05; margin: 14px 0 12px; }
+  .bw .lead { color: var(--muted); font-size: 18px; max-width: 46em; }
+  .bw .live { display: inline-flex; align-items: center; gap: 8px; font: 13px var(--mono); color: var(--muted); }
+  .bw .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 0 0 var(--acc-dim); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198,242,78,.5) } 70% { box-shadow: 0 0 0 10px rgba(198,242,78,0) } 100% { box-shadow: 0 0 0 0 rgba(198,242,78,0) } }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 34px 0; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px 22px; }
+  .kpi .v { font-size: 42px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+  .kpi .v small { font-size: 18px; color: var(--muted); font-weight: 500; }
+  .kpi .l { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  .bar { height: 8px; background: var(--card-2); border-radius: 4px; overflow: hidden; margin-top: 14px; }
+  .bar i { display: block; height: 100%; background: var(--acc); border-radius: 4px; transition: width .6s; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; margin: 18px 0; }
+  .card h2 { font-size: 22px; margin: 0 0 4px; letter-spacing: -.01em; }
+  .card .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+  .chart { width: 100%; height: auto; display: block; }
+  .ch { margin: 6px 0 14px; } .ch-h { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 15px; }
+  .ch-h .delta { margin: 0; }
+  .legend { display: flex; gap: 18px; font-size: 13px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+  .legend b { display: inline-block; width: 12px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+  .nets { display: grid; gap: 10px; }
+  .net { display: grid; grid-template-columns: 150px 1fr 120px; gap: 12px; align-items: center; font-size: 14px; }
+  .net .n { font-family: var(--mono); color: var(--muted); }
+  .stack { display: flex; height: 22px; border-radius: 6px; overflow: hidden; background: var(--card-2); }
+  .stack .h { background: var(--acc); } .stack .o { background: var(--cool); } .stack .d { background: rgba(237,235,230,.08); }
+  .net .c { text-align: right; font-family: var(--mono); font-size: 13px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+  .s { font: 12px var(--mono); padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .s.ok { color: #0b0c0d; background: var(--acc); border-color: var(--acc); }
+  .tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tabs button { background: var(--card-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 999px; padding: 7px 14px; font: 14px var(--font); cursor: pointer; }
+  .tabs button.on { background: var(--text); color: var(--bg); }
+  .cta { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+  .cta p { margin: 6px 0 0; color: var(--muted); }
+  .top-cta { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 26px 0 6px; }
+  .top-cta a { display: flex; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r);
+    padding: 16px 18px; color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s; }
+  .top-cta a:hover { border-color: var(--acc); transform: translateY(-1px); }
+  .top-cta .ic { font-size: 26px; flex: none; }
+  .top-cta b { display: block; font-size: 16px; } .top-cta span { color: var(--muted); font-size: 13.5px; line-height: 1.35; display: block; margin-top: 2px; }
+  .top-cta a.acc { border-color: var(--acc); background: linear-gradient(135deg, rgba(198,242,78,.12), rgba(198,242,78,.02)); }
+  .delta { font: 13px var(--mono); margin-top: 6px; color: var(--muted); } .delta.up { color: var(--acc); }
+  .live.busy .dot { background: var(--cool); }
+  @media (max-width: 640px) { .top-cta { grid-template-columns: 1fr } .bw { padding-top: 26px } .kpi .v { font-size: 36px } }
+  .sub-form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .sub-form input { flex: 1; min-width: 220px; background: var(--bg-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 12px; padding: 13px 15px; font: 16px var(--font); }
+  .sub-form input:focus { outline: none; border-color: var(--acc); }
+  .qa { border-top: 1px solid var(--line); padding: 12px 0; } .qa:first-of-type { border-top: 0; }
+  .qa summary { cursor: pointer; font-size: 17px; font-weight: 600; list-style: none; } .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after { content: '+'; float: right; color: var(--acc); font-size: 20px; } .qa[open] summary::after { content: '−'; }
+  .qa p { color: var(--muted); margin: 10px 0 2px; line-height: 1.6; }
+  .feed { display: flex; gap: 8px; flex-wrap: wrap; } .feed .s { flex: none; }
+  .feed .ago { font: 11px var(--mono); color: rgba(11,12,13,.55); margin-left: 6px; }
+  .note { color: var(--dim); font-size: 13px; margin-top: 26px; line-height: 1.6; }
+  @media (max-width: 640px) { .net { grid-template-columns: 1fr; gap: 4px } .net .c { text-align: left } .cta { grid-template-columns: 1fr } }
+.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 14px }
+.news-card { display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: inherit; background: rgba(237,235,230,.03); border: 1px solid rgba(237,235,230,.08); border-radius: 14px; padding: 12px; transition: border-color .2s }
+.news-card:hover { border-color: var(--acc) }
+.news-card img { width: 100%; height: auto; border-radius: 10px; display: block; margin-bottom: 4px }
+.news-dt { font: 12px/1.3 ui-monospace, Menlo, monospace; color: var(--acc) }
+.news-card b { font-size: 16px; line-height: 1.3 }
+.news-d { font-size: 13px; color: #9a978f; line-height: 1.45 }
+</style>
+<script>window.RL_METRIKA=113418511;window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113418511','ym');ym(113418511,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>
+<style>
+  .chk { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 6px }
+  .chk input { font: 18px var(--mono); padding: 14px 16px; border-radius: 12px; border: 1px solid rgba(237,235,230,.16); background: rgba(237,235,230,.04); color: var(--text); min-width: 0 }
+  .res { margin-top: 18px; display: none } .res.on { display: block }
+  .res .big { font-size: 22px; font-weight: 700; margin: 0 0 8px } .res p { margin: 6px 0; line-height: 1.55 }
+  .strip { display: flex; gap: 3px; flex-wrap: wrap; margin: 12px 0 4px } .strip span { font: 11px var(--mono); padding: 5px 4px; border-radius: 5px; min-width: 30px; text-align: center; background: rgba(237,235,230,.06); color: var(--muted) }
+  .strip span.h { background: rgba(198,242,78,.22); color: var(--acc) } .strip span.o { background: rgba(122,167,255,.18); color: #7aa7ff } .strip span.me { outline: 2px solid var(--text) }
+  .qmap { display: grid; gap: 14px; margin-top: 10px } .qrow .qn { font: 13px var(--mono); color: var(--muted); margin-bottom: 4px } .qrow .qn b { color: var(--text) }
+  .qcells { display: grid; grid-template-columns: repeat(127, 1fr); gap: 2px } .qcells i { display: block; aspect-ratio: 1; border-radius: 2px; background: rgba(237,235,230,.08); cursor: pointer }
+  .qcells i.h { background: var(--acc) } .qcells i.o { background: #7aa7ff } .qcells i.me { outline: 2px solid #fff; outline-offset: 1px }
+  @media (max-width: 760px) { .qcells { grid-template-columns: repeat(64, 1fr) } .chk { grid-template-columns: 1fr } }
+</style><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Как узнать, на каком сервере Бегет мой сайт?", "acceptedAnswer": {"@type": "Answer", "text": "Введите адрес сайта в поле выше — мы найдём его IP сами. Или выполните в терминале nslookup ваш-сайт.ru (на Mac — «Терминал», на Windows — «Командная строка»): адрес в строке Address и есть ваш сервер. IP вида 45.130.41.x, 87.236.16.x, 5.101.152.x — это сети хостинга Бегет."}}, {"@type": "Question", "name": "Как проверить, включён ли сервер Бегет?", "acceptedAnswer": {"@type": "Answer", "text": "Введите IP в поле выше — покажем состояние по нашей последней проверке. Вручную: откройте в браузере http://ваш-IP/. Если видите страницу Бегет «Домен не прилинкован к директории на сервере» — сервер включён. Если страница не грузится — сервер ещё выключен."}}, {"@type": "Question", "name": "Сервер включён, а сайт не открывается — почему?", "acceptedAnswer": {"@type": "Answer", "text": "После включения сервера сайт проходит этапы: сначала 502 Bad Gateway, потом ошибки базы данных, потом открывается. По нашим данным, половина сайтов оживает за 2–3 часа. Если сервер работает больше суток, а сайт нет — пишите в поддержку Бегет."}}, {"@type": "Question", "name": "В каком порядке Бегет включает серверы?", "acceptedAnswer": {"@type": "Answer", "text": "По нашим наблюдениям, внутри сети серверы включают в основном по возрастанию номера: начало сети почти всё работает, дальше всё реже. Массовые включения проходят днём и вечером, ночью почти ничего не меняется. Часть аккаунтов Бегет переносит на новые серверы в других сетях и присылает письмо о переносе."}}, {"@type": "Question", "name": "Какой процент Бегет уже восстановил?", "acceptedAnswer": {"@type": "Answer", "text": "Официально на 5 ноября, 15:00 — 60% виртуального хостинга. По нашим замерам открывается около половины сайтов из выборки 1000; живые цифры — на странице статуса rebornlab.ru/beget."}}, {"@type": "Question", "name": "Мой сервер не включён — что делать?", "acceptedAnswer": {"@type": "Answer", "text": "Проверьте почту аккаунта Бегет: может прийти письмо о переносе на новый сервер (если DNS домена не у Бегет — поменяйте A-записи). Если сайт важен и есть своя копия — поднимайте его у другого хостинга; если копии нет — Бегет обещает выдать резервные копии примерно к 10 ноября. Чтобы не проверять вручную, пришлите адрес сайта боту @rebornlab_bot."}}, {"@type": "Question", "name": "Где сейчас входить в панель Бегет?", "acceptedAnswer": {"@type": "Answer", "text": "Основная панель cp.beget.com пока отвечает ошибкой 502. DNS доменов можно менять на domains.beget.ru (открывается из российского интернета), почта — на webmail.beget.ru."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "REBORN LAB", "item": "https://rebornlab.ru/"}, {"@type": "ListItem", "position": 2, "name": "Статус Beget", "item": "https://rebornlab.ru/beget/"}, {"@type": "ListItem", "position": 3, "name": "Проверить сервер по IP", "item": "https://rebornlab.ru/beget/server/"}]}</script>
+</head>
+<body>
+<main class="bw">
+  <a href="/beget/" class="live" style="text-decoration:none">← Статус восстановления Бегет</a>
+  <h1>Проверить сервер Бегет (Beget) по IP</h1>
+  <p class="lead">Введите IP-адрес сервера или адрес сайта — покажем, включил ли Бегет ваш сервер после атаки, что с соседними серверами и что делать дальше. Данные наших проверок всех 9 сетей хостинга Бегет, обновление каждые 15 минут.</p>
+  <div class="live" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
+
+  <div class="card" id="check">
+    <h2>Проверка сервера</h2>
+    <form class="chk" id="f"><input id="q" placeholder="45.130.41.112 или мой-сайт.ru" autocomplete="off" inputmode="url" aria-label="IP или адрес сайта"><button class="btn btn-acc" type="submit">Проверить</button></form>
+    <div class="res" id="res"></div>
+  </div>
+
+  <div class="card" id="queue">
+    <h2>Очередь восстановления: какие серверы Бегет уже включены</h2>
+    <p class="sub">Каждый квадрат — один адрес в сети. <span style="color:var(--acc)">■</span> сервер хостинга работает · <span style="color:#7aa7ff">■</span> другой сервер (VPS, выделенный) · <span style="color:var(--dim)">■</span> молчит или адрес не занят. Нажмите на квадрат — покажем этот сервер.</p>
+    <div class="qmap" id="qmap"></div>
+  </div>
+
+  <div class="card">
+    <h2>Частые вопросы</h2>
+    <details class="qa"><summary>Как узнать, на каком сервере Бегет мой сайт?</summary><p>Введите адрес сайта в поле выше — мы найдём его IP сами. Или выполните в терминале nslookup ваш-сайт.ru (на Mac — «Терминал», на Windows — «Командная строка»): адрес в строке Address и есть ваш сервер. IP вида 45.130.41.x, 87.236.16.x, 5.101.152.x — это сети хостинга Бегет.</p></details>
+    <details class="qa"><summary>Как проверить, включён ли сервер Бегет?</summary><p>Введите IP в поле выше — покажем состояние по нашей последней проверке. Вручную: откройте в браузере http://ваш-IP/. Если видите страницу Бегет «Домен не прилинкован к директории на сервере» — сервер включён. Если страница не грузится — сервер ещё выключен.</p></details>
+    <details class="qa"><summary>Сервер включён, а сайт не открывается — почему?</summary><p>После включения сервера сайт проходит этапы: сначала 502 Bad Gateway, потом ошибки базы данных, потом открывается. По нашим данным, половина сайтов оживает за 2–3 часа. Если сервер работает больше суток, а сайт нет — пишите в поддержку Бегет.</p></details>
+    <details class="qa"><summary>В каком порядке Бегет включает серверы?</summary><p>По нашим наблюдениям, внутри сети серверы включают в основном по возрастанию номера: начало сети почти всё работает, дальше всё реже. Массовые включения проходят днём и вечером, ночью почти ничего не меняется. Часть аккаунтов Бегет переносит на новые серверы в других сетях и присылает письмо о переносе.</p></details>
+    <details class="qa"><summary>Какой процент Бегет уже восстановил?</summary><p>Официально на 5 ноября, 15:00 — 60% виртуального хостинга. По нашим замерам открывается около половины сайтов из выборки 1000; живые цифры — на странице статуса rebornlab.ru/beget.</p></details>
+    <details class="qa"><summary>Мой сервер не включён — что делать?</summary><p>Проверьте почту аккаунта Бегет: может прийти письмо о переносе на новый сервер (если DNS домена не у Бегет — поменяйте A-записи). Если сайт важен и есть своя копия — поднимайте его у другого хостинга; если копии нет — Бегет обещает выдать резервные копии примерно к 10 ноября. Чтобы не проверять вручную, пришлите адрес сайта боту <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a>.</p></details>
+    <details class="qa"><summary>Где сейчас входить в панель Бегет?</summary><p>Основная панель cp.beget.com пока отвечает ошибкой 502. DNS доменов можно менять на domains.beget.ru (открывается из российского интернета), почта — на webmail.beget.ru.</p></details>
+  </div>
+
+  <div class="top-cta" style="margin-top:20px">
+    <a class="acc" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener"><span class="ic">🔔</span><div><b>Не проверяйте вручную</b><span>Бот @rebornlab_bot проверяет ваш сайт и сервер каждые 5 минут и пишет, когда что-то изменится. Бесплатно.</span></div></a>
+  </div>
+  <p class="note" style="font-size:15px">Общая картина восстановления, графики и новости — на странице <a href="/beget/" style="color:var(--acc)">rebornlab.ru/beget</a>. Независимый мониторинг REBORN LAB, не связан с Бегет.</p>
+</main>
+
+<footer class="ftr"><div class="wrap">
+  <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© 2026 REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a></div></div>
+  <div><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
+  <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
+</div></footer>
+<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
+<script src="/assets/main.js?v=51303007" defer></script>
+<script>
+(function () {
+  var D = null;
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+  function fmt(t) { return new Date(t * 1000).toLocaleString('ru-RU', {timeZone: 'Europe/Moscow', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) + ' МСК'; }
+  function load() {
+    fetch('https://api.rebornlab.ru/servers.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (d) {
+      D = d; $('upd').textContent = 'данные проверки от ' + fmt(d.updated); map();
+      var h = decodeURIComponent((location.hash || '').slice(1)); if (h && !$('q').value) { $('q').value = h; check(h); }
+    }).catch(function () { $('upd').textContent = 'не удалось загрузить данные — обновите страницу'; });
+  }
+  function map() {
+    var out = '';
+    Object.keys(D.nets).forEach(function (n) {
+      var s = D.nets[n].s, on = (s.match(/h/g) || []).length, cells = '';
+      for (var i = 0; i < 254; i++) cells += '<i class="' + (s[i] === 'h' ? 'h' : s[i] === 'o' ? 'o' : '') + '" data-ip="' + n + '.' + (i + 1) + '" title="' + n + '.' + (i + 1) + '"></i>';
+      out += '<div class="qrow"><div class="qn"><b>' + n + '.x</b> — работает ' + on + ' серверов хостинга' + (D.nets[n].new ? ' · с 6 ноября в мониторинге' : '') + '</div><div class="qcells">' + cells + '</div></div>';
+    });
+    $('qmap').innerHTML = out;
+    $('qmap').onclick = function (e) { var ip = e.target.getAttribute('data-ip'); if (ip) { $('q').value = ip; check(ip); $('check').scrollIntoView({behavior: 'smooth'}); } };
+  }
+  function resolve(name) {
+    var u1 = 'https://dns.google/resolve?type=A&name=' + encodeURIComponent(name), u2 = 'https://cloudflare-dns.com/dns-query?type=A&name=' + encodeURIComponent(name);
+    function q(u, hd) { return fetch(u, {headers: hd || {}}).then(function (r) { return r.json(); }).then(function (j) { var a = (j.Answer || []).filter(function (x) { return x.type === 1; }); if (!a.length) throw 0; return a[a.length - 1].data; }); }
+    return q(u1).catch(function () { return q(u2, {accept: 'application/dns-json'}); });
+  }
+  function show(html) { $('res').innerHTML = html; $('res').className = 'res on'; }
+  function check(v) {
+    v = v.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+    if (!v || !D) return;
+    if (/^\d{1,3}(\.\d{1,3}){3}$/.test(v)) return verdict(v, null);
+    show('<p>Ищем IP сайта ' + esc(v) + '…</p>');
+    resolve(v).then(function (ip) { verdict(ip, v); }).catch(function () {
+      show('<p class="big">Не удалось узнать IP сайта ' + esc(v) + '</p><p>Проверьте адрес или узнайте IP командой <code>nslookup ' + esc(v) + '</code> и введите его сюда. Ещё проще — пришлите адрес боту <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a>.</p>');
+    });
+  }
+  function verdict(ip, site) {
+    location.hash = encodeURIComponent(site || ip);
+    var p = ip.split('.'), n = p.slice(0, 3).join('.'), k = +p[3], net = D.nets[n], who = site ? 'Сайт ' + esc(site) + ' стоит на сервере <b>' + ip + '</b>. ' : '';
+    if (!net) { show('<p class="big">' + (site ? esc(site) + ' — ' : '') + ip + ': не из сетей хостинга Бегет, за которыми мы следим</p><p>Возможно, сайт уже переехал на другой хостинг, стоит на VPS или выделенном сервере Бегет, или это не Бегет. Мы проверяем 9 сетей виртуального хостинга: ' + Object.keys(D.nets).map(function (x) { return x + '.x'; }).join(', ') + '.</p>'); return; }
+    var s = net.s, c = s[k - 1], lo = Math.max(1, k - 12), hi = Math.min(254, k + 12), strip = '', near = 0, nearAll = 0;
+    for (var i = lo; i <= hi; i++) { var ch = s[i - 1]; strip += '<span class="' + (ch === 'h' ? 'h' : ch === 'o' ? 'o' : '') + (i === k ? ' me' : '') + '">' + i + '</span>'; }
+    for (var j = Math.max(1, k - 20); j <= Math.min(254, k + 20); j++) { if (j !== k) { nearAll++; if (s[j - 1] === 'h') near++; } }
+    var total = (s.match(/h/g) || []).length, share = near / Math.max(1, nearAll), html = '';
+    var smp = D.sample[ip], first = D.first[ip];
+    if (c === 'h') {
+      html = '<p class="big">✅ ' + who + 'Сервер включён</p><p>Он отвечает стандартной страницей хостинга Бегет' + (first === 0 ? ' — работает с первых дней наших наблюдений (до 6 ноября).' : first ? ' — впервые увидели его включённым ' + fmt(first) + '.' : '.') + '</p>' +
+        (smp ? '<p>Из нашей выборки на этом сервере ' + smp[1] + ' сайт(ов), открываются ' + smp[0] + '.</p>' : '') +
+        '<p><b>Что делать:</b> если ваш сайт всё ещё не открывается (502, ошибки базы данных) — это промежуточный этап, половина сайтов оживает за 2–3 часа. Если сервер включён больше суток, а сайт нет — пишите в поддержку Бегет.</p>';
+    } else if (c === 'o') {
+      html = '<p class="big">' + who + 'По этому адресу отвечает не сервер хостинга</p><p>Скорее всего, это VPS или выделенный сервер. По словам Бегет, полные копии дисков VPS утрачены — подробнее в <a href="/journal/beget-vps-ne-rabotayut/" style="color:var(--acc)">разборе про VPS</a>.</p>';
+    } else {
+      var hint = share > .4 ? 'Вокруг вашего сервера уже работает большинство соседей — скорее всего, очередь близко.' : share > .1 ? 'Рядом включена часть соседей — очередь движется, но не быстро.' : total === 0 ? 'В этой сети пока не включён ни один сервер — ждать, скорее всего, придётся дольше остальных.' : 'Рядом почти ничего не включено — ваша часть сети пока в хвосте очереди.';
+      html = '<p class="big">⏳ ' + who + 'Сервер пока не включён</p><p>' + hint + ' В сети ' + n + '.x работает ' + total + ' серверов хостинга, рядом с вашим — ' + near + ' из ' + nearAll + '.</p>' +
+        (smp ? '<p>Из нашей выборки на этом сервере ' + smp[1] + ' сайт(ов) — пока не открываются.</p>' : '') +
+        '<p><b>Что делать:</b> проверьте почту аккаунта Бегет — может прийти письмо о переносе на новый сервер (если DNS домена не у Бегет, поменяйте A-записи на адрес из письма). Если сайт важен и есть своя копия — поднимайте его у другого хостинга; резервные копии Бегет обещает примерно к 10 ноября. <a href="/journal/beget-itogi-6-noyabrya/" style="color:var(--acc)">Кому ждать, а кому восстанавливать самому →</a></p>';
+    }
+    html += '<div class="strip">' + strip + '</div><p class="sub" style="margin:0">Соседние адреса в сети ' + n + '.x: подсвечены включённые, в рамке — ваш. Данные от ' + fmt(D.updated) + '.</p>' +
+      '<p style="margin-top:12px">🔔 Чтобы узнать сразу, когда сервер и сайт заработают, пришлите ' + (site ? 'адрес <b>' + esc(site) + '</b>' : 'адрес сайта') + ' боту <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a>.</p>';
+    show(html);
+  }
+  $('f').onsubmit = function (e) { e.preventDefault(); check($('q').value); };
+  load(); setInterval(load, 5 * 60 * 1000);
+})();
+</script>
+</body>
+</html>
