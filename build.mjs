@@ -38,6 +38,17 @@ function md(src) {
   const blocks = src.trim().split(/\n\s*\n/)
   for (const b of blocks) {
     const lines = b.split('\n')
+    // 06.11.2026: блоки кода, таблицы и картинки (раньше выводились сырым текстом в статьях о Бегет)
+    if (/^```/.test(b)) { out.push('<pre><code>' + esc(lines.filter((l) => !/^```/.test(l)).join('\n')) + '</code></pre>'); continue }
+    if (lines.length > 1 && lines.every((l) => /^\s*\|/.test(l))) {
+      const cells = (l) => l.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim())
+      const rows = lines.filter((l) => !/^\s*\|?\s*:?-{2,}/.test(l))
+      out.push('<div class="tbl"><table><thead><tr>' + cells(rows[0]).map((c) => `<th>${inline(c)}</th>`).join('') + '</tr></thead><tbody>' +
+        rows.slice(1).map((r) => '<tr>' + cells(r).map((c) => `<td>${inline(c)}</td>`).join('') + '</tr>').join('') + '</tbody></table></div>')
+      continue
+    }
+    const im = b.trim().match(/^!\[([^\]]*)\]\(([^)\s]+)\)$/)
+    if (im) { out.push(`<figure><img src="${im[2]}" alt="${esc(im[1])}" loading="lazy" style="display:block;width:100%;height:auto;border-radius:14px">${im[1] ? `<figcaption>${inline(im[1])}</figcaption>` : ''}</figure>`); continue }
     if (/^#{2,3} /.test(b)) { const lvl = b.match(/^#+/)[0].length; out.push(`<h${lvl} id="${slugify(b.replace(/^#+ /, ''))}">${inline(b.replace(/^#+ /, ''))}</h${lvl}>`) }
     else if (lines.every((l) => /^\s*[-*] /.test(l))) out.push('<ul>' + lines.map((l) => `<li>${inline(l.replace(/^\s*[-*] /, ''))}</li>`).join('') + '</ul>')
     else if (lines.every((l) => /^\s*\d+\. /.test(l))) out.push('<ol>' + lines.map((l) => `<li>${inline(l.replace(/^\s*\d+\. /, ''))}</li>`).join('') + '</ol>')

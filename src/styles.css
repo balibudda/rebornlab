@@ -348,3 +348,13 @@ form.need-agree .agree { color: #ff8a7a; }
 .nav a[href="/beget/"]::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 0 0 rgba(61,220,132,.6); animation: beget-pulse 1.8s infinite; }
 @keyframes beget-pulse { 0% { box-shadow: 0 0 0 0 rgba(61,220,132,.55); } 70% { box-shadow: 0 0 0 7px rgba(61,220,132,0); } 100% { box-shadow: 0 0 0 0 rgba(61,220,132,0); } }
 @media (prefers-reduced-motion: reduce) { .nav a[href="/beget/"]::before { animation: none; } }
+
+/* 06.11.2026: таблицы, код и картинки в статьях журнала */
+.prose .tbl { overflow-x: auto; margin: 18px 0 }
+.prose table { width: 100%; border-collapse: collapse; font-size: 15px }
+.prose th, .prose td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line) }
+.prose th { color: var(--muted); font-weight: 600; font-size: 13px }
+.prose pre { background: rgba(237,235,230,.05); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; overflow-x: auto; margin: 16px 0 }
+.prose pre code { font: 14px/1.5 ui-monospace, Menlo, monospace; background: none; padding: 0; white-space: pre }
+.prose figure { margin: 22px 0 }
+.prose figcaption { font-size: 13px; color: var(--muted); margin-top: 8px }
