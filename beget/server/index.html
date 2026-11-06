@@ -137,13 +137,13 @@
 <script src="/assets/main.js?v=51303007" defer></script>
 <script>
 (function () {
-  var D = null;
+  var D = null, PEND = null;
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
   function fmt(t) { return new Date(t * 1000).toLocaleString('ru-RU', {timeZone: 'Europe/Moscow', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) + ' МСК'; }
   function load() {
     fetch('https://api.rebornlab.ru/servers.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (d) {
-      D = d; $('upd').textContent = 'данные проверки от ' + fmt(d.updated); map();
+      D = d; $('upd').textContent = 'данные проверки от ' + fmt(d.updated); map(); if (PEND) { var p0 = PEND; PEND = null; check(p0); }
       var h = decodeURIComponent((location.hash || '').slice(1)); if (h && !$('q').value) { $('q').value = h; check(h); }
     }).catch(function () { $('upd').textContent = 'не удалось загрузить данные — обновите страницу'; });
   }
@@ -165,7 +165,8 @@
   function show(html) { $('res').innerHTML = html; $('res').className = 'res on'; }
   function check(v) {
     v = v.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
-    if (!v || !D) return;
+    if (!v) return;
+    if (!D) { show('<p>Данные проверки ещё загружаются — попробуйте через несколько секунд. Если не проходит, обновите страницу.</p>'); PEND = v; return; }
     if (/^\d{1,3}(\.\d{1,3}){3}$/.test(v)) return verdict(v, null);
     show('<p>Ищем IP сайта ' + esc(v) + '…</p>');
     resolve(v).then(function (ip) { verdict(ip, v); }).catch(function () {
