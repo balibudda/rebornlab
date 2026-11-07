@@ -150,7 +150,8 @@ js = r'''<script>
       var help = (cls === 'ok' || cls === 'mid') && !r.archive_error ? '<div class="help">Если понадобится помощь с восстановлением — <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">напишите нам</a>, бесплатно подскажем, что и как можно вернуть.</div>' : '';
       var now = r.beget ? '' : (r.ip ? '<p>🔴 Сайт сейчас не открывается' + (hostTxt ? ' (он ' + hostTxt + ', не на Бегет)' : '') + '.</p>' : '<p>🔴 У адреса нет IP в DNS — домен не настроен или не оплачен.</p>');
       $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>' + (r.beget ? beget(r.ip || ip) : now) + botBlock(r, v) + help;
-    }).catch(function () { clearInterval(tick); $('res').innerHTML = '<p>Не получилось проверить — попробуйте ещё раз через минуту.</p>'; });
+    }).catch(function (e) { clearInterval(tick); $('res').innerHTML = '<div class="verdict mid"><b>Пока не получилось</b>Связь прервалась — попробуйте ещё раз через минуту.</div>';
+      try { (new Image()).src = 'https://api.rebornlab.ru/q?ip=' + encodeURIComponent(v) + '&k=vost&v=fail_' + encodeURIComponent(String(e && e.message || e).slice(0, 40).replace(/\s+/g, '_')); } catch (x) {} });
   }
   $('f').onsubmit = function (e) { e.preventDefault(); check($('q').value); };
   var h = decodeURIComponent((location.hash || '').slice(1)); if (h) { $('q').value = h; check(h); }
