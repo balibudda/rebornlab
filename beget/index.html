@@ -140,7 +140,7 @@
     <div class="kpis">
       <div class="kpi"><div class="v" id="p-people">—</div><div class="l">человек следят за своими сайтами через бота</div></div>
       <div class="kpi"><div class="v" id="p-sites">—</div><div class="l">сайтов прислали</div><div class="delta" id="p-beget"></div></div>
-      <div class="kpi"><div class="v" id="p-ret">—</div><div class="l">сайтов снова открываются — бот написал «снова работает»</div><div class="delta up" id="p-retb"></div><div class="delta" id="p-retm" style="color:#7aa7ff"></div><div class="delta" id="p-ret24"></div></div>
+      <div class="kpi"><div class="v" id="p-ret">—</div><div class="l">сайтов снова открываются с 4 ноября — бот написал «снова работает»</div><div class="delta up" id="p-retb"></div><div class="delta" id="p-retm" style="color:#7aa7ff"></div><div class="delta" id="p-ret24"></div></div>
       <div class="kpi"><div class="v" id="p-ok">—</div><div class="l">открываются прямо сейчас</div><div class="delta" id="p-wait"></div><div class="bar"><i id="p-bar" style="width:0"></i></div></div>
     </div>
     <div class="ch"><div class="ch-h"><b>Сколько сайтов из бота открывается</b> <span class="delta" id="p-g"></span></div><svg class="chart" id="chart-p" viewBox="0 0 1000 170"></svg></div>
@@ -327,7 +327,7 @@
       $('p-people').textContent = b.people; $('p-sites').textContent = b.sites; $('t-bot').textContent = b.sites;
       $('p-beget').textContent = 'из них ' + b.on_beget + ' на Beget';
       $('p-ret').textContent = b.returned_total; $('p-retb').textContent = '✓ ' + Math.max(0, b.returned_total - (b.moved || 0)) + ' вернул Beget';
-      $('p-retm').textContent = '↗ ' + (b.moved || 0) + ' владельцы перенесли сами на другой хостинг'; $('p-ret24').textContent = '+' + b.returned_24h + ' за сутки';
+      $('p-retm').textContent = '↗ ' + (b.moved || 0) + ' владельцы перенесли сами на другой хостинг'; $('p-ret24').textContent = '+' + b.returned_24h + ' за сутки' + (b.moved_24h != null ? ': ' + Math.max(0, b.returned_24h - b.moved_24h) + ' вернул Beget, ' + b.moved_24h + ' перенесли' : '');
       $('p-ok').innerHTML = b.ok + '<small> / ' + b.sites + '</small>'; $('p-bar').style.width = (100 * b.ok / Math.max(1, b.sites)) + '%';
       $('p-wait').textContent = 'ещё у ' + b.server_up_waiting + ' сервер уже включился';
       var h = (b.history || []).filter(function (x) { return x.n >= 20; });
