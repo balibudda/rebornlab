@@ -1,0 +1,128 @@
+import json, re
+R = '/Users/nick/WebstormProjects/rebornlab/beget/'
+t = open(R + 'server/index.html').read()
+head_end = t.index('</style>') + len('</style>')
+pre = t[:head_end]
+TITLE = 'Как восстановить сайт без резервной копии: проверка веб-архива и Яндекса онлайн'
+DESC = ('Сайт пропал вместе с хостингом (Бегет / Beget), а копии нет? Введите адрес — проверим, сколько страниц сайта сохранил веб-архив '
+        '(archive.org) и сколько картинок — Яндекс, и подскажем, можно ли вернуть сайт. Бесплатно.')
+H1 = 'Можно ли восстановить сайт после сбоя хостинга — проверка за минуту'
+pre = re.sub(r'<title>.*?</title>', f'<title>{TITLE}</title>', pre, flags=re.S)
+pre = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{DESC}">', pre)
+pre = pre.replace('href="https://rebornlab.ru/beget/server/"', 'href="https://rebornlab.ru/beget/vosstanovit/"')
+pre = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="Можно ли восстановить сайт без резервной копии — проверка онлайн">', pre)
+pre = re.sub(r'<meta property="og:description" content="[^"]*">', '<meta property="og:description" content="Сколько страниц и картинок вашего сайта сохранили веб-архив и Яндекс — и можно ли его вернуть.">', pre)
+css = '''
+<style>
+  .rs { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:18px 0 6px }
+  .rs .kpi .v { font-size:34px }
+  .verdict { border-radius:var(--r); padding:18px 20px; margin:16px 0 6px; border:1px solid var(--line); background:var(--card-2) }
+  .verdict b { font-size:20px; display:block; margin-bottom:6px } .verdict.ok { border-color:rgba(198,242,78,.6); background:rgba(198,242,78,.07) }
+  .verdict.mid { border-color:rgba(255,190,90,.55); background:rgba(255,190,90,.07) } .verdict.no { border-color:rgba(255,110,110,.5); background:rgba(255,110,110,.06) }
+  .steps2 { margin:10px 0 0 18px } .steps2 li { margin:6px 0 }
+  .help { margin-top:16px; padding:16px 18px; border-radius:var(--r); border:1px dashed var(--line-2); color:var(--muted) } .help a { color:var(--acc) }
+  .wait { color:var(--muted); font:14px var(--mono) }
+  .chk { display:grid; grid-template-columns:1fr auto; gap:10px; margin-top:10px }
+  .chk input { font:18px var(--mono); padding:14px 16px; border-radius:12px; border:1px solid rgba(237,235,230,.16); background:rgba(237,235,230,.04); color:var(--text); min-width:0; outline:none }
+  .chk input:focus { border-color:var(--acc) }
+  @media (max-width:600px) { .chk { grid-template-columns:1fr } .chk input { font-size:16px } .chk .btn { width:100%; justify-content:center } }
+</style>'''
+faq = [
+ ('Как восстановить сайт, если нет резервной копии?', 'Если своей копии нет, сайт часто можно собрать заново из открытых источников: веб-архив (archive.org) хранит тексты и структуру страниц, Яндекс Картинки — копии изображений. Проверка выше показывает, сколько всего этого сохранилось именно для вашего сайта. Чем больше страниц в архиве, тем полнее можно вернуть сайт: тексты, заголовки, адреса страниц, описания для поиска.'),
+ ('Что нельзя вернуть из веб-архива?', 'Базу данных: заказы, заявки, личные кабинеты и пользователей, корзину, админку. Архив хранит страницы так, как их видели посетители, — поэтому сайт возвращается как «витрина»: все тексты и страницы на месте, формы заявок делаются заново. Часть фотографий архив тоже не сохраняет — их добирают из Яндекс Картинок.'),
+ ('Как проверить, есть ли мой сайт в веб-архиве?', 'Введите адрес в поле выше — мы спросим веб-архив, сколько разных страниц и картинок вашего сайта он сохранил, когда сделан первый и последний снимок. Вручную: откройте web.archive.org и введите адрес сайта.'),
+ ('Сайт пропал вместе с Бегет (Beget) — ждать или восстанавливать?', 'Если сервер вашего сайта у Бегет уже включён, обычно стоит подождать. Если сервер не включён, а сайт приносит деньги — проверьте, что сохранилось в архиве: если страниц много, сайт можно поднять у другого хостинга уже сейчас, не дожидаясь копии от Бегет. Проверить свой сервер: rebornlab.ru/beget/server/.'),
+ ('Сохранятся ли позиции в Яндексе и Google после восстановления?', 'Если сохранить те же адреса страниц, заголовки (title, H1) и тексты — да, поисковики видят тот же сайт. Поэтому при восстановлении из архива важно не менять структуру и адреса.'),
+ ('Сколько времени занимает восстановление из архива?', 'Небольшой сайт (до 300 страниц) — обычно день, большой каталог — 1–2 дня: архив отдаёт страницы медленно. Картинки добираются параллельно.'),
+ ('Это бесплатно?', 'Проверка — бесплатная и без регистрации. Мы не храним адреса, которые вы проверяете, вместе с вашими данными — только общие отметки для статистики.'),
+]
+ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]}
+bc = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+  {"@type": "ListItem", "position": 1, "name": "REBORN LAB", "item": "https://rebornlab.ru/"},
+  {"@type": "ListItem", "position": 2, "name": "Статус Beget", "item": "https://rebornlab.ru/beget/"},
+  {"@type": "ListItem", "position": 3, "name": "Можно ли восстановить сайт", "item": "https://rebornlab.ru/beget/vosstanovit/"}]}
+app = {"@context": "https://schema.org", "@type": "WebApplication", "name": "Проверка: можно ли восстановить сайт из веб-архива", "url": "https://rebornlab.ru/beget/vosstanovit/",
+       "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "RUB"}}
+lds = ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in (ld, bc, app))
+body = f'''
+</head>
+<body>
+<main class="bw">
+  <a href="/beget/" class="live" style="text-decoration:none">← Статус восстановления Бегет</a>
+  <h1>{H1}</h1>
+  <p class="lead">Хостинг упал, а резервной копии сайта нет? Не всё потеряно: тексты и страницы часто хранятся в веб-архиве (archive.org), а картинки — в Яндексе. Введите адрес сайта — за минуту покажем, сколько сохранилось и можно ли вернуть сайт без своей копии.</p>
+  <div class="card" id="check">
+    <h2>Проверить свой сайт</h2>
+    <form class="chk" id="f"><input id="q" placeholder="мой-сайт.ru" autocomplete="off" inputmode="url" aria-label="Адрес сайта"><button class="btn btn-acc" type="submit">Проверить</button></form>
+    <div id="res"></div>
+  </div>
+  <div class="card">
+    <h2>Как это работает</h2>
+    <ol class="steps2">
+      <li><b>Веб-архив (archive.org)</b> годами сохраняет копии страниц сайтов: тексты, заголовки, структуру, часть картинок. Считаем, сколько разных страниц вашего сайта там есть и за какие годы.</li>
+      <li><b>Яндекс Картинки</b> хранят копии изображений сайтов в полном размере — даже когда сам сайт уже не открывается. Смотрим, есть ли там ваши фото.</li>
+      <li><b>Сервер Бегет (Beget).</b> Если сайт был на Бегет, покажем, включён ли уже его сервер — может, стоит просто подождать.</li>
+    </ol>
+    <p class="sub" style="margin-top:12px">Из этих источников сайт собирают заново: те же адреса страниц, тексты и заголовки — значит, сохраняются и позиции в поиске. Так 7 ноября 2026 года за день вернули сайт компании, который пропал вместе с Бегет без единой копии: 1700+ страниц и около тысячи фото.</p>
+  </div>
+  <div class="card" id="faq">
+    <h2>Частые вопросы о восстановлении сайта</h2>
+    {''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in faq)}
+  </div>
+  <p class="sub">Ещё по теме: <a href="/beget/server/" style="color:var(--acc)">проверить сервер Бегет по IP</a> · <a href="/beget/" style="color:var(--acc)">статус восстановления Бегет</a> · бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> — напишет, когда ваш сайт заработает.</p>
+</main>
+'''
+js = r'''<script>
+(function () {
+  var D = null;
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+  function yr(s) { return s ? s.slice(0, 4) : '—'; }
+  function dt(s) { return s ? s.slice(6, 8) + '.' + s.slice(4, 6) + '.' + s.slice(0, 4) : '—'; }
+  fetch('https://api.rebornlab.ru/servers.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (d) { D = d; }).catch(function () {});
+  function resolve(name) {
+    return fetch('https://dns.google/resolve?type=A&name=' + encodeURIComponent(name)).then(function (r) { return r.json(); })
+      .then(function (j) { var a = (j.Answer || []).filter(function (x) { return x.type === 1; }); return a.length ? a[a.length - 1].data : null; }).catch(function () { return null; });
+  }
+  function beget(ip) {
+    if (!ip || !D) return '';
+    var p = ip.split('.'), n = p.slice(0, 3).join('.'), net = D.nets[n]; if (!net) return '';
+    var c = net.s[+p[3] - 1];
+    return c === 'h' ? '<p>🟢 Сайт на сервере Бегет <b>' + ip + '</b> — <b>сервер уже включён</b>. Возможно, сайт оживёт сам: следите в боте <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a>.</p>'
+      : '<p>⏳ Сайт на сервере Бегет <b>' + ip + '</b> — <b>сервер пока не включён</b> (<a href="/beget/server/#' + ip + '" style="color:var(--acc)">подробнее</a>).</p>';
+  }
+  function check(v) {
+    v = v.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+    if (!v) return;
+    location.hash = encodeURIComponent(v);
+    $('res').innerHTML = '<p class="wait">Спрашиваем веб-архив и Яндекс… у больших сайтов это до минуты.</p>';
+    Promise.all([fetch('https://api.rebornlab.ru/restore?d=' + encodeURIComponent(v)).then(function (r) { return r.json(); }), resolve(v)]).then(function (a) {
+      var r = a[0], ip = a[1];
+      if (r.error) { $('res').innerHTML = '<p>' + esc(r.error) + '</p>'; return; }
+      var pages = r.pages, yi = r.yandex_images, ai = r.images_archive;
+      var kpi = '<div class="rs"><div class="kpi"><div class="v">' + (pages == null ? '—' : pages) + '</div><div class="l">страниц в веб-архиве</div></div>' +
+        '<div class="kpi"><div class="v">' + (yi == null ? '—' : (yi >= 30 ? '30+' : yi)) + '</div><div class="l">картинок в Яндекс Картинках</div></div>' +
+        '<div class="kpi"><div class="v">' + (ai == null ? '—' : ai) + '</div><div class="l">картинок в веб-архиве</div></div>' +
+        '<div class="kpi"><div class="v" style="font-size:24px">' + (r.last ? dt(r.last) : '—') + '</div><div class="l">последний снимок' + (r.first ? ' · первый в ' + yr(r.first) + ' г.' : '') + '</div></div></div>';
+      var cls, head, txt;
+      if (r.archive_error) { cls = 'mid'; head = 'Веб-архив сейчас не ответил'; txt = 'Архив бывает перегружен — повторите проверку через несколько минут.'; }
+      else if (pages >= 20) { cls = 'ok'; head = '✅ Сайт можно восстановить без своей копии'; txt = 'В архиве ' + pages + ' страниц — этого хватает, чтобы вернуть сайт с теми же текстами, заголовками и адресами страниц' + (yi ? ', а картинки добрать из Яндекса' : '') + '. Не вернутся только база данных (заказы, личные кабинеты) и часть фото.'; }
+      else if (pages > 0 || yi > 0) { cls = 'mid'; head = '🟡 Восстановить можно частично'; txt = 'Сохранилось немного: ' + (pages || 0) + ' стр. в архиве' + (yi ? ', картинки есть в Яндексе' : '') + '. Главную и основные страницы вернуть реально, остальное — по вашим материалам.'; }
+      else { cls = 'no'; head = '🔴 В открытых источниках сайта нет'; txt = 'Ни веб-архив, ни Яндекс копий не сохранили. Остаются ваша копия (у вас, у разработчика) или резервная копия от хостинга — у Бегет её обещают выдать через панель.'; }
+      var help = (cls === 'ok' || cls === 'mid') && !r.archive_error ? '<div class="help">Если понадобится помощь с восстановлением — <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">напишите нам</a>, бесплатно подскажем, что и как можно вернуть.</div>' : '';
+      $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>' + beget(ip) + help;
+    }).catch(function () { $('res').innerHTML = '<p>Не получилось проверить — попробуйте ещё раз через минуту.</p>'; });
+  }
+  $('f').onsubmit = function (e) { e.preventDefault(); check($('q').value); };
+  var h = decodeURIComponent((location.hash || '').slice(1)); if (h) { $('q').value = h; check(h); }
+})();
+</script>
+</body>
+</html>
+'''
+foot = t[t.index('<footer class="ftr">'):t.index('<script src="/assets/main.js')]
+mainjs = re.search(r'<script src="/assets/main.js[^"]*" defer></script>', t).group(0)
+metrika = re.search(r'<script>window.RL_METRIKA.*?</script>', pre, re.S)
+out = pre + css + '\n' + lds + body + '\n' + foot + mainjs + '\n' + js
+open(R + 'vosstanovit/index.html', 'w').write(out)
+print('ok', len(out))
