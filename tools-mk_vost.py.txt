@@ -22,6 +22,14 @@ css = '''
   .steps2 { margin:10px 0 0 18px } .steps2 li { margin:6px 0 }
   .help { margin-top:16px; padding:16px 18px; border-radius:var(--r); border:1px dashed var(--line-2); color:var(--muted) } .help a { color:var(--acc) }
   .wait { color:var(--muted); font:14px var(--mono) }
+  .prog { margin:18px 0 4px } .prog-bar { height:6px; border-radius:3px; background:var(--card-2); overflow:hidden; position:relative }
+  .prog-bar i { position:absolute; top:0; bottom:0; left:0; width:0; background:var(--acc); border-radius:3px; transition:width .8s ease }
+  .prog ul { list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:7px; font-size:15px }
+  .prog li { color:var(--muted); display:flex; gap:10px; align-items:center } .prog li.on { color:var(--text) } .prog li.done { color:var(--muted) }
+  .prog li s { text-decoration:none; width:18px; text-align:center; flex:none } .prog li.on s::before { content:""; display:inline-block; width:12px; height:12px; border:2px solid var(--acc); border-right-color:transparent; border-radius:50%; animation:spin .8s linear infinite }
+  .prog li.done s::before { content:"✓"; color:var(--acc); font-weight:700 } .prog li:not(.on):not(.done) s::before { content:"·" }
+  .prog .tm { margin-top:10px; font:13px var(--mono); color:var(--muted) }
+  @keyframes spin { to { transform:rotate(360deg) } }
   .chk { display:grid; grid-template-columns:1fr auto; gap:10px; margin-top:10px }
   .chk input { font:18px var(--mono); padding:14px 16px; border-radius:12px; border:1px solid rgba(237,235,230,.16); background:rgba(237,235,230,.04); color:var(--text); min-width:0; outline:none }
   .chk input:focus { border-color:var(--acc) }
@@ -95,8 +103,20 @@ js = r'''<script>
     v = v.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
     if (!v) return;
     location.hash = encodeURIComponent(v);
-    $('res').innerHTML = '<p class="wait">Спрашиваем веб-архив и Яндекс… у больших сайтов это до минуты.</p>';
+    var STEPS = ['Ищем сайт в веб-архиве (archive.org)', 'Считаем сохранённые страницы и даты снимков', 'Ищем картинки сайта в Яндекс Картинках', 'Проверяем сервер Бегет', 'Считаем, можно ли восстановить'];
+    $('res').innerHTML = '<div class="prog"><div class="prog-bar"><i id="pb"></i></div><ul>' + STEPS.map(function (t, i) { return '<li id="ps' + i + '"><s></s>' + t + '</li>'; }).join('') + '</ul><div class="tm" id="ptm">прошло 0 с · у больших сайтов архив отвечает до минуты</div></div>';
+    var t0 = Date.now(), cur = -1;
+    function stepTo(k) { for (var i = 0; i < STEPS.length; i++) { var li = $('ps' + i); if (!li) return; li.className = i < k ? 'done' : i === k ? 'on' : ''; } cur = k; }
+    stepTo(0);
+    var tick = setInterval(function () {
+      var sec = Math.round((Date.now() - t0) / 1000); if (!$('ptm')) { clearInterval(tick); return; }
+      $('ptm').textContent = 'прошло ' + sec + ' с · у больших сайтов архив отвечает до минуты';
+      var k = sec < 3 ? 0 : sec < 9 ? 1 : sec < 16 ? 2 : 3;   // этапы идут параллельно — показываем по времени, финал по ответу
+      if (k > cur) stepTo(k);
+      $('pb').style.width = Math.min(92, 8 + sec * 2.4) + '%';
+    }, 500);
     Promise.all([fetch('https://api.rebornlab.ru/restore?d=' + encodeURIComponent(v)).then(function (r) { return r.json(); }), resolve(v)]).then(function (a) {
+      clearInterval(tick); stepTo(STEPS.length); if ($('pb')) $('pb').style.width = '100%';
       var r = a[0], ip = a[1];
       if (r.error) { $('res').innerHTML = '<p>' + esc(r.error) + '</p>'; return; }
       var pages = r.pages, yi = r.yandex_images, ai = r.images_archive;
@@ -111,7 +131,7 @@ js = r'''<script>
       else { cls = 'no'; head = '🔴 В открытых источниках сайта нет'; txt = 'Ни веб-архив, ни Яндекс копий не сохранили. Остаются ваша копия (у вас, у разработчика) или резервная копия от хостинга — у Бегет её обещают выдать через панель.'; }
       var help = (cls === 'ok' || cls === 'mid') && !r.archive_error ? '<div class="help">Если понадобится помощь с восстановлением — <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">напишите нам</a>, бесплатно подскажем, что и как можно вернуть.</div>' : '';
       $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>' + beget(ip) + help;
-    }).catch(function () { $('res').innerHTML = '<p>Не получилось проверить — попробуйте ещё раз через минуту.</p>'; });
+    }).catch(function () { clearInterval(tick); $('res').innerHTML = '<p>Не получилось проверить — попробуйте ещё раз через минуту.</p>'; });
   }
   $('f').onsubmit = function (e) { e.preventDefault(); check($('q').value); };
   var h = decodeURIComponent((location.hash || '').slice(1)); if (h) { $('q').value = h; check(h); }
