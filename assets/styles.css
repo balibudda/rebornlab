@@ -371,3 +371,10 @@ form.need-agree .agree { color: #ff8a7a; }
 @media (max-width: 900px) { .bbar .wrap { height: 44px; padding-right: 22px; } .bbar a { font-size: 13.5px; padding: 6px 10px; } }
 @media (prefers-reduced-motion: reduce) { .bbar-t i { animation: none; } }
 @media (max-width: 900px) { .bbar .wrap { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); } }
+/* 07.11.2026 Ник: на телефоне страницы /beget/ были «сужены» — двойные отступы (страница 22 + карточка 24). Делаем почти во всю ширину */
+@media (max-width: 600px) {
+  main.bw { padding-left: 12px !important; padding-right: 12px !important; }
+  main.bw .card { padding: 18px 14px; border-radius: 18px; margin: 12px 0; }
+  main.bw .kpi { padding: 16px 14px; }
+  main.bw .top-cta a { padding: 14px 14px; }
+}

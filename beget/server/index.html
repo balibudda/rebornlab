@@ -10,7 +10,7 @@
 <meta property="og:title" content="Проверить сервер Бегет (Beget) по IP — включён ли он">
 <meta property="og:description" content="Карта очереди восстановления Бегет: какие серверы уже включены. Проверка по IP или адресу сайта.">
 <meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
-<link rel="stylesheet" href="/assets/styles.css?v=20eaff98">
+<link rel="stylesheet" href="/assets/styles.css?v=63fb7997">
 <style>
   /* страница-монитор (ручная, build.mjs её не трогает) */
   .bw { max-width: var(--max); margin: 0 auto; padding: 40px 22px 80px; }   /* ширина как у шапки и подвала (.wrap) — края ровные */
@@ -79,7 +79,9 @@
   .chklog { margin: 10px 0 0; font-size: 13px; color: rgba(237,235,230,.7); }
   .chklog table { border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
   .chklog td { padding: 3px 14px 3px 0; border-top: 1px solid rgba(237,235,230,.07); }
-  .chklog tr:first-child td { color: var(--text); font-weight: 600; }
+  .chklog tr.th td { font-size: 12px; color: var(--muted); border-top: 0; }
+  .chklog tr.th + tr td { color: var(--text); font-weight: 600; }
+  .chklog td:not(:first-child) { text-align: right; padding-left: 14px; }
   .chklog .fresh { color: var(--acc); }
   .flash { animation: fl 1.6s ease; } @keyframes fl { 0% { background: rgba(200,255,90,.25); } 100% { background: transparent; } }
 </style>
@@ -148,7 +150,7 @@
   <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
-<script src="/assets/main.js?v=20eaff98" defer></script>
+<script src="/assets/main.js?v=63fb7997" defer></script>
 <script>
 (function () {
   var D = null, PEND = null;
@@ -167,7 +169,7 @@
     fetch('https://api.rebornlab.ru/beget.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (b) {
       var h = (b.history || []).filter(function (x) { return x.ha; }).slice(-6).reverse(), lastOn = 0, lastIp = '';
       Object.keys(D.first || {}).forEach(function (ip) { if (D.first[ip] > lastOn) { lastOn = D.first[ip]; lastIp = ip; } });
-      $('chk').innerHTML = 'Последние проверки:<table>' + h.map(function (x) { return '<tr><td>' + hm(x.t) + ' МСК</td><td>' + x.ha + ' серверов работает</td><td>' + x.s + ' сайтов из 1000 открывается</td></tr>'; }).join('') + '</table>' +
+      $('chk').innerHTML = 'Последние проверки:<table><tr class="th"><td>время, МСК</td><td>серверов работает</td><td>сайтов из 1000 открывается</td></tr>' + h.map(function (x) { return '<tr><td>' + hm(x.t) + '</td><td>' + x.ha + '</td><td>' + x.s + '</td></tr>'; }).join('') + '</table>' +
         (lastOn ? '<p style="margin:8px 0 0">Последний раз новый сервер включился <b class="fresh">' + fmt(lastOn) + '</b> — ' + lastIp + '.</p>' : '');
     }).catch(function () {});
   }
