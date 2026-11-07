@@ -77,8 +77,21 @@ const svIcon = (s) => `<svg class="sv-ico" width="28" height="28" viewBox="0 0 2
 const svPains = (s) => s.pains ? `<div class="sv-pain"><b>Если у вас:</b><ul>${s.pains.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''
 const HAS_SELLER = !!(SITE.operator && SITE.operatorInn)   // оферта и данные продавца — только с реквизитами
 // 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
-const NAV = [['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget']]
+const NAV = [['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget'], ['/beget/server/', 'Проверка по IP']]
 
+// 07.11.2026 Ник: одна шапка везде (и на ручных страницах /beget/ — вставляется ниже, при обработке), на страницах о Beget — полоса навигации по теме
+function HEADER(current = '') {
+  return `<header class="hdr"><div class="wrap">
+  ${LOGO}
+  <nav class="nav" aria-label="Основное меню">${NAV.map(([h, t]) => `<a href="${h}"${current === h ? ' aria-current="page"' : ''}>${t}</a>`).join('')}<a class="nav-cta" href="/contact/" data-goal="cta_menu">Обсудить идею →</a></nav>
+  <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
+  <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
+</div></header>`
+}
+function BEGET_BAR(at = '') {
+  const L = [['/beget/', 'Статус восстановления'], ['/beget/server/', '🔎 Проверить сервер по IP'], ['/beget/#news', 'Новости'], ['/beget/#faq', 'Вопросы'], ['https://t.me/rebornlab_bot', '🔔 Бот @rebornlab_bot']]
+  return `<div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет (Beget)</span>${L.map(([h, t]) => `<a href="${h}"${h === at ? ' aria-current="page"' : ''}${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${t}</a>`).join('')}</div></div>`
+}
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
   const url = SITE.url + canonical
   const metrika = SITE.metrikaId ? `<script>window.RL_METRIKA=${SITE.metrikaId};window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=${SITE.metrikaId}','ym');ym(${SITE.metrikaId},'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>` : ''
@@ -109,12 +122,7 @@ ${jsonLd.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</sc
 ${metrika}
 </head>
 <body>
-<header class="hdr"><div class="wrap">
-  ${LOGO}
-  <nav class="nav" aria-label="Основное меню">${NAV.map(([h, t]) => `<a href="${h}"${current === h ? ' aria-current="page"' : ''}>${t}</a>`).join('')}<a class="nav-cta" href="/contact/" data-goal="cta_menu">Обсудить идею →</a></nav>
-  <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
-  <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
-</div></header>
+${HEADER(current)}${/^\/(beget|journal\/beget)/.test(canonical) ? BEGET_BAR(canonical) : ''}
 <main>
 ${body}
 </main>
@@ -488,7 +496,11 @@ write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите зад�
     const fp = path.join(OUT, f)
     if (!existsSync(fp)) continue
     const news = POSTS.filter((x) => x.slug.startsWith('beget')).map((x) => `<a class="news-card" href="/journal/${x.slug}/">${x.image ? `<img src="${x.image}" alt="" loading="lazy" width="1200" height="630">` : ''}<span class="news-dt">${ruDT(x)}</span><b>${esc(x.title)}</b><span class="news-d">${esc(x.description)}</span></a>`).join('')
-    const html = readFileSync(fp, 'utf8').replace(/<footer class="ftr">[\s\S]*?<\/footer>/, () => foot)
+    const at = '/' + f.replace(/index\.html$/, '')
+    const hdr = `<!--HDR:START-->${HEADER(at === '/beget/pravila/' ? '' : at)}${BEGET_BAR(at)}<!--HDR:END-->`
+    let src = readFileSync(fp, 'utf8')
+    src = src.includes('<!--HDR:START-->') ? src.replace(/<!--HDR:START-->[\s\S]*?<!--HDR:END-->/, () => hdr) : src.replace(/<body>/, () => '<body>\n' + hdr)
+    const html = src.replace(/<footer class="ftr">[\s\S]*?<\/footer>/, () => foot)
       .replace(/<!--NEWS:START-->[\s\S]*?<!--NEWS:END-->/, () => `<!--NEWS:START--><div class="news-grid">${news}</div><!--NEWS:END-->`)
       .replace(/\/assets\/styles\.css(\?v=\w+)?"/, `/assets/styles.css?v=${ASSET_V}"`).replace(/\/assets\/main\.js(\?v=\w+)?"/, `/assets/main.js?v=${ASSET_V}"`)
     writeFileSync(fp, html)
