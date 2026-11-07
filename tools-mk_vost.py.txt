@@ -117,12 +117,12 @@ js = r'''<script>
       if (k > cur) stepTo(k);
       $('pb').style.width = Math.min(92, 8 + sec * 2.4) + '%';
     }, 500);
-    Promise.all([fetch('https://api.rebornlab.ru/restore?d=' + encodeURIComponent(v)).then(function (r) { return r.json(); }), resolve(v)]).then(function (a) {
+    Promise.all([fetch('https://api.rebornlab.ru/restore?d=' + encodeURIComponent(v)).then(function (r) { return r.json().catch(function () { return {error: r.status === 429 ? 'Слишком много проверок с вашего адреса — попробуйте через час.' : 'Веб-архив отвечает слишком долго (так бывает с очень большими сайтами или когда архив перегружен) — попробуйте ещё раз через пару минут.'}; }); }), resolve(v)]).then(function (a) {
       clearInterval(tick); stepTo(STEPS.length); if ($('pb')) $('pb').style.width = '100%';
       var r = a[0], ip = a[1];
-      if (r.error) { $('res').innerHTML = '<p>' + esc(r.error) + '</p>'; return; }
+      if (r.error) { clearInterval(tick); $('res').innerHTML = '<div class="verdict mid"><b>Пока не получилось</b>' + esc(r.error) + '</div>'; return; }
       var pages = r.pages, yi = r.yandex_images, ai = r.images_archive;
-      var kpi = '<div class="rs"><div class="kpi"><div class="v">' + (pages == null ? '—' : pages) + '</div><div class="l">страниц в веб-архиве</div></div>' +
+      var kpi = '<div class="rs"><div class="kpi"><div class="v">' + (pages == null ? '—' : (pages >= 3000 ? '3000+' : pages)) + '</div><div class="l">страниц в веб-архиве</div></div>' +
         '<div class="kpi"><div class="v">' + (yi == null ? '—' : (yi >= 30 ? '30+' : yi)) + '</div><div class="l">картинок в Яндекс Картинках</div></div>' +
         '<div class="kpi"><div class="v">' + (ai == null ? '—' : ai) + '</div><div class="l">картинок в веб-архиве</div></div>' +
         '<div class="kpi"><div class="v" style="font-size:24px">' + (r.last ? dt(r.last) : '—') + '</div><div class="l">последний снимок' + (r.first ? ' · первый в ' + yr(r.first) + ' г.' : '') + '</div></div></div>';
@@ -130,7 +130,7 @@ js = r'''<script>
       if (r.live && !r.beget) {   // сайт работает и он не на Бегет — успокоить, архив — как запасной вариант
         cls = 'ok'; head = '🟢 Сайт работает — восстанавливать ничего не нужно';
         txt = 'Сайт сейчас открывается' + (hostTxt ? ', он ' + hostTxt + (r.host ? '' : '') + ', не на Бегет' : '') + '. ' +
-          (pages > 0 ? 'На всякий случай: в веб-архиве сохранено ' + pages + ' страниц — если с сайтом что-то случится, его можно будет вернуть даже без своей копии. А лучше — регулярно делать свои резервные копии.' : 'В веб-архиве копий сайта нет — обязательно делайте свои резервные копии.');
+          (pages > 0 ? 'На всякий случай: в веб-архиве сохранено ' + (pages >= 3000 ? 'больше 3000' : pages) + ' страниц — если с сайтом что-то случится, его можно будет вернуть даже без своей копии. А лучше — регулярно делать свои резервные копии.' : 'В веб-архиве копий сайта нет — обязательно делайте свои резервные копии.');
         $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>';
         return;
       }
@@ -139,7 +139,7 @@ js = r'''<script>
         return;
       }
       if (r.archive_error) { cls = 'mid'; head = 'Веб-архив сейчас не ответил'; txt = 'Архив бывает перегружен — повторите проверку через несколько минут.'; }
-      else if (pages >= 20) { cls = 'ok'; head = '✅ Сайт можно восстановить без своей копии'; txt = 'В архиве ' + pages + ' страниц — этого хватает, чтобы вернуть сайт с теми же текстами, заголовками и адресами страниц' + (yi ? ', а картинки добрать из Яндекса' : '') + '. Не вернутся только база данных (заказы, личные кабинеты) и часть фото.'; }
+      else if (pages >= 20) { cls = 'ok'; head = '✅ Сайт можно восстановить без своей копии'; txt = 'В архиве ' + (pages >= 3000 ? 'больше 3000' : pages) + ' страниц — этого хватает, чтобы вернуть сайт с теми же текстами, заголовками и адресами страниц' + (yi ? ', а картинки добрать из Яндекса' : '') + '. Не вернутся только база данных (заказы, личные кабинеты) и часть фото.'; }
       else if (pages > 0 || yi > 0) { cls = 'mid'; head = '🟡 Восстановить можно частично'; txt = 'Сохранилось немного: ' + (pages || 0) + ' стр. в архиве' + (yi ? ', картинки есть в Яндексе' : '') + '. Главную и основные страницы вернуть реально, остальное — по вашим материалам.'; }
       else { cls = 'no'; head = '🔴 Сайт не открывается, и в открытых источниках его нет'; txt = 'Ни веб-архив, ни Яндекс копий не сохранили. Остаются ваша копия (у вас, у разработчика) или резервная копия от хостинга — у Бегет её обещают выдать через панель.'; }
       var help = (cls === 'ok' || cls === 'mid') && !r.archive_error ? '<div class="help">Если понадобится помощь с восстановлением — <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">напишите нам</a>, бесплатно подскажем, что и как можно вернуть.</div>' : '';
