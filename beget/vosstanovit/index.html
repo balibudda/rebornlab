@@ -165,8 +165,9 @@
       .then(function (j) { var a = (j.Answer || []).filter(function (x) { return x.type === 1; }); return a.length ? a[a.length - 1].data : null; }).catch(function () { return null; });
   }
   function beget(ip) {
-    if (!ip || !D) return '';
-    var p = ip.split('.'), n = p.slice(0, 3).join('.'), net = D.nets[n]; if (!net) return '';
+    if (!ip) return '';
+    var p = ip.split('.'), n = p.slice(0, 3).join('.'), net = D && D.nets[n];
+    if (!net) return '<p>⏳ Сайт на сервере Бегет <b>' + ip + '</b> — эта сеть Бегет пока вне нашего мониторинга серверов. Следите в боте <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a>.</p>';
     var c = net.s[+p[3] - 1];
     return c === 'h' ? '<p>🟢 Сайт на сервере Бегет <b>' + ip + '</b> — <b>сервер уже включён</b>. Возможно, сайт оживёт сам: следите в боте <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a>.</p>'
       : '<p>⏳ Сайт на сервере Бегет <b>' + ip + '</b> — <b>сервер пока не включён</b> (<a href="/beget/server/#' + ip + '" style="color:var(--acc)">подробнее</a>).</p>';
@@ -196,13 +197,25 @@
         '<div class="kpi"><div class="v">' + (yi == null ? '—' : (yi >= 30 ? '30+' : yi)) + '</div><div class="l">картинок в Яндекс Картинках</div></div>' +
         '<div class="kpi"><div class="v">' + (ai == null ? '—' : ai) + '</div><div class="l">картинок в веб-архиве</div></div>' +
         '<div class="kpi"><div class="v" style="font-size:24px">' + (r.last ? dt(r.last) : '—') + '</div><div class="l">последний снимок' + (r.first ? ' · первый в ' + yr(r.first) + ' г.' : '') + '</div></div></div>';
-      var cls, head, txt;
+      var cls, head, txt, hostTxt = r.host ? ('на хостинге <b>' + esc(r.host) + '</b>') : (r.ip ? 'на сервере <b>' + r.ip + '</b>' : '');
+      if (r.live && !r.beget) {   // сайт работает и он не на Бегет — успокоить, архив — как запасной вариант
+        cls = 'ok'; head = '🟢 Сайт работает — восстанавливать ничего не нужно';
+        txt = 'Сайт сейчас открывается' + (hostTxt ? ', он ' + hostTxt + (r.host ? '' : '') + ', не на Бегет' : '') + '. ' +
+          (pages > 0 ? 'На всякий случай: в веб-архиве сохранено ' + pages + ' страниц — если с сайтом что-то случится, его можно будет вернуть даже без своей копии. А лучше — регулярно делать свои резервные копии.' : 'В веб-архиве копий сайта нет — обязательно делайте свои резервные копии.');
+        $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>';
+        return;
+      }
+      if (r.live && r.beget) {
+        $('res').innerHTML = kpi + '<div class="verdict ok"><b>🟢 Сайт уже открывается — он на Бегет</b>Похоже, Бегет его восстановил. В веб-архиве ' + (pages || 0) + ' страниц — запасной вариант на будущее. Сохраните себе копию сайта, как только откроется панель Бегет.</div>';
+        return;
+      }
       if (r.archive_error) { cls = 'mid'; head = 'Веб-архив сейчас не ответил'; txt = 'Архив бывает перегружен — повторите проверку через несколько минут.'; }
       else if (pages >= 20) { cls = 'ok'; head = '✅ Сайт можно восстановить без своей копии'; txt = 'В архиве ' + pages + ' страниц — этого хватает, чтобы вернуть сайт с теми же текстами, заголовками и адресами страниц' + (yi ? ', а картинки добрать из Яндекса' : '') + '. Не вернутся только база данных (заказы, личные кабинеты) и часть фото.'; }
       else if (pages > 0 || yi > 0) { cls = 'mid'; head = '🟡 Восстановить можно частично'; txt = 'Сохранилось немного: ' + (pages || 0) + ' стр. в архиве' + (yi ? ', картинки есть в Яндексе' : '') + '. Главную и основные страницы вернуть реально, остальное — по вашим материалам.'; }
-      else { cls = 'no'; head = '🔴 В открытых источниках сайта нет'; txt = 'Ни веб-архив, ни Яндекс копий не сохранили. Остаются ваша копия (у вас, у разработчика) или резервная копия от хостинга — у Бегет её обещают выдать через панель.'; }
+      else { cls = 'no'; head = '🔴 Сайт не открывается, и в открытых источниках его нет'; txt = 'Ни веб-архив, ни Яндекс копий не сохранили. Остаются ваша копия (у вас, у разработчика) или резервная копия от хостинга — у Бегет её обещают выдать через панель.'; }
       var help = (cls === 'ok' || cls === 'mid') && !r.archive_error ? '<div class="help">Если понадобится помощь с восстановлением — <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">напишите нам</a>, бесплатно подскажем, что и как можно вернуть.</div>' : '';
-      $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>' + beget(ip) + help;
+      var now = r.beget ? '' : (r.ip ? '<p>🔴 Сайт сейчас не открывается' + (hostTxt ? ' (он ' + hostTxt + ', не на Бегет)' : '') + '.</p>' : '<p>🔴 У адреса нет IP в DNS — домен не настроен или не оплачен.</p>');
+      $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>' + (r.beget ? beget(r.ip || ip) : now) + help;
     }).catch(function () { clearInterval(tick); $('res').innerHTML = '<p>Не получилось проверить — попробуйте ещё раз через минуту.</p>'; });
   }
   $('f').onsubmit = function (e) { e.preventDefault(); check($('q').value); };
