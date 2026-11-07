@@ -23,6 +23,12 @@ css = '''
   .steps2 { margin:10px 0 0 18px } .steps2 li { margin:6px 0 }
   .help { margin-top:16px; padding:16px 18px; border-radius:var(--r); border:1px dashed var(--line-2); color:var(--muted) } .help a { color:var(--acc) }
   .wait { color:var(--muted); font:14px var(--mono) }
+  .feed { list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px }
+  .feed li { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:10px 14px; border-radius:12px; background:var(--card-2); font-size:14.5px; animation:fin .6s ease }
+  .feed .fd { font:14px var(--mono) } .feed .fv { font-size:13px; white-space:nowrap } .feed .ft { color:var(--muted); font-size:12.5px; white-space:nowrap; min-width:70px; text-align:right }
+  .feed .fv.ok { color:var(--acc) } .feed .fv.part { color:#ffc15a } .feed .fv.no { color:#ff8a8a } .feed .fv.works { color:#7aa7ff }
+  @keyframes fin { from { opacity:0; transform:translateY(-6px) } to { opacity:1; transform:none } }
+  @media (max-width:600px) { .feed li { grid-template-columns:1fr auto; } .feed .ft { grid-column:1 / -1; text-align:left; margin-top:-4px } }
   .prog { margin:18px 0 4px } .prog-bar { height:6px; border-radius:3px; background:var(--card-2); overflow:hidden; position:relative }
   .prog-bar i { position:absolute; top:0; bottom:0; left:0; width:0; background:var(--acc); border-radius:3px; transition:width .8s ease }
   .prog ul { list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:7px; font-size:15px }
@@ -64,6 +70,11 @@ body = f'''
     <h2>Проверить свой сайт</h2>
     <form class="chk" id="f"><input id="q" placeholder="мой-сайт.ru" autocomplete="off" inputmode="url" aria-label="Адрес сайта"><button class="btn btn-acc" type="submit">Проверить</button></form>
     <div id="res"></div>
+  </div>
+  <div class="card" id="feed">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><h2>Только что проверили</h2><span class="live"><span class="dot"></span><span id="ftot">…</span></span></div>
+    <p class="sub">Адреса сайтов скрыты. Лента обновляется сама.</p>
+    <ul class="feed" id="fl"><li class="wait">загружаем…</li></ul>
   </div>
   <div class="card">
     <h2>Как это работает</h2>
@@ -149,12 +160,26 @@ js = r'''<script>
       else if (pages > 0 || yi > 0) { cls = 'mid'; head = '🟡 Восстановить можно частично'; txt = 'Сохранилось немного: ' + (pages || 0) + ' стр. в архиве' + (yi ? ', картинки есть в Яндексе' : '') + '. Главную и основные страницы вернуть реально, остальное — по вашим материалам.'; }
       else { cls = 'no'; head = '🔴 Сайт не открывается, и в открытых источниках его нет'; txt = 'Ни веб-архив, ни Яндекс копий не сохранили. Остаются ваша копия (у вас, у разработчика) или резервная копия от хостинга — у Бегет её обещают выдать через панель.'; }
       var help = (cls === 'ok' || cls === 'mid') && !r.archive_error ? '<div class="help">Если понадобится помощь с восстановлением — <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">напишите нам</a>, бесплатно подскажем, что и как можно вернуть.</div>' : '';
+      var reg = r.registrar ? '<p>🏷 Домен зарегистрирован у <b>' + esc(r.registrar) + '</b>' + (/BEGET/i.test(r.registrar) ? ' — адрес сайта меняется только через панель Бегет (domains.beget.ru). Если вход не работает, сайт можно запустить на временном адресе и переключить позже.' : ' — владелец сам может переключить адрес сайта на новый сервер за несколько минут.') + '</p>' : '';
       var now = r.beget ? '' : (r.ip ? '<p>🔴 Сайт сейчас не открывается' + (hostTxt ? ' (он ' + hostTxt + ', не на Бегет)' : '') + '.</p>' : '<p>🔴 У адреса нет IP в DNS — домен не настроен или не оплачен.</p>');
-      $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>' + (r.beget ? beget(r.ip || ip) : now) + botBlock(r, v) + help;
+      $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>' + (r.beget ? beget(r.ip || ip) : now) + reg + botBlock(r, v) + help;
     }).catch(function (e) { clearInterval(tick); $('res').innerHTML = '<div class="verdict mid"><b>Пока не получилось</b>Связь прервалась — попробуйте ещё раз через минуту.</div>';
       try { (new Image()).src = 'https://api.rebornlab.ru/q?ip=' + encodeURIComponent(v) + '&k=vost&v=fail_' + encodeURIComponent(String(e && e.message || e).slice(0, 40).replace(/\s+/g, '_')); } catch (x) {} });
   }
   $('f').onsubmit = function (e) { e.preventDefault(); check($('q').value); };
+  var known = {};
+  function ago(t) { var m = Math.round((Date.now() / 1000 - t) / 60); return m < 1 ? 'только что' : m < 60 ? m + ' мин назад' : Math.round(m / 60) + ' ч назад'; }
+  var VV = {ok: '✅ можно восстановить', part: '🟡 частично', no: '🔴 нет в архиве', works: '🟢 сайт работает'};
+  function feed() {
+    fetch('https://api.rebornlab.ru/restore?feed=1', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (d) {
+      $('ftot').textContent = 'всего проверено ' + d.total + ' сайтов';
+      $('fl').innerHTML = d.items.map(function (x) {
+        var k = x.d + x.t, fresh = !known[k]; known[k] = 1;
+        return '<li' + (fresh ? '' : ' style="animation:none"') + '><span class="fd">' + esc(x.d) + (x.pages ? ' <span style="color:var(--muted)">· ' + (x.pages >= 2000 ? '2000+' : x.pages) + ' стр.</span>' : '') + '</span><span class="fv ' + x.v + '">' + VV[x.v] + '</span><span class="ft">' + ago(x.t) + '</span></li>';
+      }).join('');
+    }).catch(function () {});
+  }
+  feed(); setInterval(feed, 30000);
   var h = decodeURIComponent((location.hash || '').slice(1)); if (h) { $('q').value = h; check(h); }
 })();
 </script>
