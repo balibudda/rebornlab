@@ -174,6 +174,11 @@
     <ul class="slog" id="slog"><li class="slog-e">Загружаем…</li></ul>
   </div>
 
+  <div class="card" id="tip">
+    <h2>Что сделать, чтобы сбой хостинга больше не был катастрофой?</h2>
+    <p style="font-size:17px;margin:8px 0 0">Три простых правила: <b>своя резервная копия в другом месте</b>; <b>домен — у независимого регистратора</b>, а не у хостинга; <b>DNS — у отдельного сервиса</b>. Тогда любой сбой превращается в переезд на пару часов. <a href="/beget/voprosy/" style="color:var(--acc)">Все вопросы и ответы →</a></p>
+  </div>
+
   <div class="card">
     <h2>Сети Beget</h2>
     <p class="sub"><a href="/beget/server/" style="color:var(--acc)">Проверить конкретный сервер по IP и посмотреть карту очереди →</a> С 6 ноября следим ещё за тремя сетями (пометка «новая»): туда Beget в том числе переносит аккаунты на новые серверы. В счётчики и графики вверху они не входят, чтобы цифры шли без скачка. Каждый адрес проверяется одним обычным запросом. <span style="color:var(--acc)">■</span> сервер хостинга работает · <span style="color:var(--cool)">■</span> другой сервер (VPS) · <span style="color:var(--dim)">■</span> молчит или адрес не занят</p>
@@ -295,7 +300,7 @@
       var x = byH[keys[i]], p = byH[keys[i - 1]], k = keys[i];
       var both = x.ha != null && p.ha != null, srv = x.ha != null ? x.ha : x.h, psrv = both ? p.ha : (x.ha != null ? srv : p.h);   // до 6.11 считали 6 сетей — без ложного скачка
       out.push('<li><b>' + k.slice(8, 10) + '.' + k.slice(5, 7) + ' ' + k.slice(11, 13) + ':00</b><span>Отвечает <b style="font:inherit;color:inherit">' + srv + '</b> серверов хостинга из ' + total + dl(srv, psrv) +
-        ' · открывается ' + x.s + ' сайтов из 1000' + dl(x.s, p.s) + (x.sm ? ' · ещё ' + x.sm + ' владельцы перенесли сами' : '') + '</span></li>');
+        ' · открывается ' + x.s + ' сайтов из 1000' + dl(x.s, p.s) + (x.sm ? ' · ещё ' + x.sm + ' сайтов владельцы перенесли сами' : '') + '</span></li>');
     }
     el.innerHTML = out.join('') || '<li class="slog-e">Пока нет данных</li>';
   }
