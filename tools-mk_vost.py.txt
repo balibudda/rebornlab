@@ -14,11 +14,12 @@ pre = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:
 pre = re.sub(r'<meta property="og:description" content="[^"]*">', '<meta property="og:description" content="Сколько страниц и картинок вашего сайта сохранили веб-архив и Яндекс — и можно ли его вернуть.">', pre)
 css = '''
 <style>
-  .rs { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:18px 0 6px }
+  .rs { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:18px 0 6px }
   .rs .kpi .v { font-size:34px }
   .verdict { border-radius:var(--r); padding:18px 20px; margin:16px 0 6px; border:1px solid var(--line); background:var(--card-2) }
   .verdict > b:first-child { font-size:20px; display:block; margin-bottom:6px } .verdict.ok { border-color:rgba(198,242,78,.6); background:rgba(198,242,78,.07) }
   .verdict.mid { border-color:rgba(255,190,90,.55); background:rgba(255,190,90,.07) } .verdict.no { border-color:rgba(255,110,110,.5); background:rgba(255,110,110,.06) }
+  @media (max-width:600px) { .rs { grid-template-columns:1fr 1fr } .rs .kpi:last-child { grid-column:1 / -1 } }
   .steps2 { margin:10px 0 0 18px } .steps2 li { margin:6px 0 }
   .help { margin-top:16px; padding:16px 18px; border-radius:var(--r); border:1px dashed var(--line-2); color:var(--muted) } .help a { color:var(--acc) }
   .wait { color:var(--muted); font:14px var(--mono) }
@@ -129,7 +130,7 @@ js = r'''<script>
       var pages = r.pages, yi = r.yandex_images, ai = r.images_archive;
       var kpi = '<div class="rs"><div class="kpi"><div class="v">' + (pages == null ? '—' : (pages >= 2000 ? '2000+' : pages)) + '</div><div class="l">страниц в веб-архиве</div></div>' +
         '<div class="kpi"><div class="v">' + (yi == null ? '—' : (yi >= 30 ? '30+' : yi)) + '</div><div class="l">картинок в Яндекс Картинках</div></div>' +
-        '<div class="kpi"><div class="v">' + (ai == null ? '—' : ai) + '</div><div class="l">картинок в веб-архиве</div></div>' +
+
         '<div class="kpi"><div class="v" style="font-size:24px">' + (r.last ? dt(r.last) : '—') + '</div><div class="l">последний снимок' + (r.first ? ' · первый в ' + yr(r.first) + ' г.' : '') + '</div></div></div>';
       var cls, head, txt, hostTxt = r.host ? ('на хостинге <b>' + esc(r.host) + '</b>') : (r.ip ? 'на сервере <b>' + r.ip + '</b>' : '');
       if (r.live && !r.beget) {   // сайт работает и он не на Бегет — успокоить, архив — как запасной вариант
