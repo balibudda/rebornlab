@@ -170,12 +170,17 @@
     if (/^\d{1,3}(\.\d{1,3}){3}$/.test(v)) return verdict(v, null);
     show('<p>Ищем IP сайта ' + esc(v) + '…</p>');
     resolve(v).then(function (ip) { verdict(ip, v); }).catch(function () {
+      ping('-', 'd', 'nores');
       show('<p class="big">Не удалось узнать IP сайта ' + esc(v) + '</p><p>Проверьте адрес или узнайте IP командой <code>nslookup ' + esc(v) + '</code> и введите его сюда. Ещё проще — пришлите адрес боту <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a>.</p>');
     });
   }
+  // анонимный счётчик: только IP сервера и вердикт — без адреса сайта и без данных посетителя (см. /beget/pravila/)
+  function ping(ip, kind, v) { try { (new Image()).src = 'https://api.rebornlab.ru/q?ip=' + encodeURIComponent(ip) + '&k=' + kind + '&v=' + v; } catch (e) {} }
   function verdict(ip, site) {
     location.hash = encodeURIComponent(site || ip);
-    var p = ip.split('.'), n = p.slice(0, 3).join('.'), k = +p[3], net = D.nets[n], who = site ? 'Сайт ' + esc(site) + ' стоит на сервере <b>' + ip + '</b>. ' : '';
+    var p = ip.split('.'), n = p.slice(0, 3).join('.'), k = +p[3], net = D.nets[n];
+    ping(ip, site ? 'd' : 'i', !net ? 'nb' : net.s[k - 1] === 'h' ? 'on' : net.s[k - 1] === 'o' ? 'vps' : 'off');
+    var who = site ? 'Сайт ' + esc(site) + ' стоит на сервере <b>' + ip + '</b>. ' : '';
     if (!net) { show('<p class="big">' + (site ? esc(site) + ' — ' : '') + ip + ': не из сетей хостинга Бегет, за которыми мы следим</p><p>Возможно, сайт уже переехал на другой хостинг, стоит на VPS или выделенном сервере Бегет, или это не Бегет. Мы проверяем 9 сетей виртуального хостинга: ' + Object.keys(D.nets).map(function (x) { return x + '.x'; }).join(', ') + '.</p>'); return; }
     var s = net.s, c = s[k - 1], lo = Math.max(1, k - 12), hi = Math.min(254, k + 12), strip = '', near = 0, nearAll = 0;
     for (var i = lo; i <= hi; i++) { var ch = s[i - 1]; strip += '<span class="' + (ch === 'h' ? 'h' : ch === 'o' ? 'o' : '') + (i === k ? ' me' : '') + '">' + i + '</span>'; }
