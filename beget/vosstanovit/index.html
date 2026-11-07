@@ -133,6 +133,7 @@
   <div class="card" id="check">
     <h2>Проверить свой сайт</h2>
     <form class="chk" id="f"><input id="q" placeholder="мой-сайт.ru" autocomplete="off" inputmode="url" aria-label="Адрес сайта"><button class="btn btn-acc" type="submit">Проверить</button></form>
+    <p class="sub" style="margin:10px 0 0;font-size:14px">⏳ Проверяем по очереди: веб-архив (archive.org) блокирует адреса, с которых приходит много запросов, — чтобы проверка работала стабильно для всех, сайты идут по одному, а страницы считаем до 100. Если в архиве больше 100 страниц — сайт там есть и его можно восстановить; точное число — у администратора <a href="https://t.me/m8614f" target="_blank" rel="noopener" style="color:var(--acc)">@m8614f</a>.</p>
     <div id="res"></div>
   </div>
   <div class="card" id="feed">
@@ -205,12 +206,32 @@
       if (k > cur) stepTo(k);
       $('pb').style.width = Math.min(92, 8 + sec * 2.4) + '%';
     }, 500);
-    Promise.all([fetch('https://api.rebornlab.ru/restore?d=' + encodeURIComponent(v)).then(function (r) { return r.json().catch(function () { return {error: r.status === 429 ? 'Слишком много проверок с вашего адреса — попробуйте через час.' : 'Веб-архив отвечает слишком долго (так бывает с очень большими сайтами или когда архив перегружен) — попробуйте ещё раз через пару минут.'}; }); }), resolve(v)]).then(function (a) {
+    function botLink(v) { return 'https://t.me/rebornlab_bot?start=v_' + btoa(unescape(encodeURIComponent(v))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+    function mins(sec) { return sec < 60 ? 'меньше минуты' : 'около ' + Math.round(sec / 60) + ' мин'; }
+    function qbox(html) { var el = $('pq'); if (!el) { el = document.createElement('div'); el.id = 'pq'; el.className = 'help'; el.style.marginTop = '12px'; var pr = document.querySelector('#res .prog'); if (pr) pr.appendChild(el); } el.innerHTML = html; }
+    var BOTQ = ' <a href="' + botLink(v) + '" target="_blank" rel="noopener">Не хотите ждать — получите результат в боте @rebornlab_bot</a>: оставьте заявку, и он пришлёт ответ, как только проверка пройдёт.';
+    // 07.11 ночь: очередь — опрашиваем сервер, пока не придёт результат; показываем место и время, а не ошибку
+    function ask() {
+      return fetch('https://api.rebornlab.ru/restore?d=' + encodeURIComponent(v), {cache: 'no-store'}).then(function (r) {
+        return r.json().catch(function () { return {error: 'Сервис проверки сейчас перегружен.', bot: true}; });
+      }).then(function (j) {
+        if (j.queued) {
+          if (j.running) { t0 = Math.min(t0, Date.now()); qbox('🔎 Проверяем ваш сайт — веб-архив отвечает до минуты.' + BOTQ); }
+          else if (j.archive_wait) { qbox('⏸ Веб-архив попросил паузу (он ограничивает частые запросы). Ваше место в очереди сохранено: <b>№' + j.pos + '</b>, продолжим примерно через ' + mins(j.archive_wait) + '.' + BOTQ); t0 = Date.now(); }
+          else { qbox('🕐 Вы в очереди: <b>№' + j.pos + '</b> из ' + j.total + ' · осталось ' + mins(j.eta) + '. Страницу можно не закрывать — результат появится сам.' + BOTQ); t0 = Date.now(); }
+          return new Promise(function (ok) { setTimeout(ok, 4000); }).then(ask);
+        }
+        if (j.queue_full) return {error: 'Сейчас очень много проверок (в очереди ' + j.total + ' сайтов, это ' + mins(j.eta) + ').', bot: true};
+        return j;
+      });
+    }
+    Promise.all([ask(), resolve(v)]).then(function (a) {
+      if (a[0] && a[0].error && a[0].bot) { clearInterval(tick); $('res').innerHTML = '<div class="verdict mid"><b>Пока не получилось</b>' + esc(a[0].error) + BOTQ + '</div>'; return; }
       clearInterval(tick); stepTo(STEPS.length); if ($('pb')) $('pb').style.width = '100%';
       var r = a[0], ip = a[1];
       if (r.error) { clearInterval(tick); $('res').innerHTML = '<div class="verdict mid"><b>Пока не получилось</b>' + esc(r.error) + '</div>'; return; }
       var pages = r.pages, yi = r.yandex_images, ai = r.images_archive;
-      var kpi = '<div class="rs"><div class="kpi"><div class="v">' + (pages == null ? '—' : (pages >= 2000 ? '2000+' : pages)) + '</div><div class="l">страниц в веб-архиве</div></div>' +
+      var kpi = '<div class="rs"><div class="kpi"><div class="v">' + (pages == null ? '—' : (pages > 100 ? '100+' : pages)) + '</div><div class="l">страниц в веб-архиве</div></div>' +
         '<div class="kpi"><div class="v">' + (yi == null ? '—' : (yi >= 30 ? '30+' : yi)) + '</div><div class="l">картинок в Яндекс Картинках</div></div>' +
 
         '<div class="kpi"><div class="v" style="font-size:24px">' + (r.last ? dt(r.last) : '—') + '</div><div class="l">последний снимок' + (r.first ? ' · первый в ' + yr(r.first) + ' г.' : '') + '</div></div></div>';
@@ -218,7 +239,7 @@
       if (r.live && !r.beget) {   // сайт работает и он не на Бегет — успокоить, архив — как запасной вариант
         cls = 'ok'; head = '🟢 Сайт работает — восстанавливать ничего не нужно';
         txt = 'Сайт сейчас открывается' + (hostTxt ? ', он ' + hostTxt + (r.host ? '' : '') + ', не на Бегет' : '') + '. ' +
-          (pages > 0 ? 'На всякий случай: в веб-архиве сохранено ' + (pages >= 2000 ? 'больше 2000' : pages) + ' страниц — если с сайтом что-то случится, его можно будет вернуть даже без своей копии. А лучше — регулярно делать свои резервные копии.' : 'В веб-архиве копий сайта нет — обязательно делайте свои резервные копии.');
+          (pages > 0 ? 'На всякий случай: в веб-архиве сохранено ' + (pages > 100 ? 'больше 100' : pages) + ' страниц — если с сайтом что-то случится, его можно будет вернуть даже без своей копии. А лучше — регулярно делать свои резервные копии.' : 'В веб-архиве копий сайта нет — обязательно делайте свои резервные копии.');
         $('res').innerHTML = kpi + '<div class="verdict ' + cls + '"><b>' + head + '</b>' + txt + '</div>';
         return;
       }
@@ -226,8 +247,8 @@
         $('res').innerHTML = kpi + '<div class="verdict ok"><b>🟢 Сайт уже открывается — он на Бегет</b>Похоже, Бегет его восстановил. В веб-архиве ' + (pages || 0) + ' страниц — запасной вариант на будущее. Сохраните себе копию сайта, как только откроется панель Бегет.</div>';
         return;
       }
-      if (r.archive_error) { cls = 'mid'; head = 'Веб-архив сейчас не ответил'; txt = 'Архив бывает перегружен — повторите проверку через несколько минут.'; }
-      else if (pages >= 20) { cls = 'ok'; head = '✅ Сайт можно восстановить без своей копии'; txt = 'В архиве ' + (pages >= 2000 ? 'больше 2000' : pages) + ' страниц — этого хватает, чтобы вернуть сайт с теми же текстами, заголовками и адресами страниц' + (yi ? ', а картинки добрать из Яндекса' : '') + '. Не вернутся только база данных (заказы, личные кабинеты) и часть фото.'; }
+      if (r.archive_error) { cls = 'mid'; head = 'Веб-архив сейчас не ответил'; txt = 'Архив ограничивает частые запросы и сейчас не ответил даже после повторов — проверьте позже или напишите администратору @m8614f.' + BOTQ; }
+      else if (pages >= 20) { cls = 'ok'; head = '✅ Сайт можно восстановить без своей копии'; txt = 'В архиве ' + (pages > 100 ? 'больше 100' : pages) + ' страниц — этого хватает, чтобы вернуть сайт с теми же текстами, заголовками и адресами страниц' + (yi ? ', а картинки добрать из Яндекса' : '') + '. Не вернутся только база данных (заказы, личные кабинеты) и часть фото.'; }
       else if (pages > 0 || yi > 0) { cls = 'mid'; head = '🟡 Восстановить можно частично'; txt = 'Сохранилось немного: ' + (pages || 0) + ' стр. в архиве' + (yi ? ', картинки есть в Яндексе' : '') + '. Главную и основные страницы вернуть реально, остальное — по вашим материалам.'; }
       else { cls = 'no'; head = '🔴 Сайт не открывается, и в открытых источниках его нет'; txt = 'Ни веб-архив, ни Яндекс копий не сохранили. Остаются ваша копия (у вас, у разработчика) или резервная копия от хостинга — у Бегет её обещают выдать через панель.'; }
       var help = (cls === 'ok' || cls === 'mid') && !r.archive_error ? '<div class="help">Если понадобится помощь с восстановлением — <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">напишите нам</a>, бесплатно подскажем, что и как можно вернуть.</div>' : '';
@@ -246,7 +267,7 @@
       $('ftot').textContent = 'всего проверено ' + d.total + ' сайтов';
       $('fl').innerHTML = d.items.map(function (x) {
         var k = x.d + x.t, fresh = !known[k]; known[k] = 1;
-        return '<li' + (fresh ? '' : ' style="animation:none"') + '><span class="fd">' + esc(x.d) + (x.pages ? ' <span style="color:var(--muted)">· ' + (x.pages >= 2000 ? '2000+' : x.pages) + ' стр.</span>' : '') + '</span><span class="fv ' + x.v + '">' + VV[x.v] + '</span><span class="ft">' + ago(x.t) + '</span></li>';
+        return '<li' + (fresh ? '' : ' style="animation:none"') + '><span class="fd">' + esc(x.d) + (x.pages ? ' <span style="color:var(--muted)">· ' + (x.pages > 100 ? '100+' : x.pages) + ' стр.</span>' : '') + '</span><span class="fv ' + x.v + '">' + VV[x.v] + '</span><span class="ft">' + ago(x.t) + '</span></li>';
       }).join('');
     }).catch(function () {});
   }
