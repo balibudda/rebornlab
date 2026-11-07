@@ -25,7 +25,7 @@ const ru = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('ru-RU', { day: 
 const ruDT = (p) => ru(p.date) + (p.time ? `, ${p.time} МСК` : '')
 const isoDT = (p) => (p.time ? `${p.date}T${p.time}:00+03:00` : p.date)
 // 06.11.2026 Ник: во всех новостях о Бегет (Beget) — ссылка на бота
-const BOT_BOX = `<div class="bot-box" style="margin:0 0 28px;padding:18px 20px;border:1px solid var(--acc);border-radius:16px;background:rgba(198,242,78,.06)"><b>🔔 Ждёте свой сайт на Бегет (Beget)?</b><br>Бесплатный Telegram-бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> проверяет ваш сайт каждые 5 минут и пишет, когда включится сервер и когда сайт откроется. Живая статистика восстановления — <a href="/beget/" style="color:var(--acc)">rebornlab.ru/beget</a>.</div>`
+const BOT_BOX = `<div class="bot-box" style="margin:0 0 28px;padding:18px 20px;border:1px solid var(--acc);border-radius:16px;background:rgba(198,242,78,.06)"><b>🔔 Ждёте свой сайт на Бегет (Beget)?</b><br>Бесплатный Telegram-бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> проверяет ваш сайт каждые 10 минут и пишет, когда включится сервер и когда сайт откроется. Живая статистика восстановления — <a href="/beget/" style="color:var(--acc)">rebornlab.ru/beget</a>.</div>`
 
 // tiny markdown → html (headings, paragraphs, lists, quotes, bold/italic/code/links)
 function md(src) {

@@ -104,7 +104,7 @@ js = r'''<script>
   function botBlock(r, v) {
     if (r.in_bot) return '<div class="help">🔔 За этим сайтом уже следит бот <a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">@rebornlab_bot</a> — подписчики узнают сразу, как он откроется. Хотите получать уведомление и вы — пришлите боту адрес сайта.</div>';
     var b = btoa(unescape(encodeURIComponent(v))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    return '<div class="help">🔔 Хотите узнать сразу, когда сайт снова откроется? <a href="https://t.me/rebornlab_bot?start=w_' + b + '" target="_blank" rel="noopener">Добавьте его в бот @rebornlab_bot</a> — он проверяет каждые 5 минут и напишет. Бесплатно.</div>';
+    return '<div class="help">🔔 Хотите узнать сразу, когда сайт снова откроется? <a href="https://t.me/rebornlab_bot?start=w_' + b + '" target="_blank" rel="noopener">Добавьте его в бот @rebornlab_bot</a> — он проверяет каждые 10 минут и напишет. Бесплатно.</div>';
   }
   function check(v) {
     v = v.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];

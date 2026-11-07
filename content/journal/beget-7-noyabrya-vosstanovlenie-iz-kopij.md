@@ -47,4 +47,4 @@ category: web
 | VPS на Бегет | Готовиться собирать сервер заново: файловая копия будет не у всех |
 | Своя почта на Бегет | Почтовые серверы работают; веб-почта — webmail.beget.ru |
 
-Проверить свой сервер — [rebornlab.ru/beget/server/](/beget/server/). Узнать, можно ли вернуть сайт без копии, — [rebornlab.ru/beget/vosstanovit/](/beget/vosstanovit/). А чтобы не проверять вручную, пришлите адрес сайта боту [@rebornlab_bot](https://t.me/rebornlab_bot): он следит каждые 5 минут и напишет, как только сайт откроется.
+Проверить свой сервер — [rebornlab.ru/beget/server/](/beget/server/). Узнать, можно ли вернуть сайт без копии, — [rebornlab.ru/beget/vosstanovit/](/beget/vosstanovit/). А чтобы не проверять вручную, пришлите адрес сайта боту [@rebornlab_bot](https://t.me/rebornlab_bot): он следит каждые 10 минут и напишет, как только сайт откроется.
