@@ -17,7 +17,7 @@ css = '''
   .rs { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:18px 0 6px }
   .rs .kpi .v { font-size:34px }
   .verdict { border-radius:var(--r); padding:18px 20px; margin:16px 0 6px; border:1px solid var(--line); background:var(--card-2) }
-  .verdict b { font-size:20px; display:block; margin-bottom:6px } .verdict.ok { border-color:rgba(198,242,78,.6); background:rgba(198,242,78,.07) }
+  .verdict > b:first-child { font-size:20px; display:block; margin-bottom:6px } .verdict.ok { border-color:rgba(198,242,78,.6); background:rgba(198,242,78,.07) }
   .verdict.mid { border-color:rgba(255,190,90,.55); background:rgba(255,190,90,.07) } .verdict.no { border-color:rgba(255,110,110,.5); background:rgba(255,110,110,.06) }
   .steps2 { margin:10px 0 0 18px } .steps2 li { margin:6px 0 }
   .help { margin-top:16px; padding:16px 18px; border-radius:var(--r); border:1px dashed var(--line-2); color:var(--muted) } .help a { color:var(--acc) }
