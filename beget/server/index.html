@@ -76,11 +76,11 @@
 .news-dt { font: 12px/1.3 ui-monospace, Menlo, monospace; color: var(--acc) }
 .news-card b { font-size: 16px; line-height: 1.3 }
 .news-d { font-size: 13px; color: #9a978f; line-height: 1.45 }
-  .chk { margin: 10px 0 0; font-size: 13px; color: rgba(237,235,230,.7); }
-  .chk table { border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
-  .chk td { padding: 3px 14px 3px 0; border-top: 1px solid rgba(237,235,230,.07); }
-  .chk tr:first-child td { color: var(--text); font-weight: 600; }
-  .chk .fresh { color: var(--acc); }
+  .chklog { margin: 10px 0 0; font-size: 13px; color: rgba(237,235,230,.7); }
+  .chklog table { border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .chklog td { padding: 3px 14px 3px 0; border-top: 1px solid rgba(237,235,230,.07); }
+  .chklog tr:first-child td { color: var(--text); font-weight: 600; }
+  .chklog .fresh { color: var(--acc); }
   .flash { animation: fl 1.6s ease; } @keyframes fl { 0% { background: rgba(200,255,90,.25); } 100% { background: transparent; } }
 </style>
 <script>window.RL_METRIKA=113418511;window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113418511','ym');ym(113418511,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>
@@ -95,6 +95,7 @@
   .qcells { display: grid; grid-template-columns: repeat(127, 1fr); gap: 2px } .qcells i { display: block; aspect-ratio: 1; border-radius: 2px; background: rgba(237,235,230,.08); cursor: pointer }
   .qcells i.h { background: var(--acc) } .qcells i.o { background: #7aa7ff } .qcells i.me { outline: 2px solid #fff; outline-offset: 1px }
   @media (max-width: 760px) { .qcells { grid-template-columns: repeat(64, 1fr) } .chk { grid-template-columns: 1fr } }
+  @media (max-width: 600px) { .chk input { font-size: 16px; padding: 13px 14px } .chk .btn { width: 100%; justify-content: center } .chklog td { padding-right: 8px } .chklog table { font-size: 12px } }
 </style><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Как узнать, на каком сервере Бегет мой сайт?", "acceptedAnswer": {"@type": "Answer", "text": "Введите адрес сайта в поле выше — мы найдём его IP сами. Или выполните в терминале nslookup ваш-сайт.ru (на Mac — «Терминал», на Windows — «Командная строка»): адрес в строке Address и есть ваш сервер. IP вида 45.130.41.x, 87.236.16.x, 5.101.152.x — это сети хостинга Бегет."}}, {"@type": "Question", "name": "Как проверить, включён ли сервер Бегет?", "acceptedAnswer": {"@type": "Answer", "text": "Введите IP в поле выше — покажем состояние по нашей последней проверке. Вручную: откройте в браузере http://ваш-IP/. Если видите страницу Бегет «Домен не прилинкован к директории на сервере» — сервер включён. Если страница не грузится — сервер ещё выключен."}}, {"@type": "Question", "name": "Сервер включён, а сайт не открывается — почему?", "acceptedAnswer": {"@type": "Answer", "text": "После включения сервера сайт проходит этапы: сначала 502 Bad Gateway, потом ошибки базы данных, потом открывается. По нашим данным, половина сайтов оживает за 2–3 часа. Если сервер работает больше суток, а сайт нет — пишите в поддержку Бегет."}}, {"@type": "Question", "name": "В каком порядке Бегет включает серверы?", "acceptedAnswer": {"@type": "Answer", "text": "По нашим наблюдениям, внутри сети серверы включают в основном по возрастанию номера: начало сети почти всё работает, дальше всё реже. Массовые включения проходят днём и вечером, ночью почти ничего не меняется. Часть аккаунтов Бегет переносит на новые серверы в других сетях и присылает письмо о переносе."}}, {"@type": "Question", "name": "Какой процент Бегет уже восстановил?", "acceptedAnswer": {"@type": "Answer", "text": "Официально на 5 ноября, 15:00 — 60% виртуального хостинга. По нашим замерам открывается около половины сайтов из выборки 1000; живые цифры — на странице статуса rebornlab.ru/beget."}}, {"@type": "Question", "name": "Мой сервер не включён — что делать?", "acceptedAnswer": {"@type": "Answer", "text": "Проверьте почту аккаунта Бегет: может прийти письмо о переносе на новый сервер (если DNS домена не у Бегет — поменяйте A-записи). Если сайт важен и есть своя копия — поднимайте его у другого хостинга; если копии нет — Бегет обещает выдать резервные копии примерно к 10 ноября. Чтобы не проверять вручную, пришлите адрес сайта боту @rebornlab_bot."}}, {"@type": "Question", "name": "Где сейчас входить в панель Бегет?", "acceptedAnswer": {"@type": "Answer", "text": "Основная панель cp.beget.com пока отвечает ошибкой 502. DNS доменов можно менять на domains.beget.ru (открывается из российского интернета), почта — на webmail.beget.ru."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "REBORN LAB", "item": "https://rebornlab.ru/"}, {"@type": "ListItem", "position": 2, "name": "Статус Beget", "item": "https://rebornlab.ru/beget/"}, {"@type": "ListItem", "position": 3, "name": "Проверить сервер по IP", "item": "https://rebornlab.ru/beget/server/"}]}</script>
 </head>
@@ -110,7 +111,7 @@
   <h1>Проверить сервер Бегет (Beget) по IP</h1>
   <p class="lead">Введите IP-адрес сервера или адрес сайта — покажем, включил ли Бегет ваш сервер после атаки, что с соседними серверами и что делать дальше. Данные наших проверок всех 9 сетей хостинга Бегет, обновление каждые 15 минут.</p>
   <div class="live" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
-  <div class="chk" id="chk"></div>
+  <div class="chklog" id="chk"></div>
 
   <div class="card" id="check">
     <h2>Проверка сервера</h2>
@@ -155,6 +156,7 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
   function fmt(t) { return new Date(t * 1000).toLocaleString('ru-RU', {timeZone: 'Europe/Moscow', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'}) + ' МСК'; }
   // 07.11 (Ник: «покажи, что реально обновляется»): «N мин назад», журнал последних проверок, автообновление без перезагрузки
+  if (window.matchMedia('(max-width: 600px)').matches) { var qi = document.getElementById('q'); if (qi) qi.placeholder = 'IP или адрес сайта'; }
   function hm(t) { return new Date(t * 1000).toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit'}); }
   function tick() {
     if (!D) return;
