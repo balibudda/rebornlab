@@ -89,8 +89,8 @@ function HEADER(current = '') {
 </div></header>`
 }
 function BEGET_BAR(at = '') {
-  const L = [['/beget/', 'Статус восстановления'], ['/beget/server/', '🔎 Проверить сервер по IP'], ['/beget/vosstanovit/', '♻️ Можно ли восстановить сайт'], ['/beget/#news', 'Новости'], ['/beget/voprosy/', '❓ Вопросы и ответы'], ['https://t.me/rebornlab_bot', '🔔 Бот @rebornlab_bot']]
-  return `<div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет (Beget)</span>${L.map(([h, t]) => `<a href="${h}"${h === at ? ' aria-current="page"' : ''}${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${t}</a>`).join('')}</div></div>`
+  const L = [['/beget/', 'Статус'], ['/beget/server/', '🔎 Сервер по IP'], ['/beget/vosstanovit/', '♻️ Восстановить сайт'], ['/beget/#news', 'Новости'], ['/beget/voprosy/', '❓ Вопросы и ответы'], ['https://t.me/rebornlab_bot', '🔔 Бот']]   // 07.11: короче — кнопка бота не влезала
+  return `<div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет</span>${L.map(([h, t]) => `<a href="${h}"${h === at ? ' aria-current="page"' : ''}${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${t}</a>`).join('')}</div></div>`
 }
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
   const url = SITE.url + canonical
