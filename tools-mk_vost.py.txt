@@ -78,6 +78,7 @@ body = f'''
     {''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in faq)}
   </div>
   <p class="sub">Ещё по теме: <a href="/beget/server/" style="color:var(--acc)">проверить сервер Бегет по IP</a> · <a href="/beget/" style="color:var(--acc)">статус восстановления Бегет</a> · бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> — напишет, когда ваш сайт заработает.</p>
+  <div class="help" style="margin-top:14px">💬 Остались вопросы или нужна помощь с сайтом — напишите администратору в Telegram: <a href="https://t.me/m8614f" target="_blank" rel="noopener">@m8614f</a></div>
 </main>
 '''
 js = r'''<script>
