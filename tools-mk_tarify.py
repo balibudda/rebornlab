@@ -52,6 +52,8 @@ style = src[src.index('<style>'):style_end].replace('</style>', '''
   .steps3 li::before { content: counter(s); position: absolute; left: 16px; top: 12px; width: 30px; height: 30px; border-radius: 50%; background: var(--acc); color: #111; font-weight: 700; display: grid; place-items: center; }
   .cta2 { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0; }
   .qa p { color: var(--muted); }
+  .me { background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--acc); border-radius: var(--r); padding: 18px 22px; margin: 12px 0 16px; }
+  .me p { margin: 0 0 10px; line-height: 1.6; } .me p:last-child { margin: 0; } .me-s { color: var(--muted); font-size: 14px; }
   .contacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 14px 0 18px; }
   .ct { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); color: var(--fg); text-decoration: none; }
   .ct:hover { border-color: var(--acc); } .ct span { color: var(--acc); }
@@ -96,7 +98,13 @@ main = f'''{banner}<main class="bw">
   <h2>Как это работает</h2>
   <ol class="steps3"><li>Вы присылаете адрес сайта — бесплатно проверяем, что сохранилось в веб-архиве и Яндекс Картинках.</li><li>Предлагаем вариант и называем цену заранее — без сюрпризов.</li><li>Собираем сайт и показываем на временном адресе — вы смотрите и принимаете.</li><li>Переключаем домен на новый сервер, подключаем https и почту для заявок.</li></ol>
   <div class="help" style="margin:30px 0 8px;font-size:15px;line-height:1.6">💚 REBORN LAB — это прежде всего проект, созданный для помощи владельцам сайтов. Наши инструменты мониторинга и проверки остаются бесплатными. Если вам потребуется техническая помощь с восстановлением сайта, мы готовы предложить свои услуги на прозрачных условиях. Но пользоваться бесплатными инструментами можно независимо от того, обращаетесь вы к нам за услугами или нет.</div>
-  <h2 id="contact">Связаться с нами</h2>
+  <h2 id="contact">Связаться со мной</h2>
+  <div class="me">
+    <p><b>Вы общаетесь с живым человеком, а не с компанией.</b> Меня зовут Николай, и с вами на связи буду я сам: отвечаю, разговариваю, принимаю все ваши правки и веду диалог до результата.</p>
+    <p><b>Общаемся письменно — без звонков.</b> Голосовые сообщения приветствуются: слушаю и отвечаю. Так всё остаётся в переписке, и ничего не теряется.</p>
+    <p><b>Скажите точно, что вам нужно, — и сделаем.</b> Если это технически возможно, реализуем без лишних согласований. Понимаю, что делаю и как вам помочь, поэтому решаю вопросы быстро.</p>
+    <p class="me-s">Общаюсь по-человечески — без канцелярита, могу и смайлик поставить 🙂</p>
+  </div>
   <div class="contacts">
     <a class="ct" href="https://t.me/m8614f" target="_blank" rel="noopener" data-goal="tarify_tg"><b>Telegram</b><span>@m8614f</span></a>
     <a class="ct" href="https://wa.me/6281998871268" target="_blank" rel="noopener" data-goal="tarify_wa"><b>WhatsApp</b><span>+62 819 9887-1268</span></a>
