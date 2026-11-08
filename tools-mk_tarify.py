@@ -111,11 +111,13 @@ main = f'''{banner}<main class="bw">
     <a class="ct" href="mailto:info@rebornlab.ru?subject=%D0%92%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" data-goal="tarify_mail"><b>Почта</b><span>info@rebornlab.ru</span></a>
   </div>
   <form class="tform" id="tform" novalidate>
-    <b class="pn">Короткая заявка — ответим сами</b>
+    <b class="pn">Короткая заявка — напишу вам сам</b>
+    <p class="me-s" style="margin:6px 0 0">Удобнее всего общаться письменно — в WhatsApp, Telegram или на почту. Звонков нет, голосовые — пожалуйста.</p>
     <div class="tgrid">
       <label class="wide"><span>Что нужно</span><select name="plan">{plan_opts}</select></label>
-      <label><span>Адрес сайта *</span><input name="site" placeholder="мой-сайт.ru" required></label>
-      <label><span>Как с вами связаться *</span><input name="contact" placeholder="телефон, Telegram или почта" required></label>
+      <label class="wide"><span>Адрес сайта *</span><input name="site" placeholder="мой-сайт.ru" required></label>
+      <label><span>Где удобнее общаться</span><select name="via"><option>WhatsApp</option><option>Telegram</option><option>Почта</option><option>Другое</option></select></label>
+      <label><span>Ваш номер, ник или почта *</span><input name="contact" placeholder="+7…, @ник или почта" required></label>
       <label class="wide"><span>Комментарий</span><textarea name="text" rows="3" placeholder="Что случилось с сайтом, есть ли копия"></textarea></label>
     </div>
     <input name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
@@ -134,6 +136,7 @@ after = after[:after.index('<script>\n(function () {')] + '''<script>
 (function () {
   var f = document.getElementById('tform'), msg = document.getElementById('tmsg'); if (!f) return;
   document.querySelectorAll('.pick').forEach(function (b) { b.addEventListener('click', function () { var sel = f.plan; for (var i = 0; i < sel.options.length; i++) if (sel.options[i].text === b.dataset.plan) sel.selectedIndex = i; setTimeout(function () { f.site.focus(); }, 400); }); });
+  var PH = {'WhatsApp': '+7 999 123-45-67', 'Telegram': '@ваш_ник', 'Почта': 'you@mail.ru', 'Другое': 'как с вами связаться'}; f.via.addEventListener('change', function () { f.contact.placeholder = PH[f.via.value]; }); f.contact.placeholder = PH[f.via.value];
   var T0 = Date.now(), HUMAN = false; ['mousemove', 'touchstart', 'keydown', 'scroll'].forEach(function (ev) { addEventListener(ev, function () { HUMAN = true; }, {once: true, passive: true}); });
   f.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -142,7 +145,7 @@ after = after[:after.index('<script>\n(function () {')] + '''<script>
     if (!ag.checked) { f.classList.add('need-agree'); msg.textContent = 'Отметьте согласие на обработку данных.'; return; }
     f.classList.remove('need-agree');
     var btn = f.querySelector('button'); btn.disabled = true; msg.textContent = 'Отправляем…';
-    fetch('https://api.rebornlab.ru/lead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topics: ['Восстановление сайта', f.plan.value], text: 'Тариф: ' + f.plan.value + '\\nСайт: ' + site + (f.text.value.trim() ? '\\n' + f.text.value.trim() : ''), contact: contact, page: location.pathname, agree: true, hp: f.company.value || '', k: T0.toString(36), t: Date.now() - T0, h: HUMAN ? 1 : 0})})
+    fetch('https://api.rebornlab.ru/lead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topics: ['Восстановление сайта', f.plan.value], text: 'Тариф: ' + f.plan.value + '\\nСайт: ' + site + (f.text.value.trim() ? '\\n' + f.text.value.trim() : ''), contact: f.via.value + ': ' + contact, page: location.pathname, agree: true, hp: f.company.value || '', k: T0.toString(36), t: Date.now() - T0, h: HUMAN ? 1 : 0})})
       .then(function (r) { if (!r.ok) throw 0; f.innerHTML = '<p style="font-size:18px;margin:0">✓ Заявка отправлена — напишем вам в ближайшее время.</p>'; try { ym(window.RL_METRIKA, 'reachGoal', 'tarify_lead'); } catch (x) {} })
       .catch(function () { btn.disabled = false; msg.innerHTML = 'Не получилось отправить. Напишите нам в <a href="https://t.me/m8614f" style="color:var(--acc)">Telegram</a>, <a href="https://wa.me/6281998871268" style="color:var(--acc)">WhatsApp</a> или на <a href="mailto:info@rebornlab.ru" style="color:var(--acc)">info@rebornlab.ru</a>.'; });
   });
