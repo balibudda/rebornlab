@@ -33,7 +33,7 @@ ld = {'@context': 'https://schema.org', '@graph': [
 
 src = (ROOT / 'beget' / 'vosstanovit' / 'index.html').read_text()
 head = src[:src.index('<style>')]
-head = re.sub(r'<title>.*?</title>', '<title>Восстановление сайта после Бегет — цены и сроки | REBORN LAB</title>', head, flags=re.S)
+head = re.sub(r'<title>.*?</title>', '<title>Восстановление сайта Бегет после сбоя хостинга: цены и сроки. Быстро, в порядке очереди</title>', head, flags=re.S)
 head = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="Восстановим сайт после сбоя хостинга: лендинг из веб-архива — 1 500 ₽, возврат WordPress из копии — 2 000 ₽, сайт или каталог из архива — 3 000 ₽, новый WordPress с админкой — 7 000 ₽. Те же адреса страниц — позиции в поиске сохраняются.">', head)
 head = re.sub(r'<link rel="canonical" href="[^"]*">', '' if DRAFT else '<link rel="canonical" href="https://rebornlab.ru/vosstanovlenie-sajta/">', head)
 head = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="Восстановление сайта после сбоя хостинга — цены">', head)
@@ -59,9 +59,18 @@ hdr = re.sub(r'<div class="bbar">.*?</div></div>(?=<!--HDR:END-->)', '', hdr, fl
 banner = '<div style="background:#c6f24e;color:#111;text-align:center;padding:10px;font:600 14px sans-serif">ЧЕРНОВИК для Ника — не опубликован, скрыт от поисковиков</div>' if DRAFT else ''
 main = f'''{banner}<main class="bw">
   <span class="live"><span class="dot"></span>восстановление сайтов · REBORN LAB</span>
-  <h1>Восстановление сайта после сбоя хостинга: цены и сроки</h1>
+  <h1>Восстановление сайта после сбоя Beget: цены и сроки</h1>
   <p class="lead">Сайт перестал открываться после сбоя у хостинга (например, Бегет), а копии нет или нет доступа к панели? Вернём сайт с теми же адресами страниц и текстами — чтобы вы не теряли клиентов и позиции в поиске, пока ждёте. Сначала бесплатно проверим, что сохранилось.</p>
   <div class="plans">{cards}</div>
+  <h2>Что ещё мы делаем — всё от А до Я</h2>
+  <div class="plans">
+    <div class="plan"><b class="pn">Как было — один в один</b><p class="pd" style="margin-top:8px">Возвращаем ваш родной дизайн: те же цвета, шрифты, картинки и блоки. Клиенты увидят привычный сайт.</p></div>
+    <div class="plan"><b class="pn">Новый современный дизайн</b><p class="pd" style="margin-top:8px">Если старого дизайна не сохранилось или хочется обновиться — делаем красивый современный сайт на ваших текстах. Удобный на телефоне, быстрый, с теми же адресами страниц.</p></div>
+    <div class="plan"><b class="pn">Переезд и домен</b><p class="pd" style="margin-top:8px">Новый хостинг или наш сервер, направляем домен, подключаем https, переносим записи почты — без простоя.</p></div>
+    <div class="plan"><b class="pn">Заявки и почта</b><p class="pd" style="margin-top:8px">Рабочие формы заявок на вашу почту, защита от спама, письма с подписью домена — чтобы не попадали в спам.</p></div>
+    <div class="plan"><b class="pn">Закон и аналитика</b><p class="pd" style="margin-top:8px">Политика и согласие по 152-ФЗ, плашка cookie, ваши счётчики Яндекс Метрики и подтверждение Вебмастера — как были.</p></div>
+    <div class="plan"><b class="pn">SEO и присмотр</b><p class="pd" style="margin-top:8px">Сохраняем адреса, заголовки и тексты — позиции не теряются. Подключаем бесплатный мониторинг: узнаете о сбое раньше клиентов.</p></div>
+  </div>
   <h2>Как это работает</h2>
   <ol class="steps3"><li>Вы присылаете адрес сайта — бесплатно проверяем, что сохранилось в веб-архиве и Яндекс Картинках.</li><li>Предлагаем вариант и называем цену заранее — без сюрпризов.</li><li>Собираем сайт и показываем на временном адресе — вы смотрите и принимаете.</li><li>Переключаем домен на новый сервер, подключаем https и почту для заявок.</li></ol>
   <div class="cta2"><a class="btn btn-acc" href="https://t.me/m8614f" target="_blank" rel="noopener">Написать в Telegram</a><a class="btn" href="/beget/vosstanovit/">Проверить сайт бесплатно</a></div>
