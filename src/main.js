@@ -1,3 +1,5 @@
+/* 08.11: метки антиспама для заявок (время на странице, было ли движение) */
+var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown', 'scroll'].forEach(function (ev) { window.addEventListener(ev, function () { RL_HUMAN = true; }, {once: true, passive: true}); });
 // REBORN LAB — small, dependency-free interactions.
 (function () {
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -105,7 +107,7 @@
       if (ag && !ag.checked) { f.classList.add('need-agree'); ag.focus(); return; }
       f.classList.remove('need-agree');
       btn.disabled = true; btn.textContent = 'Отправляю…';
-      var payload = { topics: topics, text: text.trim(), contact: contact.trim(), page: location.pathname, agree: true, hp: (f.querySelector('input[name=company]') || {}).value || '' };
+      var payload = { topics: topics, text: text.trim(), contact: contact.trim(), page: location.pathname, agree: true, hp: (f.querySelector('input[name=company]') || {}).value || '', k: RL_T0.toString(36), t: Date.now() - RL_T0, h: RL_HUMAN ? 1 : 0 };   // 08.11: метки антиспама
       fetch('https://api.rebornlab.ru/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
         .then(function (r) { if (!r.ok) throw 0; ok.style.display = 'block'; f.reset(); f.querySelectorAll('.chip.on').forEach(function (c) { c.classList.remove('on'); }); if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'lead'); })
         .catch(function () { window.open('https://t.me/Reborn_Lab', '_blank'); })
