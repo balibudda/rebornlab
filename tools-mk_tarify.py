@@ -59,8 +59,10 @@ style = src[src.index('<style>'):style_end].replace('</style>', '''
   .tgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; } .tgrid .wide { grid-column: 1 / -1; }
   .tform label span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
   .tform input:not([type=checkbox]), .tform textarea { width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
-  .plan .pick { margin-top: auto; align-self: flex-start; margin-top: 16px; }
-  .tform select { width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+  .plan ul { flex: 1; }
+  .plan .pick { display: block; margin-top: 18px; text-align: center; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--acc); color: var(--acc); background: rgba(198,242,78,.08); font-weight: 700; text-decoration: none; }
+  .plan .pick:hover { background: var(--acc); color: #111; }
+  .tform select { text-align: left; text-align-last: left; width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
   .tform .agree { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); margin: 0 0 14px; } .tform .agree a { color: var(--acc); }
   .tform.need-agree .agree { color: #ff9b9b; } .tmsg { margin: 10px 0 0; font-size: 14px; }
   @media (max-width: 600px) { .tgrid { grid-template-columns: 1fr; } }
