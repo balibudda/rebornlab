@@ -11,7 +11,7 @@
 <meta property="og:title" content="Восстановление сайта после сбоя хостинга — цены">
 <meta property="og:description" content="От 1 500 ₽. Те же адреса страниц и тексты — позиции в поиске сохраняются.">
 <meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
-<link rel="stylesheet" href="/assets/styles.css?v=63fb7997">
+<link rel="stylesheet" href="/assets/styles.css?v=62f2b18b">
 <style>
   /* страница-монитор (ручная, build.mjs её не трогает) */
   .bw { max-width: var(--max); margin: 0 auto; padding: 40px 22px 80px; }   /* ширина как у шапки и подвала (.wrap) — края ровные */
@@ -102,6 +102,8 @@
   .tgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; } .tgrid .wide { grid-column: 1 / -1; }
   .tform label span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
   .tform input:not([type=checkbox]), .tform textarea { width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+  .plan .pick { margin-top: auto; align-self: flex-start; margin-top: 16px; }
+  .tform select { width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
   .tform .agree { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); margin: 0 0 14px; } .tform .agree a { color: var(--acc); }
   .tform.need-agree .agree { color: #ff9b9b; } .tmsg { margin: 10px 0 0; font-size: 14px; }
   @media (max-width: 600px) { .tgrid { grid-template-columns: 1fr; } }
@@ -152,7 +154,7 @@
   <h1>Восстановление сайта после сбоя Beget: цены и сроки</h1>
   <p class="lead">Сайт перестал работать, а доступ к хостингу потерян? Не спешите начинать всё с нуля. Восстановим сайт из резервной копии или доступных архивных материалов: вернём страницы, тексты, изображения и прежние адреса, настроим формы заявок и подключим сайт к новому серверу. Сначала бесплатно проверим, что можно восстановить, — стоимость согласуем заранее.</p>
   <div class="kpis"><div class="kpi"><div class="v">Бесплатно</div><div class="l">предварительная проверка</div></div><div class="kpi"><div class="v">от 1 500 ₽</div><div class="l">стоимость восстановления</div></div><div class="kpi"><div class="v">Сначала результат</div><div class="l">смотрите сайт на временном адресе до оплаты</div></div></div>
-  <div class="plans"><div class="plan"><b class="pn">Лендинг из веб-архива</b><div class="pp">1 500 ₽</div><p class="pd">Одностраничный сайт или промо-страница</p><ul><li>Одна страница: возвращаем тексты, блоки и прежний адрес</li><li>Изображения — из доступных архивных копий и ваших материалов</li><li>Рабочая форма заявок на вашу почту</li><li>Обычно — в тот же день</li></ul></div><div class="plan"><b class="pn">Возврат вашего WordPress из копии</b><div class="pp">2 000 ₽</div><p class="pd">Если у вас есть полная копия сайта: файлы и база данных</p><ul><li>Разворачиваем копию на новом хостинге</li><li>Админка, заказы и пользователи — как были</li><li>Подключаем домен и https</li><li>Цена — для готовой рабочей копии; если копия неполная или повреждена, стоимость согласуем отдельно</li></ul></div><div class="plan"><b class="pn">Сайт или каталог из веб-архива</b><div class="pp">3 000 ₽</div><p class="pd">Многостраничный сайт, каталог, блог — когда копии нет</p><ul><li>Восстанавливаем доступные страницы, тексты, заголовки и изображения</li><li>Сохраняем прежнюю структуру и адреса страниц</li><li>Формы заявок настраиваем заново</li><li>Админка и база пользователей без оригинальной копии не восстанавливаются: правки вносим мы</li><li>Для очень больших сайтов (сотни страниц) стоимость согласуем заранее</li></ul></div><div class="plan"><b class="pn">Новый сайт на WordPress с админкой</b><div class="pp">7 000 ₽</div><p class="pd">Если нужен сайт, который вы будете править сами</p><ul><li>Сайт на WordPress с адаптивным дизайном и админкой</li><li>Переносим содержимое из архива или копии с теми же адресами страниц</li><li>Хостинг — ваш, поможем выбрать и настроить</li><li>Интернет-магазин, сложные интеграции, нестандартные функции и большой объём контента — рассчитываем отдельно</li></ul></div></div>
+  <div class="plans"><div class="plan"><b class="pn">Лендинг из веб-архива</b><div class="pp">1 500 ₽</div><p class="pd">Одностраничный сайт или промо-страница</p><ul><li>Одна страница: возвращаем тексты, блоки и прежний адрес</li><li>Изображения — из доступных архивных копий и ваших материалов</li><li>Рабочая форма заявок на вашу почту</li><li>Обычно — в тот же день</li></ul><a class="btn pick" href="#contact" data-plan="Лендинг из веб-архива — 1 500 ₽">Выбрать</a></div><div class="plan"><b class="pn">Возврат вашего WordPress из копии</b><div class="pp">2 000 ₽</div><p class="pd">Если у вас есть полная копия сайта: файлы и база данных</p><ul><li>Разворачиваем копию на новом хостинге</li><li>Админка, заказы и пользователи — как были</li><li>Подключаем домен и https</li><li>Цена — для готовой рабочей копии; если копия неполная или повреждена, стоимость согласуем отдельно</li></ul><a class="btn pick" href="#contact" data-plan="Возврат вашего WordPress из копии — 2 000 ₽">Выбрать</a></div><div class="plan"><b class="pn">Сайт или каталог из веб-архива</b><div class="pp">3 000 ₽</div><p class="pd">Многостраничный сайт, каталог, блог — когда копии нет</p><ul><li>Восстанавливаем доступные страницы, тексты, заголовки и изображения</li><li>Сохраняем прежнюю структуру и адреса страниц</li><li>Формы заявок настраиваем заново</li><li>Админка и база пользователей без оригинальной копии не восстанавливаются: правки вносим мы</li><li>Для очень больших сайтов (сотни страниц) стоимость согласуем заранее</li></ul><a class="btn pick" href="#contact" data-plan="Сайт или каталог из веб-архива — 3 000 ₽">Выбрать</a></div><div class="plan"><b class="pn">Новый сайт на WordPress с админкой</b><div class="pp">7 000 ₽</div><p class="pd">Если нужен сайт, который вы будете править сами</p><ul><li>Сайт на WordPress с адаптивным дизайном и админкой</li><li>Переносим содержимое из архива или копии с теми же адресами страниц</li><li>Хостинг — ваш, поможем выбрать и настроить</li><li>Интернет-магазин, сложные интеграции, нестандартные функции и большой объём контента — рассчитываем отдельно</li></ul><a class="btn pick" href="#contact" data-plan="Новый сайт на WordPress с админкой — 7 000 ₽">Выбрать</a></div></div>
   <h2>Что ещё мы делаем — всё от А до Я</h2>
   <div class="plans">
     <div class="plan"><b class="pn">Как было — один в один</b><p class="pd" style="margin-top:8px">Возвращаем ваш родной дизайн: те же цвета, шрифты, картинки и блоки. Клиенты увидят привычный сайт.</p></div>
@@ -179,6 +181,7 @@
   <form class="tform" id="tform" novalidate>
     <b class="pn">Короткая заявка — ответим сами</b>
     <div class="tgrid">
+      <label class="wide"><span>Что нужно</span><select name="plan"><option>Лендинг из веб-архива — 1 500 ₽</option><option>Возврат вашего WordPress из копии — 2 000 ₽</option><option>Сайт или каталог из веб-архива — 3 000 ₽</option><option>Новый сайт на WordPress с админкой — 7 000 ₽</option><option>Свой запрос / не знаю — подскажите</option></select></label>
       <label><span>Адрес сайта *</span><input name="site" placeholder="мой-сайт.ru" required></label>
       <label><span>Как с вами связаться *</span><input name="contact" placeholder="телефон, Telegram или почта" required></label>
       <label class="wide"><span>Комментарий</span><textarea name="text" rows="3" placeholder="Что случилось с сайтом, есть ли копия"></textarea></label>
@@ -201,10 +204,11 @@
   <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
-<script src="/assets/main.js?v=63fb7997" defer></script>
+<script src="/assets/main.js?v=62f2b18b" defer></script>
 <script>
 (function () {
   var f = document.getElementById('tform'), msg = document.getElementById('tmsg'); if (!f) return;
+  document.querySelectorAll('.pick').forEach(function (b) { b.addEventListener('click', function () { var sel = f.plan; for (var i = 0; i < sel.options.length; i++) if (sel.options[i].text === b.dataset.plan) sel.selectedIndex = i; setTimeout(function () { f.site.focus(); }, 400); }); });
   var T0 = Date.now(), HUMAN = false; ['mousemove', 'touchstart', 'keydown', 'scroll'].forEach(function (ev) { addEventListener(ev, function () { HUMAN = true; }, {once: true, passive: true}); });
   f.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -213,7 +217,7 @@
     if (!ag.checked) { f.classList.add('need-agree'); msg.textContent = 'Отметьте согласие на обработку данных.'; return; }
     f.classList.remove('need-agree');
     var btn = f.querySelector('button'); btn.disabled = true; msg.textContent = 'Отправляем…';
-    fetch('https://api.rebornlab.ru/lead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topics: ['Восстановление сайта'], text: 'Сайт: ' + site + (f.text.value.trim() ? '\n' + f.text.value.trim() : ''), contact: contact, page: location.pathname, agree: true, hp: f.company.value || '', k: T0.toString(36), t: Date.now() - T0, h: HUMAN ? 1 : 0})})
+    fetch('https://api.rebornlab.ru/lead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topics: ['Восстановление сайта', f.plan.value], text: 'Тариф: ' + f.plan.value + '\nСайт: ' + site + (f.text.value.trim() ? '\n' + f.text.value.trim() : ''), contact: contact, page: location.pathname, agree: true, hp: f.company.value || '', k: T0.toString(36), t: Date.now() - T0, h: HUMAN ? 1 : 0})})
       .then(function (r) { if (!r.ok) throw 0; f.innerHTML = '<p style="font-size:18px;margin:0">✓ Заявка отправлена — напишем вам в ближайшее время.</p>'; try { ym(window.RL_METRIKA, 'reachGoal', 'tarify_lead'); } catch (x) {} })
       .catch(function () { btn.disabled = false; msg.innerHTML = 'Не получилось отправить. Напишите нам в <a href="https://t.me/m8614f" style="color:var(--acc)">Telegram</a>, <a href="https://wa.me/6281998871268" style="color:var(--acc)">WhatsApp</a> или на <a href="mailto:info@rebornlab.ru" style="color:var(--acc)">info@rebornlab.ru</a>.'; });
   });

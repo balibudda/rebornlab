@@ -24,7 +24,8 @@ FAQ = [
  ('Как оплатить?', 'После того как мы проверим сайт и вы согласуете вариант. Обычно оплата — когда сайт уже работает на временном адресе и вы его посмотрели.'),
 ]
 
-cards = ''.join(f'<div class="plan"><b class="pn">{E(n)}</b><div class="pp">{E(p)}</div><p class="pd">{E(d)}</p><ul>' + ''.join(f'<li>{E(x)}</li>' for x in items) + '</ul></div>' for n, p, d, items in PLANS)
+cards = ''.join(f'<div class="plan"><b class="pn">{E(n)}</b><div class="pp">{E(p)}</div><p class="pd">{E(d)}</p><ul>' + ''.join(f'<li>{E(x)}</li>' for x in items) + f'</ul><a class="btn pick" href="#contact" data-plan="{E(n)} — {E(p)}">Выбрать</a></div>' for n, p, d, items in PLANS)
+plan_opts = ''.join(f'<option>{E(n)} — {E(p)}</option>' for n, p, _, _ in PLANS) + '<option>Свой запрос / не знаю — подскажите</option>'
 faq = ''.join(f'<details class="qa"><summary>{E(q)}</summary><p>{E(a)}</p></details>' for q, a in FAQ)
 ld = {'@context': 'https://schema.org', '@graph': [
     {'@type': 'Service', 'name': 'Восстановление сайта после сбоя хостинга', 'provider': {'@type': 'Organization', 'name': 'REBORN LAB', 'url': 'https://rebornlab.ru/'},
@@ -58,6 +59,8 @@ style = src[src.index('<style>'):style_end].replace('</style>', '''
   .tgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; } .tgrid .wide { grid-column: 1 / -1; }
   .tform label span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
   .tform input:not([type=checkbox]), .tform textarea { width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+  .plan .pick { margin-top: auto; align-self: flex-start; margin-top: 16px; }
+  .tform select { width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
   .tform .agree { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); margin: 0 0 14px; } .tform .agree a { color: var(--acc); }
   .tform.need-agree .agree { color: #ff9b9b; } .tmsg { margin: 10px 0 0; font-size: 14px; }
   @media (max-width: 600px) { .tgrid { grid-template-columns: 1fr; } }
@@ -99,6 +102,7 @@ main = f'''{banner}<main class="bw">
   <form class="tform" id="tform" novalidate>
     <b class="pn">Короткая заявка — ответим сами</b>
     <div class="tgrid">
+      <label class="wide"><span>Что нужно</span><select name="plan">{plan_opts}</select></label>
       <label><span>Адрес сайта *</span><input name="site" placeholder="мой-сайт.ru" required></label>
       <label><span>Как с вами связаться *</span><input name="contact" placeholder="телефон, Telegram или почта" required></label>
       <label class="wide"><span>Комментарий</span><textarea name="text" rows="3" placeholder="Что случилось с сайтом, есть ли копия"></textarea></label>
@@ -118,6 +122,7 @@ after = src[src.index('</main>') + len('</main>'):]
 after = after[:after.index('<script>\n(function () {')] + '''<script>
 (function () {
   var f = document.getElementById('tform'), msg = document.getElementById('tmsg'); if (!f) return;
+  document.querySelectorAll('.pick').forEach(function (b) { b.addEventListener('click', function () { var sel = f.plan; for (var i = 0; i < sel.options.length; i++) if (sel.options[i].text === b.dataset.plan) sel.selectedIndex = i; setTimeout(function () { f.site.focus(); }, 400); }); });
   var T0 = Date.now(), HUMAN = false; ['mousemove', 'touchstart', 'keydown', 'scroll'].forEach(function (ev) { addEventListener(ev, function () { HUMAN = true; }, {once: true, passive: true}); });
   f.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -126,7 +131,7 @@ after = after[:after.index('<script>\n(function () {')] + '''<script>
     if (!ag.checked) { f.classList.add('need-agree'); msg.textContent = 'Отметьте согласие на обработку данных.'; return; }
     f.classList.remove('need-agree');
     var btn = f.querySelector('button'); btn.disabled = true; msg.textContent = 'Отправляем…';
-    fetch('https://api.rebornlab.ru/lead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topics: ['Восстановление сайта'], text: 'Сайт: ' + site + (f.text.value.trim() ? '\\n' + f.text.value.trim() : ''), contact: contact, page: location.pathname, agree: true, hp: f.company.value || '', k: T0.toString(36), t: Date.now() - T0, h: HUMAN ? 1 : 0})})
+    fetch('https://api.rebornlab.ru/lead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topics: ['Восстановление сайта', f.plan.value], text: 'Тариф: ' + f.plan.value + '\\nСайт: ' + site + (f.text.value.trim() ? '\\n' + f.text.value.trim() : ''), contact: contact, page: location.pathname, agree: true, hp: f.company.value || '', k: T0.toString(36), t: Date.now() - T0, h: HUMAN ? 1 : 0})})
       .then(function (r) { if (!r.ok) throw 0; f.innerHTML = '<p style="font-size:18px;margin:0">✓ Заявка отправлена — напишем вам в ближайшее время.</p>'; try { ym(window.RL_METRIKA, 'reachGoal', 'tarify_lead'); } catch (x) {} })
       .catch(function () { btn.disabled = false; msg.innerHTML = 'Не получилось отправить. Напишите нам в <a href="https://t.me/m8614f" style="color:var(--acc)">Telegram</a>, <a href="https://wa.me/6281998871268" style="color:var(--acc)">WhatsApp</a> или на <a href="mailto:info@rebornlab.ru" style="color:var(--acc)">info@rebornlab.ru</a>.'; });
   });
