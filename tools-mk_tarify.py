@@ -51,6 +51,16 @@ style = src[src.index('<style>'):style_end].replace('</style>', '''
   .steps3 li::before { content: counter(s); position: absolute; left: 16px; top: 12px; width: 30px; height: 30px; border-radius: 50%; background: var(--acc); color: #111; font-weight: 700; display: grid; place-items: center; }
   .cta2 { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0; }
   .qa p { color: var(--muted); }
+  .contacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 14px 0 18px; }
+  .ct { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); color: var(--fg); text-decoration: none; }
+  .ct:hover { border-color: var(--acc); } .ct span { color: var(--acc); }
+  .tform { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; margin: 0 0 18px; position: relative; }
+  .tgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; } .tgrid .wide { grid-column: 1 / -1; }
+  .tform label span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .tform input:not([type=checkbox]), .tform textarea { width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+  .tform .agree { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); margin: 0 0 14px; } .tform .agree a { color: var(--acc); }
+  .tform.need-agree .agree { color: #ff9b9b; } .tmsg { margin: 10px 0 0; font-size: 14px; }
+  @media (max-width: 600px) { .tgrid { grid-template-columns: 1fr; } }
 </style>''')
 seg = src[style_end:src.index('<!--HDR:START-->')]
 seg = re.sub(r'<script type="application/ld\+json">.*?</script>', lambda m: '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False) + '</script>', seg, count=1, flags=re.S)
@@ -80,14 +90,50 @@ main = f'''{banner}<main class="bw">
   </div>
   <h2>Как это работает</h2>
   <ol class="steps3"><li>Вы присылаете адрес сайта — бесплатно проверяем, что сохранилось в веб-архиве и Яндекс Картинках.</li><li>Предлагаем вариант и называем цену заранее — без сюрпризов.</li><li>Собираем сайт и показываем на временном адресе — вы смотрите и принимаете.</li><li>Переключаем домен на новый сервер, подключаем https и почту для заявок.</li></ol>
-  <div class="cta2"><a class="btn btn-acc" href="https://t.me/m8614f" target="_blank" rel="noopener">Написать в Telegram</a><a class="btn" href="/beget/vosstanovit/">Проверить сайт бесплатно</a></div>
+  <h2 id="contact">Связаться с нами</h2>
+  <div class="contacts">
+    <a class="ct" href="https://t.me/m8614f" target="_blank" rel="noopener" data-goal="tarify_tg"><b>Telegram</b><span>@m8614f</span></a>
+    <a class="ct" href="https://wa.me/6281998871268" target="_blank" rel="noopener" data-goal="tarify_wa"><b>WhatsApp</b><span>+62 819 9887-1268</span></a>
+    <a class="ct" href="mailto:info@rebornlab.ru?subject=%D0%92%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" data-goal="tarify_mail"><b>Почта</b><span>info@rebornlab.ru</span></a>
+  </div>
+  <form class="tform" id="tform" novalidate>
+    <b class="pn">Короткая заявка — ответим сами</b>
+    <div class="tgrid">
+      <label><span>Адрес сайта *</span><input name="site" placeholder="мой-сайт.ru" required></label>
+      <label><span>Как с вами связаться *</span><input name="contact" placeholder="телефон, Telegram или почта" required></label>
+      <label class="wide"><span>Комментарий</span><textarea name="text" rows="3" placeholder="Что случилось с сайтом, есть ли копия"></textarea></label>
+    </div>
+    <input name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <label class="agree"><input type="checkbox" name="agree"> <span>Согласен на обработку персональных данных по <a href="/consent/" target="_blank">согласию</a> и <a href="/privacy/" target="_blank">политике конфиденциальности</a></span></label>
+    <button class="btn btn-acc" type="submit">Отправить заявку</button>
+    <p class="tmsg" id="tmsg"></p>
+  </form>
+  <p class="sub"><a href="/beget/vosstanovit/" style="color:var(--acc)">Проверить сайт бесплатно →</a></p>
   <h2>Частые вопросы</h2>
   {faq}
   <p class="sub" style="margin-top:24px">Бесплатно и без обязательств: <a href="/beget/vosstanovit/" style="color:var(--acc)">проверка «можно ли восстановить сайт»</a>, <a href="/beget/server/" style="color:var(--acc)">проверка сервера по IP</a> и бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> — напишет, когда сайт снова откроется.</p>
 </main>
 '''
 after = src[src.index('</main>') + len('</main>'):]
-after = after[:after.index('<script>\n(function () {')] + '</body>\n</html>\n'
+after = after[:after.index('<script>\n(function () {')] + '''<script>
+(function () {
+  var f = document.getElementById('tform'), msg = document.getElementById('tmsg'); if (!f) return;
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var site = f.site.value.trim(), contact = f.contact.value.trim(), ag = f.agree;
+    if (!site || !contact) { msg.textContent = 'Укажите адрес сайта и как с вами связаться.'; return; }
+    if (!ag.checked) { f.classList.add('need-agree'); msg.textContent = 'Отметьте согласие на обработку данных.'; return; }
+    f.classList.remove('need-agree');
+    var btn = f.querySelector('button'); btn.disabled = true; msg.textContent = 'Отправляем…';
+    fetch('https://api.rebornlab.ru/lead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topics: ['Восстановление сайта'], text: 'Сайт: ' + site + (f.text.value.trim() ? '\\n' + f.text.value.trim() : ''), contact: contact, page: location.pathname, agree: true, hp: f.company.value || ''})})
+      .then(function (r) { if (!r.ok) throw 0; f.innerHTML = '<p style="font-size:18px;margin:0">✓ Заявка отправлена — напишем вам в ближайшее время.</p>'; try { ym(window.RL_METRIKA, 'reachGoal', 'tarify_lead'); } catch (x) {} })
+      .catch(function () { btn.disabled = false; msg.innerHTML = 'Не получилось отправить. Напишите нам в <a href="https://t.me/m8614f" style="color:var(--acc)">Telegram</a>, <a href="https://wa.me/6281998871268" style="color:var(--acc)">WhatsApp</a> или на <a href="mailto:info@rebornlab.ru" style="color:var(--acc)">info@rebornlab.ru</a>.'; });
+  });
+})();
+</script>
+</body>
+</html>
+'''
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text(head + style + seg + hdr + '\n' + main + after)
 print('готово:', OUT, '| H1:', (head + main).count('<h1'))
