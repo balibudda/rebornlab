@@ -103,6 +103,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
       var ok = f.querySelector('.ok-msg'), btn = f.querySelector('button[type=submit]');
       if (text.trim().length < 5 && !topics.length) { f.querySelector('textarea').focus(); return; }
       if (contact.trim().length < 3) { var ci = f.querySelector('input[name=contact]'); ci && ci.focus(); return; }
+      if (/[^\s@]+@[^\s@]+\.[a-z]{2,}/i.test(contact)) { var ce = f.querySelector('input[name=contact]'); ce && (ce.value = '', ce.placeholder = 'Почту не принимаем — укажите Telegram или телефон', ce.focus()); return; }   // 09.11 (Ник): почту не собираем
       var ag = f.querySelector('input[name=agree]');
       if (ag && !ag.checked) { f.classList.add('need-agree'); ag.focus(); return; }
       f.classList.remove('need-agree');

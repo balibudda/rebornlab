@@ -122,12 +122,12 @@ main = f'''{banner}<main class="bw">
   </div>
   <form class="tform" id="tform" novalidate>
     <b class="pn">Короткая заявка — напишу вам сам</b>
-    <p class="me-s" style="margin:6px 0 0">Удобнее всего общаться письменно — в WhatsApp, Telegram или на почту. Звонков нет, голосовые — пожалуйста.</p>
+    <p class="me-s" style="margin:6px 0 0">Удобнее всего общаться письменно — в WhatsApp или Telegram. Звонков нет, голосовые — пожалуйста.</p>
     <div class="tgrid">
       <label class="wide"><span>Что нужно</span><select name="plan">{plan_opts}</select></label>
       <label class="wide"><span>Адрес сайта *</span><input name="site" placeholder="мой-сайт.ru" required></label>
-      <label><span>Где удобнее общаться</span><select name="via"><option>WhatsApp</option><option>Telegram</option><option>Почта</option><option>Другое</option></select></label>
-      <label><span>Ваш номер, ник или почта *</span><input name="contact" placeholder="+7…, @ник или почта" required></label>
+      <label><span>Где удобнее общаться</span><select name="via"><option>WhatsApp</option><option>Telegram</option><option>Другое</option></select></label>
+      <label><span>Ваш номер или ник *</span><input name="contact" placeholder="+7… или @ник" required></label>
       <label class="wide"><span>Комментарий</span><textarea name="text" rows="3" placeholder="Что случилось с сайтом, есть ли копия"></textarea></label>
     </div>
     <input name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
@@ -146,12 +146,13 @@ after = after[:after.index('<script>\n(function () {')] + '''<script>
 (function () {
   var f = document.getElementById('tform'), msg = document.getElementById('tmsg'); if (!f) return;
   document.querySelectorAll('.pick').forEach(function (b) { b.addEventListener('click', function () { var sel = f.plan; for (var i = 0; i < sel.options.length; i++) if (sel.options[i].text === b.dataset.plan) sel.selectedIndex = i; setTimeout(function () { f.site.focus(); }, 400); }); });
-  var PH = {'WhatsApp': '+7 999 123-45-67', 'Telegram': '@ваш_ник', 'Почта': 'you@mail.ru', 'Другое': 'как с вами связаться'}; f.via.addEventListener('change', function () { f.contact.placeholder = PH[f.via.value]; }); f.contact.placeholder = PH[f.via.value];
+  var PH = {'WhatsApp': '+7 999 123-45-67', 'Telegram': '@ваш_ник', 'Другое': 'как с вами связаться'}; f.via.addEventListener('change', function () { f.contact.placeholder = PH[f.via.value]; }); f.contact.placeholder = PH[f.via.value];
   var T0 = Date.now(), HUMAN = false; ['mousemove', 'touchstart', 'keydown', 'scroll'].forEach(function (ev) { addEventListener(ev, function () { HUMAN = true; }, {once: true, passive: true}); });
   f.addEventListener('submit', function (e) {
     e.preventDefault();
     var site = f.site.value.trim(), contact = f.contact.value.trim(), ag = f.agree;
     if (!site || !contact) { msg.textContent = 'Укажите адрес сайта и как с вами связаться.'; return; }
+    if (/[^\\s@]+@[^\\s@]+\\.[a-z]{2,}/i.test(contact)) { msg.textContent = 'Почту в форме не принимаем — укажите номер или ник в Telegram. Или напишите нам на info@rebornlab.ru сами.'; return; }
     if (!ag.checked) { f.classList.add('need-agree'); msg.textContent = 'Отметьте согласие на обработку данных.'; return; }
     f.classList.remove('need-agree');
     var btn = f.querySelector('button'); btn.disabled = true; msg.textContent = 'Отправляем…';

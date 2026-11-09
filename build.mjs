@@ -40,9 +40,8 @@ const SHARE_COMMENTS = (p) => {
 <input name="name" maxlength="60" placeholder="Ваше имя" required style="padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;font:inherit">
 <textarea name="text" maxlength="2000" rows="4" placeholder="Ваш комментарий" required style="padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;font:inherit"></textarea>
 <input name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
-<label style="font-size:14px;opacity:.9"><input type="checkbox" name="notify" class="cm-nt"> Сообщить мне, когда ответят</label>
-<div class="cm-nb" hidden style="display:grid;gap:6px;padding:12px 14px;border:1px dashed rgba(255,255,255,.2);border-radius:10px"><input name="email" type="email" maxlength="120" placeholder="Почта для уведомления (необязательно)" style="padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;font:inherit"><small style="opacity:.7">Или получите ответ в Telegram — кнопка появится после отправки.</small></div>
-<label style="font-size:14px;opacity:.85"><input type="checkbox" name="agree"> Согласен на публикацию имени и текста комментария и на обработку почты для уведомления, если указал её (<a href="/consent/">согласие</a>, <a href="/privacy/">политика</a>)</label>
+<label style="font-size:14px;opacity:.9"><input type="checkbox" name="notify" class="cm-nt"> Сообщить мне об ответе в Telegram</label>
+<label style="font-size:14px;opacity:.85"><input type="checkbox" name="agree"> Согласен на публикацию имени и текста комментария (<a href="/consent/">согласие</a>, <a href="/privacy/">политика</a>)</label>
 <button type="submit" class="btn" style="justify-self:start">Отправить</button>
 <p class="cm-msg" style="margin:0;font-size:14px"></p>
 <p style="margin:0;font-size:13px;opacity:.6">Комментарии публикуются после проверки.</p></form></div>
@@ -52,10 +51,10 @@ const SHARE_COMMENTS = (p) => {
 document.querySelectorAll('[data-copy]').forEach(function(b){b.onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy);b.textContent='Ссылка скопирована'}});
 function esc(x){var d=document.createElement('div');d.textContent=x;return d.innerHTML}
 fetch(API+'?s='+s).then(function(r){return r.json()}).then(function(d){if(!d.items||!d.items.length)return;box.querySelector('.cm-list').innerHTML=d.items.map(function(c){return '<div class="cm-item"><b>'+esc(c.name)+'</b><small>'+new Date(c.t*1000).toLocaleDateString('ru-RU')+'</small><p style="margin:6px 0 0;white-space:pre-wrap">'+esc(c.text)+'</p>'+(c.reply?'<div style="margin:10px 0 0 18px;padding:10px 14px;border-left:3px solid var(--acc);background:rgba(198,242,78,.05)"><b>REBORN LAB</b><p style="margin:4px 0 0;white-space:pre-wrap">'+esc(c.reply)+'</p></div>':'')+'</div>'}).join('')}).catch(function(){});
-var f=box.querySelector('.cm-form'),m=f.querySelector('.cm-msg'),nb=f.querySelector('.cm-nb');f.notify.onchange=function(){nb.hidden=!f.notify.checked};f.onsubmit=function(e){e.preventDefault();var n=f.name.value.trim(),tx=f.text.value.trim();
+var f=box.querySelector('.cm-form'),m=f.querySelector('.cm-msg');f.onsubmit=function(e){e.preventDefault();var n=f.name.value.trim(),tx=f.text.value.trim();
 if(n.length<2||tx.length<3){m.textContent='Напишите имя и комментарий';return}if(!f.agree.checked){m.textContent='Отметьте согласие на публикацию';return}
-var b=f.querySelector('[type=submit]');b.disabled=true;fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({s:s,name:n,text:tx,agree:true,notify:f.notify.checked,email:f.email.value.trim(),k:k,t:Date.now()-t0,h:h,hp:f.company.value})})
-.then(function(r){return r.json()}).then(function(r){if(r.ok){var want=f.notify.checked;f.reset();nb.hidden=true;m.innerHTML='Спасибо! Комментарий появится после проверки.'+(want&&r.id?' <a href="https://t.me/rebornlab_bot?start=cm_'+r.id+'" target="_blank" rel="noopener" style="color:var(--acc)">Получать ответ в Telegram →</a>':'')}else{m.textContent='Не получилось отправить, попробуйте позже.';b.disabled=false}}).catch(function(){m.textContent='Не получилось отправить, попробуйте позже.';b.disabled=false})}})();</script>`
+var b=f.querySelector('[type=submit]');b.disabled=true;fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({s:s,name:n,text:tx,agree:true,notify:f.notify.checked,k:k,t:Date.now()-t0,h:h,hp:f.company.value})})
+.then(function(r){return r.json()}).then(function(r){if(r.ok){var want=f.notify.checked;f.reset();m.innerHTML='Спасибо! Комментарий появится после проверки.'+(want&&r.id?' <a href="https://t.me/rebornlab_bot?start=cm_'+r.id+'" target="_blank" rel="noopener" style="color:var(--acc)">Получать ответ в Telegram →</a>':'')}else{m.textContent='Не получилось отправить, попробуйте позже.';b.disabled=false}}).catch(function(){m.textContent='Не получилось отправить, попробуйте позже.';b.disabled=false})}})();</script>`
 }
 
 const BOT_BOX = `<div class="bot-box" style="margin:0 0 28px;padding:18px 20px;border:1px solid var(--acc);border-radius:16px;background:rgba(198,242,78,.06)"><b>🔔 Ждёте свой сайт на Бегет (Beget)?</b><br>Бесплатный Telegram-бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> проверяет ваш сайт каждые 10 минут и пишет, когда включится сервер и когда сайт откроется. Живая статистика восстановления — <a href="/beget/" style="color:var(--acc)">rebornlab.ru/beget</a>.</div>`
@@ -189,7 +188,7 @@ function leadForm(id, label = 'Разобрать задачу') {
     <div class="chips" data-chips>${['Есть идея', 'Нужен сайт', 'Автоматизировать бизнес', 'Нужен AI', 'Нужно продвижение', 'Другая задача'].map((c) => `<button type="button" class="chip">${c}</button>`).join('')}</div>
     <label class="sr" for="${id}-t">Опишите задачу</label>
     <textarea class="ym-disable-keys" id="${id}-t" name="text" placeholder="Опишите проблему или идею обычными словами. Например: «заявок много, менеджеры не успевают отвечать»"></textarea>
-    <div class="form-row"><label class="sr" for="${id}-c">Контакт</label><input class="ym-disable-keys" type="text" id="${id}-c" name="contact" placeholder="Telegram, телефон или email — как с вами связаться" style="flex:1;min-width:220px"></div>
+    <div class="form-row"><label class="sr" for="${id}-c">Контакт</label><input class="ym-disable-keys" type="text" id="${id}-c" name="contact" placeholder="Telegram или телефон — как с вами связаться" style="flex:1;min-width:220px"></div>
     <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
     <label class="agree"><input type="checkbox" name="agree" required> <span>Даю <a href="/consent/" target="_blank">согласие на обработку персональных данных</a> и принимаю <a href="/privacy/" target="_blank">политику конфиденциальности</a></span></label>
     <div class="form-row"><button class="btn btn-acc" type="submit" data-label="${label} →">${label} <span class="arrow">→</span></button><a class="btn btn-ghost" href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener" data-goal="telegram">Написать в Telegram</a></div>
@@ -433,7 +432,7 @@ write('privacy/index.html', shell({
   <p>Оператор персональных данных — ${esc(OPERATOR)}. Вопросы о данных, запросы и отзыв согласия: ${PD_CONTACT}.</p>
   <h2>2. Чьи данные, какие и зачем</h2>
   <table><tr><th>Кто</th><th>Какие данные</th><th>Цель</th><th>Основание</th><th>Срок</th></tr>
-  <tr><td>Посетитель, отправивший заявку</td><td>контакт (Telegram, телефон или email), текст заявки, адрес сайта (если указан), IP-адрес, страница, дата и время</td><td>ответить на заявку, обсудить задачу, подготовить предложение; защита от спама</td><td>согласие (п. 1 ч. 1 ст. 6)</td><td>до достижения цели, не дольше 3 лет с последнего общения, или до отзыва согласия</td></tr>
+  <tr><td>Посетитель, отправивший заявку</td><td>контакт (ник в Telegram или телефон), текст заявки, адрес сайта (если указан), IP-адрес, страница, дата и время</td><td>ответить на заявку, обсудить задачу, подготовить предложение; защита от спама</td><td>согласие (п. 1 ч. 1 ст. 6)</td><td>до достижения цели, не дольше 3 лет с последнего общения, или до отзыва согласия</td></tr>
   <tr><td>Посетитель сайта</td><td>cookie и данные о посещении через Яндекс Метрику: страницы, источник перехода, устройство, действия на странице (Вебвизор, без содержимого полей форм)</td><td>статистика и улучшение сайтов</td><td>согласие, данное кнопкой «Согласен»</td><td>по правилам Яндекс Метрики, не дольше 12 месяцев</td></tr></table>
   <p>Специальные категории данных (здоровье, убеждения и т. п.) и биометрию мы не запрашиваем и не обрабатываем — пожалуйста, не указывайте их в заявках.</p>
   <h2>3. Что мы делаем с данными</h2>
@@ -474,7 +473,7 @@ const consentPage = (slug, title, intro, data, purpose, extra) => write(`${slug}
   <p>Подробнее — в <a href="/privacy/">политике обработки персональных данных</a>.</p></div>`,
 }))
 consentPage('consent', 'Согласие на обработку персональных данных', 'Отправляя заявку на сайте rebornlab.ru и отмечая галочку согласия,',
-  'контакт для связи (имя или ник в Telegram, телефон или адрес электронной почты), текст заявки, адрес сайта (если указан), а также IP-адрес, адрес страницы, дата и время отправки.',
+  'контакт для связи (имя или ник в Telegram либо телефон), текст заявки, адрес сайта (если указан), а также IP-адрес, адрес страницы, дата и время отправки.',
   'рассмотрение заявки, связь со мной, обсуждение задачи и подготовка предложения; защита сайта от спама.', '')
 write('consent-order/index.html', '<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://rebornlab.ru/consent/"><meta http-equiv="refresh" content="0;url=/consent/"><a href="/consent/">Согласие на обработку персональных данных</a>')   // 09.11: оплаты на сайте нет
 
