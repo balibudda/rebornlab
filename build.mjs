@@ -117,6 +117,7 @@ function HEADER(current = '') {
   ${LOGO}
   <nav class="nav" aria-label="Основное меню">${NAV.map(([h, t]) => `<a href="${h}"${current === h ? ' aria-current="page"' : ''}>${t}</a>`).join('')}<a class="nav-cta" href="/contact/" data-goal="cta_menu">Обсудить идею →</a></nav>
   <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
+  <button class="srch-btn" type="button" aria-label="Поиск по сайту" data-search><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 16.5 21 21M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg></button>
   <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
 </div></header>`
 }
@@ -154,7 +155,7 @@ ${jsonLd.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</sc
 ${metrika}
 </head>
 <body>
-${HEADER(current)}${/^\/(beget|journal\/beget)/.test(canonical) ? BEGET_BAR(canonical) : ''}
+${HEADER(current)}${canonical === '/' || /^\/(beget|journal\/beget)/.test(canonical) ? BEGET_BAR(canonical) : ''}
 <main>
 ${body}
 </main>
@@ -231,6 +232,7 @@ const home = shell({
 <section class="hero" aria-labelledby="h1">
   <canvas id="lab" aria-hidden="true"></canvas>
   <div class="wrap">
+    <div class="bnow" id="bnow"><div><span class="bnow-t"><i></i>Ситуация с Бегет</span><p id="bnow-p">Живой статус серверов, проверка своего сайта и ответы на вопросы. Бесплатно.</p></div><div class="bnow-a"><a class="btn btn-acc" href="/beget/" data-goal="home_beget">Смотреть статус <span class="arrow">→</span></a><a class="bnow-l" href="/beget/server/" data-goal="home_beget_ip">Проверить свой сервер</a></div></div>
     <div class="kicker">Digital laboratory · идея → система → продукт</div>
     <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
     <p class="sub">Сайты, веб-сервисы, AI, автоматизация, SEO и внутренние системы — придумываем и собираем под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
@@ -509,6 +511,26 @@ for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', '
 
 const urls = [['/', today, '1.0'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/beget/pravila/', today, '0.4'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
+// 09.11 (Ник): поиск по всему сайту — индекс /search.json (страницы, услуги, статьи, вопросы); noindex и закрытое сюда не попадает
+{
+  const strip = (s) => String(s || '').replace(/\s+/g, ' ').trim()
+  const items = [
+    { t: 'Статус восстановления Бегет', u: '/beget/', d: 'Живые замеры: серверы, сайты, график', k: 'Бегет' },
+    { t: 'Проверка сервера Бегет по IP', u: '/beget/server/', d: 'Узнать, на каком сервере сайт и включён ли он', k: 'Бегет' },
+    { t: 'Можно ли восстановить сайт', u: '/beget/vosstanovit/', d: 'Что сохранилось в веб-архиве и Яндекс Картинках', k: 'Бегет' },
+    { t: 'Вопросы и ответы', u: '/beget/voprosy/', d: 'Сайт, почта, домен, копии, переезд', k: 'Бегет' },
+    { t: 'Восстановление сайта: цены и сроки', u: '/vosstanovlenie-sajta/', d: 'Варианты и стоимость', k: 'Услуги' },
+    { t: 'Услуги', u: '/services/', d: 'Сайты, сервисы, AI, автоматизация, SEO', k: 'Услуги' },
+    { t: 'Журнал', u: '/journal/', d: 'Разборы, кейсы и инструкции', k: 'Журнал' },
+    { t: 'О лаборатории', u: '/about/', d: 'Кто мы', k: 'Страница' },
+    { t: 'Контакты', u: '/contact/', d: 'Обсудить задачу', k: 'Страница' },
+    ...SERVICES.map((s) => ({ t: s.title, u: `/services/${s.slug}/`, d: s.lead, k: 'Услуги' })),
+    ...POSTS.map((p) => ({ t: p.title, u: `/journal/${p.slug}/`, d: p.description, k: 'Журнал' })),
+  ]
+  const vp = path.join(ROOT, 'beget/voprosy/index.html')
+  if (existsSync(vp)) for (const m of readFileSync(vp, 'utf8').matchAll(/<summary>([^<]+)<\/summary>/g)) items.push({ t: strip(m[1]), u: '/beget/voprosy/?q=' + encodeURIComponent(strip(m[1])), d: 'Вопросы и ответы', k: 'Вопрос' })
+  write('search.json', JSON.stringify(items.map((x) => ({ ...x, t: strip(x.t), d: strip(x.d).slice(0, 140) }))))
+}
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d, pr]) => `  <url><loc>${SITE.url}${u}</loc><lastmod>${d}</lastmod><priority>${pr}</priority></url>`).join('\n')}\n</urlset>\n`)
 write('robots.txt', `User-agent: *\nAllow: /\nDisallow: /demo/\n\n# AI-поисковики приветствуются (GEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: YandexBot\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`)
 write('rss.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>REBORN LAB — Журнал</title><link>${SITE.url}/journal/</link><description>AI, автоматизация, сайты, SEO и GEO — практические разборы.</description><language>ru</language>\n${POSTS.map((p) => `<item><title>${esc(p.title)}</title><link>${SITE.url}/journal/${p.slug}/</link><guid>${SITE.url}/journal/${p.slug}/</guid><pubDate>${new Date(p.time ? isoDT(p) : p.date + 'T09:00:00Z').toUTCString()}</pubDate><description>${esc(p.description)}</description></item>`).join('\n')}\n</channel></rss>\n`)

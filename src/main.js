@@ -133,3 +133,59 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     a.addEventListener('click', function () { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', a.getAttribute('data-goal')); });
   });
 })();
+
+// 09.11: живые цифры в блоке «Ситуация с Бегет» на главной
+(function () {
+  var p = document.getElementById('bnow-p'); if (!p || !window.fetch) return;
+  fetch('https://api.rebornlab.ru/beget.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
+    if (!d || !d.sites_total || d.sites_up == null || !d.ips_total_all) return;
+    p.innerHTML = 'По нашим замерам отвечает <b>' + d.hosting_up_all + ' из ' + d.ips_total_all + '</b> адресов серверов, открывается <b>' + d.sites_up + ' из ' + d.sites_total + '</b> сайтов выборки.';
+  }).catch(function () {});
+})();
+
+// 09.11: поиск по всему сайту (кнопка-лупа в шапке, индекс /search.json грузится при первом открытии)
+(function () {
+  var btn = document.querySelector('[data-search]'); if (!btn) return;
+  var box = document.createElement('div'); box.className = 'srch'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Поиск по сайту');
+  box.innerHTML = '<div class="srch-box"><div class="srch-top"><input type="search" placeholder="Что ищете: почта, сервер, 502, копия…" aria-label="Поиск по сайту" autocomplete="off"><button class="srch-x" type="button" aria-label="Закрыть">×</button></div><div class="srch-r"></div></div>';
+  document.body.appendChild(box);
+  var input = box.querySelector('input'), res = box.querySelector('.srch-r'), data = null, sel = -1;
+  function norm(s) { return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/beget|багет|бегете|бегета|бегету|бегетом/g, 'бегет'); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function row(x) { return '<a href="' + esc(x.u) + '"><i>' + esc(x.k) + '</i><b>' + esc(x.t) + '</b>' + (x.d ? '<span>' + esc(x.d) + '</span>' : '') + '</a>'; }
+  function hint() { res.innerHTML = '<div class="srch-e">Введите слово, адрес сайта или IP сервера.</div>'; }
+  function run() {
+    sel = -1;
+    var raw = input.value.trim(), q = norm(raw); if (!q) return hint();
+    var out = '', v = raw.replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0];
+    if (/^\d{1,3}(\.\d{1,3}){3}$/.test(v) || /^[a-zа-яё0-9-]+(\.[a-zа-яё0-9-]+)+$/i.test(v)) out = row({ u: '/beget/server/#' + encodeURIComponent(v), k: 'Проверка', t: 'Проверить сервер: ' + v, d: 'Покажем, включён ли сервер' });
+    if (!data) { res.innerHTML = out || '<div class="srch-e">Загружаем…</div>'; return; }
+    var w = q.split(/\s+/).map(function (x) { return x.length > 4 ? x.slice(0, -1) : x; });
+    var list = data.map(function (x) {
+      var t = norm(x.t), d = norm(x.d), s = 0;
+      for (var i = 0; i < w.length; i++) { if (t.indexOf(w[i]) >= 0) s += 3; else if (d.indexOf(w[i]) >= 0) s += 1; else return null; }
+      if (t.indexOf(q) === 0) s += 3;
+      return { x: x, s: s };
+    }).filter(Boolean).sort(function (a, b) { return b.s - a.s; }).slice(0, 8);
+    out += list.map(function (r) { return row(r.x); }).join('');
+    res.innerHTML = out || '<div class="srch-e">Ничего не нашлось. Посмотрите <a href="/beget/voprosy/">все вопросы и ответы</a> или <a href="/journal/">журнал</a>.</div>';
+  }
+  function open() { box.classList.add('on'); document.body.classList.add('srch-lock'); run(); setTimeout(function () { input.focus(); }, 30);
+    if (!data) fetch('/search.json').then(function (r) { return r.json(); }).then(function (d) { data = d; run(); }).catch(function () { data = []; }); }
+  function close() { box.classList.remove('on'); document.body.classList.remove('srch-lock'); btn.focus(); }
+  btn.addEventListener('click', open);
+  box.querySelector('.srch-x').addEventListener('click', close);
+  box.addEventListener('click', function (e) { if (e.target === box) close(); });
+  input.addEventListener('input', run);
+  document.addEventListener('keydown', function (e) {
+    if (!box.classList.contains('on')) { if (e.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); open(); } return; }
+    if (e.key === 'Escape') return close();
+    var a = res.querySelectorAll('a'); if (!a.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); sel = (sel + (e.key === 'ArrowDown' ? 1 : a.length - 1 + (sel < 0 ? 1 : 0))) % a.length; a.forEach(function (x, i) { x.classList.toggle('sel', i === sel); }); }
+    if (e.key === 'Enter') { e.preventDefault(); location.href = (a[sel < 0 ? 0 : sel]).href; }
+  });
+  // переход из поиска к вопросу на /beget/voprosy/?q=…
+  var q = new URLSearchParams(location.search).get('q'), qs = document.getElementById('qs');
+  if (q && qs) { qs.value = q; qs.dispatchEvent(new Event('input', { bubbles: true })); var d = document.querySelector('details.qa:not([style*="none"])'); if (d) { d.open = true; d.scrollIntoView({ block: 'center' }); } }
+})();
+
