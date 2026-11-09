@@ -143,6 +143,39 @@
   </div>
   <p class="note" style="font-size:15px">Общая картина восстановления, графики и новости — на странице <a href="/beget/" style="color:var(--acc)">rebornlab.ru/beget</a>. Независимый мониторинг REBORN LAB, не связан с Бегет.</p>
 
+  <div class="card" style="margin-top:18px" id="rfeed">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><h2>Проверки «можно ли восстановить сайт» — только что</h2><span class="live"><span class="dot"></span><span id="rftot">…</span></span></div>
+    <p class="sub">Последние сайты, которые люди проверили в <a href="/beget/vosstanovit/" style="color:var(--acc)">инструменте восстановления</a> и в боте. Адреса скрыты, лента обновляется сама.</p>
+    <ul class="rfl" id="rfl"><li class="wait">загружаем…</li></ul>
+    <p class="sub" style="margin:12px 0 0;display:flex;gap:18px;flex-wrap:wrap"><a href="#" id="rfmore" style="color:var(--acc)">Показать ещё ↓</a><a href="/beget/vosstanovit/" style="color:var(--acc)">Проверить свой сайт →</a></p>
+  </div>
+  <style>
+  .rfl { list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px }
+  .rfl li { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:10px 14px; border-radius:12px; background:var(--card-2); font-size:14.5px; animation:rfin .6s ease }
+  .rfl .fd { font:14px var(--mono) } .rfl .fv { font-size:13px; white-space:nowrap } .rfl .ft { color:var(--muted); font-size:12.5px; white-space:nowrap; min-width:70px; text-align:right }
+  .rfl .fv.ok { color:var(--acc) } .rfl .fv.part { color:#ffc15a } .rfl .fv.no { color:#ff8a8a } .rfl .fv.works { color:#7aa7ff }
+  @keyframes rfin { from { opacity:0; transform:translateY(-6px) } to { opacity:1; transform:none } }
+  @media (max-width:600px) { .rfl li { grid-template-columns:1fr auto; } .rfl .ft { grid-column:1 / -1; text-align:left; margin-top:-4px } }
+  </style>
+  <script>
+  (function () {
+    var known = {}, N = 12, VV = {ok: '✅ можно восстановить', part: '🟡 частично', no: '🔴 нет в архиве', works: '🟢 сайт работает'};
+    function esc(x) { var d = document.createElement('div'); d.textContent = x; return d.innerHTML; }
+    function ago(t) { var m = Math.round((Date.now() / 1000 - t) / 60); return m < 1 ? 'только что' : m < 60 ? m + ' мин назад' : Math.round(m / 60) + ' ч назад'; }
+    function feed() {
+      fetch('https://api.rebornlab.ru/restore?feed=1&n=' + N, {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (d) {
+        document.getElementById('rftot').textContent = 'всего проверено ' + d.total + ' сайтов';
+        document.getElementById('rfl').innerHTML = d.items.map(function (x) {
+          var k = x.d + x.t, fresh = !known[k]; known[k] = 1;
+          return '<li' + (fresh ? '' : ' style="animation:none"') + '><span class="fd">' + esc(x.d) + (x.pages ? ' <span style="color:var(--muted)">· ' + (x.pages > 100 ? '100+' : x.pages) + ' стр.</span>' : '') + '</span><span class="fv ' + x.v + '">' + (VV[x.v] || '') + '</span><span class="ft">' + ago(x.t) + '</span></li>';
+        }).join('');
+      }).catch(function () {});
+    }
+    document.getElementById('rfmore').onclick = function (e) { e.preventDefault(); N = Math.min(50, N + 19); if (N >= 50) this.style.display = 'none'; feed(); };
+    feed(); setInterval(feed, 30000);
+  })();
+  </script>
+
   <div class="card" style="margin-top:18px">
     <h2>Три инструмента — одна задача</h2>
     <p class="sub" style="margin:6px 0 0"><a href="/beget/" style="color:var(--acc)">Статус</a> — что происходит с хостингом в целом · <a href="/beget/server/" style="color:var(--acc)">Сервер</a> — отвечает ли мой IP · <a href="/beget/vosstanovit/" style="color:var(--acc)">Восстановление</a> — что осталось от моего сайта. Следить за сервером без проверок вручную — <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">бот @rebornlab_bot</a>: пришлите ему IP.</p>
