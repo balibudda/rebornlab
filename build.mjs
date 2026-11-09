@@ -25,6 +25,37 @@ const ru = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('ru-RU', { day: 
 const ruDT = (p) => ru(p.date) + (p.time ? `, ${p.time} МСК` : '')
 const isoDT = (p) => (p.time ? `${p.date}T${p.time}:00+03:00` : p.date)
 // 06.11.2026 Ник: во всех новостях о Бегет (Beget) — ссылка на бота
+// 09.11.2026 (Ник): под каждой статьёй — «Поделиться» и комментарии (премодерация: служба rl-comments на vpn-id, решение — кнопками в @rebornlab_bot)
+const SHARE_COMMENTS = (p) => {
+  const url = `https://rebornlab.ru/journal/${p.slug}/`, u = encodeURIComponent(url), t = encodeURIComponent(p.title)
+  return `<div class="share" style="margin:40px 0 0;padding:20px 0;border-top:1px solid rgba(255,255,255,.12)"><b style="display:block;margin-bottom:12px">Поделиться статьёй</b>
+<div style="display:flex;flex-wrap:wrap;gap:10px">
+<a class="btn-sh" href="https://t.me/share/url?url=${u}&text=${t}" target="_blank" rel="noopener">Telegram</a>
+<a class="btn-sh" href="https://vk.com/share.php?url=${u}&title=${t}" target="_blank" rel="noopener">ВКонтакте</a>
+<a class="btn-sh" href="https://wa.me/?text=${t}%20${u}" target="_blank" rel="noopener">WhatsApp</a>
+<a class="btn-sh" href="https://connect.ok.ru/offer?url=${u}&title=${t}" target="_blank" rel="noopener">Одноклассники</a>
+<button type="button" class="btn-sh" data-copy="${url}">Скопировать ссылку</button></div></div>
+<div id="comments" data-slug="${p.slug}" style="margin:28px 0 0"><h2>Комментарии</h2><div class="cm-list"><p class="cm-empty" style="opacity:.7">Пока нет комментариев — будьте первым.</p></div>
+<form class="cm-form" novalidate style="display:grid;gap:10px;margin-top:18px;max-width:640px">
+<input name="name" maxlength="60" placeholder="Ваше имя" required style="padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;font:inherit">
+<textarea name="text" maxlength="2000" rows="4" placeholder="Ваш комментарий" required style="padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;font:inherit"></textarea>
+<input name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+<label style="font-size:14px;opacity:.85"><input type="checkbox" name="agree"> Согласен на публикацию имени и текста комментария (<a href="/consent/">согласие</a>, <a href="/privacy/">политика</a>)</label>
+<button type="submit" class="btn" style="justify-self:start">Отправить</button>
+<p class="cm-msg" style="margin:0;font-size:14px"></p>
+<p style="margin:0;font-size:13px;opacity:.6">Комментарии публикуются после проверки.</p></form></div>
+<style>.btn-sh{display:inline-block;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.25);color:inherit;text-decoration:none;background:transparent;font:inherit;font-size:14px;cursor:pointer}.btn-sh:hover{border-color:var(--acc);color:var(--acc)}.cm-item{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}.cm-item b{display:block}.cm-item small{opacity:.6}</style>
+<script>(function(){var box=document.getElementById('comments');if(!box)return;var s=box.dataset.slug,API='https://api.rebornlab.ru/comments',k=Date.now().toString(36),t0=Date.now(),h=0;
+['mousemove','touchstart','keydown','scroll'].forEach(function(e){addEventListener(e,function(){h=1},{once:true,passive:true})});
+document.querySelectorAll('[data-copy]').forEach(function(b){b.onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy);b.textContent='Ссылка скопирована'}});
+function esc(x){var d=document.createElement('div');d.textContent=x;return d.innerHTML}
+fetch(API+'?s='+s).then(function(r){return r.json()}).then(function(d){if(!d.items||!d.items.length)return;box.querySelector('.cm-list').innerHTML=d.items.map(function(c){return '<div class="cm-item"><b>'+esc(c.name)+'</b><small>'+new Date(c.t*1000).toLocaleDateString('ru-RU')+'</small><p style="margin:6px 0 0;white-space:pre-wrap">'+esc(c.text)+'</p></div>'}).join('')}).catch(function(){});
+var f=box.querySelector('.cm-form'),m=f.querySelector('.cm-msg');f.onsubmit=function(e){e.preventDefault();var n=f.name.value.trim(),tx=f.text.value.trim();
+if(n.length<2||tx.length<3){m.textContent='Напишите имя и комментарий';return}if(!f.agree.checked){m.textContent='Отметьте согласие на публикацию';return}
+var b=f.querySelector('[type=submit]');b.disabled=true;fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({s:s,name:n,text:tx,agree:true,k:k,t:Date.now()-t0,h:h,hp:f.company.value})})
+.then(function(r){return r.json()}).then(function(r){if(r.ok){f.reset();m.textContent='Спасибо! Комментарий появится после проверки.'}else{m.textContent='Не получилось отправить, попробуйте позже.';b.disabled=false}}).catch(function(){m.textContent='Не получилось отправить, попробуйте позже.';b.disabled=false})}})();</script>`
+}
+
 const BOT_BOX = `<div class="bot-box" style="margin:0 0 28px;padding:18px 20px;border:1px solid var(--acc);border-radius:16px;background:rgba(198,242,78,.06)"><b>🔔 Ждёте свой сайт на Бегет (Beget)?</b><br>Бесплатный Telegram-бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> проверяет ваш сайт каждые 10 минут и пишет, когда включится сервер и когда сайт откроется. Живая статистика восстановления — <a href="/beget/" style="color:var(--acc)">rebornlab.ru/beget</a>.</div>`
 
 // tiny markdown → html (headings, paragraphs, lists, quotes, bold/italic/code/links)
@@ -347,7 +378,7 @@ for (const p of POSTS) {
     jsonLd: [crumbsLd([['Главная', '/'], ['Журнал', '/journal/'], [p.title, `/journal/${p.slug}/`]]),
       { '@context': 'https://schema.org', '@type': 'Article', headline: p.title, description: p.description, datePublished: isoDT(p), dateModified: p.updated || isoDT(p), inLanguage: 'ru', author: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url }, publisher: { '@type': 'Organization', name: 'REBORN LAB', logo: { '@type': 'ImageObject', url: SITE.url + '/assets/logo.png' } }, mainEntityOfPage: SITE.url + `/journal/${p.slug}/`, image: SITE.url + (p.image || '/assets/og.jpg'), articleSection: JOURNAL_CATEGORIES[p.category] || p.category, wordCount: p.words }],
     body: `<article><div class="wrap page-hd">${crumbs([['Главная', '/'], ['Журнал', '/journal/'], [p.title, '']])}<div class="kicker" style="margin-top:18px">${esc(JOURNAL_CATEGORIES[p.category] || p.category)} · ${ruDT(p)} · ${Math.max(1, Math.round(p.words / 180))} мин</div><h1 style="max-width:20ch">${esc(p.title)}</h1><p class="sub">${esc(p.description)}</p>${p.image ? `<img src="${p.image}" alt="${esc(p.title)}" width="1200" height="630" style="display:block;width:100%;max-width:900px;height:auto;border-radius:16px;margin-top:22px">` : ''}</div>
-    <div class="wrap"><div class="prose">${p.slug.startsWith('beget') ? BOT_BOX : ''}${p.html}</div></div></article>
+    <div class="wrap"><div class="prose">${p.slug.startsWith('beget') ? BOT_BOX : ''}${p.html}${SHARE_COMMENTS(p)}</div></div></article>
     <section class="sec"><div class="wrap"><div class="final-box rv"><div class="kicker">Применим к вашей задаче</div><h2 style="font-size:clamp(30px,4vw,52px)">Хотите так же? <em>Разберём бесплатно.</em></h2>${leadForm('f-post')}</div></div></section>
     ${related.length ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="kicker rv">Читайте также</div><div class="posts" style="margin-top:18px">${related.map(postCard).join('')}</div></div></section>` : ''}`,
   }))
