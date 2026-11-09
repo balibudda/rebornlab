@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Восстановление сайта: проверка и примерная цена — REBORN LAB</title>
+<meta name="description" content="Введите адрес сайта: покажем, что сохранилось, какие есть варианты и сколько это примерно стоит.">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Можно ли восстановить сайт после Beget без копии — проверка онлайн">
+<meta property="og:description" content="Сколько страниц и картинок вашего сайта сохранили веб-архив и Яндекс — и можно ли его вернуть.">
+<meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
+<link rel="stylesheet" href="/assets/styles.css?v=ac42d9e3">
+<style>
+  /* страница-монитор (ручная, build.mjs её не трогает) */
+  .bw { max-width: var(--max); margin: 0 auto; padding: 40px 22px 80px; }   /* ширина как у шапки и подвала (.wrap) — края ровные */
+  .bw h1 { font-size: clamp(30px, 5vw, 54px); letter-spacing: -.03em; line-height: 1.05; margin: 14px 0 12px; }
+  .bw .lead { color: var(--muted); font-size: 18px; max-width: 46em; }
+  .bw .live { display: inline-flex; align-items: center; gap: 8px; font: 13px var(--mono); color: var(--muted); }
+  .bw .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 0 0 var(--acc-dim); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198,242,78,.5) } 70% { box-shadow: 0 0 0 10px rgba(198,242,78,0) } 100% { box-shadow: 0 0 0 0 rgba(198,242,78,0) } }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 34px 0; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px 22px; }
+  .kpi .v { font-size: 42px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+  .kpi .v small { font-size: 18px; color: var(--muted); font-weight: 500; }
+  .kpi .l { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  .bar { height: 8px; background: var(--card-2); border-radius: 4px; overflow: hidden; margin-top: 14px; }
+  .bar i { display: block; height: 100%; background: var(--acc); border-radius: 4px; transition: width .6s; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; margin: 18px 0; }
+  .card h2 { font-size: 22px; margin: 0 0 4px; letter-spacing: -.01em; }
+  .card .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+  .chart { width: 100%; height: auto; display: block; }
+  .ch { margin: 6px 0 14px; } .ch-h { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 15px; }
+  .ch-h .delta { margin: 0; }
+  .legend { display: flex; gap: 18px; font-size: 13px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+  .legend b { display: inline-block; width: 12px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+  .nets { display: grid; gap: 10px; }
+  .net { display: grid; grid-template-columns: 150px 1fr 120px; gap: 12px; align-items: center; font-size: 14px; }
+  .net .n { font-family: var(--mono); color: var(--muted); }
+  .stack { display: flex; height: 22px; border-radius: 6px; overflow: hidden; background: var(--card-2); }
+  .stack .h { background: var(--acc); } .stack .o { background: var(--cool); } .stack .d { background: rgba(237,235,230,.08); }
+  .net .c { text-align: right; font-family: var(--mono); font-size: 13px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+  .s { font: 12px var(--mono); padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .s.ok { color: #0b0c0d; background: var(--acc); border-color: var(--acc); }
+  .tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tabs button { background: var(--card-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 999px; padding: 7px 14px; font: 14px var(--font); cursor: pointer; }
+  .tabs button.on { background: var(--text); color: var(--bg); }
+  .cta { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+  .cta p { margin: 6px 0 0; color: var(--muted); }
+  .top-cta { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 26px 0 6px; }
+  .top-cta a { display: flex; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r);
+    padding: 16px 18px; color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s; }
+  .top-cta a:hover { border-color: var(--acc); transform: translateY(-1px); }
+  .top-cta .ic { font-size: 26px; flex: none; }
+  .top-cta b { display: block; font-size: 16px; } .top-cta span { color: var(--muted); font-size: 13.5px; line-height: 1.35; display: block; margin-top: 2px; }
+  .top-cta a.acc { border-color: var(--acc); background: linear-gradient(135deg, rgba(198,242,78,.12), rgba(198,242,78,.02)); }
+  .delta { font: 13px var(--mono); margin-top: 6px; color: var(--muted); } .delta.up { color: var(--acc); }
+  .live.busy .dot { background: var(--cool); }
+  @media (max-width: 640px) { .top-cta { grid-template-columns: 1fr } .bw { padding-top: 26px } .kpi .v { font-size: 36px } }
+  .sub-form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .sub-form input { flex: 1; min-width: 220px; background: var(--bg-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 12px; padding: 13px 15px; font: 16px var(--font); }
+  .sub-form input:focus { outline: none; border-color: var(--acc); }
+  .qa { border-top: 1px solid var(--line); padding: 12px 0; } .qa:first-of-type { border-top: 0; }
+  .qa summary { cursor: pointer; font-size: 17px; font-weight: 600; list-style: none; } .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after { content: '+'; float: right; color: var(--acc); font-size: 20px; } .qa[open] summary::after { content: '−'; }
+  .qa p { color: var(--muted); margin: 10px 0 2px; line-height: 1.6; }
+  .feed { display: flex; gap: 8px; flex-wrap: wrap; } .feed .s { flex: none; }
+  .feed .ago { font: 11px var(--mono); color: rgba(11,12,13,.55); margin-left: 6px; }
+  .note { color: var(--dim); font-size: 13px; margin-top: 26px; line-height: 1.6; }
+  @media (max-width: 640px) { .net { grid-template-columns: 1fr; gap: 4px } .net .c { text-align: left } .cta { grid-template-columns: 1fr } }
+.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 14px }
+.news-card { display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: inherit; background: rgba(237,235,230,.03); border: 1px solid rgba(237,235,230,.08); border-radius: 14px; padding: 12px; transition: border-color .2s }
+.news-card:hover { border-color: var(--acc) }
+.news-card img { width: 100%; height: auto; border-radius: 10px; display: block; margin-bottom: 4px }
+.news-dt { font: 12px/1.3 ui-monospace, Menlo, monospace; color: var(--acc) }
+.news-card b { font-size: 16px; line-height: 1.3 }
+.news-d { font-size: 13px; color: #9a978f; line-height: 1.45 }
+  .chklog { margin: 10px 0 0; font-size: 13px; color: rgba(237,235,230,.7); }
+  .chklog table { border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .chklog td { padding: 3px 14px 3px 0; border-top: 1px solid rgba(237,235,230,.07); }
+  .chklog tr.th td { font-size: 12px; color: var(--muted); border-top: 0; }
+  .chklog tr.th + tr td { color: var(--text); font-weight: 600; }
+  .chklog td:not(:first-child) { text-align: right; padding-left: 14px; }
+  .chklog .fresh { color: var(--acc); }
+  .flash { animation: fl 1.6s ease; } @keyframes fl { 0% { background: rgba(200,255,90,.25); } 100% { background: transparent; } }
+
+  .tn-banner { background: #c6f24e; color: #111; text-align: center; padding: 10px 16px; font: 600 14px sans-serif; }
+  .tn-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 24px; margin: 18px 0; }
+  .tn-step { font: 13px var(--mono); color: var(--acc); margin: 0 0 8px; }
+  .tn-card h2 { margin: 0 0 14px; font-size: 24px; }
+  .tn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .tn-row input { flex: 1 1 260px; min-width: 0; font: 18px var(--mono); padding: 15px 16px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--fg); }
+  .tn-ex { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
+  .tn-ex button { font: inherit; color: var(--acc); background: none; border: 1px dashed var(--line); border-radius: 999px; padding: 4px 12px; margin: 4px 6px 0 0; cursor: pointer; }
+  .tn-kp { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  .tn-kp div { border: 1px solid var(--line); border-radius: 12px; padding: 14px; } .tn-kp b { display: block; font-size: 26px; line-height: 1.15; overflow-wrap: anywhere; } .tn-kp span { color: var(--muted); font-size: 13px; }
+  .tn-note { margin: 14px 0 0; font-size: 15px; line-height: 1.55; color: var(--muted); } .tn-note b { color: var(--fg); }
+  .tn-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .tn-opt { display: block; border: 1px solid var(--line); border-radius: 14px; padding: 18px; cursor: pointer; }
+  .tn-opt:has(input:checked) { border-color: var(--acc); box-shadow: inset 0 0 0 1px var(--acc); }
+  .tn-opt input { accent-color: var(--acc); margin-right: 8px; } .tn-opt b { font-size: 18px; } .tn-opt p { margin: 8px 0 0; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+  .tn-sub { margin-top: 16px; display: none; } .tn-sub.on { display: block; }
+  .tn-chk { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 15.5px; } .tn-chk label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; } .tn-chk input { accent-color: var(--acc); width: 18px; height: 18px; }
+  .tn-price { font-size: clamp(34px, 7vw, 52px); font-weight: 700; letter-spacing: -.02em; color: var(--acc); line-height: 1.1; margin: 4px 0 10px; }
+  .tn-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; } .tn-btns > * { flex: 1 1 240px; text-align: center; justify-content: center; }
+  .tn-ghost { display: inline-flex; align-items: center; padding: 14px 18px; border-radius: 12px; border: 1px solid var(--line); color: var(--fg); text-decoration: none; }
+  .tn-msg { margin: 12px 0 0; color: var(--acc); font-size: 15px; min-height: 1.4em; }
+  .tn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px 22px; padding: 0; margin: 0; list-style: none; } .tn-grid li { line-height: 1.5; padding-left: 24px; position: relative; } .tn-grid li::before { content: "✓"; position: absolute; left: 0; color: var(--acc); }
+  .tn-tbl { width: 100%; border-collapse: collapse; font-size: 15px; } .tn-tbl th, .tn-tbl td { border-bottom: 1px solid var(--line); padding: 12px 10px 12px 0; text-align: left; vertical-align: top; line-height: 1.45; } .tn-tbl th { color: var(--muted); font-weight: 500; } .tn-w { overflow-x: auto; }
+  .tn-flow { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; } .tn-flow li { counter-increment: s; line-height: 1.5; } .tn-flow li::before { content: counter(s); display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--acc); color: #111; font-weight: 700; margin-bottom: 10px; } .tn-flow b { display: block; }
+  #tnReport, #tnNext { display: none; } #tnReport.on, #tnNext.on { display: block; }
+  @media (max-width: 600px) { .tn-card { padding: 18px; } .tn-tbl { font-size: 14px; } }
+</style>
+<style>
+  .rs { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:18px 0 6px }
+  .rs .kpi .v { font-size:34px }
+  .verdict { border-radius:var(--r); padding:18px 20px; margin:16px 0 6px; border:1px solid var(--line); background:var(--card-2) }
+  .verdict > b:first-child { font-size:20px; display:block; margin-bottom:6px } .verdict.ok { border-color:rgba(198,242,78,.6); background:rgba(198,242,78,.07) }
+  .verdict.mid { border-color:rgba(255,190,90,.55); background:rgba(255,190,90,.07) } .verdict.no { border-color:rgba(255,110,110,.5); background:rgba(255,110,110,.06) }
+  @media (max-width:600px) { .rs { grid-template-columns:1fr 1fr } .rs .kpi:last-child { grid-column:1 / -1 } }
+  .steps2 { margin:10px 0 0 18px } .steps2 li { margin:6px 0 }
+  .help { margin-top:16px; padding:16px 18px; border-radius:var(--r); border:1px dashed var(--line-2); color:var(--muted) } .help a { color:var(--acc) }
+  .wait { color:var(--muted); font:14px var(--mono) }
+  .feed { list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px }
+  .feed li { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:10px 14px; border-radius:12px; background:var(--card-2); font-size:14.5px; animation:fin .6s ease }
+  .feed .fd { font:14px var(--mono) } .feed .fv { font-size:13px; white-space:nowrap } .feed .ft { color:var(--muted); font-size:12.5px; white-space:nowrap; min-width:70px; text-align:right }
+  .feed .fv.ok { color:var(--acc) } .feed .fv.part { color:#ffc15a } .feed .fv.no { color:#ff8a8a } .feed .fv.works { color:#7aa7ff }
+  @keyframes fin { from { opacity:0; transform:translateY(-6px) } to { opacity:1; transform:none } }
+  @media (max-width:600px) { .feed li { grid-template-columns:1fr auto; } .feed .ft { grid-column:1 / -1; text-align:left; margin-top:-4px } }
+  .prog { margin:18px 0 4px } .prog-bar { height:6px; border-radius:3px; background:var(--card-2); overflow:hidden; position:relative }
+  .prog-bar i { position:absolute; top:0; bottom:0; left:0; width:0; background:var(--acc); border-radius:3px; transition:width .8s ease }
+  .prog ul { list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:7px; font-size:15px }
+  .prog li { color:var(--muted); display:flex; gap:10px; align-items:center } .prog li.on { color:var(--text) } .prog li.done { color:var(--muted) }
+  .prog li s { text-decoration:none; width:18px; text-align:center; flex:none } .prog li.on s::before { content:""; display:inline-block; width:12px; height:12px; border:2px solid var(--acc); border-right-color:transparent; border-radius:50%; animation:spin .8s linear infinite }
+  .prog li.done s::before { content:"✓"; color:var(--acc); font-weight:700 } .prog li:not(.on):not(.done) s::before { content:"·" }
+  .prog .tm { margin-top:10px; font:13px var(--mono); color:var(--muted) }
+  @keyframes spin { to { transform:rotate(360deg) } }
+  .chk { display:grid; grid-template-columns:1fr auto; gap:10px; margin-top:10px }
+  .chk input { font:18px var(--mono); padding:14px 16px; border-radius:12px; border:1px solid rgba(237,235,230,.16); background:rgba(237,235,230,.04); color:var(--text); min-width:0; outline:none }
+  .chk input:focus { border-color:var(--acc) }
+  @media (max-width:600px) { .chk { grid-template-columns:1fr } .chk input { font-size:16px } .chk .btn { width:100%; justify-content:center } }
+</style>
+</head>
+<body>
+<!--HDR:START--><header class="hdr"><div class="wrap">
+  <a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a>
+  <nav class="nav" aria-label="Основное меню"><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/beget/">Статус Beget</a><a href="/beget/server/">Проверка по IP</a><a class="nav-cta" href="/contact/" data-goal="cta_menu">Обсудить идею →</a></nav>
+  <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
+  <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
+</div></header><!--HDR:END-->
+<div class="tn-banner">ЧЕРНОВИК для Николая: страница не опубликована, скрыта от поисковиков, заявки отсюда не отправляются</div>
+<main class="bw">
+  <span class="live"><span class="dot"></span>восстановление сайтов · REBORN LAB</span>
+  <h1>Узнайте, можно ли вернуть ваш сайт и сколько это стоит</h1>
+  <p class="lead">Введите адрес. Покажем, что сохранилось, какие есть варианты и примерную цену. Проверка бесплатная и ни к чему не обязывает.</p>
+
+  <section class="tn-card">
+    <p class="tn-step">Шаг 1 · ваш сайт</p>
+    <form class="tn-row" id="tnForm"><input id="tnSite" placeholder="мой-сайт.ru" autocomplete="url" inputmode="url" aria-label="Адрес сайта" required><button class="btn btn-acc" type="submit">Проверить сайт</button></form>
+    <p class="tn-ex">Или посмотрите на примере:
+      <button type="button" data-ex="small">лендинг, 12 страниц</button><button type="button" data-ex="mid">сайт с каталогом, 310</button><button type="button" data-ex="big">магазин, 4 800</button></p>
+  </section>
+
+  <section class="tn-card" id="tnReport" aria-live="polite"><p class="tn-step">Отчёт</p><h2 id="tnRepTitle">Что сохранилось</h2><div class="tn-kp" id="tnKp"></div><p class="tn-note" id="tnRepNote"></p></section>
+
+  <div id="tnNext">
+    <section class="tn-card">
+      <p class="tn-step">Шаг 2 · каким должен стать сайт</p>
+      <div class="tn-opts">
+        <label class="tn-opt"><input type="radio" name="v" value="asis" checked><b>Как было</b><p>Ваш дизайн, тексты и адреса страниц. Заявки, https и телефон работают. Админки нет, правки вносим мы.</p></label>
+        <label class="tn-opt"><input type="radio" name="v" value="design"><b>Обновлённый дизайн</b><p>То же содержимое и адреса, но современный вид. Особенно если старый дизайн устарел или сохранился плохо.</p></label>
+        <label class="tn-opt"><input type="radio" name="v" value="cms"><b>С админкой</b><p>Собираем сайт на CMS и переносим содержимое, чтобы вы правили его сами.</p></label>
+      </div>
+      <div class="tn-sub" id="tnCms"><div class="tn-chk" role="group" aria-label="Система управления">
+        <label><input type="radio" name="c" value="WordPress" checked>WordPress</label><label><input type="radio" name="c" value="MODX">MODX</label><label><input type="radio" name="c" value="1С-Битрикс">1С-Битрикс</label><label><input type="checkbox" id="tnShop">Нужен магазин: корзина и заказы</label></div></div>
+    </section>
+
+    <section class="tn-card">
+      <p class="tn-step">Шаг 3 · что у вас есть</p>
+      <div class="tn-chk">
+        <label><input type="checkbox" data-m="copy">Копия сайта</label><label><input type="checkbox" data-m="db">База данных</label><label><input type="checkbox" data-m="photo">Фото</label><label><input type="checkbox" data-m="price">Прайс или выгрузка товаров</label><label><input type="checkbox" data-m="lic">Лицензия CMS</label></div>
+      <p class="tn-note">Если ничего нет, это нормально: соберём из веб-архива и Яндекс Картинок. Всё, что найдётся, сделает сайт полнее.</p>
+    </section>
+
+    <section class="tn-card">
+      <p class="tn-step">Примерная цена</p>
+      <div class="tn-price" id="tnPrice">—</div>
+      <p class="tn-note" id="tnPriceNote"></p>
+      <div class="tn-btns"><button class="btn btn-acc" type="button" id="tnDemo">Получить бесплатное демо, 10 страниц</button><a class="tn-ghost" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">Написать напрямую: @Reborn_Lab</a></div>
+      <p class="tn-msg" id="tnMsg"></p>
+    </section>
+  </div>
+
+  <h2>Что будет в любом варианте</h2>
+  <ul class="tn-grid"><li>Те же адреса страниц: это важно для поиска</li><li>Формы, заявки приходят вам на почту</li><li>Защищённое соединение https</li><li>Нормальный вид на телефоне</li><li>Ваши счётчики Метрики, если они сохранились</li><li>Размещение на нашем сервере в России</li></ul>
+
+  <h2>Нужна ли вам CMS</h2>
+  <div class="tn-w"><table class="tn-tbl"><thead><tr><th></th><th>Без CMS</th><th>С CMS (WordPress, MODX, Битрикс)</th></tr></thead><tbody>
+    <tr><td><b>Что это</b></td><td>Готовый сайт из страниц, как он выглядел</td><td>Сайт с панелью управления</td></tr>
+    <tr><td><b>Кто правит</b></td><td>Мы, по вашей просьбе</td><td>Вы сами</td></tr>
+    <tr><td><b>Скорость запуска</b></td><td>Быстрее</td><td>Дольше: содержимое переносится вручную и скриптами</td></tr>
+    <tr><td><b>Кому подходит</b></td><td>Сайт нужно вернуть, а менять его редко</td><td>Часто меняются цены, товары, статьи</td></tr>
+    <tr><td><b>Стоимость</b></td><td>Ниже</td><td>Выше, Битрикс требует вашу лицензию</td></tr>
+  </tbody></table></div>
+  <p class="tn-note">Старую админку, заказы и пользователей можно вернуть только из вашей копии с базой данных. Без неё собираем сайт заново и переносим содержимое из архива.</p>
+
+  <h2>Как работаем</h2>
+  <ol class="tn-flow"><li><b>Проверка</b>Смотрим, что сохранилось, и называем точную цену.</li><li><b>Бесплатное демо</b>10 страниц без CMS на временном адресе. Смотрите, подходит ли.</li><li><b>Аванс 50%</b>Только если демо понравилось и вы готовы продолжать.</li><li><b>Сборка и запуск</b>Доделываем, показываем, подключаем домен. Затем остаток оплаты.</li></ol>
+
+  <h2>Частые вопросы</h2>
+  <details class="qa"><summary>Цена на странице окончательная?</summary><p>Нет, это примерная оценка по объёму. Точную цену называем после просмотра сайта, до начала работы.</p></details>
+  <details class="qa"><summary>Всё ли вернётся?</summary><p>Вернём то, что сохранилось. Часть картинок и цен может отсутствовать или устареть. В отчёте и демо это будет видно заранее.</p></details>
+  <details class="qa"><summary>Сохранятся ли позиции в поиске?</summary><p>Адреса и тексты сохраняем, это снижает риск потерь. Гарантировать позиции не может никто.</p></details>
+  <details class="qa"><summary>Что с почтой на домене?</summary><p>Смотрим, где она работает. Если почта рабочая, не трогаем её. Если упала вместе с хостингом, поможем настроить заново.</p></details>
+</main>
+<footer class="ftr"><div class="wrap">
+  <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© 2026 REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a></div></div>
+  <div><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
+  <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
+</div></footer>
+<script>
+(function () {
+  var $ = function (i) { return document.getElementById(i); }, S = { pages: null, over: false, images: null, name: '', ex: false };
+  var EX = {
+    small: { name: 'Пример: лендинг', pages: 12, images: 20, last: 'октябрь 2026', cms: 'нет', note: '' },
+    mid: { name: 'Пример: сайт с каталогом', pages: 310, images: 295, last: 'июль 2026', cms: '1С-Битрикс', note: '' },
+    big: { name: 'Пример: интернет-магазин', pages: 4800, images: 1550, last: 'август 2026', cms: '1С-Битрикс', note: 'Часть цен в карточках может быть устаревшей: страницы сохранялись в разное время.' }
+  };
+  var BANDS = [20, 300, 1500, Infinity];
+  var P = { asis: [[1500, 3000], [4000, 6000], [8000, 10000], [10000, 0]], design: [[3000, 5000], [6000, 9000], [10000, 14000], [14000, 0]], cms: [[7000, 9000], [10000, 15000], [15000, 25000], [20000, 0]] };
+  function rub(n) { return String(n).replace(/\B(?=(\d{3})+$)/g, ' '); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function val(n) { var e = document.querySelector('input[name=' + n + ']:checked'); return e ? e.value : ''; }
+  function kp(v, l) { return '<div><b>' + esc(v) + '</b><span>' + esc(l) + '</span></div>'; }
+  function price() {
+    if (S.pages === null) return;
+    var i = 0; while (S.pages > BANDS[i]) i++;
+    var v = val('v'), r = P[v][i], from = S.over || !r[1], cms = v === 'cms', shop = cms && $('tnShop').checked;
+    $('tnCms').classList.toggle('on', cms);
+    $('tnPrice').textContent = (from || shop ? 'от ' + rub(r[0]) : rub(r[0]) + ' – ' + rub(r[1])) + ' ₽';
+    var n = ['Точную цену назовёт Николай после просмотра сайта.'], m = function (k) { return document.querySelector('[data-m=' + k + ']').checked; };
+    if (S.over) n.push('Страниц больше 100, поэтому показана нижняя граница.');
+    if (shop) n.push('Магазин считаем отдельно: корзина, заказы, доставка.');
+    if (cms && val('c') === '1С-Битрикс') n.push(m('lic') ? 'Лицензия у вас есть, это подходит.' : 'Для Битрикса нужна ваша лицензия.');
+    if (m('copy') && m('db')) n.push('С копией и базой можно вернуть родную админку: часто это быстрее и дешевле.');
+    else if (m('copy')) n.push('Копия ускорит работу. Для родной админки нужна ещё база данных.');
+    if (S.images !== null && S.pages > 50 && S.images < S.pages * .2 && !m('photo')) n.push('Картинок сохранилось мало: ваши фото очень помогут.');
+    $('tnPriceNote').textContent = n.join(' ');
+  }
+  function show(d) {
+    S = { pages: d.pages, over: !!d.over, images: d.images, name: d.name };
+    $('tnRepTitle').textContent = d.name;
+    $('tnKp').innerHTML = kp(d.over ? '100+' : rub(d.pages), 'страниц в веб-архиве') + kp(d.images === null ? '—' : (d.imagesPlus ? d.images + '+' : rub(d.images)), d.imgLabel || 'картинок') + kp(d.last || '—', 'последний снимок') + kp(d.cms || '—', d.cmsLabel || 'движок сайта');
+    $('tnRepNote').innerHTML = d.note || '';
+    $('tnReport').classList.add('on'); $('tnNext').classList.add('on'); price();
+    $('tnReport').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function month(t) { if (!t) return ''; t = String(t); return t.slice(6, 8) + '.' + t.slice(4, 6) + '.' + t.slice(0, 4); }
+  function ask(d, tries) {
+    return fetch('https://api.rebornlab.ru/restore?d=' + encodeURIComponent(d), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
+      if (j.queued) { if (tries > 60) throw new Error('долго'); $('tnRepNote').textContent = j.archive_down ? 'Веб-архив сейчас недоступен, ждём его…' : (j.running ? 'Проверяем, веб-архив отвечает до минуты…' : 'Ваша проверка в очереди…'); return new Promise(function (ok) { setTimeout(ok, 4000); }).then(function () { return ask(d, tries + 1); }); }
+      return j;
+    });
+  }
+  $('tnForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var d = $('tnSite').value.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+    if (!d || d.indexOf('.') < 0) { $('tnSite').focus(); return; }
+    $('tnRepTitle').textContent = d; $('tnKp').innerHTML = ''; $('tnRepNote').textContent = 'Проверяем…'; $('tnNext').classList.remove('on'); $('tnReport').classList.add('on');
+    ask(d, 0).then(function (r) {
+      if (r.error) { $('tnRepNote').textContent = 'Пока не получилось: ' + r.error; return; }
+      var note = r.live ? '<b>Сайт сейчас открывается.</b> Если он работает как надо, восстанавливать его не нужно.' : '<b>Сайт сейчас не открывается.</b>';
+      if (r.registrar) note += ' Домен: ' + esc(r.registrar) + '.';
+      if (r.pages > 100) note += ' <i>В черновике проверка считает только до 100 страниц; в рабочей версии будет полный подсчёт, разделы и движок сайта.</i>';
+      show({ name: d, pages: Math.max(r.pages || 0, r.pages > 100 ? 101 : 0), over: r.pages > 100, images: r.yandex_images == null ? null : r.yandex_images, imagesPlus: r.yandex_images >= 30, imgLabel: 'картинок в Яндексе', last: month(r.last), cms: r.host || '—', cmsLabel: 'хостинг', note: note });
+    }).catch(function () { $('tnRepNote').textContent = 'Проверка сейчас не отвечает. Попробуйте позже или напишите нам.'; });
+  });
+  document.querySelectorAll('[data-ex]').forEach(function (b) { b.addEventListener('click', function () { show(EX[b.dataset.ex]); }); });
+  document.querySelectorAll('#tnNext input').forEach(function (i) { i.addEventListener('change', price); });
+  $('tnDemo').addEventListener('click', function () { $('tnMsg').textContent = 'Это черновик: заявка не отправляется. В рабочей версии здесь будут контакт, согласие и отправка вместе с отчётом.'; });
+})();
+</script>
+</body>
+</html>
