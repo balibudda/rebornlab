@@ -10,7 +10,7 @@
 <meta property="og:title" content="Проверить сервер Бегет (Beget) по IP — включён ли он">
 <meta property="og:description" content="Карта очереди восстановления Бегет: какие серверы уже включены. Проверка по IP или адресу сайта.">
 <meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
-<link rel="stylesheet" href="/assets/styles.css?v=33c81623">
+<link rel="stylesheet" href="/assets/styles.css?v=ac42d9e3">
 <style>
   /* страница-монитор (ручная, build.mjs её не трогает) */
   .bw { max-width: var(--max); margin: 0 auto; padding: 40px 22px 80px; }   /* ширина как у шапки и подвала (.wrap) — края ровные */
@@ -84,7 +84,13 @@
   .chklog td:not(:first-child) { text-align: right; padding-left: 14px; }
   .chklog .fresh { color: var(--acc); }
   .flash { animation: fl 1.6s ease; } @keyframes fl { 0% { background: rgba(200,255,90,.25); } 100% { background: transparent; } }
-</style>
+  .rfl { list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px }
+  .rfl li { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:10px 14px; border-radius:12px; background:var(--card-2); font-size:14.5px; animation:rfin .6s ease }
+  .rfl .fd { font:14px var(--mono) } .rfl .fv { font-size:13px; white-space:nowrap } .rfl .ft { color:var(--muted); font-size:12.5px; white-space:nowrap; min-width:70px; text-align:right }
+  .rfl .fv.ok { color:var(--acc) } .rfl .fv.part { color:#ffc15a } .rfl .fv.no { color:#ff8a8a } .rfl .fv.works { color:#7aa7ff }
+  @keyframes rfin { from { opacity:0; transform:translateY(-6px) } to { opacity:1; transform:none } }
+  @media (max-width:600px) { .rfl li { grid-template-columns:1fr auto; } .rfl .ft { grid-column:1 / -1; text-align:left; margin-top:-4px } }
+  </style>
 <script>window.RL_METRIKA=113418511;window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113418511','ym');ym(113418511,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>
 <style>
   .chk { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 6px }
@@ -127,14 +133,6 @@
     <ul class="rfl" id="rfl"><li class="wait">загружаем…</li></ul>
     <p class="sub" style="margin:12px 0 0;display:flex;gap:18px;flex-wrap:wrap"><a href="#" id="rfmore" style="color:var(--acc)">Показать ещё ↓</a><a href="/beget/vosstanovit/" style="color:var(--acc)">Проверить свой сайт →</a></p>
   </div>
-  <style>
-  .rfl { list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px }
-  .rfl li { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:10px 14px; border-radius:12px; background:var(--card-2); font-size:14.5px; animation:rfin .6s ease }
-  .rfl .fd { font:14px var(--mono) } .rfl .fv { font-size:13px; white-space:nowrap } .rfl .ft { color:var(--muted); font-size:12.5px; white-space:nowrap; min-width:70px; text-align:right }
-  .rfl .fv.ok { color:var(--acc) } .rfl .fv.part { color:#ffc15a } .rfl .fv.no { color:#ff8a8a } .rfl .fv.works { color:#7aa7ff }
-  @keyframes rfin { from { opacity:0; transform:translateY(-6px) } to { opacity:1; transform:none } }
-  @media (max-width:600px) { .rfl li { grid-template-columns:1fr auto; } .rfl .ft { grid-column:1 / -1; text-align:left; margin-top:-4px } }
-  </style>
   <script>
   (function () {
     var known = {}, N = 12, VV = {ok: '✅ можно восстановить', part: '🟡 частично', no: '🔴 нет в архиве', works: '🟢 сайт работает'};
@@ -189,7 +187,7 @@
   <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
-<script src="/assets/main.js?v=33c81623" defer></script>
+<script src="/assets/main.js?v=ac42d9e3" defer></script>
 <script>
 (function () {
   var D = null, PEND = null;

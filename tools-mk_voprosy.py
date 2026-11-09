@@ -119,7 +119,7 @@ style = src[head_end:style_end].replace('</style>', '''
   .qa p a { color: var(--acc); }
   .qnone { color: var(--muted); display: none; margin: 18px 0; }
 </style>''')
-after_main = src[src.index('</main>'):]
+after_main = src[src.index('</main>') + len('</main>'):]   # 09.11: иначе </main> дважды (валидатор W3C)
 after_main = after_main[:after_main.index('<script>\n(function () {')] + '''<script>
 (function () {
   var inp = document.getElementById('qs'), qs = [].slice.call(document.querySelectorAll('details.qa')), none = document.getElementById('qnone');

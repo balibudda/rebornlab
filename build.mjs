@@ -45,7 +45,7 @@ const SHARE_COMMENTS = (p) => {
 <button type="submit" class="btn" style="justify-self:start">Отправить</button>
 <p class="cm-msg" style="margin:0;font-size:14px"></p>
 <p style="margin:0;font-size:13px;opacity:.6">Комментарии публикуются после проверки.</p></form></div>
-<style>.btn-sh{display:inline-block;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.25);color:inherit;text-decoration:none;background:transparent;font:inherit;font-size:14px;cursor:pointer}.btn-sh:hover{border-color:var(--acc);color:var(--acc)}.cm-item{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}.cm-item b{display:block}.cm-item small{opacity:.6}</style>
+
 <script>(function(){var box=document.getElementById('comments');if(!box)return;var s=box.dataset.slug,API='https://api.rebornlab.ru/comments',k=Date.now().toString(36),t0=Date.now(),h=0;
 ['mousemove','touchstart','keydown','scroll'].forEach(function(e){addEventListener(e,function(){h=1},{once:true,passive:true})});
 document.querySelectorAll('[data-copy]').forEach(function(b){b.onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy);b.textContent='Ссылка скопирована'}});
@@ -322,6 +322,7 @@ write('services/index.html', shell({
     <li><b>Делаем</b><span>быстро: от 999 ₽ и от пары дней</span></li>
     <li><b>Сопровождаем</b><span>обновления, законы, доступность</span></li></ol></div>
   </div></section>
+  <div class="wrap"><h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Направления работы</h2><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/"><div class="sv-top">${svIcon(s)}<span class="code">${s.code} · ${esc(s.short)}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}<ul>${s.items.slice(0, 4).map((i) => `<li>${esc(i)}</li>`).join('')}</ul><span class="card-link">Подробнее <span class="arrow">→</span></span></a>`).join('')}
   <a class="cap ask rv" href="/contact/"><span class="code">06</span><h3>Другая задача</h3><p>Опишите её — предложим решение.</p></a></div></div>
   <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Не знаете, что выбрать? <em>Опишите задачу.</em></h2>${leadForm('f-svc')}</div></div></section>`,
 }))
@@ -367,7 +368,7 @@ write('journal/index.html', shell({
   canonical: '/journal/', current: '/journal/',
   jsonLd: [crumbsLd([['Главная', '/'], ['Журнал', '/journal/']])],
   body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Журнал', '/journal/']])}<div class="kicker" style="margin-top:18px">Lab notes</div><h1>Журнал <span style="color:var(--acc)">лаборатории</span></h1><p class="sub">Разборы, кейсы и инструкции — то, что сами применяем в проектах.</p></div>
-  <div class="wrap"><div class="posts">${POSTS.map(postCard).join('') || '<p class="muted">Скоро здесь появятся первые материалы.</p>'}</div></div>
+  <div class="wrap"><h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Все статьи</h2><div class="posts">${POSTS.map(postCard).join('') || '<p class="muted">Скоро здесь появятся первые материалы.</p>'}</div></div>
   <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Узнали свою задачу? <em>Разберём.</em></h2>${leadForm('f-jr')}</div></div></section>`,
 }))
 for (const p of POSTS) {

@@ -379,3 +379,5 @@ form.need-agree .agree { color: #ff8a7a; }
   main.bw .top-cta a { padding: 14px 14px; }
 }
 .cm-nb[hidden]{display:none!important}
+/* кнопки «Поделиться» и комментарии в статьях (перенесено из страницы, 09.11 — валидатор W3C) */
+.btn-sh{display:inline-block;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.25);color:inherit;text-decoration:none;background:transparent;font:inherit;font-size:14px;cursor:pointer}.btn-sh:hover{border-color:var(--acc);color:var(--acc)}.cm-item{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}.cm-item b{display:block}.cm-item small{opacity:.6}
