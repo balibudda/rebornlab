@@ -9,7 +9,7 @@ OUT = ROOT / 'demo' / 'tarify-new' / 'index.html'
 src = (ROOT / 'beget' / 'vosstanovit' / 'index.html').read_text()
 
 head = src[:src.index('<style>')]
-head = re.sub(r'<title>.*?</title>', '<title>Восстановление сайта: проверка и примерная цена — REBORN LAB</title>', head, flags=re.S)
+head = re.sub(r'<title>.*?</title>', '<title>Тарифы на восстановление сайта — REBORN LAB</title>', head, flags=re.S)
 head = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="Введите адрес сайта: покажем, что сохранилось, какие есть варианты и сколько это примерно стоит.">', head)
 head = re.sub(r'<link rel="canonical" href="[^"]*">', '', head)
 head = head.replace('<head>', '<head>\n<meta name="robots" content="noindex, nofollow">', 1)
@@ -44,7 +44,7 @@ CSS = '''
   .tn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px 22px; padding: 0; margin: 0; list-style: none; } .tn-grid li { line-height: 1.5; padding-left: 24px; position: relative; } .tn-grid li::before { content: "✓"; position: absolute; left: 0; color: var(--acc); }
   .tn-tbl { width: 100%; border-collapse: collapse; font-size: 15px; } .tn-tbl th, .tn-tbl td { border-bottom: 1px solid var(--line); padding: 12px 10px 12px 0; text-align: left; vertical-align: top; line-height: 1.45; } .tn-tbl th { color: var(--muted); font-weight: 500; } .tn-w { overflow-x: auto; }
   .tn-flow { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; } .tn-flow li { counter-increment: s; line-height: 1.5; } .tn-flow li::before { content: counter(s); display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--acc); color: #111; font-weight: 700; margin-bottom: 10px; } .tn-flow b { display: block; }
-  #tnReport, #tnNext { display: none; } #tnReport.on, #tnNext.on { display: block; }
+  #tnReport { display: none; } #tnReport.on { display: block; }
   @media (max-width: 600px) { .tn-card { padding: 18px; } .tn-tbl { font-size: 14px; } }
 </style>'''
 style = src[src.index('<style>'):style_end].replace('</style>', CSS)
@@ -52,17 +52,18 @@ style = src[src.index('<style>'):style_end].replace('</style>', CSS)
 MAIN = '''<div class="tn-banner">ЧЕРНОВИК для Николая: страница не опубликована, скрыта от поисковиков, заявки отсюда не отправляются</div>
 <main class="bw">
   <span class="live"><span class="dot"></span>восстановление сайтов · REBORN LAB</span>
-  <h1>Узнайте, можно ли вернуть ваш сайт и сколько это стоит</h1>
-  <p class="lead">Введите адрес. Покажем, что сохранилось, какие есть варианты и примерную цену. Проверка бесплатная и ни к чему не обязывает.</p>
+  <h1>Тарифы на восстановление сайта</h1>
+  <p class="lead">Выберите, каким должен стать сайт, и сразу увидите примерную цену. Если вы пришли из проверки, адрес и данные уже подставлены.</p>
+
+  <section class="tn-card" id="tnReport" aria-live="polite"><p class="tn-step">Ваш сайт из проверки</p><h2 id="tnRepTitle"></h2><div class="tn-kp" id="tnKp"></div></section>
 
   <section class="tn-card">
-    <p class="tn-step">Шаг 1 · ваш сайт</p>
-    <form class="tn-row" id="tnForm"><input id="tnSite" placeholder="мой-сайт.ru" autocomplete="url" inputmode="url" aria-label="Адрес сайта" required><button class="btn btn-acc" type="submit">Проверить сайт</button></form>
-    <p class="tn-ex">Или посмотрите на примере:
-      <button type="button" data-ex="small">лендинг, 12 страниц</button><button type="button" data-ex="mid">сайт с каталогом, 310</button><button type="button" data-ex="big">магазин, 4 800</button></p>
+    <p class="tn-step">Шаг 1 · ваш сайт и его размер</p>
+    <div class="tn-row"><input id="tnSite" placeholder="мой-сайт.ru" autocomplete="url" inputmode="url" aria-label="Адрес сайта"></div>
+    <div class="tn-chk tn-sizes" role="group" aria-label="Размер сайта" style="margin-top:14px">
+      <label><input type="radio" name="s" value="12">до 20 страниц</label><label><input type="radio" name="s" value="200" checked>до 300</label><label><input type="radio" name="s" value="900">300–1 500</label><label><input type="radio" name="s" value="3000">больше 1 500</label></div>
+    <p class="tn-note" id="tnSizeNote">Не знаете точно? <a href="/beget/vosstanovit/" style="color:var(--acc)">Проверьте сайт</a>: покажем, что сохранилось в веб-архиве.</p>
   </section>
-
-  <section class="tn-card" id="tnReport" aria-live="polite"><p class="tn-step">Отчёт</p><h2 id="tnRepTitle">Что сохранилось</h2><div class="tn-kp" id="tnKp"></div><p class="tn-note" id="tnRepNote"></p></section>
 
   <div id="tnNext">
     <section class="tn-card">
@@ -87,6 +88,8 @@ MAIN = '''<div class="tn-banner">ЧЕРНОВИК для Николая: стр�
       <p class="tn-step">Примерная цена</p>
       <div class="tn-price" id="tnPrice">—</div>
       <p class="tn-note" id="tnPriceNote"></p>
+      <div class="tn-row" style="margin-top:16px"><input id="tnContact" placeholder="Telegram или телефон" aria-label="Как с вами связаться"></div>
+      <label class="tn-chk" style="margin-top:12px;font-size:14px"><input type="checkbox" id="tnAgree"><span>Согласен на обработку персональных данных по <a href="/consent/" target="_blank" style="color:var(--acc)">согласию</a> и <a href="/privacy/" target="_blank" style="color:var(--acc)">политике конфиденциальности</a></span></label>
       <div class="tn-btns"><button class="btn btn-acc" type="button" id="tnDemo">Заказать демо, 10 страниц: 1 000 ₽</button><a class="tn-ghost" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">Написать напрямую: @Reborn_Lab</a></div>
       <p class="tn-msg" id="tnMsg"></p>
     </section>
@@ -117,26 +120,21 @@ MAIN = '''<div class="tn-banner">ЧЕРНОВИК для Николая: стр�
 
 JS = r'''<script>
 (function () {
-  var $ = function (i) { return document.getElementById(i); }, S = { pages: null, over: false, images: null, name: '', ex: false };
-  var EX = {
-    small: { name: 'Пример: лендинг', pages: 12, images: 20, last: 'октябрь 2026', cms: 'нет', note: '' },
-    mid: { name: 'Пример: сайт с каталогом', pages: 310, images: 295, last: 'июль 2026', cms: '1С-Битрикс', note: '' },
-    big: { name: 'Пример: интернет-магазин', pages: 4800, images: 1550, last: 'август 2026', cms: '1С-Битрикс', note: 'Часть цен в карточках может быть устаревшей: страницы сохранялись в разное время.' }
-  };
+  var $ = function (i) { return document.getElementById(i); }, Q = new URLSearchParams(location.search), S = { pages: 200, over: false, images: null };
   var BANDS = [20, 300, 1500, Infinity];
   var P = { asis: [[1500, 3000], [4000, 6000], [8000, 10000], [10000, 0]], design: [[3000, 5000], [6000, 9000], [10000, 14000], [14000, 0]], cms: [[7000, 9000], [10000, 15000], [15000, 25000], [20000, 0]] };
   function rub(n) { return String(n).replace(/\B(?=(\d{3})+$)/g, ' '); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function val(n) { var e = document.querySelector('input[name=' + n + ']:checked'); return e ? e.value : ''; }
   function kp(v, l) { return '<div><b>' + esc(v) + '</b><span>' + esc(l) + '</span></div>'; }
+  function m(k) { return document.querySelector('[data-m=' + k + ']').checked; }
   function price() {
-    if (S.pages === null) return;
     var i = 0; while (S.pages > BANDS[i]) i++;
-    var v = val('v'), r = P[v][i], from = S.over || !r[1], cms = v === 'cms', shop = cms && $('tnShop').checked;
+    var v = val('v'), r = P[v][i], cms = v === 'cms', shop = cms && $('tnShop').checked;
     $('tnCms').classList.toggle('on', cms);
-    $('tnPrice').textContent = (from || shop ? 'от ' + rub(r[0]) : rub(r[0]) + ' – ' + rub(r[1])) + ' ₽';
-    var n = ['Точную цену назовёт Николай после просмотра сайта.'], m = function (k) { return document.querySelector('[data-m=' + k + ']').checked; };
-    if (S.over) n.push('Страниц больше 100, поэтому показана нижняя граница.');
+    $('tnPrice').textContent = (!r[1] || shop || S.over ? 'от ' + rub(r[0]) : rub(r[0]) + ' – ' + rub(r[1])) + ' ₽';
+    var n = ['Точную цену назовёт Николай после просмотра сайта.'];
+    if (S.over) n.push('В проверке страниц больше 100: уточните размер в шаге 1.');
     if (shop) n.push('Магазин считаем отдельно: корзина, заказы, доставка.');
     if (cms && val('c') === '1С-Битрикс') n.push(m('lic') ? 'Лицензия у вас есть, это подходит.' : 'Для Битрикса нужна ваша лицензия.');
     if (m('copy') && m('db')) n.push('С копией и базой можно вернуть родную админку: часто это быстрее и дешевле.');
@@ -144,37 +142,23 @@ JS = r'''<script>
     if (S.images !== null && S.pages > 50 && S.images < S.pages * .2 && !m('photo')) n.push('Картинок сохранилось мало: ваши фото очень помогут.');
     $('tnPriceNote').textContent = n.join(' ');
   }
-  function show(d) {
-    S = { pages: d.pages, over: !!d.over, images: d.images, name: d.name };
-    $('tnRepTitle').textContent = d.name;
-    $('tnKp').innerHTML = kp(d.over ? '100+' : rub(d.pages), 'страниц в веб-архиве') + kp(d.images === null ? '—' : (d.imagesPlus ? d.images + '+' : rub(d.images)), d.imgLabel || 'картинок') + kp(d.last || '—', 'последний снимок') + kp(d.cms || '—', d.cmsLabel || 'движок сайта');
-    $('tnRepNote').innerHTML = d.note || '';
-    $('tnReport').classList.add('on'); $('tnNext').classList.add('on'); price();
-    $('tnReport').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // данные приходят из проверки: ?site=…&pages=…&images=…&last=…
+  var site = (Q.get('site') || '').slice(0, 120), pages = parseInt(Q.get('pages'), 10), images = parseInt(Q.get('images'), 10), last = (Q.get('last') || '').slice(0, 20);
+  if (site) $('tnSite').value = site;
+  if (site || pages) {
+    $('tnRepTitle').textContent = site || 'Ваш сайт';
+    $('tnKp').innerHTML = (isNaN(pages) ? '' : kp(pages > 100 ? '100+' : rub(pages), 'страниц в веб-архиве')) + (isNaN(images) ? '' : kp(rub(images), 'картинок')) + (last ? kp(last, 'последний снимок') : '');
+    $('tnReport').classList.add('on');
   }
-  function month(t) { if (!t) return ''; t = String(t); return t.slice(6, 8) + '.' + t.slice(4, 6) + '.' + t.slice(0, 4); }
-  function ask(d, tries) {
-    return fetch('https://api.rebornlab.ru/restore?d=' + encodeURIComponent(d), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
-      if (j.queued) { if (tries > 60) throw new Error('долго'); $('tnRepNote').textContent = j.archive_down ? 'Веб-архив сейчас недоступен, ждём его…' : (j.running ? 'Проверяем, веб-архив отвечает до минуты…' : 'Ваша проверка в очереди…'); return new Promise(function (ok) { setTimeout(ok, 4000); }).then(function () { return ask(d, tries + 1); }); }
-      return j;
-    });
+  if (!isNaN(images)) S.images = images;
+  if (!isNaN(pages)) {
+    if (pages > 100) { S.pages = 101; S.over = true; document.querySelector('input[name=s][value="200"]').checked = true; }
+    else { S.pages = pages; var el = document.querySelector('input[name=s][value="' + (pages <= 20 ? 12 : 200) + '"]'); if (el) el.checked = true; }
   }
-  $('tnForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var d = $('tnSite').value.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
-    if (!d || d.indexOf('.') < 0) { $('tnSite').focus(); return; }
-    $('tnRepTitle').textContent = d; $('tnKp').innerHTML = ''; $('tnRepNote').textContent = 'Проверяем…'; $('tnNext').classList.remove('on'); $('tnReport').classList.add('on');
-    ask(d, 0).then(function (r) {
-      if (r.error) { $('tnRepNote').textContent = 'Пока не получилось: ' + r.error; return; }
-      var note = r.live ? '<b>Сайт сейчас открывается.</b> Если он работает как надо, восстанавливать его не нужно.' : '<b>Сайт сейчас не открывается.</b>';
-      if (r.registrar) note += ' Домен: ' + esc(r.registrar) + '.';
-      if (r.pages > 100) note += ' <i>В черновике проверка считает только до 100 страниц; в рабочей версии будет полный подсчёт, разделы и движок сайта.</i>';
-      show({ name: d, pages: Math.max(r.pages || 0, r.pages > 100 ? 101 : 0), over: r.pages > 100, images: r.yandex_images == null ? null : r.yandex_images, imagesPlus: r.yandex_images >= 30, imgLabel: 'картинок в Яндексе', last: month(r.last), cms: r.host || '—', cmsLabel: 'хостинг', note: note });
-    }).catch(function () { $('tnRepNote').textContent = 'Проверка сейчас не отвечает. Попробуйте позже или напишите нам.'; });
-  });
-  document.querySelectorAll('[data-ex]').forEach(function (b) { b.addEventListener('click', function () { show(EX[b.dataset.ex]); }); });
+  document.querySelectorAll('input[name=s]').forEach(function (i) { i.addEventListener('change', function () { S.pages = +i.value; S.over = false; price(); }); });
   document.querySelectorAll('#tnNext input').forEach(function (i) { i.addEventListener('change', price); });
-  $('tnDemo').addEventListener('click', function () { $('tnMsg').textContent = 'Это черновик: заявка не отправляется. В рабочей версии здесь будут контакт, согласие и отправка вместе с отчётом.'; });
+  $('tnDemo').addEventListener('click', function () { $('tnMsg').textContent = 'Это черновик: заявка не отправляется. В рабочей версии уйдёт вместе с выбранным вариантом и данными о сайте.'; });
+  price();
 })();
 </script>
 </body>
