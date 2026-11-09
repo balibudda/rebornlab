@@ -141,12 +141,12 @@ ldjson = '<script type="application/ld+json">' + json.dumps({'@context': 'https:
 main = f'''<main class="bw">
   <span class="live"><span class="dot"></span>помощь владельцам сайтов · {nq} вопросов</span>
   <h1>Сайт не работает после сбоя Beget: вопросы и ответы</h1>
-  <p class="lead">Простыми словами — для тех, кто далёк от ИТ: что происходит с сайтом, почтой и доменом, где взять копию, как переехать и как вернуть сайт без копии. Если вашего вопроса нет — напишите администратору <a href="https://t.me/m8614f" style="color:var(--acc)">@m8614f</a>.</p>
+  <p class="lead">Простыми словами — для тех, кто далёк от ИТ: что происходит с сайтом, почтой и доменом, где взять копию, как переехать и как вернуть сайт без копии. Если вашего вопроса нет — напишите администратору <a href="https://t.me/Reborn_Lab" style="color:var(--acc)">@Reborn_Lab</a>.</p>
   <input class="qsearch" id="qs" type="search" placeholder="Найти вопрос: почта, домен, копия, 502…" aria-label="Поиск по вопросам">
   <nav class="qtoc">{''.join(toc)}</nav>
-  <p class="qnone" id="qnone">Такого вопроса пока нет — напишите <a href="https://t.me/m8614f" style="color:var(--acc)">@m8614f</a>, ответим и добавим.</p>
+  <p class="qnone" id="qnone">Такого вопроса пока нет — напишите <a href="https://t.me/Reborn_Lab" style="color:var(--acc)">@Reborn_Lab</a>, ответим и добавим.</p>
   {''.join(qa_html)}
-  <div class="help" style="margin-top:30px"><b>Не нашли ответ на свой вопрос?</b> Напишите нам в Telegram <a href="https://t.me/m8614f" style="color:var(--acc)">@m8614f</a> — постараемся разобраться в ситуации, подсказать возможные решения и дополним справочник новым ответом.</div>
+  <div class="help" style="margin-top:30px"><b>Не нашли ответ на свой вопрос?</b> Напишите нам в Telegram <a href="https://t.me/Reborn_Lab" style="color:var(--acc)">@Reborn_Lab</a> — постараемся разобраться в ситуации, подсказать возможные решения и дополним справочник новым ответом.</div>
   <div class="help" style="margin-top:14px">🔎 Полезные инструменты: {IP} · {VOST} · {BOT} — напишет, когда сайт откроется. Всё бесплатно.</div>
 </main>
 '''

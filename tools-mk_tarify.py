@@ -116,7 +116,7 @@ main = f'''{banner}<main class="bw">
     <p class="me-s">Общаюсь по-человечески — без канцелярита, могу и смайлик поставить 🙂</p>
   </div>
   <div class="contacts">
-    <a class="ct" href="https://t.me/m8614f" target="_blank" rel="noopener" data-goal="tarify_tg"><b>Telegram</b><span>@m8614f</span></a>
+    <a class="ct" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="tarify_tg"><b>Telegram</b><span>@Reborn_Lab</span></a>
     <a class="ct" href="https://wa.me/6281998871268" target="_blank" rel="noopener" data-goal="tarify_wa"><b>WhatsApp</b><span>+62 819 9887-1268</span></a>
     <a class="ct" href="mailto:info@rebornlab.ru?subject=%D0%92%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0" data-goal="tarify_mail"><b>Почта</b><span>info@rebornlab.ru</span></a>
   </div>
@@ -158,7 +158,7 @@ after = after[:after.index('<script>\n(function () {')] + '''<script>
     var btn = f.querySelector('button'); btn.disabled = true; msg.textContent = 'Отправляем…';
     fetch('https://api.rebornlab.ru/lead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topics: ['Восстановление сайта', f.plan.value], text: 'Тариф: ' + f.plan.value + '\\nСайт: ' + site + (f.text.value.trim() ? '\\n' + f.text.value.trim() : ''), contact: f.via.value + ': ' + contact, page: location.pathname, agree: true, hp: f.company.value || '', k: T0.toString(36), t: Date.now() - T0, h: HUMAN ? 1 : 0})})
       .then(function (r) { if (!r.ok) throw 0; f.innerHTML = '<p style="font-size:18px;margin:0">✓ Заявка отправлена — напишем вам в ближайшее время.</p>'; try { ym(window.RL_METRIKA, 'reachGoal', 'tarify_lead'); } catch (x) {} })
-      .catch(function () { btn.disabled = false; msg.innerHTML = 'Не получилось отправить. Напишите нам в <a href="https://t.me/m8614f" style="color:var(--acc)">Telegram</a>, <a href="https://wa.me/6281998871268" style="color:var(--acc)">WhatsApp</a> или на <a href="mailto:info@rebornlab.ru" style="color:var(--acc)">info@rebornlab.ru</a>.'; });
+      .catch(function () { btn.disabled = false; msg.innerHTML = 'Не получилось отправить. Напишите нам в <a href="https://t.me/Reborn_Lab" style="color:var(--acc)">Telegram</a>, <a href="https://wa.me/6281998871268" style="color:var(--acc)">WhatsApp</a> или на <a href="mailto:info@rebornlab.ru" style="color:var(--acc)">info@rebornlab.ru</a>.'; });
   });
 })();
 </script>
