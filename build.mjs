@@ -88,11 +88,12 @@ function frontMatter(raw) {
 const MARK = `<svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`
 const LOGO = `<a class="logo" href="/" aria-label="REBORN LAB — на главную">${MARK}<b>REBORN</b><span>LAB</span></a>`
 
+const svImg = (s) => existsSync(`src/assets/services/${s.slug}.jpg`) ? `<img class="cap-img" src="/assets/services/${s.slug}.jpg" alt="" width="800" height="450" loading="lazy">` : ''   // 10.11: картинки карточек (drafts/services-pics.*)
 const svIcon = (s) => `<svg class="sv-ico" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${s.icon || ''}</svg>`
 const svPains = (s) => s.pains ? `<div class="sv-pain"><b>Если у вас:</b><ul>${s.pains.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''
 const HAS_SELLER = !!(SITE.operator && SITE.operatorInn)   // оферта и данные продавца — только с реквизитами
 // 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
-const NAV = [['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget'], ['/beget/server/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг серверов']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
+const NAV = [['/#uslugi', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget'], ['/beget/server/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг серверов']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
 
 // 07.11.2026 Ник: одна шапка везде (и на ручных страницах /beget/ — вставляется ниже, при обработке), на страницах о Beget — полоса навигации по теме
 function HEADER(current = '') {
@@ -144,7 +145,7 @@ ${body}
 </main>
 <footer class="ftr"><div class="wrap">
   <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© ${new Date().getFullYear()} REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a></div></div>
-  <div><a href="/services/">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
+  <div><a href="/#uslugi">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
   <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
@@ -218,11 +219,11 @@ const home = shell({
     <div class="bnow" id="bnow"><div><span class="bnow-t"><i></i>Ситуация с Бегет</span><p id="bnow-p">Живой статус серверов, проверка своего сайта и ответы на вопросы. Бесплатно.</p><form class="bnow-s" data-bnow-s role="search"><input type="search" name="q" placeholder="IP сервера, адрес сайта или вопрос" aria-label="Поиск: сервер, сайт или вопрос о Бегет" autocomplete="off"><button type="submit" class="btn btn-acc">Найти</button></form></div><div class="bnow-a"><a class="btn btn-acc" href="/beget/" data-goal="home_beget">Смотреть статус <span class="arrow">→</span></a><a class="bnow-l" href="/beget/server/" data-goal="home_beget_ip">Проверить свой сервер</a></div></div>
     <div class="kicker">Digital laboratory · идея → система → продукт</div>
     <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
-    <p class="sub">Сайты, веб-сервисы, AI, автоматизация, SEO и внутренние системы — придумываем и собираем под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
+    <p class="sub">Восстанавливаем и переносим сайты, делаем так, чтобы они открывались у всех. Собираем сайты, ботов, автоматизацию и AI под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
     <div class="row">
       <a class="btn btn-acc" href="#task" data-goal="cta_hero">Разобрать задачу <span class="arrow">→</span></a>
     </div>
-    <div class="hero-meta"><span>AI · Web · Automation · SEO/GEO · Design</span><span>от прототипа до продукта</span></div>
+    <div class="hero-meta"><span>Восстановление · Переезд · Сайты · Боты · AI</span><span>от прототипа до продукта</span></div>
   </div>
 </section>
 <div class="rline"></div>
@@ -232,11 +233,11 @@ const home = shell({
   <div class="sl-logo rv"><img src="/assets/svoya-liniya-logo.jpg" alt="" width="88" height="88" loading="lazy"></div>
 </div></section>
 
-<section class="sec" style="padding-top:20px"><div class="wrap">
+<section class="sec" id="uslugi" style="padding-top:20px"><div class="wrap">
   <div class="sec-hd rv"><div><div class="kicker">Что мы можем</div><h2>Не одна технология, <em>а целая лаборатория</em></h2></div><p>Под задачу собираем нужную связку: где-то хватит сайта, где-то нужен AI, где-то — автоматизация и интеграции. Чаще всего — всё вместе.</p></div>
   <div class="caps">
-    ${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/"><div class="sv-top">${svIcon(s)}<span class="code">${s.code}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}</a>`).join('\n')}
-    <a class="cap ask rv" href="#task"><span class="code">06</span><h3>Ваша задача</h3><p>Не нашли своё? Это нормально. Опишите проблему — предложим, что можно сделать.</p><span class="card-link" style="margin-top:auto">Разобрать задачу <span class="arrow">→</span></span></a>
+    ${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/">${svImg(s)}<div class="sv-top">${svIcon(s)}<span class="code">${s.code}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}</a>`).join('\n')}
+    <a class="cap ask rv" href="#task"><span class="code">${String(SERVICES.length + 1).padStart(2, '0')}</span><h3>Ваша задача</h3><p>Не нашли своё? Это нормально. Опишите проблему — предложим, что можно сделать.</p><span class="card-link" style="margin-top:auto">Разобрать задачу <span class="arrow">→</span></span></a>
   </div>
 </div></section>
 <div class="rline"></div>
@@ -251,26 +252,7 @@ const home = shell({
   <div class="ask-box rv"><div class="kicker">Расскажите, что болит</div><h3>У меня есть идея / проблема…</h3>${leadForm('f-task')}</div>
 </div></section>
 
-<section class="sec" style="padding-top:20px"><div class="wrap">
-  <div class="sec-hd rv"><div><div class="kicker">Из чего может состоять продукт</div><h2>От идеи <em>до продукта</em></h2></div><p>Нажмите на этап — расскажем, что в нём происходит. Не обязательно проходить все: начинаем с того, что нужно вам.</p></div>
-  <div class="flow rv">${SYS_NODES.map(([n, d], i) => `<button type="button" class="node${i === 0 ? ' on' : ''}" data-info="${esc(d)}">${n}</button>${i < SYS_NODES.length - 1 ? '<span class="lnk">→</span>' : ''}`).join('')}</div>
-  <p class="node-info rv" id="node-info">${esc(SYS_NODES[0][1])}</p>
-  <div class="rv" style="margin-top:60px"><div class="kicker">AI — не игрушка</div><h3 style="font-size:clamp(26px,3vw,38px);letter-spacing:-.02em;margin:10px 0 6px">Встраиваем интеллект в существующие процессы</h3><p class="muted" style="max-width:44em">AI работает не сам по себе, а связан с тем, что у вас уже есть: сайтом, CRM, Telegram, базой данных и аналитикой.</p></div>
-  <div class="arch rv">
-    <div class="cell"><b>WEBSITE</b>Заявки и вопросы клиентов</div><div class="cell"><b>TELEGRAM</b>Чаты, боты, уведомления</div><div class="cell"><b>DOCUMENTS</b>Файлы, регламенты, базы знаний</div>
-    <div class="cell core"><b style="color:var(--acc)">AI AGENT</b>понимает запрос → находит данные → отвечает или выполняет действие</div>
-    <div class="cell"><b>CRM</b>Клиент и сделка создаются сами</div><div class="cell"><b>DATABASE</b>Всё сохраняется и связывается</div><div class="cell"><b>ANALYTICS</b>Видно, что работает</div>
-  </div>
-</div></section>
-<div class="rline"></div>
-
-<section class="sec"><div class="wrap">
-  <div class="sec-hd rv"><div><div class="kicker">Что сейчас актуально</div><h2>Бизнес хочет <em>автоматизировать</em> прямо сейчас</h2></div><p>Спрос на AI и автоматизацию в России растёт быстрее всего остального рынка цифровых услуг.</p></div>
-  <div class="stats">${MARKET.stats.map(([n, t]) => `<div class="stat rv"><b>${n}</b><span>${esc(t)}</span></div>`).join('')}</div>
-  <div class="wants rv">${MARKET.wants.map((w) => `<span>${esc(w)}</span>`).join('')}</div>
-  <p class="src">Рост спроса в 2025 году к 2024. Источник: <a href="${MARKET.source}" rel="noopener" target="_blank">${esc(MARKET.sourceName)}</a>.</p>
-</div></section>
-
+<!-- 10.11 Ник: «что лишнее на главной — удали»: убраны «От идеи до продукта» + «AI — не игрушка» и рыночная статистика -->
 <section class="sec" style="padding-top:20px"><div class="wrap">
   <div class="sec-hd rv"><div><div class="kicker">Не нужно покупать всё</div><h2>Можно <em>начать с малого</em></h2></div><p>Никаких обязательных пакетов. Начинаем с того шага, который даст результат быстрее всего.</p></div>
   <div class="small">${START_SMALL.map(([a, b]) => `<div class="rv"><b>${esc(a)}</b><span>→ ${esc(b)}</span></div>`).join('')}</div>
@@ -298,8 +280,8 @@ write('services/index.html', shell({
   title: 'Услуги REBORN LAB — разработка, AI, автоматизация, SEO/GEO, дизайн',
   description: 'Разработка сайтов и веб-сервисов, внедрение AI, автоматизация бизнеса, SEO и GEO, UI/UX-дизайн. Собираем решение под задачу, а не продаём пакеты.',
   canonical: '/services/', current: '/services/',
-  jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/services/']])],
-  body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/services/']])}<h1>Что мы <span style="color:var(--acc)">собираем</span></h1><p class="sub">Под каждую задачу — своя связка. Выберите направление или просто опишите задачу.</p></div>
+  jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/#uslugi']])],
+  body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/#uslugi']])}<h1>Что мы <span style="color:var(--acc)">собираем</span></h1><p class="sub">Под каждую задачу — своя связка. Выберите направление или просто опишите задачу.</p></div>
   <section class="sec" style="padding-top:10px"><div class="wrap">
   <div class="sv-flow rv"><div class="kicker" style="margin-bottom:14px">Как работаем — без риска для вас</div><ol>
     <li><b>Разбор задачи</b><span>бесплатно: что нужно и как лучше сделать</span></li>
@@ -307,7 +289,7 @@ write('services/index.html', shell({
     <li><b>Делаем</b><span>быстро: от 999 ₽ и от пары дней</span></li>
     <li><b>Сопровождаем</b><span>обновления, законы, доступность</span></li></ol></div>
   </div></section>
-  <div class="wrap"><h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Направления работы</h2><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/"><div class="sv-top">${svIcon(s)}<span class="code">${s.code} · ${esc(s.short)}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}<ul>${s.items.slice(0, 4).map((i) => `<li>${esc(i)}</li>`).join('')}</ul><span class="card-link">Подробнее <span class="arrow">→</span></span></a>`).join('')}
+  <div class="wrap"><h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Направления работы</h2><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/">${svImg(s)}<div class="sv-top">${svIcon(s)}<span class="code">${s.code} · ${esc(s.short)}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}<ul>${s.items.slice(0, 4).map((i) => `<li>${esc(i)}</li>`).join('')}</ul><span class="card-link">Подробнее <span class="arrow">→</span></span></a>`).join('')}
   <a class="cap ask rv" href="/contact/"><span class="code">06</span><h3>Другая задача</h3><p>Опишите её — предложим решение.</p></a></div></div>
   <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Не знаете, что выбрать? <em>Опишите задачу.</em></h2>${leadForm('f-svc')}</div></div></section>`,
 }))
@@ -324,11 +306,11 @@ for (const s of SERVICES) {
     title: x.title ? `${x.title} | REBORN LAB` : `${s.seoTitle} — REBORN LAB`,
     description: x.description || s.lead,
     canonical: `/services/${s.slug}/`, current: '/services/',
-    jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/services/'], [s.title, `/services/${s.slug}/`]]),
+    jsonLd: [crumbsLd([['Главная', '/'], ['Услуги', '/#uslugi'], [s.title, `/services/${s.slug}/`]]),
       { '@context': 'https://schema.org', '@type': 'Service', name: s.seoTitle, description: x.description || s.lead, provider: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url },
         areaServed: 'RU', serviceType: s.title, url: `${SITE.url}/services/${s.slug}/`, ...(offers.length ? { offers } : {}) },
       { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }],
-    body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/services/'], [s.title, '']])}<div class="kicker sv-k" style="margin-top:18px">${svIcon(s)} ${s.code} · ${esc(s.short)}</div><h1>${esc(s.seoTitle)}</h1><p class="sub">${esc(s.lead)}</p>${svPains(s).replace('sv-pain', 'sv-pain big')}<p style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap">${ctaTop}</p></div>
+    body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Услуги', '/#uslugi'], [s.title, '']])}<div class="kicker sv-k" style="margin-top:18px">${svIcon(s)} ${s.code} · ${esc(s.short)}</div><h1>${esc(s.seoTitle)}</h1><p class="sub">${esc(s.lead)}</p>${svPains(s).replace('sv-pain', 'sv-pain big')}<p style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap">${ctaTop}</p></div>
     ${x.about ? `<section class="sec" style="padding-top:20px"><div class="wrap" style="max-width:860px"><h2 class="rv" style="font-size:clamp(26px,3.2vw,38px)">${esc(x.h2)}</h2>${x.about.map((t) => `<p class="rv sv-p">${esc(t)}</p>`).join('')}</div></section>` : ''}
     ${x.included ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="sec-hd rv"><div><div class="kicker">Что входит</div><h2>${esc(s.title)}: <em>что мы делаем</em></h2></div></div>
       <div class="sv-inc">${x.included.map(([t, d]) => `<div class="rv"><b>${esc(t)}</b>${d ? `<span>${esc(d)}</span>` : ''}</div>`).join('')}</div></div></section>`
@@ -372,21 +354,29 @@ for (const p of POSTS) {
 }
 
 // ---------- ABOUT / CONTACT ----------
-write('about/index.html', shell({
+write('about/index.html', shell({   // 10.11.2026 Ник: «обнови — ты уже знаешь, кто я и что делаем». Только реальные факты, без имён клиентов.
   title: 'О лаборатории — REBORN LAB',
-  description: 'REBORN LAB — цифровая лаборатория: берём задачу человека или бизнеса и собираем под неё решение — сайт, сервис, AI, автоматизацию, SEO.',
+  description: 'REBORN LAB: восстанавливаем и переносим сайты, делаем так, чтобы они открывались у всех, собираем сайты, ботов и AI. Бесплатный мониторинг серверов и бот для владельцев сайтов.',
   canonical: '/about/', current: '/about/',
   jsonLd: [ORG, crumbsLd([['Главная', '/'], ['О лаборатории', '/about/']])],
-  body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['О лаборатории', '']])}<h1>Место, куда можно принести <span style="color:var(--acc)">цифровую проблему</span></h1><p class="sub">И получить работающий продукт.</p></div>
+  body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['О лаборатории', '']])}<h1>Возвращаем сайты <span style="color:var(--acc)">и собираем новые</span></h1><p class="sub">REBORN LAB — небольшая цифровая лаборатория. Отвечает живой человек, лично.</p></div>
   <div class="wrap"><div class="prose">
-  <p>REBORN LAB — не веб-студия с прайсом на «сайт за N рублей». Мы работаем как лаборатория: сначала разбираемся в задаче, потом подбираем решение — и только потом пишем код.</p>
-  <p>Иногда задаче нужен лендинг. Иногда — AI-ассистент, который разгружает менеджеров. Иногда — Telegram-бот, который полностью заменяет CRM. А иногда — всё вместе: продукт с приложением, оплатами и сотнями страниц, которые приводят людей из поиска. Мы такие продукты уже собирали.</p>
+  <p>Мы начинали как лаборатория «под задачу»: сайты, веб-сервисы, Telegram-боты, автоматизация, AI. В ноябре 2026 года, когда у одного из крупных хостингов перестали работать серверы, к нам пошли люди, у которых пропали сайты. Так восстановление и переезд сайтов стали главным, чем мы занимаемся.</p>
+  <h2>Что мы делаем сейчас</h2>
+  <ul>
+  <li><strong>Возвращаем сайты.</strong> Из веб-архива — даже без резервной копии, из копии или из выгрузки товаров учётной системы (1С, SAP). Оформление, адреса страниц, заголовки и тексты — как были. За первые недели ноября так вернулись к работе девять сайтов: магазины, журнал, сайты компаний и студий.</li>
+  <li><strong>Делаем так, чтобы сайт открывался у всех.</strong> Убираем то, из-за чего сайт не грузится в России или у посетителей с VPN: шрифты и видео с зарубежных серверов, прокси Cloudflare, заблокированные IP. Подробно — в статье <a href="/journal/pochemu-sajt-ne-otkryvaetsya-v-rossii/">«Почему сайт не открывается в России или с VPN»</a>.</li>
+  <li><strong>Пересобираем сайты на лёгкий движок.</strong> Сайт на Тильде, Битриксе или MODX — в том же виде, но без тяжёлого конструктора и абонентской платы.</li>
+  <li><strong>Делаем новое.</strong> Сайты, Telegram-боты, автоматизация заявок, AI-ассистенты — когда это действительно нужно задаче.</li>
+  </ul>
+  <h2>Бесплатно для всех</h2>
+  <p>Пока хостинг восстанавливается, мы держим бесплатные инструменты: <a href="/beget/">статус и мониторинг серверов</a>, <a href="/beget/server/">проверку сервера по IP</a>, <a href="/beget/vosstanovit/">проверку «можно ли восстановить сайт»</a>, <a href="/beget/voprosy/">ответы на частые вопросы</a> и бота <a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">@rebornlab_bot</a>, который пишет, когда сайт снова заработает. Ботом пользуются больше 950 человек, он следит за полутора тысячами сайтов. Рекламы в нём нет.</p>
   <h2>Как мы работаем</h2>
-  <ol><li><strong>Разбор.</strong> Вы описываете задачу обычными словами — мы задаём вопросы и предлагаем варианты.</li><li><strong>Прототип.</strong> Начинаем с малого: быстро показываем, как это будет работать.</li><li><strong>Сборка.</strong> Дизайн, разработка, AI, интеграции — одной командой, без потерь на стыках.</li><li><strong>Запуск и рост.</strong> Аналитика, SEO, контент — чтобы продукт находили и он развивался.</li></ol>
+  <ol><li><strong>Смотрим.</strong> Вы присылаете адрес сайта или описываете задачу своими словами — мы честно говорим, что можно сделать, а что нет.</li><li><strong>Собираем.</strong> Небольшой сайт обычно удаётся поднять за 2–3 часа, большой каталог — дольше.</li><li><strong>Показываем.</strong> Сайт сначала открывается на временном адресе — проверяете, что всё на месте.</li><li><strong>Переключаем.</strong> Сайт работает на нашем сервере в России, заявки приходят на почту и в мессенджер.</li></ol>
   <h2>Чего мы не делаем</h2>
-  <ul><li>Не придумываем клиентов, награды и цифры.</li><li>Не продаём пакеты «всё включено» — начинаем с того, что нужно сейчас.</li><li>Не прячем технологии: вы знаете, на чём и как сделан ваш продукт.</li></ul>
+  <ul><li>Не пугаем потерей сайта и не торопим — решение принимаете вы.</li><li>Не обещаем невозможного: если сайт не восстановить, так и скажем.</li><li>Не придумываем клиентов, отзывы и цифры.</li><li>Не прячем технологии: вы знаете, на чём и где работает ваш сайт.</li></ul>
   </div></div>
-  <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Есть задача? <em>Давайте соберём.</em></h2>${leadForm('f-about', 'Обсудить идею')}</div></div></section>`,
+  <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Есть задача? <em>Расскажите.</em></h2>${leadForm('f-about', 'Обсудить задачу')}</div></div></section>`,
 }))
 write('contact/index.html', shell({
   title: 'Обсудить проект — REBORN LAB',
@@ -480,7 +470,7 @@ if (HAS_SELLER) write('oferta/index.html', shell({
 }))
 
 write('404.html', shell({ title: 'Страница не найдена — REBORN LAB', description: 'Такой страницы нет.', canonical: '/404.html',
-  body: `<div class="wrap page-hd"><div class="kicker">404</div><h1>Такой страницы <span style="color:var(--acc)">нет</span></h1><p class="sub">Зато есть <a href="/services/" style="color:var(--acc)">услуги</a>, <a href="/journal/" style="color:var(--acc)">журнал</a> и <a href="/contact/" style="color:var(--acc)">форма для вашей задачи</a>.</p></div><div style="height:120px"></div>` }))
+  body: `<div class="wrap page-hd"><div class="kicker">404</div><h1>Такой страницы <span style="color:var(--acc)">нет</span></h1><p class="sub">Зато есть <a href="/#uslugi" style="color:var(--acc)">услуги</a>, <a href="/journal/" style="color:var(--acc)">журнал</a> и <a href="/contact/" style="color:var(--acc)">форма для вашей задачи</a>.</p></div><div style="height:120px"></div>` }))
 
 // ---------- assets, sitemap, robots, rss ----------
 for (const d of ['assets']) mkdirSync(path.join(OUT, d), { recursive: true })
@@ -492,7 +482,7 @@ if (existsSync(path.join(ROOT, 'src/assets/journal'))) {   // 06.11: облож�
 }
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
-const urls = [['/', today, '1.0'], ['/services/', today, '0.9'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/beget/pravila/', today, '0.4'],
+const urls = [['/', today, '1.0'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/beget/pravila/', today, '0.4'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 // 09.11 (Ник): поиск по всему сайту — индекс /search.json (страницы, услуги, статьи, вопросы); noindex и закрытое сюда не попадает
 {
@@ -503,7 +493,7 @@ const urls = [['/', today, '1.0'], ['/services/', today, '0.9'], ['/journal/', P
     { t: 'Можно ли восстановить сайт', u: '/beget/vosstanovit/', d: 'Что сохранилось в веб-архиве и Яндекс Картинках', k: 'Бегет' },
     { t: 'Вопросы и ответы', u: '/beget/voprosy/', d: 'Сайт, почта, домен, копии, переезд', k: 'Бегет' },
     { t: 'Восстановление сайта: цены и сроки', u: '/vosstanovlenie-sajta/', d: 'Варианты и стоимость', k: 'Услуги' },
-    { t: 'Услуги', u: '/services/', d: 'Сайты, сервисы, AI, автоматизация, SEO', k: 'Услуги' },
+    { t: 'Услуги', u: '/#uslugi', d: 'Сайты, сервисы, AI, автоматизация, SEO', k: 'Услуги' },
     { t: 'Журнал', u: '/journal/', d: 'Разборы, кейсы и инструкции', k: 'Журнал' },
     { t: 'О лаборатории', u: '/about/', d: 'Кто мы', k: 'Страница' },
     { t: 'Контакты', u: '/contact/', d: 'Обсудить задачу', k: 'Страница' },

@@ -1,0 +1,135 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<!-- Картинки карточек услуг (10.11.2026). Снимаются drafts/services-pics.mjs → src/assets/services/<slug>.jpg, 800×450 -->
+<style>
+*{box-sizing:border-box}body{margin:0;background:#222;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#edebe6}
+.p{width:800px;height:450px;position:relative;overflow:hidden;margin:0 0 20px;
+ background:radial-gradient(520px 320px at 85% 10%,rgba(198,242,78,.16),transparent 65%),radial-gradient(400px 300px at 0% 100%,rgba(122,167,255,.10),transparent 60%),#0c0e10}
+.p:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(237,235,230,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(237,235,230,.045) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(circle at 60% 40%,#000 30%,transparent 80%)}
+.in{position:absolute;inset:0;padding:40px 44px;display:flex;align-items:center;gap:28px}
+.box{background:#14171a;border:1px solid rgba(237,235,230,.12);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.win{overflow:hidden}.win .bar{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid rgba(237,235,230,.08);background:#181b1f}.win .bar i{width:9px;height:9px;border-radius:50%;background:#3a3e44}
+.ln{height:10px;border-radius:5px;background:rgba(237,235,230,.14);margin:10px 0}.ln.a{background:#c6f24e}.ln.c{background:#7aa7ff}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:#171a1e;border:1px solid rgba(237,235,230,.12);font-size:16px;font-weight:600;white-space:nowrap}
+.ok{color:#c6f24e}.dot{width:9px;height:9px;border-radius:50%;background:#c6f24e;box-shadow:0 0 10px rgba(198,242,78,.7)}
+.arr{font:700 34px/1 monospace;color:#c6f24e}
+.k{font:700 13px "SF Mono",Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#c6f24e}
+.mono{font-family:"SF Mono",Menlo,monospace}
+</style></head><body>
+
+<!-- 1. Восстановление и переезд -->
+<div class="p" id="site-restore"><div class="in">
+ <div style="display:flex;flex-direction:column;gap:12px;width:200px">
+  <span class="chip">🗂 Веб-архив</span><span class="chip">💾 Резервная копия</span><span class="chip">📦 Выгрузка 1С / SAP</span>
+ </div>
+ <div class="arr">→</div>
+ <div class="box win" style="flex:1;height:290px;position:relative">
+  <div class="bar"><i></i><i></i><i></i><span class="mono" style="margin-left:10px;font-size:12px;color:#9a9890">ваш-сайт.ru</span></div>
+  <div style="padding:18px 20px">
+   <div style="display:flex;gap:12px"><div style="width:70px;height:70px;border-radius:12px;background:linear-gradient(135deg,#c6f24e,#7aa7ff)"></div><div style="flex:1"><div class="ln a" style="width:70%"></div><div class="ln" style="width:90%"></div><div class="ln" style="width:55%"></div></div></div>
+   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px">
+    <div style="height:62px;border-radius:10px;background:#1d2126"></div><div style="height:62px;border-radius:10px;background:#1d2126"></div><div style="height:62px;border-radius:10px;background:#1d2126"></div></div>
+   <div class="chip" style="position:absolute;right:18px;bottom:18px;background:#1b2410;border-color:rgba(198,242,78,.5)"><span class="dot"></span>Сервер в России · адреса как были</div>
+  </div>
+ </div>
+</div></div>
+
+<!-- 2. Сайт открывается у всех -->
+<div class="p" id="site-fix"><div class="in" style="justify-content:center">
+ <div class="box" style="width:400px;padding:22px 24px">
+  <div class="k" style="margin-bottom:14px">проверка доступности</div>
+  <div style="display:flex;flex-direction:column;gap:12px;font-size:17px">
+   <div style="display:flex;justify-content:space-between"><span>Домашний интернет</span><b class="ok">✓ открывается</b></div>
+   <div style="display:flex;justify-content:space-between"><span>Мобильный интернет</span><b class="ok">✓ открывается</b></div>
+   <div style="display:flex;justify-content:space-between"><span>С VPN</span><b class="ok">✓ открывается</b></div>
+   <div style="display:flex;justify-content:space-between"><span>Из других стран</span><b class="ok">✓ открывается</b></div>
+  </div></div>
+ <div style="display:flex;flex-direction:column;gap:12px">
+  <div class="box" style="width:220px;padding:20px;text-align:center"><div class="k">загрузка</div><div style="font:800 40px/1.2 -apple-system,Arial;margin-top:6px" class="ok">быстро</div></div>
+  <span class="chip" style="text-decoration:line-through;color:#9a9890">fonts.googleapis.com</span>
+  <span class="chip" style="text-decoration:line-through;color:#9a9890">Cloudflare-прокси</span>
+ </div>
+</div></div>
+
+<!-- 3. Редизайн: Тильда/Битрикс → лёгкий сайт -->
+<div class="p" id="redesign"><div class="in">
+ <div class="box win" style="width:270px;height:280px;opacity:.75">
+  <div class="bar"><i></i><i></i><i></i><span style="margin-left:10px;font-size:12px;color:#9a9890">Тильда · Битрикс</span></div>
+  <div style="padding:16px">
+   <div style="height:46px;border-radius:8px;background:#2a2d31;margin-bottom:10px"></div>
+   <div style="height:46px;border-radius:8px;background:#2a2d31;margin-bottom:10px"></div>
+   <div style="height:46px;border-radius:8px;background:#2a2d31;margin-bottom:10px"></div>
+   <div class="mono" style="font-size:13px;color:#ff7a6b">тяжёлый конструктор</div></div></div>
+ <div class="arr">→</div>
+ <div class="box win" style="flex:1;height:300px">
+  <div class="bar"><i></i><i></i><i></i><span style="margin-left:10px;font-size:12px;color:#9a9890">тот же дизайн</span></div>
+  <div style="padding:18px">
+   <div class="ln a" style="width:55%;height:14px"></div><div class="ln" style="width:85%"></div><div class="ln" style="width:70%"></div>
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0"><div style="height:60px;border-radius:10px;background:#1d2126"></div><div style="height:60px;border-radius:10px;background:#1d2126"></div></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip" style="font-size:13px;padding:7px 10px">адреса и SEO</span><span class="chip" style="font-size:13px;padding:7px 10px">заявки</span><span class="chip ok" style="font-size:13px;padding:7px 10px">лёгкий и быстрый</span></div></div></div>
+</div></div>
+
+<!-- 4. Telegram-боты -->
+<div class="p" id="telegram-bots"><div class="in" style="justify-content:center">
+ <div class="box" style="width:420px;padding:20px;display:flex;flex-direction:column;gap:10px">
+  <div style="align-self:flex-end;background:#2b5278;padding:10px 14px;border-radius:14px 14px 4px 14px;font-size:16px">Хочу записаться на пятницу</div>
+  <div style="align-self:flex-start;background:#1d2126;padding:10px 14px;border-radius:14px 14px 14px 4px;font-size:16px">Свободно: 12:00 · 15:00 · 18:30</div>
+  <div style="display:flex;gap:8px"><span class="chip" style="font-size:14px">12:00</span><span class="chip" style="font-size:14px;border-color:#c6f24e;color:#c6f24e">15:00</span><span class="chip" style="font-size:14px">18:30</span></div>
+  <div style="align-self:flex-start;background:#1d2126;padding:10px 14px;border-radius:14px 14px 14px 4px;font-size:16px"><span class="ok">✓</span> Записали на пятницу, 15:00. Напомним за час</div>
+ </div>
+</div></div>
+
+<!-- 5. SEO и GEO -->
+<div class="p" id="seo"><div class="in" style="justify-content:center">
+ <div class="box" style="width:520px;padding:20px">
+  <div style="display:flex;align-items:center;gap:10px;background:#1d2126;border-radius:12px;padding:10px 14px;font-size:16px;color:#9a9890">🔎 ремонт кофемашин спб</div>
+  <div style="margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid rgba(198,242,78,.5);background:rgba(198,242,78,.06)">
+   <div class="mono" style="font-size:12px;color:#c6f24e">ваш-сайт.ru</div><div style="font-size:18px;font-weight:700;margin-top:4px">Ремонт кофемашин в СПб — за 1 день</div><div class="ln" style="width:80%;margin:8px 0 0"></div></div>
+  <div style="padding:12px 14px"><div class="ln" style="width:45%"></div><div class="ln" style="width:75%"></div></div>
+  <div style="display:flex;gap:10px;align-items:center;margin-top:4px"><span class="chip" style="font-size:14px">✦ Ответ AI ссылается на вас</span></div>
+ </div>
+</div></div>
+
+<!-- 6. Дизайн -->
+<div class="p" id="design"><div class="in" style="justify-content:center">
+ <div style="display:flex;flex-direction:column;gap:10px">
+  <div style="display:flex;gap:10px"><div style="width:62px;height:62px;border-radius:14px;background:#c6f24e"></div><div style="width:62px;height:62px;border-radius:14px;background:#7aa7ff"></div><div style="width:62px;height:62px;border-radius:14px;background:#edebe6"></div><div style="width:62px;height:62px;border-radius:14px;background:#2a2d31"></div></div>
+  <div class="box" style="padding:16px 18px;font:800 40px/1 -apple-system,Arial">Аа <span style="font-weight:400;color:#9a9890">Аа</span></div>
+ </div>
+ <div class="box win" style="width:330px;height:300px">
+  <div class="bar"><i></i><i></i><i></i></div>
+  <div style="padding:18px"><div style="height:96px;border-radius:12px;background:linear-gradient(120deg,#c6f24e,#7aa7ff)"></div><div class="ln" style="width:60%;height:14px;margin-top:16px"></div><div class="ln" style="width:85%"></div>
+   <div style="display:flex;gap:8px;margin-top:14px"><div style="height:34px;width:110px;border-radius:10px;background:#c6f24e"></div><div style="height:34px;width:90px;border-radius:10px;border:1px solid rgba(237,235,230,.3)"></div></div></div></div>
+</div></div>
+
+<!-- 7. Цифровые продукты -->
+<div class="p" id="web-development"><div class="in" style="justify-content:center">
+ <div class="box win" style="width:600px;height:320px">
+  <div class="bar"><i></i><i></i><i></i><span style="margin-left:10px;font-size:12px;color:#9a9890">личный кабинет</span></div>
+  <div style="display:grid;grid-template-columns:150px 1fr;height:calc(100% - 31px)">
+   <div style="border-right:1px solid rgba(237,235,230,.08);padding:16px"><div class="ln a" style="width:80%"></div><div class="ln" style="width:65%"></div><div class="ln" style="width:72%"></div><div class="ln" style="width:58%"></div></div>
+   <div style="padding:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start">
+    <div style="background:#1d2126;border-radius:10px;padding:12px"><div class="mono" style="font-size:11px;color:#9a9890">заказы</div><div style="font-size:26px;font-weight:800">128</div></div>
+    <div style="background:#1d2126;border-radius:10px;padding:12px"><div class="mono" style="font-size:11px;color:#9a9890">выручка</div><div style="font-size:26px;font-weight:800" class="ok">+24%</div></div>
+    <div style="background:#1d2126;border-radius:10px;padding:12px"><div class="mono" style="font-size:11px;color:#9a9890">клиенты</div><div style="font-size:26px;font-weight:800">57</div></div>
+    <div style="grid-column:1/-1;height:120px;background:#1d2126;border-radius:10px;display:flex;align-items:flex-end;gap:8px;padding:12px">
+     <div style="flex:1;height:30%;background:#7aa7ff;border-radius:4px"></div><div style="flex:1;height:45%;background:#7aa7ff;border-radius:4px"></div><div style="flex:1;height:38%;background:#7aa7ff;border-radius:4px"></div><div style="flex:1;height:62%;background:#7aa7ff;border-radius:4px"></div><div style="flex:1;height:74%;background:#c6f24e;border-radius:4px"></div><div style="flex:1;height:90%;background:#c6f24e;border-radius:4px"></div></div>
+   </div></div></div>
+</div></div>
+
+<!-- 8. Автоматизация -->
+<div class="p" id="automation"><div class="in" style="justify-content:center;gap:16px">
+ <span class="chip" style="font-size:18px;padding:14px 18px">📝 Заявка с сайта</span><div class="arr">→</div>
+ <span class="chip" style="font-size:18px;padding:14px 18px">🗂 CRM</span><div class="arr">→</div>
+ <div style="display:flex;flex-direction:column;gap:10px"><span class="chip" style="font-size:16px">💬 Менеджеру в Telegram</span><span class="chip" style="font-size:16px">📄 Счёт и договор</span><span class="chip" style="font-size:16px">📊 Отчёт за день</span></div>
+</div></div>
+
+<!-- 9. AI -->
+<div class="p" id="ai"><div class="in" style="justify-content:center">
+ <div class="box" style="width:500px;padding:20px;display:flex;flex-direction:column;gap:12px">
+  <div style="align-self:flex-end;background:#2b5278;padding:10px 14px;border-radius:14px 14px 4px 14px;font-size:16px">Какие сроки поставки по договору №118?</div>
+  <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#c6f24e,#7aa7ff);flex:0 0 34px;display:flex;align-items:center;justify-content:center;color:#0c0e10;font-weight:800">✦</div>
+   <div style="background:#1d2126;padding:10px 14px;border-radius:4px 14px 14px 14px;font-size:16px;line-height:1.45">Поставка — до 20 декабря, оплата 50/50.<div class="mono" style="font-size:12px;color:#9a9890;margin-top:6px">источник: Договор_118.pdf, п. 4.2</div></div></div>
+ </div>
+</div></div>
+
+</body></html>
