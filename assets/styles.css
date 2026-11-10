@@ -414,3 +414,6 @@ form.need-agree .agree { color: #ff8a7a; }
 body.srch-lock { overflow: hidden; }
 @media (min-width: 981px) { .srch-btn { margin-left: 0; order: 2; margin-right: 0; } .hdr-cta { order: 3; } }
 
+/* 10.11 (Ник): на юридических страницах подвал по краям текста; таблица на телефоне листается внутри, страница не уезжает вправо */
+body:has(.legal) .ftr .wrap { max-width: 860px; }
+@media (max-width: 700px) { .legal table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; } .legal td, .legal th { min-width: 140px; } }
