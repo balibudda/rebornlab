@@ -236,7 +236,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
 // 10.11.2026: ИИ-консультант (окошко на всех страницах). Сервер — api.rebornlab.ru/chat (vpn-id, служба rl-chat).
 // Включается переключателем CHAT_ON ниже (на всех страницах) или тестовой ссылкой ?chat=1.
 (function () {
-  var CHAT_ON = false;   // ← включить, когда на vpn-id заработает ключ (/etc/rl-chat.env); до этого — только ?chat=1
+  var CHAT_ON = true;   // 10.11 включено (ChatGPT gpt-5-mini, Claude — когда пополним). Было: включить, когда на vpn-id заработает ключ (/etc/rl-chat.env); до этого — только ?chat=1
   var on = CHAT_ON || /[?&]chat=1/.test(location.search);
   if (!on) return;
   var API = 'https://api.rebornlab.ru/chat', LEAD = 'https://api.rebornlab.ru/lead';
