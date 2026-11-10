@@ -108,7 +108,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
       f.classList.remove('need-agree');
       btn.disabled = true; btn.textContent = 'Отправляю…';
       var payload = { topics: topics, text: text.trim(), contact: contact.trim(), page: location.pathname, agree: true, hp: (f.querySelector('input[name=company]') || {}).value || '', k: RL_T0.toString(36), t: Date.now() - RL_T0, h: RL_HUMAN ? 1 : 0 };   // 08.11: метки антиспама
-      fetch('https://api.rebornlab.ru/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
         .then(function (r) { if (!r.ok) throw 0; ok.style.display = 'block'; f.reset(); f.querySelectorAll('.chip.on').forEach(function (c) { c.classList.remove('on'); }); if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'lead'); })
         .catch(function () { window.open('https://t.me/Reborn_Lab', '_blank'); })
         .then(function () { btn.disabled = false; btn.textContent = btn.getAttribute('data-label'); });
@@ -238,7 +238,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   var CHAT_ON = true;   // 10.11 включено (ChatGPT gpt-5-mini, Claude — когда пополним). Было: включить, когда на vpn-id заработает ключ (/etc/rl-chat.env); до этого — только ?chat=1
   var on = CHAT_ON || /[?&]chat=1/.test(location.search);
   if (!on) return;
-  var API = '/api/chat', LEAD = 'https://api.rebornlab.ru/lead';
+  var API = '/api/chat', LEAD = '/api/lead';
   var sid = ''; try { sid = sessionStorage.getItem('rl_chat_sid') || ''; } catch (e) {}
   if (!sid) { sid = Math.random().toString(36).slice(2) + Date.now().toString(36); try { sessionStorage.setItem('rl_chat_sid', sid); } catch (e) {} }
   var hist = []; try { hist = JSON.parse(sessionStorage.getItem('rl_chat_hist') || '[]'); } catch (e) {}
