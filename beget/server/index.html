@@ -119,7 +119,7 @@
 <main class="bw">
   <a href="/beget/" class="live" style="text-decoration:none">← Статус восстановления Бегет</a>
   <h1>Проверить сервер Бегет (Beget) по IP</h1>
-  <p class="lead">Введите IP-адрес сервера или адрес сайта — покажем, отвечает ли ваш сервер на наши проверки, что с соседними серверами и что делать дальше. Данные наших проверок всех 9 сетей хостинга Бегет, обновление каждые 15 минут.</p>
+  <p class="lead">Введите IP-адрес сервера или адрес сайта — покажем, отвечает ли ваш сервер на наши проверки, что с соседними серверами и что делать дальше. Данные наших проверок всех сетей хостинга Бегет, обновление каждые 15 минут.</p>
   <div class="live" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
   <div class="chklog" id="chk"></div>
 
@@ -202,7 +202,7 @@
   function tick() {
     if (!D) return;
     var m = Math.max(0, Math.round((Date.now() / 1000 - D.updated) / 60));
-    $('upd').innerHTML = 'последняя проверка серверов — <b>' + (m < 1 ? 'только что' : m + ' мин назад') + '</b> (в ' + hm(D.updated) + ' МСК) · проверяем все 9 сетей каждые 15–30 минут, страница обновляется сама';
+    $('upd').innerHTML = 'последняя проверка серверов — <b>' + (m < 1 ? 'только что' : m + ' мин назад') + '</b> (в ' + hm(D.updated) + ' МСК) · проверяем все сети каждые 15–30 минут, страница обновляется сама';
   }
   function journal() {
     fetch('https://api.rebornlab.ru/beget.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (b) {
@@ -232,7 +232,7 @@
     Object.keys(D.nets).forEach(function (n) {
       var s = D.nets[n].s, on = (s.match(/h/g) || []).length, cells = '';
       for (var i = 0; i < 254; i++) cells += '<i class="' + (s[i] === 'h' ? 'h' : s[i] === 'o' ? 'o' : '') + '" data-ip="' + n + '.' + (i + 1) + '" title="' + n + '.' + (i + 1) + '"></i>';
-      out += '<div class="qrow"><div class="qn"><b>' + n + '.x</b> — работает ' + on + ' серверов хостинга' + (D.nets[n].new ? ' · с 6 ноября в мониторинге' : '') + '</div><div class="qcells">' + cells + '</div></div>';
+      out += '<div class="qrow"><div class="qn"><b>' + n + '.x</b> — работает ' + on + ' серверов хостинга' + (D.nets[n].new ? ' · добавлена в мониторинг позже' : '') + '</div><div class="qcells">' + cells + '</div></div>';
     });
     $('qmap').innerHTML = out;
     $('qmap').onclick = function (e) { var ip = e.target.getAttribute('data-ip'); if (ip) { $('q').value = ip; check(ip); $('check').scrollIntoView({behavior: 'smooth'}); } };
@@ -261,7 +261,7 @@
     var p = ip.split('.'), n = p.slice(0, 3).join('.'), k = +p[3], net = D.nets[n];
     ping(ip, site ? 'd' : 'i', !net ? 'nb' : net.s[k - 1] === 'h' ? 'on' : net.s[k - 1] === 'o' ? 'vps' : 'off');
     var who = site ? 'Сайт ' + esc(site) + ' стоит на сервере <b>' + ip + '</b>. ' : '';
-    if (!net) { show('<p class="big">' + (site ? esc(site) + ' — ' : '') + ip + ': не из сетей хостинга Бегет, за которыми мы следим</p><p>Возможно, сайт уже переехал на другой хостинг, стоит на VPS или выделенном сервере Бегет, или это не Бегет. Мы проверяем 9 сетей виртуального хостинга: ' + Object.keys(D.nets).map(function (x) { return x + '.x'; }).join(', ') + '.</p>'); return; }
+    if (!net) { show('<p class="big">' + (site ? esc(site) + ' — ' : '') + ip + ': не из сетей хостинга Бегет, за которыми мы следим</p><p>Если это сеть Бегет, которой нет в нашем мониторинге, пришлите её админу <a href="https://t.me/Reborn_Lab" style="color:var(--acc)">@Reborn_Lab</a> — добавим в проверку.</p><p>Возможно, сайт уже переехал на другой хостинг, стоит на VPS или выделенном сервере Бегет, или это не Бегет. Мы проверяем 9 сетей виртуального хостинга: ' + Object.keys(D.nets).map(function (x) { return x + '.x'; }).join(', ') + '.</p>'); return; }
     var s = net.s, c = s[k - 1], lo = Math.max(1, k - 12), hi = Math.min(254, k + 12), strip = '', near = 0, nearAll = 0;
     for (var i = lo; i <= hi; i++) { var ch = s[i - 1]; strip += '<span class="' + (ch === 'h' ? 'h' : ch === 'o' ? 'o' : '') + (i === k ? ' me' : '') + '">' + i + '</span>'; }
     for (var j = Math.max(1, k - 20); j <= Math.min(254, k + 20); j++) { if (j !== k) { nearAll++; if (s[j - 1] === 'h') near++; } }
