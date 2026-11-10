@@ -249,7 +249,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   var btn = document.createElement('button'); btn.className = 'rlc-btn'; btn.type = 'button'; btn.setAttribute('aria-label', 'Спросить консультанта');
   btn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></svg><span>Спросить</span>';
   var box = document.createElement('div'); box.className = 'rlc'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Консультант REBORN LAB');
-  box.innerHTML = '<div class="rlc-hd"><div><b>Консультант REBORN LAB</b><span>отвечает ИИ · обычно за несколько секунд</span></div><button type="button" class="rlc-x" aria-label="Закрыть">×</button></div>' +
+  box.innerHTML = '<div class="rlc-hd"><div><b>С вами Алиса</b><span>ИИ-консультант REBORN LAB · отвечает за несколько секунд</span></div><button type="button" class="rlc-x" aria-label="Закрыть">×</button></div>' +
     '<div class="rlc-log" aria-live="polite"></div>' +
     '<div class="rlc-chips"><button type="button">Восстановить сайт</button><button type="button">Сколько стоит</button><button type="button">Сайт не открывается</button></div>' +
     '<div class="rlc-lead" hidden><div class="rlc-ct"><select name="ct" aria-label="Как связаться"><option>Почта</option><option>Telegram</option><option>WhatsApp</option></select><input type="text" name="c" placeholder="name@mail.ru" autocomplete="off"></div><span class="rlc-note">Мы не звоним — пишем на почту, в Telegram или WhatsApp.</span><label><input type="checkbox" name="a"> Согласен на <a href="/consent/" target="_blank">обработку данных</a></label><div class="rlc-bt"><button type="button" class="btn btn-acc rlc-pay">Оплатить демо 2 000 ₽</button><button type="button" class="btn rlc-send-lead">Только заявка</button></div><span class="rlc-note">Демо — до 12 страниц вашего сайта на временном адресе, чтобы увидеть результат до основной оплаты. Карта или СБП через ЮKassa.</span></div>' +
@@ -258,7 +258,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   document.body.appendChild(btn); document.body.appendChild(box);
   var log = box.querySelector('.rlc-log'), form = box.querySelector('.rlc-in'), inp = form.querySelector('input'), busy = false;
   function add(role, text) { var d = document.createElement('div'); d.className = 'rlc-m ' + (role === 'user' ? 'u' : 'a'); d.innerHTML = fmt(text); log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
-  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Подскажу, можно ли восстановить ваш сайт, сколько это стоит и почему сайт может не открываться. Напишите адрес сайта или вопрос.'); hist.forEach(function (m) { add(m.role, m.content); }); }
+  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Я Алиса, консультант REBORN LAB. Подскажу, можно ли восстановить ваш сайт, сколько это стоит и почему сайт может не открываться. Напишите адрес сайта или вопрос.'); hist.forEach(function (m) { add(m.role, m.content); }); }
   function ask(text) {
     if (busy || !text.trim()) return; busy = true;
     hist.push({ role: 'user', content: text.trim() }); save(); add('user', text.trim());
