@@ -260,8 +260,9 @@
     var g = '';
     [lo, Math.round((lo + hi) / 2), hi].forEach(function (v) { var y = Y(v); g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y + '" y2="' + y + '" stroke="rgba(237,235,230,.07)"/><text x="' + (W - R + 8) + '" y="' + (y + 4) + '" fill="#6a6862" font-size="12">' + v + '</text>'; });
     var n = Math.min(5, h.length);   // подписи времени снизу
-    for (var k = 0; k < n; k++) { var x = h[Math.round(k * (h.length - 1) / Math.max(1, n - 1))];
-      g += '<text x="' + X(x.t) + '" y="' + (H - 6) + '" fill="#6a6862" font-size="12" text-anchor="' + (k === 0 ? 'start' : k === n - 1 ? 'end' : 'middle') + '">' + tm(x.t) + '</text>'; }
+    var t0 = h[0].t, t1 = h[h.length - 1].t, span = t1 - t0;   // 11.11: подписи ровно по времени и с датой (раньше — по номеру точки, без даты: «11:02 … 00:14 … 06:59» путали)
+    for (var k = 0; k < n; k++) { var tt = t0 + k * span / Math.max(1, n - 1);
+      g += '<text x="' + X(tt) + '" y="' + (H - 6) + '" fill="#6a6862" font-size="12" text-anchor="' + (k === 0 ? 'start' : k === n - 1 ? 'end' : 'middle') + '">' + (span > 20 * 3600 ? dm(tt) + ' ' : '') + tm(tt) + '</text>'; }
     var d = h.map(function (x, i) { return (i ? 'L' : 'M') + X(x.t).toFixed(1) + ' ' + Y(x[key]).toFixed(1); }).join(' ');
     var area = d + ' L' + X(t1).toFixed(1) + ' ' + (H - B) + ' L' + X(t0).toFixed(1) + ' ' + (H - B) + ' Z';
     var dots = h.length <= 80 ? h.map(function (x) { return '<circle cx="' + X(x.t).toFixed(1) + '" cy="' + Y(x[key]).toFixed(1) + '" r="3.2" fill="' + color + '"/>'; }).join('') : '';
@@ -269,6 +270,7 @@
     svg.innerHTML = g + '<path d="' + area + '" fill="' + color + '" opacity=".08"/><path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="2.5" stroke-linejoin="round"/>' + dots +
       '<circle cx="' + X(last.t) + '" cy="' + Y(last[key]) + '" r="6" fill="' + color + '"/><text x="' + (X(last.t) - 10) + '" y="' + (Y(last[key]) - 12) + '" fill="' + color + '" font-size="15" font-weight="700" text-anchor="end">' + last[key] + '</text>';
   }
+  function dm(t) { return new Date(t * 1000).toLocaleDateString('ru-RU', {timeZone: 'Europe/Moscow', day: 'numeric', month: 'short'}).replace('.', ''); }
   function tm(t) { return new Date(t * 1000).toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit'}); }
   // 06.11: провалы, когда сбоил наш замер (сервер проверки не успел), а не Beget — точка ниже 85% медианы соседей не рисуется
   function clean(h, k) {
