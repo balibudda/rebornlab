@@ -25,7 +25,7 @@ const ru = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('ru-RU', { day: 
 const ruDT = (p) => ru(p.date) + (p.time ? `, ${p.time} МСК` : '')
 const isoDT = (p) => (p.time ? `${p.date}T${p.time}:00+03:00` : p.date)
 // 06.11.2026 Ник: во всех новостях о Бегет (Beget) — ссылка на бота
-// 09.11.2026 (Ник): под каждой статьёй — «Поделиться» и комментарии (премодерация: служба rl-comments на vpn-id, решение — кнопками в @rebornlab_bot)
+// 09.11.2026 (Ник): под каждой статьёй — «Поделиться». 10.11: комментарии убраны (Ник: «никто не пишет»)
 const SHARE_COMMENTS = (p) => {
   const url = `https://rebornlab.ru/journal/${p.slug}/`, u = encodeURIComponent(url), t = encodeURIComponent(p.title)
   return `<div class="share" style="margin:40px 0 0;padding:20px 0;border-top:1px solid rgba(255,255,255,.12)"><b style="display:block;margin-bottom:12px">Поделиться статьёй</b>
@@ -35,26 +35,9 @@ const SHARE_COMMENTS = (p) => {
 <a class="btn-sh" href="https://wa.me/?text=${t}%20${u}" target="_blank" rel="noopener">WhatsApp</a>
 <a class="btn-sh" href="https://connect.ok.ru/offer?url=${u}&title=${t}" target="_blank" rel="noopener">Одноклассники</a>
 <button type="button" class="btn-sh" data-copy="${url}">Скопировать ссылку</button></div></div>
-<div id="comments" data-slug="${p.slug}" style="margin:28px 0 0"><h2>Комментарии</h2><div class="cm-list"><p class="cm-empty" style="opacity:.7">Пока нет комментариев — будьте первым.</p></div>
-<form class="cm-form" novalidate style="display:grid;gap:10px;margin-top:18px;max-width:640px">
-<input name="name" maxlength="60" placeholder="Ваше имя" required style="padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;font:inherit">
-<textarea name="text" maxlength="2000" rows="4" placeholder="Ваш комментарий" required style="padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:transparent;color:inherit;font:inherit"></textarea>
-<input name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
-<label style="font-size:14px;opacity:.9"><input type="checkbox" name="notify" class="cm-nt"> Сообщить мне об ответе в Telegram</label>
-<label style="font-size:14px;opacity:.85"><input type="checkbox" name="agree"> Согласен на публикацию имени и текста комментария (<a href="/consent/">согласие</a>, <a href="/privacy/">политика</a>)</label>
-<button type="submit" class="btn" style="justify-self:start">Отправить</button>
-<p class="cm-msg" style="margin:0;font-size:14px"></p>
-<p style="margin:0;font-size:13px;opacity:.6">Комментарии публикуются после проверки.</p></form></div>
-
-<script>(function(){var box=document.getElementById('comments');if(!box)return;var s=box.dataset.slug,API='https://api.rebornlab.ru/comments',k=Date.now().toString(36),t0=Date.now(),h=0;
-['mousemove','touchstart','keydown','scroll'].forEach(function(e){addEventListener(e,function(){h=1},{once:true,passive:true})});
+<script>(function(){
 document.querySelectorAll('[data-copy]').forEach(function(b){b.onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(b.dataset.copy);b.textContent='Ссылка скопирована'}});
-function esc(x){var d=document.createElement('div');d.textContent=x;return d.innerHTML}
-fetch(API+'?s='+s).then(function(r){return r.json()}).then(function(d){if(!d.items||!d.items.length)return;box.querySelector('.cm-list').innerHTML=d.items.map(function(c){return '<div class="cm-item"><b>'+esc(c.name)+'</b><small>'+new Date(c.t*1000).toLocaleDateString('ru-RU')+'</small><p style="margin:6px 0 0;white-space:pre-wrap">'+esc(c.text)+'</p>'+(c.reply?'<div style="margin:10px 0 0 18px;padding:10px 14px;border-left:3px solid var(--acc);background:rgba(198,242,78,.05)"><b>REBORN LAB</b><p style="margin:4px 0 0;white-space:pre-wrap">'+esc(c.reply)+'</p></div>':'')+'</div>'}).join('')}).catch(function(){});
-var f=box.querySelector('.cm-form'),m=f.querySelector('.cm-msg');f.onsubmit=function(e){e.preventDefault();var n=f.name.value.trim(),tx=f.text.value.trim();
-if(n.length<2||tx.length<3){m.textContent='Напишите имя и комментарий';return}if(!f.agree.checked){m.textContent='Отметьте согласие на публикацию';return}
-var b=f.querySelector('[type=submit]');b.disabled=true;fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({s:s,name:n,text:tx,agree:true,notify:f.notify.checked,k:k,t:Date.now()-t0,h:h,hp:f.company.value})})
-.then(function(r){return r.json()}).then(function(r){if(r.ok){var want=f.notify.checked;f.reset();m.innerHTML='Спасибо! Комментарий появится после проверки.'+(want&&r.id?' <a href="https://t.me/rebornlab_bot?start=cm_'+r.id+'" target="_blank" rel="noopener" style="color:var(--acc)">Получать ответ в Telegram →</a>':'')}else{m.textContent='Не получилось отправить, попробуйте позже.';b.disabled=false}}).catch(function(){m.textContent='Не получилось отправить, попробуйте позже.';b.disabled=false})}})();</script>`
+})();</script>`
 }
 
 const BOT_BOX = `<div class="bot-box" style="margin:0 0 28px;padding:18px 20px;border:1px solid var(--acc);border-radius:16px;background:rgba(198,242,78,.06)"><b>🔔 Ждёте свой сайт на Бегет (Beget)?</b><br>Бесплатный Telegram-бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> проверяет ваш сайт каждые 10 минут и пишет, когда включится сервер и когда сайт откроется. Живая статистика восстановления — <a href="/beget/" style="color:var(--acc)">rebornlab.ru/beget</a>.</div>`
@@ -442,7 +425,7 @@ write('privacy/index.html', shell({
   <p>Сбор, запись, систематизация, накопление, хранение, уточнение, извлечение, использование, передача (предоставление доступа) лицам из раздела 4, блокирование, удаление и уничтожение — с использованием средств автоматизации. Данные не продаём, для рекламы третьим лицам не передаём, решений, порождающих юридические последствия, только на основе автоматической обработки не принимаем.</p>
   <h2>4. Кому передаются данные</h2>
   <ul><li>ООО «Яндекс» (Россия) — Яндекс Метрика, после вашего согласия;</li>
-  <li>хостинг-провайдер сервера оператора (Индонезия) — хранение заявок, данных бота @rebornlab_bot и комментариев;</li>
+  <li>хостинг-провайдер сервера оператора (Индонезия) — хранение заявок и данных бота @rebornlab_bot;</li>
   <li>ООО «РЕГ.РУ» (Россия) — хостинг сервера, на котором размещён сайт rebornlab.ru;</li>
   <li>Telegram (ОАЭ) — пересылка заявок оператору и переписка, если вы пишете в Telegram;</li>
   <li>ООО «Яндекс» (Россия) — почтовый ящик оператора: письма на info@rebornlab.ru и копии заявок принимает сервер оператора и передаёт в ящик на Яндекс Почте.</li></ul>
