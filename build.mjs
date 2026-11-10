@@ -127,6 +127,11 @@ ${noindex ? '<meta name="robots" content="noindex, nofollow, noarchive">' : `<li
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${url}">
 <meta property="og:image" content="${SITE.url}${image}">
+<meta property="og:image:secure_url" content="${SITE.url}${image}">
+<meta property="og:image:type" content="${image.endsWith('.png') ? 'image/png' : 'image/jpeg'}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(title)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">

@@ -150,7 +150,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   box.innerHTML = '<div class="srch-box"><div class="srch-top"><input type="search" placeholder="Что ищете: почта, сервер, 502, копия…" aria-label="Поиск по сайту" autocomplete="off"><button class="srch-x" type="button" aria-label="Закрыть">×</button></div><div class="srch-r"></div></div>';
   document.body.appendChild(box);
   var input = box.querySelector('input'), res = box.querySelector('.srch-r'), data = null, sel = -1;
-  function norm(s) { return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/beget|багет|бегете|бегета|бегету|бегетом/g, 'бегет'); }
+  function norm(s) { return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[?!%,;:«»"()]/g, ' ').replace(/\s+/g, ' ').trim().replace(/beget|багет|бегете|бегета|бегету|бегетом/g, 'бегет'); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function row(x) { return '<a href="' + esc(x.u) + '"><i>' + esc(x.k) + '</i><b>' + esc(x.t) + '</b>' + (x.d ? '<span>' + esc(x.d) + '</span>' : '') + '</a>'; }
   function hint() { res.innerHTML = '<div class="srch-e">Введите слово, адрес сайта или IP сервера.</div>'; }
@@ -166,15 +166,27 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
              [/бот|уведом|отслежива|сообщит/, { u: 'https://t.me/rebornlab_bot', k: 'Бот', t: 'Бот @rebornlab_bot — напишет, когда сайт заработает', d: 'Бесплатно, проверка каждые 10 минут' }]];
     for (var ii = 0; ii < I.length; ii++) if (I[ii][0].test(q)) { out += row(I[ii][1]); break; }
     if (!data) { res.innerHTML = out || '<div class="srch-e">Загружаем…</div>'; return; }
-    var w = q.split(/\s+/).map(function (x) { return x.length > 4 ? x.slice(0, -1) : x; });
-    var list = data.map(function (x) {
-      var t = norm(x.t), d = norm(x.d), s = 0;
-      for (var i = 0; i < w.length; i++) { if (t.indexOf(w[i]) >= 0) s += 3; else if (d.indexOf(w[i]) >= 0) s += 1; else return null; }
+    // 10.11: служебные слова не нужны, окончания срезаем, совпадение не всех слов — тоже результат (ранжируем по числу совпадений)
+    var STOP = ' что как где когда почему зачем делать сделать мой моя мое мои ваш наш это этот эта есть ли или и в на с со к по о об от до у за из для не нет же бы то так уже ещё еще можно нужно надо мне меня я вы мы он она они ';
+    function stem(x) { return x.length > 4 ? x.replace(/(ами|ями|ого|его|ому|ему|ыми|ими|ах|ях|ов|ев|ей|ий|ый|ой|ая|яя|ое|ее|ые|ие|ую|юю|ом|ем|ам|ям|а|я|о|е|ы|и|у|ю|ь)$/, '') : x; }
+    var w = q.replace(/[^a-zа-я0-9.\s-]/g, ' ').split(/\s+/).filter(function (x) { return x && STOP.indexOf(' ' + x + ' ') < 0; }).map(stem);
+    var list = w.length ? data.map(function (x) {
+      var t = norm(x.t), d = norm(x.d), s = 0, hit = 0;
+      for (var i = 0; i < w.length; i++) { if (t.indexOf(w[i]) >= 0) { s += 3; hit++; } else if (d.indexOf(w[i]) >= 0) { s += 1; hit++; } }
+      if (!hit) return null;
       if (t.indexOf(q) === 0) s += 3;
-      return { x: x, s: s };
-    }).filter(Boolean).sort(function (a, b) { return b.s - a.s; }).slice(0, 8);
+      return { x: x, s: s + hit * 10 };
+    }).filter(Boolean).sort(function (a, b) { return b.s - a.s; }).slice(0, 8) : [];
     out += list.map(function (r) { return row(r.x); }).join('');
-    res.innerHTML = out || '<div class="srch-e">Ничего не нашлось. Посмотрите <a href="/beget/voprosy/">все вопросы и ответы</a> или <a href="/journal/">журнал</a>.</div>';
+    if (!out) {   // ничего не совпало — показываем самое нужное, а не тупик
+      out = '<div class="srch-e">Точного ответа не нашли. Возможно, поможет это:</div>' + [
+        { u: '/beget/voprosy/', k: 'Ответы', t: 'Сайт не работает: вопросы и ответы', d: '61 вопрос — что делать с сайтом, почтой, доменом' },
+        { u: '/beget/server/', k: 'Проверка', t: 'Мониторинг серверов Бегет по IP', d: 'Включён ли ваш сервер' },
+        { u: '/beget/vosstanovit/', k: 'Проверка', t: 'Можно ли восстановить сайт без копии', d: 'Проверим веб-архив' },
+        { u: '/journal/pochemu-sajt-ne-otkryvaetsya-v-rossii/', k: 'Журнал', t: 'Почему сайт не открывается в России или с VPN', d: 'Частые причины и что проверить самому' }
+      ].map(row).join('') + '<div class="srch-e">Не нашли ответ — напишите <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>.</div>';
+    }
+    res.innerHTML = out;
   }
   function open(q) { if (typeof q === 'string') input.value = q; box.classList.add('on'); document.body.classList.add('srch-lock'); run(); setTimeout(function () { input.focus(); }, 30);
     if (!data) fetch('/search.json').then(function (r) { return r.json(); }).then(function (d) { data = d; run(); }).catch(function () { data = []; }); }
