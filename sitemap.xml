@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://rebornlab.ru/</loc><lastmod>2026-11-10</lastmod><priority>1.0</priority></url>
-  <url><loc>https://rebornlab.ru/journal/</loc><lastmod>2026-10-05</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rebornlab.ru/journal/</loc><lastmod>2026-11-11</lastmod><priority>0.8</priority></url>
   <url><loc>https://rebornlab.ru/about/</loc><lastmod>2026-11-10</lastmod><priority>0.5</priority></url>
   <url><loc>https://rebornlab.ru/contact/</loc><lastmod>2026-11-10</lastmod><priority>0.6</priority></url>
   <url><loc>https://rebornlab.ru/beget/</loc><lastmod>2026-11-10</lastmod><priority>0.9</priority></url>
@@ -20,25 +20,24 @@
   <url><loc>https://rebornlab.ru/services/web-development/</loc><lastmod>2026-11-10</lastmod><priority>0.8</priority></url>
   <url><loc>https://rebornlab.ru/services/automation/</loc><lastmod>2026-11-10</lastmod><priority>0.8</priority></url>
   <url><loc>https://rebornlab.ru/services/ai/</loc><lastmod>2026-11-10</lastmod><priority>0.8</priority></url>
-  <url><loc>https://rebornlab.ru/journal/avtomatizaciya-zayavok/</loc><lastmod>2026-10-05</lastmod><priority>0.7</priority></url>
   <url><loc>https://rebornlab.ru/journal/beget-10-noyabrya-zamery/</loc><lastmod>2026-11-11</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/beget-502-oshibka-bazy-dannyh/</loc><lastmod>2026-11-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/pochemu-sajt-ne-otkryvaetsya-v-rossii/</loc><lastmod>2026-11-10</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/chto-sohranyaetsya-v-veb-arhive/</loc><lastmod>2026-11-09</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/timeweb-perenos-opyt/</loc><lastmod>2026-11-09</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/ostatsya-ili-pereekhat-hosting/</loc><lastmod>2026-11-08</lastmod><priority>0.7</priority></url>
   <url><loc>https://rebornlab.ru/journal/beget-7-noyabrya-vosstanovlenie-iz-kopij/</loc><lastmod>2026-11-07</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/beget-itogi-6-noyabrya/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/beget-kak-proverit-server-sajta/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/beget-ne-rabotaet-kak-podnyali-sajt/</loc><lastmod>2026-11-04</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/beget-novye-servery-perenos-akkauntov/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/beget-pochta-i-panel-chto-rabotaet/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/beget-posle-ataki-paroli-proverka-sajta/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
   <url><loc>https://rebornlab.ru/journal/beget-proverit-server-po-ip/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/beget-itogi-6-noyabrya/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
   <url><loc>https://rebornlab.ru/journal/beget-rezervnye-kopii-panel/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
   <url><loc>https://rebornlab.ru/journal/beget-rezhim-vosstanovleniya/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/beget-pochta-i-panel-chto-rabotaet/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/beget-posle-ataki-paroli-proverka-sajta/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/beget-novye-servery-perenos-akkauntov/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/beget-kak-proverit-server-sajta/</loc><lastmod>2026-11-06</lastmod><priority>0.7</priority></url>
   <url><loc>https://rebornlab.ru/journal/beget-vps-ne-rabotayut/</loc><lastmod>2026-11-05</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/chto-sohranyaetsya-v-veb-arhive/</loc><lastmod>2026-11-09</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/beget-502-oshibka-bazy-dannyh/</loc><lastmod>2026-11-05</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/beget-ne-rabotaet-kak-podnyali-sajt/</loc><lastmod>2026-11-04</lastmod><priority>0.7</priority></url>
   <url><loc>https://rebornlab.ru/journal/geo-ai-poisk/</loc><lastmod>2026-10-04</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/kejs-spravochnik-sotni-stranic/</loc><lastmod>2026-10-02</lastmod><priority>0.7</priority></url>
   <url><loc>https://rebornlab.ru/journal/mvp-proverka-idei/</loc><lastmod>2026-10-03</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/ostatsya-ili-pereekhat-hosting/</loc><lastmod>2026-11-08</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/pochemu-sajt-ne-otkryvaetsya-v-rossii/</loc><lastmod>2026-11-10</lastmod><priority>0.7</priority></url>
-  <url><loc>https://rebornlab.ru/journal/timeweb-perenos-opyt/</loc><lastmod>2026-11-09</lastmod><priority>0.7</priority></url>
+  <url><loc>https://rebornlab.ru/journal/kejs-spravochnik-sotni-stranic/</loc><lastmod>2026-10-02</lastmod><priority>0.7</priority></url>
 </urlset>
