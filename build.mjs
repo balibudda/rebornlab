@@ -480,6 +480,7 @@ if (existsSync(path.join(ROOT, 'src/assets/journal'))) {   // 06.11: облож�
   mkdirSync(path.join(OUT, 'assets/journal'), { recursive: true })
   for (const f of readdirSync(path.join(ROOT, 'src/assets/journal'))) copyFileSync(path.join(ROOT, 'src/assets/journal', f), path.join(OUT, 'assets/journal', f))
 }
+if (existsSync(path.join(ROOT, 'src/assets/services'))) { mkdirSync(path.join(OUT, 'assets/services'), { recursive: true }); for (const f of readdirSync(path.join(ROOT, 'src/assets/services'))) copyFileSync(path.join(ROOT, 'src/assets/services', f), path.join(OUT, 'assets/services', f)) }   // 10.11: картинки карточек услуг
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
 const urls = [['/', today, '1.0'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/beget/pravila/', today, '0.4'],
