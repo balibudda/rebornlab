@@ -159,6 +159,12 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     var raw = input.value.trim(), q = norm(raw); if (!q) return hint();
     var out = '', v = raw.replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0];
     if (/^\d{1,3}(\.\d{1,3}){3}$/.test(v) || /^[a-zа-яё0-9-]+(\.[a-zа-яё0-9-]+)+$/i.test(v)) out = row({ u: '/beget/server/#' + encodeURIComponent(v), k: 'Проверка', t: 'Проверить сервер: ' + v, d: 'Покажем, включён ли сервер' });
+    // 10.11: запросы по смыслу — сразу нужная страница первой строкой
+    var I = [[/мониторинг|статус|ситуаци|какие сайты работа|что с бегет|онлайн|восстановлен.*хостинг|очеред/, { u: '/beget/', k: 'Бегет', t: 'Статус и мониторинг серверов Бегет', d: 'Что работает прямо сейчас: серверы, сайты, VPS' }],
+             [/сервер|айпи|\bip\b|ping|пинг|доступност|проверить|проверка|работа(ет)? ли/, { u: '/beget/server/', k: 'Проверка', t: 'Мониторинг серверов Бегет по IP', d: 'Включён ли ваш сервер, имя сервера, соседи по сети' }],
+             [/восстанов|архив|копи|вернуть сайт|пропал/, { u: '/beget/vosstanovit/', k: 'Проверка', t: 'Можно ли восстановить сайт без копии', d: 'Проверим веб-архив и Яндекс Картинки' }],
+             [/бот|уведом|отслежива|сообщит/, { u: 'https://t.me/rebornlab_bot', k: 'Бот', t: 'Бот @rebornlab_bot — напишет, когда сайт заработает', d: 'Бесплатно, проверка каждые 10 минут' }]];
+    for (var ii = 0; ii < I.length; ii++) if (I[ii][0].test(q)) { out += row(I[ii][1]); break; }
     if (!data) { res.innerHTML = out || '<div class="srch-e">Загружаем…</div>'; return; }
     var w = q.split(/\s+/).map(function (x) { return x.length > 4 ? x.slice(0, -1) : x; });
     var list = data.map(function (x) {
@@ -170,10 +176,11 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     out += list.map(function (r) { return row(r.x); }).join('');
     res.innerHTML = out || '<div class="srch-e">Ничего не нашлось. Посмотрите <a href="/beget/voprosy/">все вопросы и ответы</a> или <a href="/journal/">журнал</a>.</div>';
   }
-  function open() { box.classList.add('on'); document.body.classList.add('srch-lock'); run(); setTimeout(function () { input.focus(); }, 30);
+  function open(q) { if (typeof q === 'string') input.value = q; box.classList.add('on'); document.body.classList.add('srch-lock'); run(); setTimeout(function () { input.focus(); }, 30);
     if (!data) fetch('/search.json').then(function (r) { return r.json(); }).then(function (d) { data = d; run(); }).catch(function () { data = []; }); }
   function close() { box.classList.remove('on'); document.body.classList.remove('srch-lock'); btn.focus(); }
-  btn.addEventListener('click', open);
+  btn.addEventListener('click', function () { open(); });
+  window.RL_SEARCH = open;
   box.querySelector('.srch-x').addEventListener('click', close);
   box.addEventListener('click', function (e) { if (e.target === box) close(); });
   input.addEventListener('input', run);
@@ -189,3 +196,15 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   if (q && qs) { qs.value = q; qs.dispatchEvent(new Event('input', { bubbles: true })); var d = document.querySelector('details.qa:not([style*="none"])'); if (d) { d.open = true; d.scrollIntoView({ block: 'center' }); } }
 })();
 
+
+// 10.11.2026: поиск в блоке «Ситуация с Бегет» на главной — IP или адрес сайта сразу на проверку сервера, остальное — в поиск по сайту
+(function () {
+  var f = document.querySelector('[data-bnow-s]'); if (!f) return;
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var raw = f.q.value.trim(); if (!raw) return f.q.focus();
+    var v = raw.replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0];
+    if (/^\d{1,3}(\.\d{1,3}){3}$/.test(v) || /^[a-zа-яё0-9-]+(\.[a-zа-яё0-9-]+)+$/i.test(v)) { location.href = '/beget/server/#' + encodeURIComponent(v); return; }
+    if (window.RL_SEARCH) window.RL_SEARCH(raw); else location.href = '/beget/voprosy/';
+  });
+})();

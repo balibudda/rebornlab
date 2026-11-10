@@ -417,3 +417,12 @@ body.srch-lock { overflow: hidden; }
 /* 10.11 (Ник): на юридических страницах подвал по краям текста; таблица на телефоне листается внутри, страница не уезжает вправо */
 body:has(.legal) .ftr .wrap { max-width: 860px; }
 @media (max-width: 700px) { .legal table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; } .legal td, .legal th { min-width: 140px; } }
+
+/* 10.11.2026: пункт меню «Мониторинг серверов» со значком + поиск в блоке «Ситуация с Бегет» на главной */
+.nav a[href="/beget/server/"] { display: inline-flex; align-items: center; gap: 6px; }
+.nav-ic { color: var(--acc); flex: 0 0 auto; }
+.bnow-s { display: flex; gap: 8px; margin-top: 14px; max-width: 560px; }
+.bnow-s input { flex: 1; min-width: 0; height: 46px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line-2); background: var(--bg-2); color: var(--text); font: inherit; font-size: 15.5px; }
+.bnow-s input:focus { outline: none; border-color: var(--acc); }
+.bnow-s .btn { height: 46px; padding: 0 20px; }
+@media (max-width: 560px) { .bnow-s { flex-direction: column; } .bnow-s .btn { width: 100%; justify-content: center; } }

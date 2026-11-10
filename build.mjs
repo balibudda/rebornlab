@@ -92,7 +92,7 @@ const svIcon = (s) => `<svg class="sv-ico" width="28" height="28" viewBox="0 0 2
 const svPains = (s) => s.pains ? `<div class="sv-pain"><b>Если у вас:</b><ul>${s.pains.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''
 const HAS_SELLER = !!(SITE.operator && SITE.operatorInn)   // оферта и данные продавца — только с реквизитами
 // 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
-const NAV = [['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget'], ['/beget/server/', 'Проверка по IP']]
+const NAV = [['/services/', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget'], ['/beget/server/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг серверов']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
 
 // 07.11.2026 Ник: одна шапка везде (и на ручных страницах /beget/ — вставляется ниже, при обработке), на страницах о Beget — полоса навигации по теме
 function HEADER(current = '') {
@@ -105,7 +105,7 @@ function HEADER(current = '') {
 </div></header>`
 }
 function BEGET_BAR(at = '') {
-  const L = [['/beget/', 'Статус'], ['/beget/server/', '🔎 Сервер по IP'], ['/beget/vosstanovit/', '♻️ Восстановить сайт'], ['/beget/#news', 'Новости'], ['/beget/voprosy/', '❓ Вопросы и ответы'], ['https://t.me/rebornlab_bot', '🔔 Бот']]   // 07.11: короче — кнопка бота не влезала
+  const L = [['/beget/', 'Статус'], ['/beget/server/', '📡 Мониторинг серверов'], ['/beget/vosstanovit/', '♻️ Восстановить сайт'], ['/beget/#news', 'Новости'], ['/beget/voprosy/', '❓ Вопросы и ответы'], ['https://t.me/rebornlab_bot', '🔔 Бот']]   // 07.11: короче — кнопка бота не влезала
   return `<div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет</span>${L.map(([h, t]) => `<a href="${h}"${h === at ? ' aria-current="page"' : ''}${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${t}</a>`).join('')}</div></div>`
 }
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
@@ -215,7 +215,7 @@ const home = shell({
 <section class="hero" aria-labelledby="h1">
   <canvas id="lab" aria-hidden="true"></canvas>
   <div class="wrap">
-    <div class="bnow" id="bnow"><div><span class="bnow-t"><i></i>Ситуация с Бегет</span><p id="bnow-p">Живой статус серверов, проверка своего сайта и ответы на вопросы. Бесплатно.</p></div><div class="bnow-a"><a class="btn btn-acc" href="/beget/" data-goal="home_beget">Смотреть статус <span class="arrow">→</span></a><a class="bnow-l" href="/beget/server/" data-goal="home_beget_ip">Проверить свой сервер</a></div></div>
+    <div class="bnow" id="bnow"><div><span class="bnow-t"><i></i>Ситуация с Бегет</span><p id="bnow-p">Живой статус серверов, проверка своего сайта и ответы на вопросы. Бесплатно.</p><form class="bnow-s" data-bnow-s role="search"><input type="search" name="q" placeholder="IP сервера, адрес сайта или вопрос" aria-label="Поиск: сервер, сайт или вопрос о Бегет" autocomplete="off"><button type="submit" class="btn btn-acc">Найти</button></form></div><div class="bnow-a"><a class="btn btn-acc" href="/beget/" data-goal="home_beget">Смотреть статус <span class="arrow">→</span></a><a class="bnow-l" href="/beget/server/" data-goal="home_beget_ip">Проверить свой сервер</a></div></div>
     <div class="kicker">Digital laboratory · идея → система → продукт</div>
     <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
     <p class="sub">Сайты, веб-сервисы, AI, автоматизация, SEO и внутренние системы — придумываем и собираем под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
@@ -499,7 +499,7 @@ const urls = [['/', today, '1.0'], ['/services/', today, '0.9'], ['/journal/', P
   const strip = (s) => String(s || '').replace(/\s+/g, ' ').trim()
   const items = [
     { t: 'Статус восстановления Бегет', u: '/beget/', d: 'Живые замеры: серверы, сайты, график', k: 'Бегет' },
-    { t: 'Проверка сервера Бегет по IP', u: '/beget/server/', d: 'Узнать, на каком сервере сайт и включён ли он', k: 'Бегет' },
+    { t: 'Мониторинг серверов Бегет по IP', u: '/beget/server/', d: 'Проверка сервера: включён ли, на каком сервере сайт, имя сервера, очередь восстановления', k: 'Бегет' },
     { t: 'Можно ли восстановить сайт', u: '/beget/vosstanovit/', d: 'Что сохранилось в веб-архиве и Яндекс Картинках', k: 'Бегет' },
     { t: 'Вопросы и ответы', u: '/beget/voprosy/', d: 'Сайт, почта, домен, копии, переезд', k: 'Бегет' },
     { t: 'Восстановление сайта: цены и сроки', u: '/vosstanovlenie-sajta/', d: 'Варианты и стоимость', k: 'Услуги' },
