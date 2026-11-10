@@ -171,7 +171,7 @@
     <p class="sub">Каждая точка — проверка раз в 15 минут (до вечера 5 ноября — раз в 5 минут). Шкала у каждого графика своя, чтобы был виден даже небольшой рост. <b>С ночи на 7 ноября</b> сайты, которые владельцы сами подняли у другого хостинга, не считаются «открывшимися на Beget» — поэтому на графике сайтов ступенька вниз примерно на 65.</p>
     <div class="ch"><div class="ch-h"><b>Сайты открываются</b> <span class="delta" id="g-s"></span></div><svg class="chart" id="chart-s" viewBox="0 0 1000 170"></svg></div>
     <div class="ch"><div class="ch-h"><b>Серверы хостинга отвечают</b> <span class="delta" id="g-h"></span></div><svg class="chart" id="chart-h" viewBox="0 0 1000 170"></svg></div>
-    <div class="ch" id="ch-vps" style="display:none"><div class="ch-h"><b>VPS на Beget отвечают</b> <span class="delta" id="g-v"></span></div><svg class="chart" id="chart-v" viewBox="0 0 1000 170"></svg></div>
+    <div class="ch" id="ch-vps" style="display:none"><div class="ch-h"><b>VPS на Beget отвечают</b> <span class="delta" id="g-v"></span></div><p class="ch-note" style="margin:4px 0 8px;font-size:13.5px;color:var(--muted)">Ночью 8 ноября, около 23:30 МСК, VPS на Beget начали отвечать: с 5 ноября в нашей выборке из 1 601 VPS отвечал 1, за ночь стало около 40<span id="vps-now"></span>. Это наш замер по ping, а не данные Beget.</p><svg class="chart" id="chart-v" viewBox="0 0 1000 170"></svg></div>
     <div class="legend"><span id="range"></span></div>
   </div>
 
@@ -338,6 +338,7 @@
     $('k-host').textContent = data.hosting_up; $('k-ips').textContent = data.ips_total; if ($('t-srv')) $('t-srv').textContent = data.ips_total_all || data.ips_total;
     $('k-srv').innerHTML = data.servers_with_sites_up + '<small> / ' + data.servers_with_sites + '</small>';
     $('b-srv').style.width = (100 * data.servers_with_sites_up / data.servers_with_sites) + '%';
+    if (data.vps_total && $('vps-now')) $('vps-now').textContent = ', сейчас — ' + data.vps_up + ' (' + (100 * data.vps_up / data.vps_total).toFixed(1).replace('.', ',') + '%)';
     if (data.vps_total) { $('kpi-vps').style.display = ''; $('k-vps').innerHTML = data.vps_up + '<small> / ' + data.vps_total + '</small>';
       $('b-vps').style.width = (100 * data.vps_up / data.vps_total) + '%'; }
     $('nets').innerHTML = data.nets.map(function (n) {
