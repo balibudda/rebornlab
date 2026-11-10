@@ -91,7 +91,7 @@ const LOGO = `<a class="logo" href="/" aria-label="REBORN LAB — на глав�
 const svImg = (s) => existsSync(`src/assets/services/${s.slug}.jpg`) ? `<img class="cap-img" src="/assets/services/${s.slug}.jpg" alt="" width="800" height="450" loading="lazy">` : ''   // 10.11: картинки карточек (drafts/services-pics.*)
 const svIcon = (s) => `<svg class="sv-ico" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${s.icon || ''}</svg>`
 const svPains = (s) => s.pains ? `<div class="sv-pain"><b>Если у вас:</b><ul>${s.pains.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''
-const HAS_SELLER = !!(SITE.operator && SITE.operatorInn)   // оферта и данные продавца — только с реквизитами
+const HAS_SELLER = !!SITE.operator   // 10.11: оферта с ФИО самозанятого; ИНН добавится, когда будет   // оферта и данные продавца — только с реквизитами
 // 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
 const NAV = [['/#uslugi', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget'], ['/beget/server/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг серверов']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
 
@@ -149,7 +149,7 @@ ${HEADER(current)}${canonical === '/' || /^\/(beget|journal\/beget)/.test(canoni
 ${body}
 </main>
 <footer class="ftr"><div class="wrap">
-  <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© ${new Date().getFullYear()} REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a></div></div>
+  <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© ${new Date().getFullYear()} REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a>${HAS_SELLER ? '<a href="/oferta/">Публичная оферта</a>' : ''}</div></div>
   <div><a href="/#uslugi">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
   <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
@@ -463,19 +463,20 @@ consentPage('consent', 'Согласие на обработку персона�
 write('consent-order/index.html', '<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://rebornlab.ru/consent/"><meta http-equiv="refresh" content="0;url=/consent/"><a href="/consent/">Согласие на обработку персональных данных</a>')   // 09.11: оплаты на сайте нет
 
 // ---------- ОФЕРТА (появляется, только когда в data.mjs есть реквизиты: operator + operatorInn) ----------
-if (HAS_SELLER) write('oferta/index.html', shell({
-  title: 'Публичная оферта — REBORN LAB', description: 'Договор-оферта на услуги проверки сайта: документы по 152-ФЗ и перенос сайта с Tilda.', canonical: '/oferta/',
+if (HAS_SELLER) write('oferta/index.html', shell({   // 10.11.2026: восстановление сайтов, демо 2 000 ₽, оплата ЮKassa
+  title: 'Публичная оферта — REBORN LAB', description: 'Договор-оферта REBORN LAB: восстановление и перенос сайтов, платное демо, оплата и возврат.', canonical: '/oferta/',
   jsonLd: [crumbsLd([['Главная', '/'], ['Публичная оферта', '/oferta/']])],
   body: `${legalCss}<div class="wrap page-hd legal" style="max-width:860px">${crumbs([['Главная', '/'], ['Публичная оферта', '']])}<h1 style="font-size:clamp(32px,5vw,52px)">Публичная оферта</h1>
-  <p class="sub">Редакция от ${LEGAL_DATE}. Предложение заключить договор оказания услуг (ст. 435, 437 ГК РФ).</p>
-  <h2>1. Исполнитель</h2><p>${esc(OPERATOR)}. Связь: ${PD_CONTACT}.</p>
-  <h2>2. Услуги и цены</h2><ul><li><b>Документы под сайт — 999 ₽:</b> политика обработки персональных данных, отдельное согласие, тексты для форм и уведомления о cookie, подготовленные для сайта заказчика, и инструкция по размещению.</li>
-  <li><b>Перенос сайта с Tilda — 1 999 ₽:</b> выгрузка лендинга или небольшого сайта, размещение на бесплатном хостинге с сохранением дизайна и адреса, настройка форм заявок на почту или в Telegram. Сайты с корзиной, оплатой, личным кабинетом — по отдельной договорённости.</li></ul>
-  <h2>3. Как заключается договор</h2><p>Договор заключён с момента оплаты заказа на странице <a href="/proverka-sajta/#order">rebornlab.ru/proverka-sajta</a>. Оплата — через ЮKassa (ООО НКО «ЮМани»).</p>
-  <h2>4. Сроки и результат</h2><p>Документы — на указанную почту в течение 1 рабочего дня после оплаты. Перенос с Tilda — до 5 рабочих дней после получения доступа к сайту. Результат считается принятым, если в течение 5 дней после получения заказчик не прислал замечаний; замечания исправляем бесплатно.</p>
-  <h2>5. Возврат</h2><p>Если услуга не оказана в срок — возвращаем всю сумму. Заказчик вправе отказаться от услуги в любой момент, оплатив фактически выполненную работу (ст. 32 Закона «О защите прав потребителей», ст. 782 ГК РФ). Возврат — тем же способом, что и оплата, в течение 10 дней после заявления.</p>
-  <h2>6. Ответственность</h2><p>Документы — типовые, подготовленные под сайт заказчика; это не юридическая консультация. Исполнитель не отвечает за решения контролирующих органов, если заказчик не разместил документы или его фактическая обработка данных отличается от описанной им.</p>
-  <h2>7. Персональные данные</h2><p>Обрабатываются по <a href="/privacy/">политике</a> и <a href="/consent-order/">согласию для заказа</a>.</p></div>`,
+  <p class="sub">Редакция от ${LEGAL_DATE}. Предложение заключить договор возмездного оказания услуг (ст. 435, 437, 779 ГК РФ).</p>
+  <h2>1. Исполнитель</h2><p>${esc(OPERATOR)}. Связь: ${PD_CONTACT}. Исполнитель не является плательщиком НДС; чек выдаётся через приложение «Мой налог».</p>
+  <h2>2. Услуги</h2><ul>
+  <li><b>Демо — 2 000 ₽:</b> до 12 страниц сайта заказчика (восстановленного или пересобранного) на временном адресе, чтобы заказчик увидел результат до основной работы. Срок — обычно 1–3 рабочих дня после оплаты и получения адреса сайта.</li>
+  <li><b>Восстановление и перенос сайта</b> (из веб-архива, резервной копии или выгрузки товаров), пересборка сайта с Тильды или Битрикса на лёгкий движок, доработки, сайты и боты — цена и срок согласуются с заказчиком письменно (в мессенджере или по почте) до начала работы. Ориентиры: сайт на лёгком движке — от 10 000 ₽; на Битриксе — от 50 000 ₽ до 1 000 страниц и +15 000 ₽ за каждые следующие 1 000 страниц. Большие и сложные сайты (каталоги, магазины, личные кабинеты, интеграции) дороже.</li></ul>
+  <h2>3. Как заключается договор</h2><p>Договор заключён с момента оплаты (акцепт оферты): кнопкой оплаты на сайте rebornlab.ru или по ссылке на оплату, которую прислал исполнитель. Оплата — через ЮKassa (ООО НКО «ЮМани»): банковская карта или СБП. Данные карты вводятся на стороне ЮKassa, исполнитель их не получает. Основная работа начинается после предоплаты, размер которой согласуется письменно.</p>
+  <h2>4. Результат и приёмка</h2><p>Результат показывается заказчику на временном или его собственном адресе. Если в течение 5 дней после показа заказчик не прислал замечаний, работа считается принятой. Замечания в пределах согласованной задачи исправляются без доплаты. Восстановление из веб-архива возможно в объёме, который в нём сохранился: если чего-то в архиве нет, исполнитель сообщает об этом до начала работы.</p>
+  <h2>5. Возврат</h2><p>Если услуга не оказана в согласованный срок по вине исполнителя — возвращается вся сумма. Заказчик вправе отказаться от услуги в любой момент, оплатив фактически выполненную работу (ст. 32 Закона «О защите прав потребителей», ст. 782 ГК РФ). Возврат — тем же способом, что и оплата, в течение 10 дней после заявления, направленного по контактам из раздела 1.</p>
+  <h2>6. Ответственность</h2><p>Исполнитель не гарантирует позиции сайта в поисковых системах и не отвечает за работу сторонних сервисов (хостинга заказчика, регистратора домена, поисковиков). Исполнитель не несёт ответственности за материалы, которые заказчик размещает на сайте.</p>
+  <h2>7. Персональные данные</h2><p>Обрабатываются по <a href="/privacy/">политике</a> и <a href="/consent/">согласию</a>.</p></div>`,
 }))
 
 write('404.html', shell({ title: 'Страница не найдена — REBORN LAB', description: 'Такой страницы нет.', canonical: '/404.html',
@@ -492,7 +493,7 @@ if (existsSync(path.join(ROOT, 'src/assets/journal'))) {   // 06.11: облож�
 if (existsSync(path.join(ROOT, 'src/assets/services'))) { mkdirSync(path.join(OUT, 'assets/services'), { recursive: true }); for (const f of readdirSync(path.join(ROOT, 'src/assets/services'))) copyFileSync(path.join(ROOT, 'src/assets/services', f), path.join(OUT, 'assets/services', f)) }   // 10.11: картинки карточек услуг
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
-const urls = [['/', today, '1.0'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/beget/pravila/', today, '0.4'],
+const urls = [['/', today, '1.0'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/beget/pravila/', today, '0.4'], ['/oferta/', today, '0.3'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 // 09.11 (Ник): поиск по всему сайту — индекс /search.json (страницы, услуги, статьи, вопросы); noindex и закрытое сюда не попадает
 {
