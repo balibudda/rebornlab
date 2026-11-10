@@ -187,6 +187,18 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
       ].map(row).join('') + '<div class="srch-e">Не нашли ответ — напишите <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>.</div>';
     }
     res.innerHTML = out;
+    logQ(raw, list.length);
+  }
+  // 10.11 Ник: история поиска — анонимно (без IP и адресов сайтов), чтобы видеть, что ищут, и улучшать ответы. Счёт: ssh vpn-id rl-search-stats
+  var lastQ = '', qTimer = null;
+  function logQ(raw, n) {
+    clearTimeout(qTimer);
+    qTimer = setTimeout(function () {
+      var v = String(raw || '').replace(/\S+@\S+/g, '[почта]').replace(/\+?\d[\d\s()-]{6,}\d/g, '[номер]').replace(/^https?:\/\//i, '').trim().slice(0, 120);
+      if (v.length < 3 || v === lastQ) return; lastQ = v;
+      if (/^\d{1,3}(\.\d{1,3}){3}$/.test(v) || /^[a-zа-яё0-9-]+(\.[a-zа-яё0-9-]+)+$/i.test(v)) v = '[адрес сайта или IP]';
+      try { (new Image()).src = 'https://api.rebornlab.ru/q?ip=-&k=' + (n ? 's' : 'n') + '&v=' + encodeURIComponent(v) + '&p=' + encodeURIComponent(location.pathname); } catch (e) {}
+    }, 1500);
   }
   function open(q) { if (typeof q === 'string') input.value = q; box.classList.add('on'); document.body.classList.add('srch-lock'); run(); setTimeout(function () { input.focus(); }, 30);
     if (!data) fetch('/search.json').then(function (r) { return r.json(); }).then(function (d) { data = d; run(); }).catch(function () { data = []; }); }
