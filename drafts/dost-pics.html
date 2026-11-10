@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<!-- Картинки для статьи pochemu-sajt-ne-otkryvaetsya-v-rossii (10.11.2026). Снимаются tools: drafts/dost-pics.mjs → src/assets/journal/dost-*.png -->
+<style>
+:root{--bg:#08090a;--card:#121417;--card2:#171a1e;--line:rgba(237,235,230,.12);--text:#edebe6;--muted:#9a9890;--dim:#6a6862;--acc:#c6f24e;--cool:#7aa7ff;--red:#ff7a6b;--mono:"SF Mono",Menlo,Consolas,monospace;--font:-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#2a2d31;font-family:var(--font);color:var(--text)}
+.pic{width:1200px;background:var(--bg);padding:48px 56px;margin:0 0 40px}
+.kick{font:600 13px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
+h2{font-size:34px;line-height:1.15;margin:0 0 8px;font-weight:700}
+.sub{color:var(--muted);font-size:17px;margin:0 0 32px}
+.note{color:var(--dim);font:13px var(--mono);margin-top:22px}
+/* 1. водопад */
+.wf{display:grid;grid-template-columns:260px 1fr;gap:12px 20px;align-items:center}
+.wf .lbl{font:14px var(--mono);color:var(--muted);text-align:right}
+.wf .trk{position:relative;height:30px;background:var(--card);border-radius:8px}
+.bar{position:absolute;top:5px;height:20px;border-radius:5px;font:12px/20px var(--mono);padding:0 8px;white-space:nowrap;color:#0b0c0d}
+.b-ok{background:var(--cool)}.b-wait{background:repeating-linear-gradient(45deg,#ff7a6b,#ff7a6b 8px,#e2675a 8px,#e2675a 16px);color:#fff}.b-paint{background:var(--acc)}
+.grp{grid-column:1/-1;font:600 15px var(--font);margin:18px 0 2px;color:var(--text)}
+.grp span{color:var(--dim);font-weight:400}
+.axis{grid-column:2;display:flex;justify-content:space-between;font:12px var(--mono);color:var(--dim)}
+/* 2. cloudflare */
+.paths{display:grid;gap:26px}
+.path{background:var(--card);border-radius:18px;padding:22px 26px}
+.path h3{margin:0 0 16px;font-size:19px}.path h3 i{font-style:normal;color:var(--dim);font-weight:400;font-size:15px;margin-left:8px}
+.row{display:flex;align-items:center;gap:14px}
+.node{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:15px;min-width:150px;text-align:center}
+.node small{display:block;color:var(--dim);font:12px var(--mono);margin-top:4px}
+.arr{flex:1;height:2px;background:var(--cool);position:relative}.arr:after{content:"";position:absolute;right:-2px;top:-5px;border:6px solid transparent;border-left:9px solid var(--cool)}
+.arr.bad{background:repeating-linear-gradient(90deg,var(--red),var(--red) 8px,transparent 8px,transparent 14px)}.arr.bad:after{border-left-color:var(--red)}
+.arr span{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font:12px var(--mono);color:var(--muted);white-space:nowrap}
+.arr.bad span{color:var(--red)}
+.cloud{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:6px}
+/* 3. терминал */
+.term{background:#0b0c0e;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.term .top{display:flex;gap:7px;padding:12px 16px;background:#14161a;border-bottom:1px solid var(--line)}.term .top i{width:11px;height:11px;border-radius:50%;background:#3a3d42}
+.term pre{margin:0;padding:20px 24px;font:15px/1.65 var(--mono);color:#cfd3cf;white-space:pre}
+.p{color:var(--acc)}.c{color:var(--dim)}.h{color:var(--cool)}.v{color:#edebe6;font-weight:600}
+.verdict{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+.verdict div{background:var(--card);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--muted)}.verdict b{display:block;color:var(--text);font:13px var(--mono);margin-bottom:4px}
+/* 4. этапы */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{background:var(--card);border-radius:18px;padding:22px;position:relative;min-height:170px}
+.step .n{font:700 34px var(--mono);color:var(--acc);line-height:1}
+.step h3{margin:12px 0 8px;font-size:19px}.step p{margin:0;color:var(--muted);font-size:15px;line-height:1.45}
+</style></head><body>
+
+<div class="pic" id="p1">
+ <div class="kick">схема · как браузер показывает страницу</div>
+ <h2>Один чужой файл в шапке — и страница ждёт</h2>
+ <p class="sub">Пока не загружены стили из &lt;head&gt;, браузер не рисует страницу. Если файл лежит на сервисе, который из России отвечает плохо, ждут все.</p>
+ <div class="wf">
+  <div class="grp">Было <span>— шрифты и иконки с fonts.googleapis.com и use.fontawesome.com</span></div>
+  <div class="lbl">index.html</div><div class="trk"><div class="bar b-ok" style="left:0;width:7%">html</div></div>
+  <div class="lbl">style.css (свой)</div><div class="trk"><div class="bar b-ok" style="left:7%;width:7%">css</div></div>
+  <div class="lbl">fonts.googleapis.com</div><div class="trk"><div class="bar b-wait" style="left:7%;width:72%">ждём ответа… соединение висит</div></div>
+  <div class="lbl">use.fontawesome.com</div><div class="trk"><div class="bar b-wait" style="left:7%;width:66%">ждём ответа…</div></div>
+  <div class="lbl">показ страницы</div><div class="trk"><div class="bar b-paint" style="left:80%;width:20%">наконец видно</div></div>
+  <div class="grp">Стало <span>— те же файлы со своего сервера</span></div>
+  <div class="lbl">index.html</div><div class="trk"><div class="bar b-ok" style="left:0;width:7%">html</div></div>
+  <div class="lbl">style.css + шрифты</div><div class="trk"><div class="bar b-ok" style="left:7%;width:9%">css, woff2</div></div>
+  <div class="lbl">показ страницы</div><div class="trk"><div class="bar b-paint" style="left:16%;width:20%">видно сразу</div></div>
+  <div class="axis"><span>0</span><span>время →</span></div>
+ </div>
+ <div class="note">Схема, не замер: длина ожидания зависит от оператора и может доходить до десятков секунд.</div>
+</div>
+
+<div class="pic" id="p2">
+ <div class="kick">схема · Cloudflare</div>
+ <h2>Прокси или только DNS</h2>
+ <p class="sub">В режиме прокси посетитель соединяется не с вашим сервером, а с Cloudflare. У части российских операторов такое соединение обрывается.</p>
+ <div class="paths">
+  <div class="path"><h3><span class="cloud" style="background:#f6821f"></span>Оранжевое облако — прокси<i>proxied: true</i></h3>
+   <div class="row"><div class="node">Посетитель<small>Россия</small></div><div class="arr bad"><span>рвётся после первых килобайт</span></div><div class="node">Cloudflare<small>server: cloudflare</small></div><div class="arr"><span></span></div><div class="node">Ваш сервер<small>не виден снаружи</small></div></div></div>
+  <div class="path"><h3><span class="cloud" style="background:#8a8f98"></span>Серое облако — только DNS<i>proxied: false</i></h3>
+   <div class="row"><div class="node">Посетитель<small>Россия</small></div><div class="arr"><span>напрямую</span></div><div class="node">Ваш сервер<small>A-запись → IP сервера</small></div></div></div>
+ </div>
+ <div class="note">Cloudflare при этом остаётся: удобно управлять DNS и быстро менять адрес сервера при переезде.</div>
+</div>
+
+<div class="pic" id="p3">
+ <div class="kick">инженерная проверка · заголовки ответа</div>
+ <h2>Кто на самом деле отдаёт сайт</h2>
+ <p class="sub">Совпадение содержимого ничего не говорит. Где работает сайт, видно по заголовкам ответа сервера.</p>
+ <div class="term"><div class="top"><i></i><i></i><i></i></div><pre><span class="p">$</span> curl -sI https://rebornlab.ru/ | grep -iE "server|x-vercel|x-github|cf-ray"
+<span class="h">server:</span> <span class="v">nginx</span>                        <span class="c"># свой сервер</span>
+
+<span class="p">$</span> curl -sI https://vercel.com/ | grep -iE "server|x-vercel"
+<span class="h">server:</span> <span class="v">Vercel</span>
+<span class="h">x-vercel-id:</span> arn1::9w95t-1794322859293-…      <span class="c"># площадка Vercel</span>
+
+<span class="p">$</span> curl -sI https://kodeksdeneg.ru/ | grep -iE "server|x-github|via"
+<span class="h">server:</span> <span class="v">GitHub.com</span>
+<span class="h">x-github-request-id:</span> 5C04:10C095:…          <span class="c"># GitHub Pages</span>
+<span class="h">via:</span> 1.1 varnish
+
+<span class="p">$</span> curl -sI https://www.cloudflare.com/ | grep -iE "server|cf-ray"
+<span class="h">server:</span> <span class="v">cloudflare</span>
+<span class="h">cf-ray:</span> a585ed999f2055cf-ARN                <span class="c"># за прокси Cloudflare</span></pre></div>
+ <div class="verdict"><div><b>server: nginx</b>свой сервер</div><div><b>x-vercel-id</b>Vercel</div><div><b>x-github-request-id</b>GitHub Pages</div><div><b>cf-ray</b>прокси Cloudflare</div></div>
+</div>
+
+<div class="pic" id="p4">
+ <div class="kick">как мы работаем · по шагам</div>
+ <h2>Восстановление и переезд сайта</h2>
+ <p class="sub">Порядок один и тот же — для сайта из веб-архива, из выгрузки учётной системы или со старого хостинга.</p>
+ <div class="steps">
+  <div class="step"><div class="n">01</div><h3>Оценка</h3><p>Считаем страницы и картинки в архиве, смотрим, что есть у владельца: копия, выгрузка товаров, фото.</p></div>
+  <div class="step"><div class="n">02</div><h3>Оформление</h3><p>Собираем внешний вид как был: логотип, цвета, шрифты, шапка, подвал — без тяжёлого конструктора.</p></div>
+  <div class="step"><div class="n">03</div><h3>Содержимое</h3><p>Тексты, каталог, карточки, фото. Адреса страниц, заголовки и описания — как на старом сайте.</p></div>
+  <div class="step"><div class="n">04</div><h3>Формы и заявки</h3><p>Свой обработчик: заявки приходят на почту и в мессенджер, без зарубежных сервисов.</p></div>
+  <div class="step"><div class="n">05</div><h3>Переезд</h3><p>Сервер в России, сертификат https, перенаправления 301 для изменившихся адресов, DNS без прокси.</p></div>
+  <div class="step"><div class="n">06</div><h3>Проверка</h3><p>Открываем сайт из разных российских сетей и из других стран, на телефоне и компьютере.</p></div>
+ </div>
+</div>
+
+</body></html>
