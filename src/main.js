@@ -103,7 +103,6 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
       var ok = f.querySelector('.ok-msg'), btn = f.querySelector('button[type=submit]');
       if (text.trim().length < 5 && !topics.length) { f.querySelector('textarea').focus(); return; }
       if (contact.trim().length < 3) { var ci = f.querySelector('input[name=contact]'); ci && ci.focus(); return; }
-      if (/[^\s@]+@[^\s@]+\.[a-z]{2,}/i.test(contact)) { var ce = f.querySelector('input[name=contact]'); ce && (ce.value = '', ce.placeholder = 'Почту не принимаем — укажите Telegram или телефон', ce.focus()); return; }   // 09.11 (Ник): почту не собираем
       var ag = f.querySelector('input[name=agree]');
       if (ag && !ag.checked) { f.classList.add('need-agree'); ag.focus(); return; }
       f.classList.remove('need-agree');
@@ -253,7 +252,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   box.innerHTML = '<div class="rlc-hd"><div><b>Консультант REBORN LAB</b><span>отвечает ИИ · обычно за несколько секунд</span></div><button type="button" class="rlc-x" aria-label="Закрыть">×</button></div>' +
     '<div class="rlc-log" aria-live="polite"></div>' +
     '<div class="rlc-chips"><button type="button">Восстановить сайт</button><button type="button">Сколько стоит</button><button type="button">Сайт не открывается</button></div>' +
-    '<div class="rlc-lead" hidden><input type="text" name="c" placeholder="Telegram или телефон" autocomplete="off"><label><input type="checkbox" name="a"> Согласен на <a href="/consent/" target="_blank">обработку данных</a></label><button type="button" class="btn btn-acc rlc-send-lead">Отправить заявку</button></div>' +
+    '<div class="rlc-lead" hidden><div class="rlc-ct"><select name="ct" aria-label="Как связаться"><option>Почта</option><option>Telegram</option><option>WhatsApp</option></select><input type="text" name="c" placeholder="name@mail.ru" autocomplete="off"></div><span class="rlc-note">Мы не звоним — пишем на почту, в Telegram или WhatsApp.</span><label><input type="checkbox" name="a"> Согласен на <a href="/consent/" target="_blank">обработку данных</a></label><div class="rlc-bt"><button type="button" class="btn btn-acc rlc-pay">Оплатить демо 2 000 ₽</button><button type="button" class="btn rlc-send-lead">Только заявка</button></div><span class="rlc-note">Демо — до 12 страниц вашего сайта на временном адресе, чтобы увидеть результат до основной оплаты. Карта или СБП через ЮKassa.</span></div>' +
     '<form class="rlc-in"><input type="text" placeholder="Например: сайт example.ru не открывается" maxlength="1000" aria-label="Ваш вопрос"><button type="submit" class="btn btn-acc" aria-label="Отправить">→</button></form>' +
     '<div class="rlc-ft">Не пишите личные данные. <button type="button" class="rlc-lead-btn">Оставить заявку</button></div>';
   document.body.appendChild(btn); document.body.appendChild(box);
@@ -265,7 +264,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     hist.push({ role: 'user', content: text.trim() }); save(); add('user', text.trim());
     var w = add('assistant', '…'); w.classList.add('wait');
     box.querySelector('.rlc-chips').hidden = true;
-    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sid: sid, messages: hist.slice(-16) }) })
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sid: sid, messages: hist.slice(-16), page: location.pathname }) })
       .then(function (r) { return r.json(); })
       .then(function (d) { w.classList.remove('wait'); var t = d.reply || 'Не получилось ответить — напишите админу @Reborn_Lab.'; w.innerHTML = fmt(t); hist.push({ role: 'assistant', content: t }); save();
         if (d.estimate) { est = d.estimate; box.querySelector('.rlc-lead').hidden = false; } })
@@ -275,16 +274,50 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   form.addEventListener('submit', function (e) { e.preventDefault(); var t = inp.value; inp.value = ''; ask(t); });
   box.querySelectorAll('.rlc-chips button').forEach(function (b) { b.addEventListener('click', function () { ask(b.textContent); }); });
   box.querySelector('.rlc-lead-btn').addEventListener('click', function () { var l = box.querySelector('.rlc-lead'); l.hidden = !l.hidden; if (!l.hidden) l.querySelector('input[name=c]').focus(); });
-  box.querySelector('.rlc-send-lead').addEventListener('click', function () {
-    var l = box.querySelector('.rlc-lead'), c = l.querySelector('input[name=c]').value.trim(), a = l.querySelector('input[name=a]');
-    if (!c) return l.querySelector('input[name=c]').focus(); if (!a.checked) { l.classList.add('need'); return; }
+  var ctSel = box.querySelector('select[name=ct]'), ctIn = box.querySelector('input[name=c]');
+  var PH = { 'Почта': 'name@mail.ru', 'Telegram': '@ваш_ник', 'WhatsApp': '+7 900 000-00-00' };
+  ctSel.addEventListener('change', function () { ctIn.placeholder = PH[ctSel.value]; ctIn.focus(); });
+  function leadData() {
+    var l = box.querySelector('.rlc-lead'), c = ctIn.value.trim(), a = l.querySelector('input[name=a]');
+    if (c.length < 3) { ctIn.focus(); return null; }
+    if (ctSel.value === 'Почта' && !/^[^\s@]+@[^\s@]+\.[a-zа-я]{2,}$/i.test(c)) { ctIn.focus(); ctIn.classList.add('bad'); return null; }
+    ctIn.classList.remove('bad');
+    if (!a.checked) { l.classList.add('need'); return null; }
+    var site = ''; hist.forEach(function (m) { if (m.role === 'user') { var x = m.content.match(/([a-zа-яё0-9-]+\.)+(ru|рф|com|net|org|su|info|pro|online|site|shop|store|biz|me|io|by|kz|ua)\b/i); if (x) site = x[0]; } });
     var text = ('Из чата на сайте:\n' + hist.slice(-12).map(function (m) { return (m.role === 'user' ? '👤 ' : '🤖 ') + m.content; }).join('\n') + (est ? '\n\nРасчёт: ' + est.text : '')).replace(/https?:\/\/\S+/g, '[ссылка]');   // антиспам заявок режет >2 ссылок
-    fetch(LEAD, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topics: ['ИИ-консультант'], text: text.slice(0, 3500), contact: c, page: location.pathname, agree: true, hp: '', k: RL_T0.toString(36), t: Date.now() - RL_T0, h: RL_HUMAN ? 1 : 0 }) })
-      .then(function (r) { l.innerHTML = r.ok ? '<p>✅ Заявка отправлена. Админ напишет вам лично.</p>' : '<p>Не отправилось — напишите <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>.</p>'; })
-      .catch(function () { l.innerHTML = '<p>Не отправилось — напишите <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>.</p>'; });
+    return { l: l, contact: ctSel.value + ': ' + c, text: text.slice(0, 3500), site: site };
+  }
+  function fail(l, msg) { l.insertAdjacentHTML('beforeend', '<p class="rlc-err">' + (msg || 'Не отправилось') + ' — или напишите <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>.</p>'); }
+  box.querySelector('.rlc-send-lead').addEventListener('click', function () {
+    var d = leadData(); if (!d) return;
+    fetch(LEAD, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topics: ['ИИ-консультант'], text: d.text, contact: d.contact, page: location.pathname, agree: true, hp: '', k: RL_T0.toString(36), t: Date.now() - RL_T0, h: RL_HUMAN ? 1 : 0 }) })
+      .then(function (r) { if (r.ok) d.l.innerHTML = '<p>✅ Заявка отправлена. Админ напишет вам (' + esc(d.contact) + ').</p>'; else fail(d.l); })
+      .catch(function () { fail(d.l); });
+  });
+  box.querySelector('.rlc-pay').addEventListener('click', function () {
+    var d = leadData(); if (!d) return; var b = this; b.disabled = true; b.textContent = 'Открываю оплату…';
+    try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_pay'); } catch (e) {}
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'pay', sid: sid, contact: d.contact, site: d.site, text: d.text, agree: true }) })
+      .then(function (r) { return r.json(); })
+      .then(function (x) { if (x.url) { try { sessionStorage.setItem('rl_chat_pay', x.pid); } catch (e) {} location.href = x.url; } else { b.disabled = false; b.textContent = 'Оплатить демо 2 000 ₽'; fail(d.l, x.error); } })
+      .catch(function () { b.disabled = false; b.textContent = 'Оплатить демо 2 000 ₽'; fail(d.l); });
   });
   function open() { box.classList.add('on'); btn.classList.add('hide'); if (!log.children.length) render(); setTimeout(function () { inp.focus(); }, 50); try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_open'); } catch (e) {} }
   btn.addEventListener('click', open);
   box.querySelector('.rlc-x').addEventListener('click', function () { box.classList.remove('on'); btn.classList.remove('hide'); });
   window.RL_CHAT = function (q) { open(); if (q) ask(q); };
+  var pm = location.search.match(/[?&]oplata=([a-f0-9]{6,12})/);   // возврат из ЮKassa
+  if (pm) {
+    open();
+    var pw = add('assistant', 'Проверяю оплату…'), tries = 0;
+    (function chk() {
+      fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'paystatus', pid: pm[1] }) }).then(function (r) { return r.json(); }).then(function (x) {
+        if (x.status === 'paid') { pw.innerHTML = fmt('✅ Оплата получена, спасибо! Админ напишет вам в ближайшее время и покажет демо' + (x.site ? ' сайта ' + x.site : '') + '. Если удобнее — напишите сами @Reborn_Lab.'); try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_paid'); } catch (e) {} }
+        else if (x.status === 'canceled') pw.innerHTML = fmt('Оплата не прошла или отменена. Можно попробовать ещё раз кнопкой «Оставить заявку» или написать @Reborn_Lab.');
+        else if (++tries < 12) setTimeout(chk, 5000);
+        else pw.innerHTML = fmt('Оплата пока в обработке. Как только она пройдёт, админ получит уведомление и напишет вам.');
+      }).catch(function () { pw.innerHTML = fmt('Не получилось проверить оплату — напишите @Reborn_Lab.'); });
+    })();
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  }
 })();

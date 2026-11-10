@@ -127,7 +127,7 @@ main = f'''{banner}<main class="bw">
       <label class="wide"><span>Что нужно</span><select name="plan">{plan_opts}</select></label>
       <label class="wide"><span>Адрес сайта *</span><input name="site" placeholder="мой-сайт.ru" required></label>
       <label><span>Где удобнее общаться</span><select name="via"><option>WhatsApp</option><option>Telegram</option><option>Другое</option></select></label>
-      <label><span>Ваш номер или ник *</span><input name="contact" placeholder="+7… или @ник" required></label>
+      <label><span>Почта, Telegram или WhatsApp *</span><input name="contact" placeholder="name@mail.ru, @ник или +7…" required></label>
       <label class="wide"><span>Комментарий</span><textarea name="text" rows="3" placeholder="Что случилось с сайтом, есть ли копия"></textarea></label>
     </div>
     <input name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
@@ -152,7 +152,6 @@ after = after[:after.index('<script>\n(function () {')] + '''<script>
     e.preventDefault();
     var site = f.site.value.trim(), contact = f.contact.value.trim(), ag = f.agree;
     if (!site || !contact) { msg.textContent = 'Укажите адрес сайта и как с вами связаться.'; return; }
-    if (/[^\\s@]+@[^\\s@]+\\.[a-z]{2,}/i.test(contact)) { msg.textContent = 'Почту в форме не принимаем — укажите номер или ник в Telegram. Или напишите нам на info@rebornlab.ru сами.'; return; }
     if (!ag.checked) { f.classList.add('need-agree'); msg.textContent = 'Отметьте согласие на обработку данных.'; return; }
     f.classList.remove('need-agree');
     var btn = f.querySelector('button'); btn.disabled = true; msg.textContent = 'Отправляем…';
