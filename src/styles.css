@@ -462,7 +462,7 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 .rlc-ct { display: flex; gap: 6px; } .rlc-ct input { flex: 1; min-width: 0; } .rlc-ct select { height: 40px; padding: 0 8px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--bg-2); color: var(--text); font: inherit; font-size: 14px; }
 .rlc-lead input.bad { border-color: #ff7a6b; } .rlc-note { color: var(--dim); font-size: 12px; line-height: 1.4; } .rlc-err { color: #ff9a8b; }
 .rlc-bt { display: flex; gap: 6px; flex-wrap: wrap; } .rlc-bt .btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 14px; }
-.rlc-lead { max-height: 55%; overflow-y: auto; }
+.rlc-lead { max-height: 75%; overflow-y: auto; }
 
 .cookie:not([hidden]) ~ .rlc-btn { display: none; }   /* 11.11: пока висит окно cookie, «Спросить» не закрывает «Согласен» */
 
@@ -475,3 +475,10 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 @media(max-width:640px){.about-me .me-card{align-items:flex-start}.about-me .me-ava{width:56px;height:56px;font-size:19px}}
 .about-me .me-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 22px;align-items:start}.about-me .me-stats figure{margin:0}.about-me .me-stats img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block}.about-me .me-stats figcaption{color:var(--muted);font-size:13px;margin-top:6px}
 @media(max-width:640px){.about-me .me-stats{grid-template-columns:1fr}}
+/* 11.11 ночь: одна форма «Написать Николаю» (сайт + вопрос + контакт) */
+.rlc-lh { display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
+.rlc-back { border: 0; background: none; color: var(--muted); font: 13px var(--font); cursor: pointer; padding: 4px 0; }
+.rlc-lead textarea { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--bg-2); color: var(--text); font: inherit; font-size: 14.5px; resize: vertical; min-height: 64px; }
+.rlc-lead input:focus, .rlc-lead textarea:focus { outline: none; border-color: var(--acc); }
+.rlc-in[hidden], .rlc-ft[hidden] { display: none; }
+.rlc-cta { display: flex; margin-top: 10px; padding: 9px 16px; font-size: 14px; }

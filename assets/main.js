@@ -247,18 +247,18 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function fmt(s) { return esc(s).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)»])/g, '<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/@Reborn_Lab/g, '<a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>').replace(/\n/g, '<br>'); }
   var btn = document.createElement('button'); btn.className = 'rlc-btn'; btn.type = 'button'; btn.setAttribute('aria-label', 'Ник на связи — спросить');
-  btn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></svg><span>Спросить</span>';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></svg><span>Ник на связи</span>';
   var box = document.createElement('div'); box.className = 'rlc'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Ник на связи — помощник REBORN LAB');
   box.innerHTML = '<div class="rlc-hd"><div><b>Ник на связи</b><span>Отвечает ИИ-помощник · лично напишет Николай</span></div><button type="button" class="rlc-x" aria-label="Закрыть">×</button></div>' +
     '<div class="rlc-log" aria-live="polite"></div>' +
     '<div class="rlc-chips"><button type="button">Восстановить сайт</button><button type="button">Сайт не открывается</button><button type="button" data-lead="1">Связаться с Николаем</button></div>' +
-    '<div class="rlc-lead" hidden><div class="rlc-ct"><select name="ct" aria-label="Как связаться"><option>Почта</option><option>Telegram</option><option>WhatsApp</option></select><input type="text" name="c" placeholder="name@mail.ru" autocomplete="off"></div><span class="rlc-note">Мы не звоним — пишем на почту, в Telegram или WhatsApp.</span><label><input type="checkbox" name="a"> Согласен на <a href="/consent/" target="_blank">обработку данных</a></label><div class="rlc-bt"><button type="button" class="btn btn-acc rlc-send-lead">Отправить Николаю</button></div><span class="rlc-note">Николай — администратор REBORN LAB. Посмотрит ваш сайт и напишет лично: что можно сделать и сколько это стоит.</span></div>' +
+    '<div class="rlc-lead" hidden><div class="rlc-lh"><b>Написать Николаю</b><button type="button" class="rlc-back">← к чату</button></div><input type="text" name="site" placeholder="Адрес сайта, если есть" autocomplete="off"><textarea name="q" rows="3" placeholder="Ваш вопрос или задача"></textarea><div class="rlc-ct"><select name="ct" aria-label="Как связаться"><option>Почта</option><option>Telegram</option><option>WhatsApp</option></select><input type="text" name="c" placeholder="name@mail.ru" autocomplete="off"></div><label><input type="checkbox" name="a"> Согласен на <a href="/consent/" target="_blank">обработку данных</a></label><div class="rlc-bt"><button type="button" class="btn btn-acc rlc-send-lead">Отправить Николаю</button></div><span class="rlc-note">Мы не звоним — Николай посмотрит сайт и напишет на почту, в Telegram или WhatsApp.</span></div>' +
     '<form class="rlc-in"><input type="text" placeholder="Адрес сайта и вопрос" maxlength="1000" aria-label="Ваш вопрос"><button type="submit" class="btn btn-acc" aria-label="Отправить">→</button></form>' +
-    '<div class="rlc-ft">Контакт — только в форме, не в чате. <button type="button" class="rlc-lead-btn">Оставить контакт</button></div>';
+    '<div class="rlc-ft">Хотите, чтобы ответил человек? <button type="button" class="rlc-lead-btn">Написать Николаю</button></div>';
   document.body.appendChild(btn); document.body.appendChild(box);
   var log = box.querySelector('.rlc-log'), form = box.querySelector('.rlc-in'), inp = form.querySelector('input'), busy = false;
   function add(role, text) { var d = document.createElement('div'); d.className = 'rlc-m ' + (role === 'user' ? 'u' : 'a'); d.innerHTML = fmt(text); log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
-  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Я ИИ-помощник Николая из REBORN LAB. Подскажу, что с вашим сайтом и можно ли его вернуть. Напишите адрес сайта — проверю. А если удобнее сразу поговорить с человеком, оставьте контакт: Николай напишет вам лично.'); hist.forEach(function (m) { add(m.role, m.content); }); }
+  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Я ИИ-помощник Николая из REBORN LAB. Подскажу, что с вашим сайтом и можно ли его вернуть. Напишите адрес сайта и вопрос — проверим. А если удобнее сразу поговорить с человеком, нажмите «Написать Николаю».'); hist.forEach(function (m) { add(m.role, m.content); }); }
   function ask(text) {
     if (busy || !text.trim()) return; busy = true;
     hist.push({ role: 'user', content: text.trim() }); save(); add('user', text.trim());
@@ -267,24 +267,32 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sid: sid, messages: hist.slice(-16), page: location.pathname }) })
       .then(function (r) { return r.json(); })
       .then(function (d) { w.classList.remove('wait'); var t = d.reply || 'Не получилось ответить — напишите админу @Reborn_Lab.'; w.innerHTML = fmt(t); hist.push({ role: 'assistant', content: t }); save();
-        if (d.lead) { box.querySelector('.rlc-lead').hidden = false; } })
+        if (d.lead && !log.querySelector('.rlc-cta')) { var cb = document.createElement('button'); cb.type = 'button'; cb.className = 'btn btn-acc rlc-cta'; cb.textContent = 'Написать Николаю'; cb.addEventListener('click', openLead); w.appendChild(cb); } })
       .catch(function () { w.classList.remove('wait'); w.innerHTML = fmt('Нет связи. Напишите админу @Reborn_Lab.'); })
       .then(function () { busy = false; log.scrollTop = log.scrollHeight; });
   }
-  function openLead() { var l = box.querySelector('.rlc-lead'); l.hidden = false; log.scrollTop = log.scrollHeight; setTimeout(function () { ctIn.focus(); }, 30); }
+  function openLead() {
+    var l = box.querySelector('.rlc-lead'), sf = l.querySelector('input[name=site]'), qf = l.querySelector('textarea[name=q]');
+    if (!sf.value) hist.forEach(function (m) { if (m.role === 'user') { var x = m.content.match(/([a-zа-яё0-9-]+\.)+(ru|рф|com|net|org|su|info|pro|online|site|shop|store|biz|me|io|by|kz|ua)\b/i); if (x) sf.value = x[0]; } });
+    if (!qf.value) { var us = hist.filter(function (m) { return m.role === 'user' && !/^(Восстановить сайт|Сайт не открывается)$/.test(m.content); }).map(function (m) { return m.content; }); qf.value = us.slice(-2).join('\n'); }
+    l.hidden = false; form.hidden = true; box.querySelector('.rlc-ft').hidden = true; box.querySelector('.rlc-chips').hidden = true;
+    setTimeout(function () { (sf.value ? (qf.value ? ctIn : qf) : sf).focus(); }, 30);
+  }
+  function closeLead() { box.querySelector('.rlc-lead').hidden = true; form.hidden = false; box.querySelector('.rlc-ft').hidden = false; setTimeout(function () { inp.focus(); }, 30); }
   form.addEventListener('submit', function (e) {
     e.preventDefault(); var t = inp.value.trim(); if (!t) return;
     var em = t.match(/[^\s@]+@[^\s@]+\.[a-zа-я]{2,}/i), tg = t.match(/(?:^|\s)@([a-z0-9_]{4,32})\b/i) || t.match(/t\.me\/([a-z0-9_]{4,32})/i), ph = t.match(/(?:\+7|\b8|\b7)[\s(-]*\d{3}[\s)-]*\d{3}[\s-]*\d{2}[\s-]*\d{2}\b/);   // только телефон РФ, не IP
     if (em || tg || ph) {   // 11.11: контакт не отправляем в ИИ — в форму, где есть согласие
       inp.value = '';
       if (em) { ctSel.value = 'Почта'; ctIn.value = em[0]; } else if (tg) { ctSel.value = 'Telegram'; ctIn.value = '@' + tg[1]; } else { ctSel.value = 'WhatsApp'; ctIn.value = ph[0].trim(); }
-      add('assistant', 'Спасибо! Чтобы передать контакт Николаю, отметьте согласие на обработку данных и нажмите «Отправить Николаю» — он напишет вам лично.');
+      add('assistant', 'Спасибо! Контакт перенесли в форму — отметьте согласие на обработку данных и нажмите «Отправить Николаю», он напишет вам лично.');
       openLead(); return;
     }
     inp.value = ''; ask(t);
   });
-  box.querySelectorAll('.rlc-chips button').forEach(function (b) { b.addEventListener('click', function () { if (b.dataset.lead) { box.querySelector('.rlc-chips').hidden = true; add('assistant', 'Оставьте Telegram, WhatsApp или почту — Николай напишет вам лично.'); openLead(); } else ask(b.textContent); }); });
-  box.querySelector('.rlc-lead-btn').addEventListener('click', function () { var l = box.querySelector('.rlc-lead'); l.hidden = !l.hidden; if (!l.hidden) l.querySelector('input[name=c]').focus(); });
+  box.querySelectorAll('.rlc-chips button').forEach(function (b) { b.addEventListener('click', function () { if (b.dataset.lead) { openLead(); } else ask(b.textContent); }); });
+  box.querySelector('.rlc-lead-btn').addEventListener('click', openLead);
+  box.querySelector('.rlc-back').addEventListener('click', closeLead);
   var ctSel = box.querySelector('select[name=ct]'), ctIn = box.querySelector('input[name=c]');
   var PH = { 'Почта': 'name@mail.ru', 'Telegram': '@ваш_ник', 'WhatsApp': '+7 900 000-00-00' };
   ctSel.addEventListener('change', function () { ctIn.placeholder = PH[ctSel.value]; ctIn.focus(); });
@@ -295,14 +303,16 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     ctIn.classList.remove('bad');
     if (!a.checked) { l.classList.add('need'); return null; }
     var site = ''; hist.forEach(function (m) { if (m.role === 'user') { var x = m.content.match(/([a-zа-яё0-9-]+\.)+(ru|рф|com|net|org|su|info|pro|online|site|shop|store|biz|me|io|by|kz|ua)\b/i); if (x) site = x[0]; } });
-    var text = ('Из чата на сайте:\n' + hist.slice(-12).map(function (m) { return (m.role === 'user' ? '👤 ' : '🤖 ') + m.content; }).join('\n') + (est ? '\n\nРасчёт: ' + est.text : '')).replace(/https?:\/\/\S+/g, '[ссылка]');   // антиспам заявок режет >2 ссылок
+    var sv = l.querySelector('input[name=site]').value.trim(), qv = l.querySelector('textarea[name=q]').value.trim(); if (sv) site = sv;
+    if (!sv && !qv && !hist.length) { l.querySelector('textarea[name=q]').focus(); return null; }
+    var text = ((sv ? 'Сайт: ' + sv + '\n' : '') + (qv ? 'Вопрос: ' + qv + '\n' : '') + (hist.length ? '\nИз чата на сайте:\n' + hist.slice(-12).map(function (m) { return (m.role === 'user' ? '👤 ' : '🤖 ') + m.content; }).join('\n') : '')).replace(/https?:\/\/\S+/g, '[ссылка]');   // антиспам заявок режет >2 ссылок
     return { l: l, contact: ctSel.value + ': ' + c, text: text.slice(0, 3500), site: site };
   }
   function fail(l, msg) { l.insertAdjacentHTML('beforeend', '<p class="rlc-err">' + (msg || 'Не отправилось') + ' — или напишите <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>.</p>'); }
   box.querySelector('.rlc-send-lead').addEventListener('click', function () {
     var d = leadData(); if (!d) return;
     fetch(LEAD, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topics: ['ИИ-консультант'], text: d.text, contact: d.contact, page: location.pathname, agree: true, hp: '', k: RL_T0.toString(36), t: Date.now() - RL_T0, h: RL_HUMAN ? 1 : 0 }) })
-      .then(function (r) { if (r.ok) { d.l.innerHTML = '<p>✅ Готово! Николай напишет вам (' + esc(d.contact) + ').</p>'; try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_lead'); } catch (e) {} } else fail(d.l); })
+      .then(function (r) { if (r.ok) { d.l.innerHTML = '<p>✅ Готово! Николай напишет вам (' + esc(d.contact) + ').</p><button type="button" class="rlc-lead-btn">← вернуться к чату</button>'; d.l.querySelector('button').addEventListener('click', function () { d.l.hidden = true; form.hidden = false; box.querySelector('.rlc-ft').hidden = false; }); try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_lead'); } catch (e) {} } else fail(d.l); })
       .catch(function () { fail(d.l); });
   });
   function open() { box.classList.add('on'); btn.classList.add('hide'); if (!log.children.length) render(); setTimeout(function () { inp.focus(); }, 50); try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_open'); } catch (e) {} }
