@@ -465,3 +465,11 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 .rlc-lead { max-height: 55%; overflow-y: auto; }
 
 .cookie:not([hidden]) ~ .rlc-btn { display: none; }   /* 11.11: пока висит окно cookie, «Спросить» не закрывает «Согласен» */
+
+/* 11.11.2026 — страница «Обо мне» */
+.about-me .me-card{display:flex;gap:18px;align-items:center;margin:8px 0 26px;padding:18px;background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+.about-me .me-card>div:last-child{display:flex;flex-direction:column;gap:3px}.about-me .me-card span{color:var(--muted);font-size:14px}
+.about-me .me-ava{flex:none;width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--acc);margin:0}
+.about-me pre{background:#0f1113;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow-x:auto;margin:16px 0}
+.about-me pre code{font:13.5px/1.6 var(--mono);color:#d6d3cc;white-space:pre;background:none;padding:0}
+@media(max-width:640px){.about-me .me-card{align-items:flex-start}.about-me .me-ava{width:56px;height:56px;font-size:19px}}
