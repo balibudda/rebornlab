@@ -463,3 +463,5 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 .rlc-lead input.bad { border-color: #ff7a6b; } .rlc-note { color: var(--dim); font-size: 12px; line-height: 1.4; } .rlc-err { color: #ff9a8b; }
 .rlc-bt { display: flex; gap: 6px; flex-wrap: wrap; } .rlc-bt .btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 14px; }
 .rlc-lead { max-height: 55%; overflow-y: auto; }
+
+.cookie:not([hidden]) ~ .rlc-btn { display: none; }   /* 11.11: пока висит окно cookie, «Спросить» не закрывает «Согласен» */
