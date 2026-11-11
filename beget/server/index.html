@@ -120,14 +120,14 @@
   <a href="/beget/" class="live" style="text-decoration:none">← Статус восстановления Бегет</a>
   <h1>Мониторинг серверов Бегет (Beget) по IP</h1>
   <p class="lead">Введите IP-адрес сервера или адрес сайта — покажем, отвечает ли ваш сервер на наши проверки, что с соседними серверами и что делать дальше. Данные наших проверок всех сетей хостинга Бегет, обновление каждые 15 минут.</p>
-  <div class="live" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
-  <div class="chklog" id="chk"></div>
   <div class="card" id="watchbox" style="margin-top:18px;border:1px solid rgba(198,242,78,.45)">
     <b style="font-size:19px">🔔 Добавить сайт или сервер в мониторинг — бесплатно</b>
     <p class="sub" style="margin:6px 0 0">Введите адрес сайта или IP сервера Бегета — откроется бот @rebornlab_bot и сразу начнёт следить. Напишем в Telegram, когда заработает. Если вашей сети ещё нет в мониторинге, бот добавит её сам.</p>
     <form class="bnow-s" data-rlwatch style="max-width:640px"><input type="text" name="w" placeholder="example.ru или 45.130.41.148" aria-label="Адрес сайта или IP сервера" autocomplete="off"><button type="submit" class="btn btn-acc">Добавить в мониторинг</button></form>
   </div>
 <script>document.addEventListener('submit',function(e){var f=e.target;if(!f.matches||!f.matches('form[data-rlwatch]'))return;e.preventDefault();var i=f.querySelector('input'),v=i.value.trim().toLowerCase().replace(/^[a-z]+:\/\//,'').split('/')[0].replace(/^www\./,'');if(!/\./.test(v)){i.focus();return;}var b=btoa(unescape(encodeURIComponent(v))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');try{if(window.ym&&window.RL_METRIKA)ym(window.RL_METRIKA,'reachGoal','watch_add');}catch(x){}window.open('https://t.me/rebornlab_bot?start=w_'+b.slice(0,62),'_blank');},true);</script>
+  <div class="live" style="margin-top:14px"><span class="dot"></span><span id="upd">загружаем данные…</span></div>
+  <div class="chklog" id="chk"></div>
 
   <div class="card" id="check">
     <h2>Проверка сервера</h2>
