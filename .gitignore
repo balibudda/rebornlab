@@ -1,1 +1,8 @@
 CLAUDE.md
+
+# 11.11: закрытые черновики (под паролем на сервере) — не в открытый репо; кладутся на vpn-ru напрямую scp
+demo/strahovka/
+demo/draft-podstrahovka/
+demo/hostingi/
+demo/draft-about/
+content/journal/sajt-vernulsya-pereezzhat-ili-podstrahovatsya.md
