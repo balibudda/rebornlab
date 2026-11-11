@@ -473,3 +473,5 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 .about-me pre{background:#0f1113;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow-x:auto;margin:16px 0}
 .about-me pre code{font:13.5px/1.6 var(--mono);color:#d6d3cc;white-space:pre;background:none;padding:0}
 @media(max-width:640px){.about-me .me-card{align-items:flex-start}.about-me .me-ava{width:56px;height:56px;font-size:19px}}
+.about-me .me-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 22px;align-items:start}.about-me .me-stats figure{margin:0}.about-me .me-stats img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block}.about-me .me-stats figcaption{color:var(--muted);font-size:13px;margin-top:6px}
+@media(max-width:640px){.about-me .me-stats{grid-template-columns:1fr}}
