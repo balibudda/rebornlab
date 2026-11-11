@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Страховка сайта: своя копия, присмотр и запасной сайт — REBORN LAB</title>
+<meta name="description" content="Ежедневная копия сайта и базы в вашем собственном хранилище, проверка восстановления каждый месяц, мониторинг и запасной сайт на сервере в России, если хостинг лёг.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://rebornlab.ru/strahovka-sajta/">
+<meta property="og:url" content="https://rebornlab.ru/strahovka-sajta/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Страховка сайта — REBORN LAB">
+<meta property="og:description" content="Копия сайта у нас, присмотр и запасной сервер в России.">
+<meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
+<link rel="stylesheet" href="/assets/styles.css?v=9f508b96">
+<style>
+  /* страница-монитор (ручная, build.mjs её не трогает) */
+  .bw { max-width: var(--max); margin: 0 auto; padding: 40px 22px 80px; }   /* ширина как у шапки и подвала (.wrap) — края ровные */
+  .bw h1 { font-size: clamp(30px, 5vw, 54px); letter-spacing: -.03em; line-height: 1.05; margin: 14px 0 12px; }
+  .bw .lead { color: var(--muted); font-size: 18px; max-width: 46em; }
+  .bw .live { display: inline-flex; align-items: center; gap: 8px; font: 13px var(--mono); color: var(--muted); }
+  .bw .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 0 0 var(--acc-dim); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198,242,78,.5) } 70% { box-shadow: 0 0 0 10px rgba(198,242,78,0) } 100% { box-shadow: 0 0 0 0 rgba(198,242,78,0) } }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 34px 0; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 20px 22px; }
+  .kpi .v { font-size: 42px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+  .kpi .v small { font-size: 18px; color: var(--muted); font-weight: 500; }
+  .kpi .l { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  .bar { height: 8px; background: var(--card-2); border-radius: 4px; overflow: hidden; margin-top: 14px; }
+  .bar i { display: block; height: 100%; background: var(--acc); border-radius: 4px; transition: width .6s; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; margin: 18px 0; }
+  .card h2 { font-size: 22px; margin: 0 0 4px; letter-spacing: -.01em; }
+  .card .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+  .chart { width: 100%; height: auto; display: block; }
+  .ch { margin: 6px 0 14px; } .ch-h { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 15px; }
+  .ch-h .delta { margin: 0; }
+  .legend { display: flex; gap: 18px; font-size: 13px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+  .legend b { display: inline-block; width: 12px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+  .nets { display: grid; gap: 10px; }
+  .net { display: grid; grid-template-columns: 150px 1fr 120px; gap: 12px; align-items: center; font-size: 14px; }
+  .net .n { font-family: var(--mono); color: var(--muted); }
+  .stack { display: flex; height: 22px; border-radius: 6px; overflow: hidden; background: var(--card-2); }
+  .stack .h { background: var(--acc); } .stack .o { background: var(--cool); } .stack .d { background: rgba(237,235,230,.08); }
+  .net .c { text-align: right; font-family: var(--mono); font-size: 13px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+  .s { font: 12px var(--mono); padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .s.ok { color: #0b0c0d; background: var(--acc); border-color: var(--acc); }
+  .tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tabs button { background: var(--card-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 999px; padding: 7px 14px; font: 14px var(--font); cursor: pointer; }
+  .tabs button.on { background: var(--text); color: var(--bg); }
+  .cta { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+  .cta p { margin: 6px 0 0; color: var(--muted); }
+  .top-cta { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 26px 0 6px; }
+  .top-cta a { display: flex; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r);
+    padding: 16px 18px; color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s; }
+  .top-cta a:hover { border-color: var(--acc); transform: translateY(-1px); }
+  .top-cta .ic { font-size: 26px; flex: none; }
+  .top-cta b { display: block; font-size: 16px; } .top-cta span { color: var(--muted); font-size: 13.5px; line-height: 1.35; display: block; margin-top: 2px; }
+  .top-cta a.acc { border-color: var(--acc); background: linear-gradient(135deg, rgba(198,242,78,.12), rgba(198,242,78,.02)); }
+  .delta { font: 13px var(--mono); margin-top: 6px; color: var(--muted); } .delta.up { color: var(--acc); }
+  .live.busy .dot { background: var(--cool); }
+  @media (max-width: 640px) { .top-cta { grid-template-columns: 1fr } .bw { padding-top: 26px } .kpi .v { font-size: 36px } }
+  .sub-form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .sub-form input { flex: 1; min-width: 220px; background: var(--bg-2); color: var(--text); border: 1px solid var(--line-2); border-radius: 12px; padding: 13px 15px; font: 16px var(--font); }
+  .sub-form input:focus { outline: none; border-color: var(--acc); }
+  .qa { border-top: 1px solid var(--line); padding: 12px 0; } .qa:first-of-type { border-top: 0; }
+  .qa summary { cursor: pointer; font-size: 17px; font-weight: 600; list-style: none; } .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after { content: '+'; float: right; color: var(--acc); font-size: 20px; } .qa[open] summary::after { content: '−'; }
+  .qa p { color: var(--muted); margin: 10px 0 2px; line-height: 1.6; }
+  .feed { display: flex; gap: 8px; flex-wrap: wrap; } .feed .s { flex: none; }
+  .feed .ago { font: 11px var(--mono); color: rgba(11,12,13,.55); margin-left: 6px; }
+  .note { color: var(--dim); font-size: 13px; margin-top: 26px; line-height: 1.6; }
+  @media (max-width: 640px) { .net { grid-template-columns: 1fr; gap: 4px } .net .c { text-align: left } .cta { grid-template-columns: 1fr } }
+.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 14px }
+.news-card { display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: inherit; background: rgba(237,235,230,.03); border: 1px solid rgba(237,235,230,.08); border-radius: 14px; padding: 12px; transition: border-color .2s }
+.news-card:hover { border-color: var(--acc) }
+.news-card img { width: 100%; height: auto; border-radius: 10px; display: block; margin-bottom: 4px }
+.news-dt { font: 12px/1.3 ui-monospace, Menlo, monospace; color: var(--acc) }
+.news-card b { font-size: 16px; line-height: 1.3 }
+.news-d { font-size: 13px; color: #9a978f; line-height: 1.45 }
+  .chklog { margin: 10px 0 0; font-size: 13px; color: rgba(237,235,230,.7); }
+  .chklog table { border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .chklog td { padding: 3px 14px 3px 0; border-top: 1px solid rgba(237,235,230,.07); }
+  .chklog tr.th td { font-size: 12px; color: var(--muted); border-top: 0; }
+  .chklog tr.th + tr td { color: var(--text); font-weight: 600; }
+  .chklog td:not(:first-child) { text-align: right; padding-left: 14px; }
+  .chklog .fresh { color: var(--acc); }
+  .flash { animation: fl 1.6s ease; } @keyframes fl { 0% { background: rgba(200,255,90,.25); } 100% { background: transparent; } }
+
+  .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 28px 0; }
+  .plan { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: flex; flex-direction: column; }
+  .plan .pn { font-size: 18px; line-height: 1.25; } .plan .pp { font-size: 34px; font-weight: 700; color: var(--acc); margin: 10px 0 4px; letter-spacing: -.02em; }
+  .plan .pd { color: var(--muted); font-size: 14px; margin: 0 0 10px; } .plan ul { margin: 0; padding-left: 18px; font-size: 15px; } .plan li { margin: 6px 0; }
+  .steps3 { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 12px; margin: 14px 0 0; }
+  .steps3 li { counter-increment: s; position: relative; padding: 14px 16px 14px 58px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+  .steps3 li::before { content: counter(s); position: absolute; left: 16px; top: 12px; width: 30px; height: 30px; border-radius: 50%; background: var(--acc); color: #111; font-weight: 700; display: grid; place-items: center; }
+  .cta2 { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0; }
+  .qa p { color: var(--muted); }
+  .me { background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--acc); border-radius: var(--r); padding: 18px 22px; margin: 12px 0 16px; }
+  .me p { margin: 0 0 10px; line-height: 1.6; } .me p:last-child { margin: 0; } .me-s { color: var(--muted); font-size: 14px; }
+  .contacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 14px 0 18px; }
+  .ct { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--r); background: var(--card); color: var(--fg); text-decoration: none; }
+  .ct:hover { border-color: var(--acc); } .ct span { color: var(--acc); }
+  .tform { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; margin: 0 0 18px; position: relative; }
+  .tgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; } .tgrid .wide { grid-column: 1 / -1; }
+  .tform label span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .tform input:not([type=checkbox]), .tform textarea { width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+  .plan ul { flex: 1; }
+  .plan .pick { display: block; margin-top: 18px; text-align: center; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--acc); color: var(--acc); background: rgba(198,242,78,.08); font-weight: 700; text-decoration: none; }
+  .plan .pick:hover { background: var(--acc); color: #111; }
+  .tform select { -webkit-appearance: none; appearance: none; text-align: left; text-align-last: left; width: 100%; font: inherit; line-height: 1.3; padding: 12px 40px 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c6f24e' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat right 14px center; color: var(--fg); cursor: pointer; }
+  .tform .agree { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); margin: 0 0 14px; } .tform .agree a { color: var(--acc); }
+  .tform.need-agree .agree { color: #ff9b9b; } .tmsg { margin: 10px 0 0; font-size: 14px; }
+  @media (max-width: 600px) { .tgrid { grid-template-columns: 1fr; } }
+</style>
+<style>
+  .rs { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:18px 0 6px }
+  .rs .kpi .v { font-size:34px }
+  .verdict { border-radius:var(--r); padding:18px 20px; margin:16px 0 6px; border:1px solid var(--line); background:var(--card-2) }
+  .verdict > b:first-child { font-size:20px; display:block; margin-bottom:6px } .verdict.ok { border-color:rgba(198,242,78,.6); background:rgba(198,242,78,.07) }
+  .verdict.mid { border-color:rgba(255,190,90,.55); background:rgba(255,190,90,.07) } .verdict.no { border-color:rgba(255,110,110,.5); background:rgba(255,110,110,.06) }
+  @media (max-width:600px) { .rs { grid-template-columns:1fr 1fr } .rs .kpi:last-child { grid-column:1 / -1 } }
+  .steps2 { margin:10px 0 0 18px } .steps2 li { margin:6px 0 }
+  .help { margin-top:16px; padding:16px 18px; border-radius:var(--r); border:1px dashed var(--line-2); color:var(--muted) } .help a { color:var(--acc) }
+  .wait { color:var(--muted); font:14px var(--mono) }
+  .feed { list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px }
+  .feed li { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:10px 14px; border-radius:12px; background:var(--card-2); font-size:14.5px; animation:fin .6s ease }
+  .feed .fd { font:14px var(--mono) } .feed .fv { font-size:13px; white-space:nowrap } .feed .ft { color:var(--muted); font-size:12.5px; white-space:nowrap; min-width:70px; text-align:right }
+  .feed .fv.ok { color:var(--acc) } .feed .fv.part { color:#ffc15a } .feed .fv.no { color:#ff8a8a } .feed .fv.works { color:#7aa7ff }
+  @keyframes fin { from { opacity:0; transform:translateY(-6px) } to { opacity:1; transform:none } }
+  @media (max-width:600px) { .feed li { grid-template-columns:1fr auto; } .feed .ft { grid-column:1 / -1; text-align:left; margin-top:-4px } }
+  .prog { margin:18px 0 4px } .prog-bar { height:6px; border-radius:3px; background:var(--card-2); overflow:hidden; position:relative }
+  .prog-bar i { position:absolute; top:0; bottom:0; left:0; width:0; background:var(--acc); border-radius:3px; transition:width .8s ease }
+  .prog ul { list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:7px; font-size:15px }
+  .prog li { color:var(--muted); display:flex; gap:10px; align-items:center } .prog li.on { color:var(--text) } .prog li.done { color:var(--muted) }
+  .prog li s { text-decoration:none; width:18px; text-align:center; flex:none } .prog li.on s::before { content:""; display:inline-block; width:12px; height:12px; border:2px solid var(--acc); border-right-color:transparent; border-radius:50%; animation:spin .8s linear infinite }
+  .prog li.done s::before { content:"✓"; color:var(--acc); font-weight:700 } .prog li:not(.on):not(.done) s::before { content:"·" }
+  .prog .tm { margin-top:10px; font:13px var(--mono); color:var(--muted) }
+  @keyframes spin { to { transform:rotate(360deg) } }
+  .chk { display:grid; grid-template-columns:1fr auto; gap:10px; margin-top:10px }
+  .chk input { font:18px var(--mono); padding:14px 16px; border-radius:12px; border:1px solid rgba(237,235,230,.16); background:rgba(237,235,230,.04); color:var(--text); min-width:0; outline:none }
+  .chk input:focus { border-color:var(--acc) }
+  @media (max-width:600px) { .chk { grid-template-columns:1fr } .chk input { font-size:16px } .chk .btn { width:100%; justify-content:center } }
+</style>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Страховка сайта","serviceType":"Резервное копирование и мониторинг сайта","provider":{"@type":"Organization","name":"REBORN LAB","url":"https://rebornlab.ru/"},"areaServed":"RU","url":"https://rebornlab.ru/strahovka-sajta/","offers":[{"@type":"Offer","name":"Присмотр","price":"490","priceCurrency":"RUB"},{"@type":"Offer","name":"Своя копия","price":"990","priceCurrency":"RUB"},{"@type":"Offer","name":"Запасной сайт","price":"1990","priceCurrency":"RUB"}]}</script>
+</head>
+<body>
+<!--HDR:START--><header class="hdr"><div class="wrap">
+  <a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a>
+  <nav class="nav" aria-label="Основное меню"><a href="/#uslugi">Услуги</a><a href="/strahovka-sajta/" aria-current="page">Страховка сайта</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/beget/">Статус Beget</a><a href="/beget/server/"><svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг серверов</a><a class="nav-cta" href="/contact/" data-goal="cta_menu">Обсудить идею →</a></nav>
+  <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
+  <button class="srch-btn" type="button" aria-label="Поиск по сайту" data-search><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 16.5 21 21M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg></button>
+  <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
+</div></header><div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет</span><a href="/beget/">Статус</a><a href="/beget/server/">📡 Мониторинг серверов</a><a href="/beget/vosstanovit/">♻️ Восстановить сайт</a><a href="/beget/#news">Новости</a><a href="/beget/voprosy/">❓ Вопросы и ответы</a><a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">🔔 Бот</a></div></div><!--HDR:END-->
+<main class="bw">
+  <span class="live"><span class="dot"></span>страховка сайта · REBORN LAB</span>
+  <h1>Страховка сайта: своя копия, присмотр и запасной сайт</h1>
+  <p class="lead">Хостинг может лечь у любого — переезжать ради этого не обязательно. Достаточно, чтобы у вас была свежая копия сайта в другом месте, кто-то проверял, что она рабочая, и знал, что делать, если сайт перестал открываться. Копия хранится у вас, в вашем хранилище, — мы настраиваем, проверяем и поднимаем сайт, когда это нужно.</p>
+
+  <div class="kpis">
+    <div class="kpi"><div class="v">1 510</div><div class="l">сайтов на Beget отслеживает наш бот с 4 ноября 2026</div></div>
+    <div class="kpi"><div class="v">28%</div><div class="l">из них снова открылись к утру 11 ноября, через неделю после сбоя</div></div>
+    <div class="kpi"><div class="v">0 ГБ</div><div class="l">ваших копий хранится у нас: они лежат в вашем хранилище</div></div>
+  </div>
+
+  <h2>Как это устроено</h2>
+  <ol class="steps3">
+    <li><b>Хранилище — ваше.</b> Отдельное облачное хранилище не у вашего хостинга: Яндекс Облако, Selectel или REG.RU. Оформляется на вас, оплачиваете его вы напрямую провайдеру — для сайта в несколько гигабайт это небольшие деньги. Поможем зарегистрировать и настроить.</li>
+    <li><b>Копируются только изменения.</b> Первый раз сайт и база уходят в хранилище целиком, дальше каждую ночь — только то, что поменялось за день: обычно это мегабайты, а не гигабайты. Копия шифруется вашим ключом — даже хранилище не видит, что внутри.</li>
+    <li><b>Копирование идёт с вашего хостинга напрямую в ваше хранилище.</b> Небольшая программа запускается по расписанию на хостинге — ваши файлы через нас не проходят и у нас не остаются.</li>
+    <li><b>Мы присматриваем.</b> Каждый день проверяем, что копия обновилась и не повреждена. Если копия не обновилась больше суток — сразу пишем вам. Раз в месяц делаем пробное восстановление: разворачиваем копию во временной «песочнице», проверяем, что сайт открывается, и удаляем её. Вам приходит короткий отчёт: «копия от такого-то числа рабочая».</li>
+    <li><b>Если сайт лёг</b> — поднимаем его из вашей копии на запасном сервере в России в тот же день или переключаем домен на запасной сайт за минуты (в тарифе «Запасной сайт»).</li>
+  </ol>
+
+  <h2>Почему это важно</h2>
+  <div class="plans">
+    <div class="plan"><b class="pn">Копия у хостинга — не ваша копия</b><p class="pd" style="margin-top:8px">Резервные копии обычно лежат у того же хостинга, что и сайт. Когда ложится хостинг, вместе с сайтом недоступны и они. Своя копия должна быть в другом месте.</p></div>
+    <div class="plan"><b class="pn">Копия, которую не проверяли, — не копия</b><p class="pd" style="margin-top:8px">Часто копии «вроде делаются», но восстановить из них сайт не получается: битая база, не те файлы. Мы регулярно проверяем, что сайт из копии действительно поднимается.</p></div>
+    <div class="plan"><b class="pn">Веб-архив — не резервная копия</b><p class="pd" style="margin-top:8px">Из веб-архива можно собрать внешний вид сайта, но не базу, не заказы, не админку. И далеко не все страницы и картинки в нём сохраняются.</p></div>
+  </div>
+
+  <h2>Варианты</h2>
+  <div class="plans">
+    <div class="plan"><b class="pn">🔔 Бот</b><div class="pp">Бесплатно</div><p class="pd">Узнать о сбое первым</p><ul><li>Проверка сайта каждые несколько минут</li><li>Сообщение в Telegram, когда сайт лёг и когда снова открылся</li><li>Можно следить за сервером хостинга по IP</li></ul><a class="btn pick" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">Открыть @rebornlab_bot</a></div>
+    <div class="plan"><b class="pn">👀 Присмотр</b><div class="pp">490 ₽<small style="font-size:16px;color:var(--muted);font-weight:500"> / мес</small></div><p class="pd">Если копии уже делаются</p><ul><li>Мониторинг сайта, о сбое узнаёте сразу</li><li>Каждый день проверяем, что ваша копия свежая</li><li>Следим за сроками домена и сертификата https — напомним заранее</li><li>Копии у нас не хранятся</li></ul><a class="btn pick" href="#contact" data-plan="Присмотр — 490 ₽/мес">Выбрать</a></div>
+    <div class="plan"><b class="pn">💾 Своя копия</b><div class="pp">990 ₽<small style="font-size:16px;color:var(--muted);font-weight:500"> / мес</small></div><p class="pd">Копия в вашем хранилище — под присмотром</p><ul><li>Настраиваем ежедневную копию файлов и базы в ваше хранилище</li><li>Только изменения, с шифрованием вашим ключом</li><li>Раз в месяц — пробное восстановление и отчёт</li><li>Сайт лёг — поднимаем из копии на запасном сервере в тот же день</li><li>Всё из «Присмотра»</li></ul><a class="btn pick" href="#contact" data-plan="Своя копия — 990 ₽/мес">Выбрать</a></div>
+    <div class="plan"><b class="pn">⚡ Запасной сайт</b><div class="pp">1 990 ₽<small style="font-size:16px;color:var(--muted);font-weight:500"> / мес</small></div><p class="pd">Сайт открывается, даже когда хостинг лежит</p><ul><li>Всё из «Своей копии»</li><li>Лёгкая копия страниц сайта постоянно готова на нашем сервере в России</li><li>Хостинг упал — переключаем домен на запасной сайт, обычно за минуты</li><li>Заявки с сайта продолжают приходить вам</li></ul><a class="btn pick" href="#contact" data-plan="Запасной сайт — 1 990 ₽/мес">Выбрать</a></div>
+  </div>
+  <p class="sub" style="margin-top:12px">Подключение — разово, от 2 000 ₽: доступы, хранилище, первая полная копия и первая проверка восстановления. Хранилище вы оплачиваете провайдеру сами, напрямую; у Яндекс Облака первый гигабайт в месяц бесплатный.</p>
+
+  <h2>Где хранить копию</h2>
+  <p class="sub" style="margin:0 0 14px">Выбор за вами — всё это российские облака с хранилищем S3, данные в России. Цены ориентировочные: по открытым тарифам на 11 ноября 2026 года, с НДС; точную сумму сверим при подключении.</p>
+  <div class="card" style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:15px;line-height:1.45">
+    <tr style="text-align:left;color:var(--muted)"><th style="padding:8px 10px 8px 0">Хранилище</th><th style="padding:8px 10px">Цена за 1 ГБ в месяц</th><th style="padding:8px 0 8px 10px">Что важно</th></tr>
+    <tr style="border-top:1px solid var(--line)"><td style="padding:10px 10px 10px 0"><b>Яндекс Облако</b><br><span class="sub">Object Storage</span></td><td style="padding:10px">≈ 2,2–2,4 ₽</td><td style="padding:10px 0 10px 10px">Первый гигабайт каждый месяц бесплатно — маленькому сайту может хватить. Оплата российской картой.</td></tr>
+    <tr style="border-top:1px solid var(--line)"><td style="padding:10px 10px 10px 0"><b>Selectel</b><br><span class="sub">Объектное хранилище S3</span></td><td style="padding:10px">≈ 2,3 ₽ стандартное<br>≈ 1,1–1,25 ₽ холодное</td><td style="padding:10px 0 10px 10px">Холодное хранение дешевле — для копий, которые нужны редко, это подходит. Входящий трафик бесплатный.</td></tr>
+    <tr style="border-top:1px solid var(--line)"><td style="padding:10px 10px 10px 0"><b>VK Cloud</b><br><span class="sub">Object Storage</span></td><td style="padding:10px">≈ 2,3 ₽ Hotbox<br>≈ 1,1 ₽ Icebox</td><td style="padding:10px 0 10px 10px">Icebox — холодное хранение, дешевле хранить, дороже скачивать. Входящий трафик бесплатный.</td></tr>
+    <tr style="border-top:1px solid var(--line)"><td style="padding:10px 10px 10px 0"><b>Timeweb Cloud</b><br><span class="sub">S3</span></td><td style="padding:10px">пакеты: 10 ГБ ≈ 79 ₽,<br>100 ГБ ≈ 349 ₽ в месяц</td><td style="padding:10px 0 10px 10px">Фиксированная цена за пакет — удобно, если хочется знать сумму заранее.</td></tr>
+    <tr style="border-top:1px solid var(--line)"><td style="padding:10px 10px 10px 0"><b>Рег.облако</b> (REG.RU)<br><span class="sub">S3</span></td><td style="padding:10px">≈ 2,2 ₽</td><td style="padding:10px 0 10px 10px">Удобно, если домен уже в REG.RU — один кабинет.</td></tr>
+    <tr style="border-top:1px solid var(--line)"><td style="padding:10px 10px 10px 0"><b>Бегет</b><br><span class="sub">S3</span></td><td style="padding:10px">≈ 2,1 ₽, от 20 ГБ</td><td style="padding:10px 0 10px 10px">Подходит, только если сам сайт <b>не</b> на Бегете: копия должна лежать у другой компании.</td></tr>
+  </table></div>
+  <p class="sub" style="margin-top:12px"><b>Сколько это в деньгах:</b> сайт весом 5 ГБ с копиями за последние 30 дней (копируются только изменения) занимает обычно 6–8 ГБ — это примерно 10–20 ₽ в месяц за хранилище.</p>
+
+  <h2>Как это было на деле</h2>
+  <div class="card">
+    <p style="margin:0 0 10px;line-height:1.6"><b>Сайт компании на 1С-Битрикс, ноябрь 2026.</b> Хостинг лёг, копии у владельца не было, а сайт оказался в аккаунте разработчика. Мы собрали временный сайт по веб-архиву, чтобы снова шли заявки. Через неделю хостинг вернул сервер, и в тот же вечер мы через админку сайта сняли полную копию: 2 ГБ файлов и база, 503 таблицы.</p>
+    <p class="sub" style="margin:0">Если бы такая копия заранее лежала в хранилище владельца и была проверена, сайт работал бы на запасном сервере уже в первый день сбоя.</p>
+  </div>
+
+  <h2>Как подключиться</h2>
+  <ol class="steps3"><li>Присылаете адрес сайта — смотрим, на чём он сделан, где лежит и сколько весит.</li><li>Помогаем завести хранилище на ваше имя и даёте доступ к хостингу (SSH или FTP) — подскажем, где его взять.</li><li>Настраиваем копирование, снимаем первую полную копию и проверяем, что сайт из неё поднимается. Присылаем отчёт.</li><li>Дальше всё идёт само, а вы получаете короткие сообщения только по делу.</li></ol>
+
+  <h2>Честно о границах</h2>
+  <div class="plans">
+    <div class="plan"><b class="pn">Мы не хостинг</b><p class="pd" style="margin-top:8px">Ваш сайт остаётся у вашего хостинга, копии — в вашем хранилище. Сайт ни к чему у нас не привязан, все доступы и ключи — ваши.</p></div>
+    <div class="plan"><b class="pn">Не обещаем 100%</b><p class="pd" style="margin-top:8px">Обещаем другое: свежая копия есть, она проверена, и мы знаем, что с ней делать. Это сильно сокращает простой.</p></div>
+    <div class="plan"><b class="pn">Где нет SSH</b><p class="pd" style="margin-top:8px">Если хостинг не даёт запускать программы, копию забираем через наш сервер в России и сразу отправляем в ваше хранилище — у нас она не остаётся. Магазин на запасном сайте показывает товары и принимает заявки, но не оформляет заказы с оплатой.</p></div>
+  </div>
+
+  <h2 id="contact">Связаться</h2>
+  <div class="contacts">
+    <a class="ct" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener"><b>Telegram</b><span>@Reborn_Lab</span></a>
+    <a class="ct" href="https://wa.me/6281998871268" target="_blank" rel="noopener"><b>WhatsApp</b><span>+62 819 9887-1268</span></a>
+    <a class="ct" href="mailto:info@rebornlab.ru?subject=%D0%A1%D1%82%D1%80%D0%B0%D1%85%D0%BE%D0%B2%D0%BA%D0%B0%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0"><b>Почта</b><span>info@rebornlab.ru</span></a>
+  </div>
+  <form class="tform" id="tform" novalidate>
+    <b class="pn">Короткая заявка — напишу вам сам</b>
+    <p class="me-s" style="margin:6px 0 0">Общаемся письменно — почта, Telegram или WhatsApp. Звонков нет, голосовые — пожалуйста.</p>
+    <div class="tgrid">
+      <label class="wide"><span>Вариант</span><select name="plan"><option>Присмотр — 490 ₽/мес</option><option>Своя копия — 990 ₽/мес</option><option>Запасной сайт — 1 990 ₽/мес</option><option>Не знаю — подскажите</option></select></label>
+      <label class="wide"><span>Адрес сайта *</span><input name="site" placeholder="мой-сайт.ru" required></label>
+      <label><span>Где удобнее общаться</span><select name="via"><option>Почта</option><option>Telegram</option><option>WhatsApp</option></select></label>
+      <label><span>Почта, Telegram или WhatsApp *</span><input name="contact" placeholder="name@mail.ru, @ник или +7…" required></label>
+      <label class="wide"><span>Комментарий</span><textarea name="text" rows="3" placeholder="На чём сделан сайт, где хостинг, есть ли доступы"></textarea></label>
+    </div>
+    <input name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <label class="agree"><input type="checkbox" name="agree"> <span>Согласен на обработку персональных данных по <a href="/consent/" target="_blank">согласию</a> и <a href="/privacy/" target="_blank">политике конфиденциальности</a></span></label>
+    <button class="btn btn-acc" type="submit">Отправить заявку</button>
+    <p class="tmsg" id="tmsg"></p>
+  </form>
+
+  <h2>Частые вопросы</h2>
+  <details class="qa"><summary>Почему копии хранятся не у вас?</summary><p>Так надёжнее и честнее: копия — ваша, доступ — ваш, ключ шифрования — ваш. Если вы перестанете с нами работать, всё останется у вас. А мы не держим у себя чужие данные и не зависим от того, сколько гигабайт весит ваш сайт.</p></details>
+  <details class="qa"><summary>Сколько стоит хранилище?</summary><p>Его вы оплачиваете провайдеру напрямую, по его тарифам. Благодаря тому что копируются только изменения, для обычного сайта в несколько гигабайт это небольшие деньги; точную сумму посчитаем при подключении. У Яндекс Облака первый гигабайт в месяц бесплатный.</p></details>
+  <details class="qa"><summary>Мой сайт на конструкторе (Tilda, Wix). Это подходит?</summary><p>Частично. Из конструктора нельзя забрать сайт целиком, но можно регулярно сохранять экспорт страниц и содержимое — так сайт можно быстро пересобрать. Для таких сайтов хорошо подходит «Запасной сайт».</p></details>
+  <details class="qa"><summary>На каких CMS работает копия?</summary><p>WordPress, 1С-Битрикс, Joomla, MODX, OpenCart, Drupal и самописные сайты — везде, где есть файлы и база данных. Для запуска 1С-Битрикс на запасном сервере нужна ваша действующая лицензия.</p></details>
+  <details class="qa"><summary>Что, если у меня нет доступа к хостингу?</summary><p>Иногда достаточно входа в админку сайта. Если нет и этого, поможем разобраться, у кого доступ и как его вернуть.</p></details>
+  <details class="qa"><summary>Нужно ли переезжать с хостинга?</summary><p>Не обязательно. Страховка работает с любым хостингом: сайт остаётся там, где есть, а копия и запасной вариант — отдельно.</p></details>
+  <details class="qa"><summary>Можно отказаться?</summary><p>Да, в любой момент, без объяснений. Копии и хранилище остаются у вас.</p></details>
+
+  <p class="sub" style="margin-top:24px">Бесплатно и без обязательств: бот <a href="https://t.me/rebornlab_bot" style="color:var(--acc)">@rebornlab_bot</a> напишет, если сайт перестанет открываться.</p>
+</main>
+
+
+
+<footer class="ftr"><div class="wrap">
+  <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© 2026 REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a><a href="/oferta/">Публичная оферта</a></div></div>
+  <div><a href="/#uslugi">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">О лаборатории</a><a href="/contact/">Контакты</a></div>
+  <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
+</div></footer>
+<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
+<script src="/assets/main.js?v=9f508b96" defer></script>
+<script>
+(function () {
+  var f = document.getElementById('tform'), msg = document.getElementById('tmsg'); if (!f) return;
+  document.querySelectorAll('.pick').forEach(function (b) { b.addEventListener('click', function () { var sel = f.plan; for (var i = 0; i < sel.options.length; i++) if (sel.options[i].text === b.dataset.plan) sel.selectedIndex = i; setTimeout(function () { f.site.focus(); }, 400); }); });
+  var PH = {'Почта': 'name@mail.ru', 'WhatsApp': '+7 999 123-45-67', 'Telegram': '@ваш_ник'}; f.via.addEventListener('change', function () { f.contact.placeholder = PH[f.via.value]; }); f.contact.placeholder = PH[f.via.value];
+  var T0 = Date.now(), HUMAN = false; ['mousemove', 'touchstart', 'keydown', 'scroll'].forEach(function (ev) { addEventListener(ev, function () { HUMAN = true; }, {once: true, passive: true}); });
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var site = f.site.value.trim(), contact = f.contact.value.trim(), ag = f.agree;
+    if (!site || !contact) { msg.textContent = 'Укажите адрес сайта и как с вами связаться.'; return; }
+    if (!ag.checked) { f.classList.add('need-agree'); msg.textContent = 'Отметьте согласие на обработку данных.'; return; }
+    f.classList.remove('need-agree');
+    var btn = f.querySelector('button'); btn.disabled = true; msg.textContent = 'Отправляем…';
+    fetch('/api/lead', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({topics: ['Страховка сайта', f.plan.value], text: 'Страховка: ' + f.plan.value + '\nСайт: ' + site + (f.text.value.trim() ? '\n' + f.text.value.trim() : ''), contact: f.via.value + ': ' + contact, page: location.pathname, agree: true, hp: f.company.value || '', k: T0.toString(36), t: Date.now() - T0, h: HUMAN ? 1 : 0})})
+      .then(function (r) { if (!r.ok) throw 0; f.innerHTML = '<p style="font-size:18px;margin:0">✓ Заявка отправлена — напишем вам в ближайшее время.</p>'; try { ym(window.RL_METRIKA, 'reachGoal', 'strahovka_lead'); } catch (x) {} })
+      .catch(function () { btn.disabled = false; msg.innerHTML = 'Не получилось отправить. Напишите нам в <a href="https://t.me/Reborn_Lab" style="color:var(--acc)">Telegram</a>, <a href="https://wa.me/6281998871268" style="color:var(--acc)">WhatsApp</a> или на <a href="mailto:info@rebornlab.ru" style="color:var(--acc)">info@rebornlab.ru</a>.'; });
+  });
+})();
+</script>
+</body>
+</html>

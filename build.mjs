@@ -93,7 +93,7 @@ const svIcon = (s) => `<svg class="sv-ico" width="28" height="28" viewBox="0 0 2
 const svPains = (s) => s.pains ? `<div class="sv-pain"><b>Если у вас:</b><ul>${s.pains.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''
 const HAS_SELLER = !!SITE.operator   // 10.11: оферта с ФИО самозанятого; ИНН добавится, когда будет   // оферта и данные продавца — только с реквизитами
 // 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
-const NAV = [['/#uslugi', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget'], ['/beget/server/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг серверов']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
+const NAV = [['/#uslugi', 'Услуги'], ['/strahovka-sajta/', 'Страховка сайта'], ['/journal/', 'Журнал'], ['/about/', 'О лаборатории'], ['/beget/', 'Статус Beget'], ['/beget/server/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг серверов']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
 
 // 07.11.2026 Ник: одна шапка везде (и на ручных страницах /beget/ — вставляется ниже, при обработке), на страницах о Beget — полоса навигации по теме
 function HEADER(current = '') {
@@ -498,7 +498,7 @@ if (existsSync(path.join(ROOT, 'src/assets/journal'))) {   // 06.11: облож�
 if (existsSync(path.join(ROOT, 'src/assets/services'))) { mkdirSync(path.join(OUT, 'assets/services'), { recursive: true }); for (const f of readdirSync(path.join(ROOT, 'src/assets/services'))) copyFileSync(path.join(ROOT, 'src/assets/services', f), path.join(OUT, 'assets/services', f)) }   // 10.11: картинки карточек услуг
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
-const urls = [['/', today, '1.0'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/beget/pravila/', today, '0.4'], ['/oferta/', today, '0.3'],
+const urls = [['/', today, '1.0'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/strahovka-sajta/', today, '0.8'], ['/beget/pravila/', today, '0.4'], ['/oferta/', today, '0.3'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 // 09.11 (Ник): поиск по всему сайту — индекс /search.json (страницы, услуги, статьи, вопросы); noindex и закрытое сюда не попадает
 {
@@ -509,6 +509,7 @@ const urls = [['/', today, '1.0'], ['/journal/', POSTS[0]?.date || today, '0.8']
     { t: 'Можно ли восстановить сайт', u: '/beget/vosstanovit/', d: 'Что сохранилось в веб-архиве и Яндекс Картинках', k: 'Бегет' },
     { t: 'Вопросы и ответы', u: '/beget/voprosy/', d: 'Сайт, почта, домен, копии, переезд', k: 'Бегет' },
     { t: 'Восстановление сайта: цены и сроки', u: '/vosstanovlenie-sajta/', d: 'Варианты и стоимость', k: 'Услуги' },
+    { t: 'Страховка сайта: своя копия, присмотр и запасной сайт', u: '/strahovka-sajta/', d: 'Ежедневная копия в вашем хранилище, проверка восстановления, мониторинг', k: 'Услуги' },
     { t: 'Услуги', u: '/#uslugi', d: 'Сайты, сервисы, AI, автоматизация, SEO', k: 'Услуги' },
     { t: 'Журнал', u: '/journal/', d: 'Разборы, кейсы и инструкции', k: 'Журнал' },
     { t: 'О лаборатории', u: '/about/', d: 'Кто мы', k: 'Страница' },
@@ -527,7 +528,7 @@ write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите зад�
 {
   const home = readFileSync(path.join(OUT, 'index.html'), 'utf8')
   const foot = home.match(/<footer class="ftr">[\s\S]*?<\/footer>/)[0]
-  for (const f of ['beget/index.html', 'beget/server/index.html', 'beget/vosstanovit/index.html', 'beget/voprosy/index.html', 'beget/pravila/index.html', 'vosstanovlenie-sajta/index.html']) {
+  for (const f of ['beget/index.html', 'beget/server/index.html', 'beget/vosstanovit/index.html', 'beget/voprosy/index.html', 'beget/pravila/index.html', 'vosstanovlenie-sajta/index.html', 'strahovka-sajta/index.html']) {
     const fp = path.join(OUT, f)
     if (!existsSync(fp)) continue
     const news = POSTS.filter((x) => x.slug.startsWith('beget')).map((x) => `<a class="news-card" href="/journal/${x.slug}/">${x.image ? `<img src="${x.image}" alt="" loading="lazy" width="1200" height="630">` : ''}<span class="news-dt">${ruDT(x)}</span><b>${esc(x.title)}</b><span class="news-d">${esc(x.description)}</span></a>`).join('')
