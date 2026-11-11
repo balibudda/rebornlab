@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<!-- Картинки для статьи sajt-vernulsya-pereezzhat-ili-podstrahovatsya (11.11.2026). Снимает drafts/podstr-pics.mjs → src/assets/journal/podstr-*.png и обложку .jpg -->
+<style>
+:root{--bg:#08090a;--card:#121417;--card2:#171a1e;--line:rgba(237,235,230,.12);--text:#edebe6;--muted:#9a9890;--dim:#6a6862;--acc:#c6f24e;--cool:#7aa7ff;--red:#ff7a6b;--warm:#ffb454;--mono:"SF Mono",Menlo,Consolas,monospace;--font:-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#2a2d31;font-family:var(--font);color:var(--text)}
+.pic{width:1200px;background:var(--bg);padding:48px 56px;margin:0 0 40px}
+.kick{font:600 13px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:14px}
+h2{font-size:34px;line-height:1.15;margin:0 0 8px;font-weight:700}
+.sub{color:var(--muted);font-size:17px;margin:0 0 30px}
+.note{color:var(--dim);font:13px var(--mono);margin-top:22px}
+.node{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:18px 20px;font-size:17px}
+.node b{display:block;font-size:19px;margin-bottom:6px}.node small{display:block;color:var(--muted);font-size:14px;line-height:1.45}
+.tag{display:inline-block;font:12px var(--mono);padding:3px 8px;border-radius:6px;margin:8px 6px 0 0;background:rgba(122,167,255,.14);color:var(--cool)}
+.tag.g{background:rgba(198,242,78,.14);color:var(--acc)}.tag.r{background:rgba(255,122,107,.14);color:var(--red)}
+/* 1. схема */
+.flow{display:grid;grid-template-columns:1fr 150px 1fr;gap:0;align-items:center}
+.link{position:relative;height:2px;background:var(--acc);margin:0 10px}.link:after{content:"";position:absolute;right:-2px;top:-6px;border:7px solid transparent;border-left:10px solid var(--acc)}
+.link span{position:absolute;left:-6px;right:-6px;top:-66px;text-align:center;font:12px/1.3 var(--mono);color:var(--acc)}
+.watch{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.watch .node{border-color:rgba(198,242,78,.35)}
+.lab{font:600 13px var(--mono);letter-spacing:.1em;color:var(--dim);text-transform:uppercase;margin:26px 0 10px}
+/* 2. сравнение */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.vs .col{background:var(--card);border-radius:18px;padding:24px 26px}
+.vs h3{margin:0 0 16px;font-size:22px}.vs .col.ok{outline:2px solid rgba(198,242,78,.45)}
+.vs ul{margin:0;padding:0;list-style:none}.vs li{padding:10px 0 10px 30px;position:relative;border-top:1px solid var(--line);font-size:16px;line-height:1.45}
+.vs li:first-child{border-top:0}.vs li:before{position:absolute;left:0;top:9px;font-size:17px}
+.vs li.p:before{content:"✓";color:var(--acc)}.vs li.m:before{content:"✕";color:var(--red)}.vs li.n:before{content:"•";color:var(--muted)}
+/* 3. чек-лист */
+.cl{display:grid;gap:12px}
+.ci{display:grid;grid-template-columns:56px 1fr auto;gap:18px;align-items:center;background:var(--card);border-radius:16px;padding:18px 22px}
+.ci .num{width:56px;height:56px;border-radius:14px;background:rgba(198,242,78,.12);color:var(--acc);font:700 26px/56px var(--mono);text-align:center}
+.ci b{font-size:19px}.ci small{display:block;color:var(--muted);font-size:15px;margin-top:4px}
+.ci .t{font:13px var(--mono);color:var(--dim);white-space:nowrap}
+/* 4. объём */
+.bars{display:flex;align-items:flex-end;gap:5px;height:240px;padding:0 4px;border-bottom:1px solid var(--line)}
+.bars div{flex:1;background:var(--cool);border-radius:4px 4px 0 0;opacity:.85}
+.bars div.full{background:var(--acc);opacity:1}
+.bx{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--dim);margin-top:8px}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.sum .node{text-align:left}.sum .v{font:700 30px var(--font);color:var(--acc)}
+/* обложка */
+#cover{width:1200px;height:630px;padding:56px 64px;position:relative;overflow:hidden}
+#cover h1{font-size:60px;line-height:1.06;margin:18px 0 0;font-weight:800;max-width:900px}
+#cover h1 b{color:var(--acc)}
+#cover .chips{position:absolute;left:64px;bottom:56px;display:flex;gap:10px;flex-wrap:wrap;max-width:1000px}
+#cover .chips span{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-size:18px;color:var(--text)}
+#cover .chips span i{font-style:normal;color:var(--acc);font-family:var(--mono);margin-right:6px}
+#cover .shield{position:absolute;right:70px;top:120px;width:250px;height:290px}
+</style></head><body>
+
+<div class="pic" id="cover">
+  <div class="kick">REBORN LAB · журнал · 11 ноября 2026</div>
+  <h1>Сайт вернулся.<br>Переезжать <b>или подстраховаться?</b></h1>
+  <svg class="shield" viewBox="0 0 250 290" aria-hidden="true"><path d="M125 10 L230 50 V140 C230 210 182 258 125 280 C68 258 20 210 20 140 V50 Z" fill="rgba(198,242,78,.08)" stroke="#c6f24e" stroke-width="4"/><path d="M78 148 L112 182 L176 112" fill="none" stroke="#c6f24e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="chips"><span><i>1</i>копия сейчас</span><span><i>2</i>проверка сайта</span><span><i>3</i>пароли</span><span><i>4</i>своя копия вне хостинга</span><span><i>5</i>мониторинг</span></div>
+</div>
+
+<div class="pic" id="p1">
+  <div class="kick">схема · своя копия вне хостинга</div>
+  <h2>Копия живёт отдельно от хостинга — и её кто-то проверяет</h2>
+  <p class="sub">Хостинг лёг — копия цела, потому что лежит у другой компании и на ваше имя.</p>
+  <div class="flow">
+    <div class="node"><b>🖥 Хостинг</b><small>сайт: файлы и база данных<br>Бегет, Timeweb, REG.RU — любой</small><span class="tag">SSH / cron</span></div>
+    <div class="link"><span>каждую ночь<br>только изменения<br>🔒 шифрование</span></div>
+    <div class="node"><b>🗄 Ваше хранилище S3</b><small>Яндекс Облако, Selectel, VK Cloud,<br>Timeweb Cloud, Рег.облако</small><span class="tag g">на ваше имя</span><span class="tag g">ключ у вас</span></div>
+  </div>
+  <div class="lab">кто-то должен следить, что копия рабочая</div>
+  <div class="watch">
+    <div class="node"><b>📅 Каждый день</b><small>копия обновилась? размер нормальный? не повреждена? Нет — сообщение сразу</small></div>
+    <div class="node"><b>🧪 Раз в месяц</b><small>пробное восстановление во временной «песочнице»: сайт из копии открывается?</small></div>
+    <div class="node"><b>🚨 Если сайт лёг</b><small>поднимаем сайт из копии на запасном сервере — или переключаем домен на запасной сайт</small></div>
+  </div>
+  <div class="note">rebornlab.ru · копия не проходит через чужие руки: хостинг → ваше хранилище напрямую</div>
+</div>
+
+<div class="pic" id="p2">
+  <div class="kick">сравнение</div>
+  <h2>Переезд или подстраховка — что реально защищает</h2>
+  <p class="sub">Сбой может случиться у любого хостинга. Защищает не адрес хостинга, а своя проверенная копия.</p>
+  <div class="vs">
+    <div class="col"><h3>🚚 Переехать на другой хостинг</h3><ul>
+      <li class="m">От следующего сбоя не защищает — он возможен у любого</li>
+      <li class="m">Перенос файлов, базы, почты, DNS, https — риск ошибок</li>
+      <li class="m">Формы и письма могут перестать работать после переноса</li>
+      <li class="n">Имеет смысл, если хостинг не устраивает и в обычное время</li></ul></div>
+    <div class="col ok"><h3>🛡 Остаться и подстраховаться</h3><ul>
+      <li class="p">Своя копия в другом месте — сайт можно поднять где угодно</li>
+      <li class="p">Сайт остаётся на месте, ничего не ломается</li>
+      <li class="p">Копию проверяют: известно, что она рабочая</li>
+      <li class="p">О сбое узнаёте первым — из мониторинга, а не от клиентов</li></ul></div>
+  </div>
+</div>
+
+<div class="pic" id="p3">
+  <div class="kick">чек-лист · сделать сегодня, пока сайт работает</div>
+  <h2>Пять шагов после возвращения сайта</h2>
+  <p class="sub">Первый — самый важный: всё остальное можно сделать позже.</p>
+  <div class="cl">
+    <div class="ci"><div class="num">1</div><div><b>Скачать полную копию</b><small>файлы сайта и база данных — через панель, FTP/SSH или админку</small></div><div class="t">~30 мин</div></div>
+    <div class="ci"><div class="num">2</div><div><b>Проверить сайт после восстановления</b><small>формы и заявки, почта, https, свежесть данных, версия PHP</small></div><div class="t">~20 мин</div></div>
+    <div class="ci"><div class="num">3</div><div><b>Сменить пароли</b><small>панель хостинга, админка, FTP/SSH, база данных</small></div><div class="t">~30 мин</div></div>
+    <div class="ci"><div class="num">4</div><div><b>Настроить свою копию вне хостинга</b><small>ежедневно, только изменения, в своё хранилище — и проверять</small></div><div class="t">~1–2 ч</div></div>
+    <div class="ci"><div class="num">5</div><div><b>Подключить мониторинг</b><small>бот @rebornlab_bot напишет, если сайт перестал открываться</small></div><div class="t">1 мин</div></div>
+  </div>
+</div>
+
+<div class="pic" id="p4">
+  <div class="kick">сколько места занимает копия</div>
+  <h2>Первый раз — целиком, дальше — только изменения</h2>
+  <p class="sub">Пример: сайт на 5 ГБ, за день меняется 30–80 МБ (новые заказы, статьи, картинки). Храним 30 дней.</p>
+  <div class="bars" id="bars"></div>
+  <div class="bx"><span>день 1 — полная копия 5 ГБ</span><span>дни 2–30 — изменения, по 30–80 МБ</span></div>
+  <div class="sum">
+    <div class="node"><div class="v">≈ 6,5 ГБ</div><small>занимают 30 ежедневных копий вместо 150 ГБ «целиком каждый день»</small></div>
+    <div class="node"><div class="v">≈ 10–20 ₽</div><small>в месяц за хранилище при цене ≈ 2,2–2,4 ₽ за ГБ</small></div>
+    <div class="node"><div class="v">~2–5 мин</div><small>длится ночное копирование изменений — сайт не тормозит</small></div>
+  </div>
+  <div class="note">цены хранилищ — по открытым тарифам на 11.11.2026, ориентировочно</div>
+</div>
+
+<script>
+var b=document.getElementById('bars'),h='<div class="full" style="height:100%"></div>';
+var d=[3,5,4,7,3,6,8,4,5,3,9,4,6,5,7,3,4,8,5,6,4,7,5,3,6,8,4,5,6];
+d.forEach(function(x){h+='<div style="height:'+(x*1.6+2)+'%"></div>'});b.innerHTML=h;
+</script>
+</body></html>
