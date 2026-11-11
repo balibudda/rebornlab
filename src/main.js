@@ -251,14 +251,14 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   var box = document.createElement('div'); box.className = 'rlc'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Консультант REBORN LAB');
   box.innerHTML = '<div class="rlc-hd"><div><b>С вами Алиса</b><span>ИИ-консультант REBORN LAB · отвечает за несколько секунд</span></div><button type="button" class="rlc-x" aria-label="Закрыть">×</button></div>' +
     '<div class="rlc-log" aria-live="polite"></div>' +
-    '<div class="rlc-chips"><button type="button">Восстановить сайт</button><button type="button">Сколько стоит</button><button type="button">Сайт не открывается</button></div>' +
-    '<div class="rlc-lead" hidden><div class="rlc-ct"><select name="ct" aria-label="Как связаться"><option>Почта</option><option>Telegram</option><option>WhatsApp</option></select><input type="text" name="c" placeholder="name@mail.ru" autocomplete="off"></div><span class="rlc-note">Мы не звоним — пишем на почту, в Telegram или WhatsApp.</span><label><input type="checkbox" name="a"> Согласен на <a href="/consent/" target="_blank">обработку данных</a></label><div class="rlc-bt"><button type="button" class="btn btn-acc rlc-pay">Оплатить демо 2 000 ₽</button><button type="button" class="btn rlc-send-lead">Только заявка</button></div><span class="rlc-note">Демо — до 12 страниц вашего сайта на временном адресе, чтобы увидеть результат до основной оплаты. Карта или СБП через ЮKassa. Оплачивая, вы принимаете <a href="/oferta/" target="_blank">оферту</a>.</span></div>' +
+    '<div class="rlc-chips"><button type="button">Восстановить сайт</button><button type="button">Сайт не открывается</button><button type="button" data-lead="1">Связаться с Николаем</button></div>' +
+    '<div class="rlc-lead" hidden><div class="rlc-ct"><select name="ct" aria-label="Как связаться"><option>Почта</option><option>Telegram</option><option>WhatsApp</option></select><input type="text" name="c" placeholder="name@mail.ru" autocomplete="off"></div><span class="rlc-note">Мы не звоним — пишем на почту, в Telegram или WhatsApp.</span><label><input type="checkbox" name="a"> Согласен на <a href="/consent/" target="_blank">обработку данных</a></label><div class="rlc-bt"><button type="button" class="btn btn-acc rlc-send-lead">Отправить Николаю</button></div><span class="rlc-note">Николай — администратор REBORN LAB. Посмотрит ваш сайт и напишет лично: что можно сделать и сколько это стоит.</span></div>' +
     '<form class="rlc-in"><input type="text" placeholder="Например: сайт example.ru не открывается" maxlength="1000" aria-label="Ваш вопрос"><button type="submit" class="btn btn-acc" aria-label="Отправить">→</button></form>' +
-    '<div class="rlc-ft">Не пишите личные данные. <button type="button" class="rlc-lead-btn">Оставить заявку</button></div>';
+    '<div class="rlc-ft">Контакт — только в форме, не в чате. <button type="button" class="rlc-lead-btn">Оставить контакт</button></div>';
   document.body.appendChild(btn); document.body.appendChild(box);
   var log = box.querySelector('.rlc-log'), form = box.querySelector('.rlc-in'), inp = form.querySelector('input'), busy = false;
   function add(role, text) { var d = document.createElement('div'); d.className = 'rlc-m ' + (role === 'user' ? 'u' : 'a'); d.innerHTML = fmt(text); log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
-  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Я Алиса, консультант REBORN LAB. Подскажу, можно ли восстановить ваш сайт, сколько это стоит и почему сайт может не открываться. Напишите адрес сайта или вопрос.'); hist.forEach(function (m) { add(m.role, m.content); }); }
+  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Я Алиса, помощник REBORN LAB. Подскажу, что с вашим сайтом и можно ли его вернуть. Напишите адрес сайта — проверю. А если удобнее сразу поговорить с человеком, оставьте контакт: Николай напишет вам лично.'); hist.forEach(function (m) { add(m.role, m.content); }); }
   function ask(text) {
     if (busy || !text.trim()) return; busy = true;
     hist.push({ role: 'user', content: text.trim() }); save(); add('user', text.trim());
@@ -267,12 +267,23 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sid: sid, messages: hist.slice(-16), page: location.pathname }) })
       .then(function (r) { return r.json(); })
       .then(function (d) { w.classList.remove('wait'); var t = d.reply || 'Не получилось ответить — напишите админу @Reborn_Lab.'; w.innerHTML = fmt(t); hist.push({ role: 'assistant', content: t }); save();
-        if (d.estimate) { est = d.estimate; box.querySelector('.rlc-lead').hidden = false; } })
+        if (d.lead) { box.querySelector('.rlc-lead').hidden = false; } })
       .catch(function () { w.classList.remove('wait'); w.innerHTML = fmt('Нет связи. Напишите админу @Reborn_Lab.'); })
       .then(function () { busy = false; log.scrollTop = log.scrollHeight; });
   }
-  form.addEventListener('submit', function (e) { e.preventDefault(); var t = inp.value; inp.value = ''; ask(t); });
-  box.querySelectorAll('.rlc-chips button').forEach(function (b) { b.addEventListener('click', function () { ask(b.textContent); }); });
+  function openLead() { var l = box.querySelector('.rlc-lead'); l.hidden = false; log.scrollTop = log.scrollHeight; setTimeout(function () { ctIn.focus(); }, 30); }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault(); var t = inp.value.trim(); if (!t) return;
+    var em = t.match(/[^\s@]+@[^\s@]+\.[a-zа-я]{2,}/i), tg = t.match(/(?:^|\s)@([a-z0-9_]{4,32})\b/i) || t.match(/t\.me\/([a-z0-9_]{4,32})/i), ph = t.match(/(?:\+7|\b8|\b7)[\s(-]*\d{3}[\s)-]*\d{3}[\s-]*\d{2}[\s-]*\d{2}\b/);   // только телефон РФ, не IP
+    if (em || tg || ph) {   // 11.11: контакт не отправляем в ИИ — в форму, где есть согласие
+      inp.value = '';
+      if (em) { ctSel.value = 'Почта'; ctIn.value = em[0]; } else if (tg) { ctSel.value = 'Telegram'; ctIn.value = '@' + tg[1]; } else { ctSel.value = 'WhatsApp'; ctIn.value = ph[0].trim(); }
+      add('assistant', 'Спасибо! Чтобы передать контакт Николаю, отметьте согласие на обработку данных и нажмите «Отправить Николаю» — он напишет вам лично.');
+      openLead(); return;
+    }
+    inp.value = ''; ask(t);
+  });
+  box.querySelectorAll('.rlc-chips button').forEach(function (b) { b.addEventListener('click', function () { if (b.dataset.lead) { box.querySelector('.rlc-chips').hidden = true; add('assistant', 'Оставьте Telegram, WhatsApp или почту — Николай напишет вам лично.'); openLead(); } else ask(b.textContent); }); });
   box.querySelector('.rlc-lead-btn').addEventListener('click', function () { var l = box.querySelector('.rlc-lead'); l.hidden = !l.hidden; if (!l.hidden) l.querySelector('input[name=c]').focus(); });
   var ctSel = box.querySelector('select[name=ct]'), ctIn = box.querySelector('input[name=c]');
   var PH = { 'Почта': 'name@mail.ru', 'Telegram': '@ваш_ник', 'WhatsApp': '+7 900 000-00-00' };
@@ -291,16 +302,8 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   box.querySelector('.rlc-send-lead').addEventListener('click', function () {
     var d = leadData(); if (!d) return;
     fetch(LEAD, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topics: ['ИИ-консультант'], text: d.text, contact: d.contact, page: location.pathname, agree: true, hp: '', k: RL_T0.toString(36), t: Date.now() - RL_T0, h: RL_HUMAN ? 1 : 0 }) })
-      .then(function (r) { if (r.ok) d.l.innerHTML = '<p>✅ Заявка отправлена. Админ напишет вам (' + esc(d.contact) + ').</p>'; else fail(d.l); })
+      .then(function (r) { if (r.ok) { d.l.innerHTML = '<p>✅ Готово! Николай напишет вам (' + esc(d.contact) + ').</p>'; try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_lead'); } catch (e) {} } else fail(d.l); })
       .catch(function () { fail(d.l); });
-  });
-  box.querySelector('.rlc-pay').addEventListener('click', function () {
-    var d = leadData(); if (!d) return; var b = this; b.disabled = true; b.textContent = 'Открываю оплату…';
-    try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_pay'); } catch (e) {}
-    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'pay', sid: sid, contact: d.contact, site: d.site, text: d.text, agree: true }) })
-      .then(function (r) { return r.json(); })
-      .then(function (x) { if (x.url) { try { sessionStorage.setItem('rl_chat_pay', x.pid); } catch (e) {} location.href = x.url; } else { b.disabled = false; b.textContent = 'Оплатить демо 2 000 ₽'; fail(d.l, x.error); } })
-      .catch(function () { b.disabled = false; b.textContent = 'Оплатить демо 2 000 ₽'; fail(d.l); });
   });
   function open() { box.classList.add('on'); btn.classList.add('hide'); if (!log.children.length) render(); setTimeout(function () { inp.focus(); }, 50); try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_open'); } catch (e) {} }
   btn.addEventListener('click', open);
