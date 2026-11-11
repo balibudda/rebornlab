@@ -246,10 +246,10 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   function save() { try { sessionStorage.setItem('rl_chat_hist', JSON.stringify(hist.slice(-20))); } catch (e) {} }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function fmt(s) { return esc(s).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)»])/g, '<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/@Reborn_Lab/g, '<a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>').replace(/\n/g, '<br>'); }
-  var btn = document.createElement('button'); btn.className = 'rlc-btn'; btn.type = 'button'; btn.setAttribute('aria-label', 'Спросить консультанта');
+  var btn = document.createElement('button'); btn.className = 'rlc-btn'; btn.type = 'button'; btn.setAttribute('aria-label', 'Ник на связи — спросить');
   btn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></svg><span>Спросить</span>';
-  var box = document.createElement('div'); box.className = 'rlc'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Консультант REBORN LAB');
-  box.innerHTML = '<div class="rlc-hd"><div><b>С вами Алиса</b><span>ИИ-консультант REBORN LAB · отвечает за несколько секунд</span></div><button type="button" class="rlc-x" aria-label="Закрыть">×</button></div>' +
+  var box = document.createElement('div'); box.className = 'rlc'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Ник на связи — помощник REBORN LAB');
+  box.innerHTML = '<div class="rlc-hd"><div><b>Ник на связи</b><span>Отвечает ИИ-помощник · лично напишет Николай</span></div><button type="button" class="rlc-x" aria-label="Закрыть">×</button></div>' +
     '<div class="rlc-log" aria-live="polite"></div>' +
     '<div class="rlc-chips"><button type="button">Восстановить сайт</button><button type="button">Сайт не открывается</button><button type="button" data-lead="1">Связаться с Николаем</button></div>' +
     '<div class="rlc-lead" hidden><div class="rlc-ct"><select name="ct" aria-label="Как связаться"><option>Почта</option><option>Telegram</option><option>WhatsApp</option></select><input type="text" name="c" placeholder="name@mail.ru" autocomplete="off"></div><span class="rlc-note">Мы не звоним — пишем на почту, в Telegram или WhatsApp.</span><label><input type="checkbox" name="a"> Согласен на <a href="/consent/" target="_blank">обработку данных</a></label><div class="rlc-bt"><button type="button" class="btn btn-acc rlc-send-lead">Отправить Николаю</button></div><span class="rlc-note">Николай — администратор REBORN LAB. Посмотрит ваш сайт и напишет лично: что можно сделать и сколько это стоит.</span></div>' +
@@ -258,7 +258,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   document.body.appendChild(btn); document.body.appendChild(box);
   var log = box.querySelector('.rlc-log'), form = box.querySelector('.rlc-in'), inp = form.querySelector('input'), busy = false;
   function add(role, text) { var d = document.createElement('div'); d.className = 'rlc-m ' + (role === 'user' ? 'u' : 'a'); d.innerHTML = fmt(text); log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
-  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Я Алиса, помощник REBORN LAB. Подскажу, что с вашим сайтом и можно ли его вернуть. Напишите адрес сайта — проверю. А если удобнее сразу поговорить с человеком, оставьте контакт: Николай напишет вам лично.'); hist.forEach(function (m) { add(m.role, m.content); }); }
+  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Я ИИ-помощник Николая из REBORN LAB. Подскажу, что с вашим сайтом и можно ли его вернуть. Напишите адрес сайта — проверю. А если удобнее сразу поговорить с человеком, оставьте контакт: Николай напишет вам лично.'); hist.forEach(function (m) { add(m.role, m.content); }); }
   function ask(text) {
     if (busy || !text.trim()) return; busy = true;
     hist.push({ role: 'user', content: text.trim() }); save(); add('user', text.trim());
