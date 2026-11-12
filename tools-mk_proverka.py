@@ -15,9 +15,9 @@ import json, pathlib, re, sys
 ROOT = pathlib.Path(__file__).parent
 PUBLISH = len(sys.argv) > 1 and sys.argv[1] == 'publish'
 # 12.11 (Ник): + страницы хостингов. В черновике всё лежит под /demo/draft-proverka/ (закрыто паролем), при публикации — боевые адреса
-PV = '/proverka-sajta/' if PUBLISH else '/demo/draft-proverka/'   # 12.11 Ник: короткие боевые адреса
+PV = '/monitoring-saitov/' if PUBLISH else '/demo/draft-proverka/'   # 12.11 Ник: короткие боевые адреса
 HB = '/hosting/' if PUBLISH else '/demo/draft-proverka/hosting/'
-URL = 'https://rebornlab.ru/proverka-sajta/'
+URL = 'https://rebornlab.ru/monitoring-saitov/'   # 12.11 Ник: было /proverka-sajta/ (в индексе старый заголовок кривой проверки) — 301 на новый
 TITLE = 'Мониторинг сайта без VPN: открывается ли сайт в России и за рубежом — бесплатная проверка'   # 12.11 Ник: title — «Мониторинг…», H1 — «Проверка/Открывается ли…»
 DESC = ('Открывается ли сайт без VPN? Проверим из России и из-за рубежа: что видит посетитель, какая ошибка и как её исправить, '
         'на каком хостинге и сервере, сертификат, домен и почта. Бесплатно, без регистрации, с уведомлением в Telegram.')
