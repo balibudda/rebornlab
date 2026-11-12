@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мониторинг сайта без VPN: открывается ли сайт в России и за рубежом — бесплатная проверка</title>
+<meta name="description" content="Открывается ли сайт без VPN? Проверим из России и из-за рубежа: что видит посетитель, какая ошибка и как её исправить, на каком хостинге и сервере, сертификат, домен и почта. Бесплатно, без регистрации, с уведомлением в Telegram.">
+<link rel="canonical" href="https://rebornlab.ru/proverka-sajta/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Открывается ли сайт без VPN? Проверка из России и из-за рубежа">
+<meta property="og:description" content="Что видит посетитель, на каком хостинге сайт, сертификат, домен и почта — и как исправить ошибку. Бесплатно.">
+<meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
+<link rel="stylesheet" href="/assets/styles.css?v=c0c4eee5">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Проверка сайта на доступность и хостинг", "url": "https://rebornlab.ru/proverka-sajta/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Любая", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "RUB"}, "publisher": {"@type": "Organization", "name": "REBORN LAB", "url": "https://rebornlab.ru/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Как проверить, на каком хостинге сайт?", "acceptedAnswer": {"@type": "Answer", "text": "Введите адрес сайта в поле выше. Мы найдём IP-адрес, на который указывает домен, узнаем, какой сети он принадлежит, и по имени сети и сервера определим хостинг: Beget, Timeweb, REG.RU, SpaceWeb и другие. Если сайт закрыт защитным сервисом или CDN (Cloudflare, DDoS-Guard), мы честно покажем их, а не хостинг: настоящий сервер за ними снаружи не виден."}}, {"@type": "Question", "name": "Как проверить доступность сайта?", "acceptedAnswer": {"@type": "Answer", "text": "Введите адрес — мы откроем сайт как браузер с двух точек: с сервера в России и с сервера за рубежом. Покажем, отвечает ли он, сколько времени занял ответ и что видит посетитель: сам сайт, заглушку хостинга, ошибку PHP или базы данных. Две точки нужны, чтобы отличить «сайт лежит» от «сайт не открывается только из России или только с VPN»."}}, {"@type": "Question", "name": "У меня сайт не открывается, а у других открывается — почему?", "acceptedAnswer": {"@type": "Answer", "text": "Чаще всего дело в сети: провайдер, Wi-Fi, VPN или старый адрес сайта в кэше компьютера. Если наша проверка показывает, что сайт открывается из России и из-за рубежа, — проблема на вашей стороне: попробуйте мобильный интернет без VPN и Wi-Fi. Если наша проверка тоже не может открыть сайт — проблема на стороне сайта или хостинга."}}, {"@type": "Question", "name": "Сайт открывается в России, но не открывается с VPN или из-за границы", "acceptedAnswer": {"@type": "Answer", "text": "Значит, хостинг или защита сайта закрывают доступ с зарубежных адресов. Владельцу стоит проверить настройки защиты от ботов и геофильтры. Подробно о причинах — в статье «Почему сайт не открывается в России или с VPN»."}}, {"@type": "Question", "name": "Что значит «Домен не прилинкован к директории»?", "acceptedAnswer": {"@type": "Answer", "text": "Сервер хостинга работает, но домен не привязан к папке с сайтом. После восстановления хостинга это самая частая ошибка: файлы на месте, нужно только прикрепить домен в панели. Пошагово — в нашей инструкции по ошибкам после восстановления."}}, {"@type": "Question", "name": "Как узнать, когда сайт снова заработает?", "acceptedAnswer": {"@type": "Answer", "text": "Добавьте сайт в бесплатного бота @rebornlab_bot — кнопка «Следить в боте» под результатом проверки. Бот проверяет сайт каждые 10 минут и сразу пишет в Telegram, когда он упадёт, заработает или откроется с ошибкой."}}, {"@type": "Question", "name": "Вы сохраняете, какие сайты я проверяю?", "acceptedAnswer": {"@type": "Answer", "text": "Мы записываем только адрес проверенного сайта и итог проверки — без вашего IP-адреса и без данных о вас. Это нужно, чтобы видеть, какие проблемы встречаются чаще. Результат проверки одного сайта хранится 3 минуты, чтобы не нагружать чужие серверы повторными запросами."}}, {"@type": "Question", "name": "Это платно? Нужна регистрация?", "acceptedAnswer": {"@type": "Answer", "text": "Нет. Проверка и бот бесплатные, регистрация не нужна. Ограничение одно: не больше 20 проверок за 10 минут с одного адреса — чтобы инструментом не пользовались для нагрузки на чужие сайты."}}]}</script>
+<style>
+  .pw { max-width: var(--max); margin: 0 auto; padding: 40px 22px 80px; }
+  .pw h1 { font-size: clamp(30px, 5vw, 54px); letter-spacing: -.03em; line-height: 1.05; margin: 14px 0 12px; }
+  .pw .lead { color: var(--muted); font-size: 18px; max-width: 46em; }
+  .pw .live { display: inline-flex; align-items: center; gap: 8px; font: 13px var(--mono); color: var(--muted); }
+  .pw .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--acc); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198,242,78,.5) } 70% { box-shadow: 0 0 0 10px rgba(198,242,78,0) } 100% { box-shadow: 0 0 0 0 rgba(198,242,78,0) } }
+  .pq { display: flex; gap: 10px; margin: 26px 0 8px; max-width: 760px; }
+  .pq input { flex: 1; min-width: 0; font-size: 18px; padding: 16px 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+  .pq input:focus { outline: none; border-color: var(--acc); }
+  .pq button { font-size: 17px; padding: 0 26px; white-space: nowrap; }
+  .gives { list-style: none; padding: 0; margin: 18px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 8px 22px; max-width: 980px; }
+  .gives li { color: var(--muted); font-size: 15.5px; padding-left: 26px; position: relative; } .gives li:before { content: "✓"; position: absolute; left: 4px; color: var(--acc); font-weight: 700; }
+  .gives b { color: var(--text); font-weight: 600; }
+  .hint { color: var(--muted); font-size: 14px; } .hint a { color: var(--muted); text-decoration: underline dotted; cursor: pointer; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px 24px; margin: 16px 0; }
+  .card h2 { font-size: 22px; margin: 0 0 6px; letter-spacing: -.01em; } .card .sub { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+  #res { display: none; } #res.on { display: block; }
+  .verdict { display: flex; gap: 16px; align-items: flex-start; border-width: 2px; }
+  .verdict .ic { font-size: 40px; line-height: 1; }
+  .verdict h2 { font-size: clamp(22px, 3vw, 30px); }
+  .verdict.ok { border-color: rgba(198,242,78,.55); } .verdict.warn { border-color: rgba(255,204,77,.6); } .verdict.bad { border-color: rgba(255,122,107,.6); }
+  .fix { margin: 12px 0 0; padding-left: 20px; } .fix li { margin: 6px 0; }
+  .errl { display: block; margin-top: 10px; font: 13px/1.5 var(--mono); color: #ffb4a8; background: #0b0c0e; border-radius: 10px; padding: 10px 12px; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .pts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pt { background: var(--card-2); border-radius: 14px; padding: 16px 18px; }
+  .pt .w { font-size: 14px; color: var(--muted); } .pt .s { font-size: 22px; font-weight: 700; margin-top: 6px; } .pt .m { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .s.ok { color: var(--acc); } .s.warn { color: #ffcc4d; } .s.bad { color: #ff7a6b; }
+  .note { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: rgba(255,204,77,.08); border: 1px solid rgba(255,204,77,.3); font-size: 15px; }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .f { background: var(--card-2); border-radius: 14px; padding: 14px 16px; }
+  .f .k { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; } .f .v { font-size: 17px; font-weight: 600; margin-top: 6px; word-break: break-word; }
+  .f .d { font-size: 13.5px; color: var(--muted); margin-top: 4px; word-break: break-word; }
+  .f .d a, .card a.lnk { color: var(--acc); }
+  .cta { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; border: 1px solid rgba(198,242,78,.45); }
+  .cta p { margin: 4px 0 0; color: var(--muted); max-width: 40em; }
+  .cta .btn { font-size: 17px; padding: 14px 22px; }
+  .wait { display: flex; gap: 12px; align-items: center; color: var(--muted); }
+  .spin { width: 22px; height: 22px; border: 3px solid var(--line); border-top-color: var(--acc); border-radius: 50%; animation: sp 1s linear infinite; }
+  @keyframes sp { to { transform: rotate(360deg) } }
+  .steps { margin: 8px 0 0; padding: 0; list-style: none; font-size: 15px; } .steps li { margin: 6px 0; color: var(--muted); } .steps li.done { color: var(--text); } .steps li.done:before { content: "✓ "; color: var(--acc); }
+  .hosts { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .h { background: var(--card-2); border-radius: 14px; padding: 16px; }
+  .h .n { font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+  .h .n i { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); display: inline-block; }
+  .h .n i.ok { background: var(--acc); box-shadow: 0 0 10px rgba(198,242,78,.6); } .h .n i.warn { background: #ffcc4d; } .h .n i.bad { background: #ff7a6b; }
+  .h .l { color: var(--muted); font-size: 14px; margin-top: 8px; line-height: 1.5; }
+  .h a { color: var(--acc); font-size: 14px; }
+  a.h.hl { display: block; color: inherit; text-decoration: none; transition: border-color .2s, transform .2s; border: 1px solid transparent; } a.h.hl:hover { border-color: var(--acc); transform: translateY(-2px); }
+  .hosts.compact { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); } .hosts.compact .h { padding: 12px 14px; } .hosts.compact .n { font-size: 16px; } .hosts.compact .l { font-size: 13px; margin-top: 4px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .chk { margin: 0; padding-left: 20px; color: var(--muted); } .chk li { margin: 6px 0; } .chk b { color: var(--text); }
+  details.qa { border-bottom: 1px solid var(--line); padding: 14px 0; } details.qa summary { cursor: pointer; font-weight: 600; font-size: 17px; } details.qa p { color: var(--muted); margin: 10px 0 0; }
+  @media (max-width: 720px) { .pts, .grid2 { grid-template-columns: 1fr; } .pq { flex-direction: column; } .pq button { padding: 14px; } .verdict .ic { font-size: 32px; } }
+</style>
+<style>
+  .seo { padding: 30px 34px; } .seo h2 { font-size: clamp(21px, 2.4vw, 26px); margin: 28px 0 10px; letter-spacing: -.01em; } .seo h2:first-child { margin-top: 0; }
+  .seo p, .seo li { color: #cfd3cf; font-size: 16.5px; line-height: 1.65; max-width: 48em; } .seo b { color: var(--text); }
+  .seo ul, .seo ol { padding-left: 22px; } .seo li { margin: 6px 0; }
+  .fig { margin: 22px 0 8px; } .fig figcaption { color: var(--muted); font-size: 13.5px; margin-top: 8px; text-align: center; }
+  @media (max-width: 720px) { .seo { padding: 22px 18px; } }
+</style>
+</head>
+<body>
+<!--HDR:START--><header class="hdr"><div class="wrap">
+  <a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a>
+  <nav class="nav" aria-label="Основное меню"><a href="/proverka-sajta/" aria-current="page"><svg class="nav-ic nav-ic-acc" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>Проверка<span class="nav-x"> сайта</span></a><a href="/vosstanovlenie-sajta/"><svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Восстановление<span class="nav-x"> сайтов</span></a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/beget/">Статус Beget</a><a href="/beget/server/"><svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг<span class="nav-x"> серверов</span></a><a class="nav-cta" href="/contact/" data-goal="cta_menu">Обсудить идею →</a></nav>
+  <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
+  <button class="srch-btn" type="button" aria-label="Поиск по сайту" data-search><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 16.5 21 21M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg></button>
+  <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
+</div></header><!--HDR:END-->
+<main class="pw">
+  <span class="live"><span class="dot"></span>бесплатно · без регистрации · из России и из-за рубежа</span>
+  <h1>Открывается ли сайт без VPN? Проверка из России и из-за рубежа</h1>
+  <p class="lead">Введите адрес — за 10–20 секунд откроем сайт как обычный посетитель: с сервера в России без VPN и с сервера за рубежом.</p>
+  <ul class="gives">
+    <li><b>Открывается ли без VPN</b> — в России и из-за границы, время ответа</li>
+    <li><b>Что видит посетитель</b> — сайт, заглушку, ошибку PHP или базы — и как это исправить</li>
+    <li><b>Где размещён сайт</b> — хостинг, сервер, движок и статус хостинга сейчас</li>
+    <li><b>Сертификат, домен и почта</b> — сколько дней осталось, где продлевать, кто принимает письма</li>
+    <li><b>Если сайт лежит</b> — есть ли копия в веб-архиве и как узнать, когда заработает</li>
+  </ul>
+  <form class="pq" id="pq" autocomplete="off">
+    <input id="q" type="text" inputmode="url" placeholder="Адрес сайта, например mysite.ru" aria-label="Адрес сайта" required>
+    <button class="btn btn-acc" type="submit" data-goal="hc_check">Проверить</button>
+  </form>
+  <p class="hint">Например: <a data-ex="rebornlab.ru">rebornlab.ru</a> · <a data-ex="ya.ru">ya.ru</a> · можно вставить ссылку целиком — лишнее уберём сами.</p>
+
+  <div id="res">
+    <div class="card wait" id="wait"><div class="spin"></div><div><b>Проверяем <span id="wd"></span>…</b><ul class="steps" id="steps">
+      <li data-s="dns">ищем сервер и хостинг</li><li data-s="ru">открываем сайт из России</li><li data-s="ab">открываем сайт из-за рубежа</li><li data-s="info">смотрим сертификат, домен и почту</li></ul></div></div>
+    <div id="out"></div>
+  </div>
+
+  <div class="card">
+    <h2>Хостинги сейчас <a class="lnk" href="/hosting/" style="font-size:15px;font-weight:500;margin-left:8px">все хостинги →</a></h2>
+    <p class="sub" id="hupd">Наш независимый мониторинг: панели управления, DNS и выборка реальных сайтов. Не официальные данные хостингов.</p>
+    <div class="hosts compact" id="hosts"><div class="h"><div class="l">Загружаем…</div></div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Что мы проверяем</h2>
+      <ul class="chk">
+        <li><b>Доступность из двух точек</b> — сервер в России и сервер за рубежом: так видно и «сайт лежит», и «не открывается только с VPN».</li>
+        <li><b>Что видит посетитель</b> — сам сайт, заглушку хостинга, «домен не прилинкован», ошибку PHP или базы данных, защиту от ботов.</li>
+        <li><b>Хостинг и сервер</b> — IP, сеть, имя сервера; для Beget — включён ли сервер по нашему мониторингу.</li>
+        <li><b>Сертификат</b> — кем выдан, на какие адреса, сколько дней осталось.</li>
+        <li><b>Домен</b> — регистратор, до какого числа оплачен, где управлять DNS.</li>
+        <li><b>Почта</b> — кто принимает письма домена (по MX).</li>
+        <li><b>Движок</b> — WordPress, Битрикс, Tilda и другие.</li>
+        <li><b>Веб-архив</b> — если сайт лежит: есть ли сохранённая копия.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Частые ошибки и что делать</h2>
+      <ul class="chk">
+        <li><b>«Домен не прилинкован»</b> — домен не привязан к папке сайта: прикрепить в панели хостинга. <a class="lnk" href="/journal/beget-posle-vosstanovleniya-3-oshibki/">Инструкция</a></li>
+        <li><b>«Подключение не защищено»</b> — нет или истёк сертификат: выпустить бесплатный Let&#39;s Encrypt, до выпуска — выключить редирект на https.</li>
+        <li><b>Fatal error / Deprecated</b> — чаще всего сменилась версия PHP: вернуть прежнюю в настройках сайта.</li>
+        <li><b>502 / ошибка базы данных</b> — сервер работает, но программа сайта или база ещё не поднялись. <a class="lnk" href="/journal/beget-502-oshibka-bazy-dannyh/">Разбор</a></li>
+        <li><b>Не открывается из России или с VPN</b> — блокировка IP, геофильтр или защита от ботов. <a class="lnk" href="/journal/pochemu-sajt-ne-otkryvaetsya-v-rossii/">Почему так</a></li>
+        <li><b>Сайт не отвечает совсем</b> — сервер выключен или недоступен. Если копии нет — <a class="lnk" href="/beget/vosstanovit/">проверьте, можно ли восстановить сайт</a>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card cta" id="botcta">
+    <div><h2>🔔 Узнавайте первым, когда сайт упал или заработал</h2>
+    <p>Бесплатный бот @rebornlab_bot проверяет ваш сайт каждые 10 минут и сразу пишет в Telegram. Без рекламы и регистрации.</p></div>
+    <a class="btn btn-acc" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="hc_bot">Открыть бота</a>
+  </div>
+
+  <article class="card seo"><h2>Зачем проверять сайт без VPN</h2>
+<p>Большинство посетителей открывают сайты без VPN — с домашнего интернета и мобильной связи. А владелец сайта часто сидит с включённым VPN и видит другую картину: у него открывается, у клиентов — нет, или наоборот. Поэтому мы открываем сайт с сервера в России без VPN — так, как его видит обычный посетитель, — и параллельно с сервера за рубежом.</p><figure class="fig"><svg viewBox="0 0 980 378" role="img" aria-label="Как работает проверка сайта" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c6f24e"/></marker></defs>
+<rect x="1" y="1" width="978" height="376" rx="18" fill="#0f1113" stroke="rgba(237,235,230,.08)"/>
+<rect x="28" y="145.0" width="230" height="88" rx="14" fill="#16181b" stroke="#c6f24e" stroke-opacity=".6"/>
+<text x="143" y="181.0" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="17" font-weight="700" fill="#edebe6">Ваш сайт</text>
+<text x="143" y="207.0" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="13.5" fill="#9a9890">адрес из поля выше</text>
+<rect x="722" y="145.0" width="230" height="88" rx="14" fill="#16181b" stroke="#c6f24e" stroke-opacity=".6"/>
+<text x="837" y="181.0" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="17" font-weight="700" fill="#edebe6">Итог + что делать</text>
+<text x="837" y="207.0" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="13.5" fill="#9a9890">и бот @rebornlab_bot</text>
+<path d="M258 189.0 C 300 189.0, 300 104, 340 104" fill="none" stroke="#c6f24e" stroke-opacity=".7" stroke-width="2" marker-end="url(#ar)"/>
+<rect x="346" y="78" width="300" height="52" rx="12" fill="#16181b" stroke="rgba(237,235,230,.12)"/>
+<circle cx="368" cy="104" r="6" fill="#c6f24e"/>
+<text x="384" y="100" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="15" font-weight="600" fill="#edebe6">Сервер в России, без VPN</text>
+<text x="384" y="119" font-family="SF Mono,Menlo,monospace" font-size="11.5" fill="#9a9890">как обычный посетитель</text>
+<path d="M646 104 C 686 104, 686 189.0, 716 189.0" fill="none" stroke="#c6f24e" stroke-opacity=".45" stroke-width="2" marker-end="url(#ar)"/>
+<path d="M258 189.0 C 300 189.0, 300 190, 340 190" fill="none" stroke="#c6f24e" stroke-opacity=".7" stroke-width="2" marker-end="url(#ar)"/>
+<rect x="346" y="164" width="300" height="52" rx="12" fill="#16181b" stroke="rgba(237,235,230,.12)"/>
+<circle cx="368" cy="190" r="6" fill="#c6f24e"/>
+<text x="384" y="186" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="15" font-weight="600" fill="#edebe6">Сервер за рубежом</text>
+<text x="384" y="205" font-family="SF Mono,Menlo,monospace" font-size="11.5" fill="#9a9890">как посетитель с VPN</text>
+<path d="M646 190 C 686 190, 686 189.0, 716 189.0" fill="none" stroke="#c6f24e" stroke-opacity=".45" stroke-width="2" marker-end="url(#ar)"/>
+<path d="M258 189.0 C 300 189.0, 300 276, 340 276" fill="none" stroke="#c6f24e" stroke-opacity=".7" stroke-width="2" marker-end="url(#ar)"/>
+<rect x="346" y="250" width="300" height="52" rx="12" fill="#16181b" stroke="rgba(237,235,230,.12)"/>
+<circle cx="368" cy="276" r="6" fill="#c6f24e"/>
+<text x="384" y="272" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="15" font-weight="600" fill="#edebe6">DNS, сертификат, домен, почта</text>
+<text x="384" y="291" font-family="SF Mono,Menlo,monospace" font-size="11.5" fill="#9a9890">whois · MX · NS · SSL</text>
+<path d="M646 276 C 686 276, 686 189.0, 716 189.0" fill="none" stroke="#c6f24e" stroke-opacity=".45" stroke-width="2" marker-end="url(#ar)"/>
+<text x="490" y="360" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="12.5" fill="#6a6862">Две точки проверки показывают разницу «без VPN» и «с VPN»: сайт может открываться только в одной из них</text>
+</svg><figcaption>Схема: две точки проверки — из России без VPN и из-за рубежа — плюс проверка DNS, сертификата, домена и почты</figcaption></figure><h2>Почему сайт открывается у вас, но не у посетителей</h2>
+<ul><li><b>Блокировка или фильтрация на пути из России</b> — из-за рубежа сайт открывается, из России нет.</li><li><b>Хостинг или защита от ботов закрывают зарубежные адреса</b> — из России открывается, а с VPN и из других стран нет.</li><li><b>Старый адрес в DNS</b> — после переезда часть посетителей ещё попадает на старый сервер.</li><li><b>Сертификат</b> — у вас браузер запомнил исключение, у посетителей «Подключение не защищено».</li></ul>
+<h2>Что показывает результат</h2>
+<p>Главное — <b>что видит посетитель</b>: сайт, заглушку хостинга, «Домен не прилинкован», ошибку PHP или базы данных, страницу защиты от ботов. Для каждой ошибки — короткий порядок действий и ссылка на подробную инструкцию. Ниже — где размещён сайт: хостинг, IP и имя сервера, сертификат и сколько дней ему осталось, регистратор домена и до какого числа он оплачен, кто принимает почту, DNS-серверы и движок.</p>
+<h2>Как определить хостинг по домену</h2>
+<p>Домен указывает на IP-адрес, а адрес принадлежит сети конкретной компании. По имени сети и обратному имени сервера (вида server123.hosting.reg.ru или ssl.name.beget.com) мы определяем хостинг. Если перед сайтом стоит CDN или защита (Cloudflare, DDoS-Guard), честно показываем их: настоящий сервер за ними снаружи не виден.</p>
+<h2>Как следить за сайтом постоянно</h2>
+<p>Разовая проверка показывает картину на эту минуту. Чтобы узнать о сбое раньше клиентов, добавьте сайт в бесплатного бота @rebornlab_bot: он проверяет сайт каждые 10 минут и сразу пишет в Telegram, когда сайт упал, открылся с ошибкой или снова заработал.</p></article>
+  <div class="card">
+    <h2>Вопросы и ответы</h2>
+    <details class="qa"><summary>Как проверить, на каком хостинге сайт?</summary><p>Введите адрес сайта в поле выше. Мы найдём IP-адрес, на который указывает домен, узнаем, какой сети он принадлежит, и по имени сети и сервера определим хостинг: Beget, Timeweb, REG.RU, SpaceWeb и другие. Если сайт закрыт защитным сервисом или CDN (Cloudflare, DDoS-Guard), мы честно покажем их, а не хостинг: настоящий сервер за ними снаружи не виден.</p></details><details class="qa"><summary>Как проверить доступность сайта?</summary><p>Введите адрес — мы откроем сайт как браузер с двух точек: с сервера в России и с сервера за рубежом. Покажем, отвечает ли он, сколько времени занял ответ и что видит посетитель: сам сайт, заглушку хостинга, ошибку PHP или базы данных. Две точки нужны, чтобы отличить «сайт лежит» от «сайт не открывается только из России или только с VPN».</p></details><details class="qa"><summary>У меня сайт не открывается, а у других открывается — почему?</summary><p>Чаще всего дело в сети: провайдер, Wi-Fi, VPN или старый адрес сайта в кэше компьютера. Если наша проверка показывает, что сайт открывается из России и из-за рубежа, — проблема на вашей стороне: попробуйте мобильный интернет без VPN и Wi-Fi. Если наша проверка тоже не может открыть сайт — проблема на стороне сайта или хостинга.</p></details><details class="qa"><summary>Сайт открывается в России, но не открывается с VPN или из-за границы</summary><p>Значит, хостинг или защита сайта закрывают доступ с зарубежных адресов. Владельцу стоит проверить настройки защиты от ботов и геофильтры. Подробно о причинах — в статье «Почему сайт не открывается в России или с VPN».</p></details><details class="qa"><summary>Что значит «Домен не прилинкован к директории»?</summary><p>Сервер хостинга работает, но домен не привязан к папке с сайтом. После восстановления хостинга это самая частая ошибка: файлы на месте, нужно только прикрепить домен в панели. Пошагово — в нашей инструкции по ошибкам после восстановления.</p></details><details class="qa"><summary>Как узнать, когда сайт снова заработает?</summary><p>Добавьте сайт в бесплатного бота @rebornlab_bot — кнопка «Следить в боте» под результатом проверки. Бот проверяет сайт каждые 10 минут и сразу пишет в Telegram, когда он упадёт, заработает или откроется с ошибкой.</p></details><details class="qa"><summary>Вы сохраняете, какие сайты я проверяю?</summary><p>Мы записываем только адрес проверенного сайта и итог проверки — без вашего IP-адреса и без данных о вас. Это нужно, чтобы видеть, какие проблемы встречаются чаще. Результат проверки одного сайта хранится 3 минуты, чтобы не нагружать чужие серверы повторными запросами.</p></details><details class="qa"><summary>Это платно? Нужна регистрация?</summary><p>Нет. Проверка и бот бесплатные, регистрация не нужна. Ограничение одно: не больше 20 проверок за 10 минут с одного адреса — чтобы инструментом не пользовались для нагрузки на чужие сайты.</p></details>
+  </div>
+</main>
+
+<footer class="ftr"><div class="wrap">
+  <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© 2026 REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a><a href="/oferta/">Публичная оферта</a></div></div>
+  <div><a href="/#uslugi">Услуги</a><a href="/vosstanovlenie-sajta/">Восстановление сайтов</a><a href="/proverka-sajta/">Проверка сайта без VPN</a><a href="/hosting/">Мониторинг хостингов</a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/contact/">Контакты</a></div>
+  <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
+</div></footer>
+<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
+<script src="/assets/main.js?v=c0c4eee5" defer></script>
+<script>
+(function () {
+  var RU = '/api/check', AB = 'https://api.rebornlab.ru/check', HB = '/hosting/';
+  var HOST_LINKS = {}, AD_NOTE = {"REG.RU": "Реклама · ООО «Регистратор доменных имён РЕГ.РУ»"};   // партнёрские ссылки через наш домен; AD_NOTE — пометка «Реклама»
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+  function goal(g) { try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', g); } catch (e) {} }
+  function norm(v) { return String(v || '').trim().toLowerCase().replace(/^[a-z]+:\/\//, '').split('/')[0].split('?')[0].split('#')[0].replace(/:\d+$/, '').replace(/\.$/, ''); }
+  function b64(v) { return btoa(unescape(encodeURIComponent(v))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '').slice(0, 62); }
+  function botUrl(d) { return 'https://t.me/rebornlab_bot?start=w_' + b64(d); }
+  function step(s) { var li = document.querySelector('#steps li[data-s="' + s + '"]'); if (li) li.className = 'done'; }
+  function dshow(d) { try { return d.indexOf('xn--') >= 0 && window.punycode ? punycode.toUnicode(d) : d; } catch (e) { return d; } }
+  function days(n) { n = Math.abs(n); var m = n % 10, c = n % 100; return n + ' ' + (m === 1 && c !== 11 ? 'день' : m >= 2 && m <= 4 && (c < 12 || c > 14) ? 'дня' : 'дней'); }
+
+  var KIND = {
+    ok: ['ok', 'Открывается'], unlinked: ['warn', 'Заглушка «домен не прилинкован»'], stub: ['warn', 'Заглушка вместо сайта'],
+    broken: ['warn', 'Открывается с ошибкой PHP'], dberror: ['warn', 'Ошибка базы данных'], shield: ['ok', 'За защитой от ботов'],
+    http_error: ['bad', 'Сервер отвечает ошибкой'], down: ['bad', 'Не отвечает'], timeout: ['bad', 'Не дождались ответа'],
+    nodns: ['bad', 'Домен не найден в DNS'], private: ['bad', 'Адрес во внутренней сети']
+  };
+  function kindOf(c) { if (!c) return ['bad', 'Не удалось проверить']; var k = KIND[c.kind] || ['bad', c.kind || '—']; if (c.kind === 'http_error' && c.code) k = ['bad', 'Ошибка ' + c.code + (c.code === 502 ? ' Bad Gateway' : c.code === 503 ? ' (сервис недоступен)' : c.code === 403 ? ' (доступ запрещён)' : c.code === 404 ? ' (страница не найдена)' : '')]; return k; }
+
+  function verdict(d, ru, ab) {
+    var c = ru, k = c && c.kind, certBad = c && c.https && c.https.error === 'cert', fix = [], icon, cls, title, text = '', err = '';
+    var abOk = ab && (ab.kind === 'ok' || ab.kind === 'shield'), ruOk = k === 'ok' || k === 'shield';
+    if (ruOk && !certBad) { icon = '✅'; cls = 'ok'; title = 'Сайт открывается'; text = 'Из России сайт отвечает' + (c.ms ? ' за ' + (c.ms / 1000).toFixed(1).replace('.', ',') + ' с' : '') + (k === 'shield' ? ', перед ним стоит защита от ботов — посетители её проходят, а наша проверка дальше не смотрит.' : '.'); }
+    else if (k === 'unlinked') { icon = '🟠'; cls = 'warn'; title = 'Сервер работает, но вместо сайта — «домен не прилинкован»'; text = 'Хостинг отвечает, а домен не привязан к папке с сайтом. Файлы, скорее всего, на месте.';
+      fix = ['Зайдите в панель хостинга. Если там «аккаунт восстанавливается» — подождите.', 'Раздел «Сайты» → у папки сайта «Прикрепить домен» → выберите свой домен. Привязка — около 10 минут.', 'Нет домена в списке — он прикреплён к другой (часто пустой) папке: открепите и прикрепите к папке с сайтом.', '<a href="/journal/beget-posle-vosstanovleniya-3-oshibki/">Подробная инструкция</a>']; }
+    else if (k === 'broken') { icon = '🟠'; cls = 'warn'; title = 'Сайт открывается с ошибкой PHP'; text = 'Сервер и сайт отвечают, но программа сайта падает. Чаще всего после переезда или восстановления сменилась версия PHP.'; err = c.error_line;
+      fix = ['Панель хостинга → настройки сайта → верните версию PHP, на которой сайт работал раньше (для старого Битрикса и WordPress обычно 7.4).', 'Deprecated и Warning — предупреждения: выключите показ ошибок посетителям (WP_DEBUG, debug в Битриксе).', '<a href="/journal/beget-posle-vosstanovleniya-3-oshibki/">Разбор ошибок PHP</a>']; }
+    else if (k === 'dberror') { icon = '🟠'; cls = 'warn'; title = 'Сайт не может подключиться к базе данных'; text = 'Сервер работает, а база данных недоступна: не запущена, сменился пароль или адрес.'; err = c.error_line;
+      fix = ['Если хостинг недавно восстанавливался — часто проходит само в течение часа.', 'Держится несколько часов — напишите в поддержку хостинга и приложите текст ошибки.', '<a href="/journal/beget-502-oshibka-bazy-dannyh/">Что значат ошибки базы и 502</a>']; }
+    else if (k === 'stub') { icon = '🟠'; cls = 'warn'; title = 'Вместо сайта — заглушка'; text = 'Сервер отвечает, но показывает страницу хостинга или регистратора: «сайт отключён», «хостинг не оплачен», «домен припаркован» или временную страницу.';
+      fix = ['Проверьте оплату хостинга и домена в личных кабинетах.', 'Если сайт переносили — проверьте, что домен указывает на новый сервер (A-запись).']; }
+    else if (certBad && (c.via === 'https-nocert' || c.redirect_to_bad_https || (c.http && /^https/.test(c.http.to || '')))) { icon = '🟠'; cls = 'warn'; title = 'Нет действующего сертификата, а сайт перекидывает на https'; text = 'Браузер покажет посетителям «Подключение не защищено» — большинство уйдёт.';
+      fix = ['Выпустите бесплатный сертификат Let&#39;s Encrypt в панели хостинга (вместе с www и поддоменами).', 'Пока сертификата нет — временно выключите редирект на https.', '<a href="/journal/beget-posle-vosstanovleniya-3-oshibki/">Как это сделать на Beget</a>']; }
+    else if (certBad) { icon = '🟠'; cls = 'warn'; title = 'Сайт открывается, но сертификат недействителен'; text = 'Браузер предупредит посетителей о небезопасном подключении.'; fix = ['Выпустите бесплатный сертификат Let&#39;s Encrypt в панели хостинга.']; }
+    else if (k === 'nodns') { icon = '🔴'; cls = 'bad'; title = 'Домен не найден'; text = 'У домена нет IP-адреса в DNS: домен не оплачен, ещё не делегирован или записи DNS удалены.'; fix = ['Проверьте у регистратора, что домен оплачен и делегирован.', 'Проверьте A-запись домена в DNS.']; }
+    else { icon = '🔴'; cls = 'bad'; title = 'Сайт не открывается'; text = k === 'http_error' ? 'Сервер отвечает ошибкой ' + c.code + '.' : 'Сервер не отвечает на наши запросы из России.';
+      fix = ['Если сайт на хостинге после сбоя — проверьте, включён ли сервер (ниже, в блоке «Хостинг»).', 'Есть своя копия — сайт можно поднять на другом хостинге, не дожидаясь.', 'Копии нет — <a href="/beget/vosstanovit/#' + encodeURIComponent(d) + '">проверьте, что сохранилось в веб-архиве</a>.']; }
+    var note = '';
+    if (ruOk && ab && !abOk && ab.kind) note = '🌍 <b>Из-за рубежа сайт не открывается</b> (' + esc(kindOf(ab)[1].toLowerCase()) + '), а из России — да. Посетители из других стран и с VPN, скорее всего, его не увидят: хостинг или защита сайта закрывают зарубежные адреса. <a href="/journal/pochemu-sajt-ne-otkryvaetsya-v-rossii/">Почему так бывает</a>';
+    if (!ruOk && abOk) note = '🇷🇺 <b>Из России сайт не открывается, а из-за рубежа — открывается.</b> Похоже на блокировку или фильтрацию на пути из России. <a href="/journal/pochemu-sajt-ne-otkryvaetsya-v-rossii/">Разбор причин</a>';
+    return '<div class="card verdict ' + cls + '"><div class="ic">' + icon + '</div><div><h2>' + title + '</h2><p style="margin:6px 0 0">' + text + '</p>' +
+      (err ? '<code class="errl">' + esc(err) + '</code>' : '') + (fix.length ? '<ol class="fix">' + fix.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ol>' : '') +
+      (note ? '<div class="note">' + note + '</div>' : '') + '</div></div>';
+  }
+
+  function pt(where, flag, c) {
+    if (!c) return '<div class="pt"><div class="w">' + flag + ' ' + where + '</div><div class="s bad">нет данных</div><div class="m">точка проверки не ответила</div></div>';
+    var k = kindOf(c), m = [];
+    if (c.code) m.push('код ' + c.code); if (c.ms) m.push((c.ms / 1000).toFixed(2).replace('.', ',') + ' с');
+    if (c.https && c.https.error === 'cert') m.push('сертификат недействителен');
+    return '<div class="pt"><div class="w">' + flag + ' ' + where + '</div><div class="s ' + k[0] + '">' + esc(k[1]) + '</div><div class="m">' + esc(m.join(' · ') || ' ') + '</div></div>';
+  }
+
+  function facts(d, r) {
+    var c = r.check || {}, s = r.server || {}, out = [], hl = HOST_LINKS[r.hoster];
+    var hv = r.hoster || (s.as_name ? s.as_name.replace(/^AS-?|-AS\b/g, '').split(',')[0] : 'не определили');
+    out.push(['Хостинг', esc(hv) + (r.hoster && HOST_LINKS[r.hoster] ? ' · <a href="' + hl + '" target="_blank" rel="noopener sponsored">сайт хостинга</a> <small style="color:var(--muted);font-weight:400">' + esc(AD_NOTE[r.hoster] || 'Реклама') + '</small>' : ''), (s.ip ? 'IP ' + esc(s.ip) : '') + (s.ptr ? ' · ' + esc(s.ptr) : '') + (s.asn ? '<br>сеть AS' + esc(s.asn) + ' ' + esc((s.as_name || '').split(' - ')[0]) : '')]);
+    if (r.beget && r.beget.known) {
+      var st = r.beget.state === 'up' ? '🟢 сервер включён' : r.beget.state === 'down' ? '🔴 сервер не отвечает' : 'нет данных';
+      out.push(['Сервер Beget', st, 'в его сети отвечают ' + r.beget.net_up + ' из ' + r.beget.net_total + ' · <a href="/beget/server/#' + esc(s.ip) + '">карта сети</a>']);
+    } else if (r.hostmon && r.hostmon.level) {
+      out.push(['Хостинг сейчас', r.hostmon.level === 'ok' ? '🟢 работает штатно' : r.hostmon.level === 'warn' ? '🟡 частичные сбои' : '🔴 сбой', 'панель ' + (r.hostmon.panel ? 'открывается' : 'не открывается') + ' · DNS ' + r.hostmon.dns_ok + '/' + r.hostmon.dns_total + ' · сайтов из выборки работает ' + r.hostmon.sites_ok + ' из ' + r.hostmon.sites_total]);
+    }
+    if (c.cert) {
+      var cd = c.cert.days, ok = c.cert.match && cd > 0;
+      out.push(['Сертификат', ok ? (cd < 15 ? '🟡 истекает через ' + days(cd) : '🟢 действует ещё ' + days(cd)) : (!c.cert.match ? '🔴 выдан на другой адрес' : '🔴 истёк'), esc(c.cert.issuer || '') + (c.cert.names && c.cert.names.length ? ' · ' + esc(c.cert.names.slice(0, 3).join(', ')) : '')]);
+    } else if (c.ports && !c.ports['443']) out.push(['Сертификат', '🟡 https не работает', 'порт 443 закрыт — сайт открывается только по http']);
+    var di = r.domain_info || {};
+    if (di.registrar) out.push(['Домен', esc(di.registrar) + (di.days_left != null ? (di.days_left < 30 ? ' · 🟡 оплачен ещё ' + days(di.days_left) : ' · оплачен до ' + esc(di.paid_till.split('-').reverse().join('.'))) : ''), (di.registrar_site ? 'управлять DNS и продлением: ' + esc(di.registrar_site) : '') + (di.created ? (di.registrar_site ? ' · ' : '') + 'зарегистрирован ' + esc(di.created.split('-').reverse().join('.')) : '')]);
+    var ml = r.mail || {};
+    if (ml.mx) out.push(['Почта домена', ml.provider ? esc(ml.provider) : esc(ml.mx[0]), esc(ml.mx.join(', '))]);
+    else if (ml.none) out.push(['Почта домена', 'не принимает письма', 'у домена явно отключена почта (MX «.»)']);
+    else out.push(['Почта домена', 'MX-записей нет', 'письма на адреса домена, скорее всего, не доходят']);
+    var dn = r.dns || {};
+    out.push(['DNS', dn.ns && dn.ns.length ? esc(dn.ns[0].replace(/^[^.]+\./, '')) : '—', (dn.ns || []).map(esc).join(', ') + (dn.www === false ? '<br>🟡 у www.' + esc(d) + ' нет записи — адрес с www не откроется' : '')]);
+    if (c.cms) out.push(['Движок', esc(c.cms), c.title ? '«' + esc(c.title.slice(0, 70)) + '»' : '']);
+    if (r.archive && r.archive.last) out.push(['Веб-архив', 'последний снимок ' + esc(r.archive.last), '<a href="/beget/vosstanovit/#' + encodeURIComponent(d) + '">можно ли восстановить сайт по архиву</a>']);
+    else if (r.archive && r.archive.none) out.push(['Веб-архив', 'снимков нет', 'восстановить по архиву не получится — нужна своя копия']);
+    return '<div class="card"><h2>Где размещён сайт и что с ним</h2><div class="facts">' + out.map(function (f) { return '<div class="f"><div class="k">' + f[0] + '</div><div class="v">' + f[1] + '</div>' + (f[2] ? '<div class="d">' + f[2] + '</div>' : '') + '</div>'; }).join('') + '</div></div>';
+  }
+
+  function cta(d, okNow) {
+    return '<div class="card cta"><div><h2>🔔 ' + (okNow ? 'Следить за ' + esc(dshow(d)) : 'Узнать, когда ' + esc(dshow(d)) + ' заработает') + '</h2><p>' +
+      (okNow ? 'Бот @rebornlab_bot проверяет сайт каждые 10 минут и сразу напишет в Telegram, если он упадёт, откроется с ошибкой или пропадёт сертификат.' : 'Бот @rebornlab_bot проверяет сайт каждые 10 минут и напишет в Telegram, как только он откроется.') +
+      ' Бесплатно, без рекламы.</p></div><a class="btn btn-acc" href="' + botUrl(d) + '" target="_blank" rel="noopener" data-goal="hc_watch">Следить в боте</a></div>';
+  }
+
+  var busy = false;
+  function check(raw) {
+    var d = norm(raw); if (!/\./.test(d) || busy) return;
+    busy = true; $('q').value = d; history.replaceState(null, '', '#' + d); goal('hc_check');
+    $('res').className = 'on'; $('wait').style.display = ''; $('out').innerHTML = ''; $('wd').textContent = dshow(d);
+    [].forEach.call(document.querySelectorAll('#steps li'), function (li) { li.className = ''; });
+    var t1 = setTimeout(function () { step('dns'); }, 1200);
+    var ru = null, ab = null, nr = 0;
+    function done() { if (++nr < 2) return; clearTimeout(t1); busy = false; render(d, ru, ab); }
+    fetch(RU + '?d=' + encodeURIComponent(d), {cache: 'no-store'}).then(function (r) { return r.json().then(function (j) { j._st = r.status; return j; }); })
+      .then(function (j) { ru = j; step('dns'); step('ru'); step('info'); }).catch(function () { ru = {error: 'net'}; }).then(done);
+    fetch(AB + '?d=' + encodeURIComponent(d) + '&mode=quick', {cache: 'no-store'}).then(function (r) { return r.json(); })
+      .then(function (j) { ab = j; step('ab'); }).catch(function () { ab = null; }).then(done);
+  }
+  function render(d, ru, ab) {
+    $('wait').style.display = 'none';
+    if (!ru || ru.error) {
+      var m = ru && ru.error === 'limit' ? 'Слишком много проверок подряд — подождите несколько минут.' : ru && ru.error === 'bad_domain' ? 'Не похоже на адрес сайта. Введите домен, например mysite.ru.' : ru && ru.error === 'busy' ? 'Сейчас проверяем много сайтов — попробуйте через минуту.' : 'Проверка не удалась — попробуйте ещё раз через минуту.';
+      $('out').innerHTML = '<div class="card verdict bad"><div class="ic">⚠️</div><div><h2>' + m + '</h2></div></div>'; return;
+    }
+    var c = ru.check || {}, okNow = c.kind === 'ok' || c.kind === 'shield';
+    $('out').innerHTML = verdict(d, c, ab) +
+      '<div class="card"><h2>Открывается ли сайт</h2><p class="sub">Проверили ' + new Date((ru.checked_at || Date.now() / 1000) * 1000).toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit'}) + ' МСК' + (ru.cached ? ' (результат последних 3 минут)' : '') + '</p><div class="pts">' +
+      pt('Из России', '🇷🇺', c) + pt('Из-за рубежа (Индонезия)', '🌍', ab) + '</div></div>' + cta(d, okNow) + facts(d, ru);
+    $('out').scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+
+  $('pq').addEventListener('submit', function (e) { e.preventDefault(); check($('q').value); });
+  [].forEach.call(document.querySelectorAll('[data-ex]'), function (a) { a.addEventListener('click', function () { check(a.getAttribute('data-ex')); }); });
+  if (location.hash.length > 3) check(decodeURIComponent(location.hash.slice(1)));
+
+  // статусы хостингов: Beget — begetwatch, остальные — hostmon
+  Promise.all([
+    fetch('https://api.rebornlab.ru/beget.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).catch(function () { return null; }),
+    fetch('/hm/status.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).catch(function () { return null; })
+  ]).then(function (a) {
+    var b = a[0], h = a[1], cards = [];
+    if (b) {
+      var p = Math.round(100 * b.sites_up / b.sites_total), cls = p > 85 ? 'ok' : p > 30 ? 'warn' : 'bad';   // по сайтам: в сетях много пустых адресов
+      cards.push('<a class="h hl" href="/beget/"><div class="n"><i class="' + cls + '"></i>Beget</div><div class="l">' + (cls === 'ok' ? 'работает' : cls === 'warn' ? 'частичные сбои' : 'серьёзный сбой') + ' · сайтов открывается ' + p + '%</div></a>');
+    }
+    if (h && h.providers) {
+      var ks = Object.keys(h.providers), rank = {down: 0, warn: 1, ok: 2};
+      ks.sort(function (a, b2) { return (rank[h.providers[a].level] - rank[h.providers[b2].level]) || 0; });
+      ks.forEach(function (k) {
+        var x = h.providers[k], cls = x.level === 'ok' ? 'ok' : x.level === 'warn' ? 'warn' : 'bad';
+        var sl = x.sites_total >= 3 ? 'сайтов открывается ' + x.sites_ok + ' из ' + x.sites_total : (x.dns_total ? 'DNS ' + x.dns_ok + ' из ' + x.dns_total : 'панель ' + (x.panel ? 'открывается' : 'не открывается'));
+        cards.push('<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + cls + '"></i>' + esc(x.name) + '</div><div class="l">' + (cls === 'ok' ? 'работает' : cls === 'warn' ? 'частичные сбои' : 'сбой') + ' · ' + sl + '</div></a>');
+      });
+    }
+    if (cards.length) $('hosts').innerHTML = cards.join('');
+    var t = Math.max(b ? b.updated : 0, h ? h.updated : 0);
+    if (t) $('hupd').innerHTML = 'Наш независимый мониторинг: панели управления, DNS и выборка реальных сайтов, обновлено в ' + new Date(t * 1000).toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit'}) + ' МСК. Не официальные данные хостингов. Сначала — хостинги со сбоями.';
+  });
+})();
+</script>
+</body>
+</html>

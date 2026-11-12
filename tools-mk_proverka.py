@@ -15,14 +15,14 @@ import json, pathlib, re, sys
 ROOT = pathlib.Path(__file__).parent
 PUBLISH = len(sys.argv) > 1 and sys.argv[1] == 'publish'
 # 12.11 (Ник): + страницы хостингов. В черновике всё лежит под /demo/draft-proverka/ (закрыто паролем), при публикации — боевые адреса
-PV = '/proverka-dostupnosti-sajta/' if PUBLISH else '/demo/draft-proverka/'
+PV = '/proverka-sajta/' if PUBLISH else '/demo/draft-proverka/'   # 12.11 Ник: короткие боевые адреса
 HB = '/hosting/' if PUBLISH else '/demo/draft-proverka/hosting/'
-URL = 'https://rebornlab.ru/proverka-dostupnosti-sajta/'
-TITLE = 'Проверка сайта без VPN: открывается ли в России и за рубежом, хостинг, SSL — бесплатно'
+URL = 'https://rebornlab.ru/proverka-sajta/'
+TITLE = 'Мониторинг сайта без VPN: открывается ли сайт в России и за рубежом — бесплатная проверка'   # 12.11 Ник: title — «Мониторинг…», H1 — «Проверка/Открывается ли…»
 DESC = ('Открывается ли сайт без VPN? Проверим из России и из-за рубежа: что видит посетитель, какая ошибка и как её исправить, '
         'на каком хостинге и сервере, сертификат, домен и почта. Бесплатно, без регистрации, с уведомлением в Telegram.')
 # партнёрские ссылки — через наш домен (/go/… на vpn-ru → 302 на партнёрку). ⚠️ Перед публикацией — erid (маркировка рекламы)
-HOST_LINKS = {'REG.RU': '/go/reg-hosting'}
+HOST_LINKS = {} if PUBLISH else {'REG.RU': '/go/reg-hosting'}   # 12.11: на боевых — без партнёрок, пока нет erid
 AD_NOTE = {'REG.RU': 'Реклама · ООО «Регистратор доменных имён РЕГ.РУ»'}
 
 FAQ = [
@@ -189,6 +189,7 @@ main = f'''<main class="pw">
     <a class="btn btn-acc" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="hc_bot">Открыть бота</a>
   </div>
 
+  __SEO__
   <div class="card">
     <h2>Вопросы и ответы</h2>
     {faq_html}
@@ -344,10 +345,77 @@ script = r'''<script>
 </script>
 '''
 
+SEO = json.loads((ROOT / 'src' / 'seo-hosting.json').read_text())   # тексты: YandexGPT Lite + наша чистка (12.11), главные — вручную
+
+
+def md2html(md):
+    out = []
+    for b in re.split(r'\n\s*\n', md.strip()):
+        b = b.strip()
+        inl = lambda t: re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', t)
+        if b.startswith('### '):
+            out.append(f'<h3>{inl(b[4:])}</h3>')
+        elif b.startswith('## '):
+            out.append(f'<h2>{inl(b[3:])}</h2>')
+        elif re.match(r'^\d+\.\s', b):
+            out.append('<ol>' + ''.join(f'<li>{inl(re.sub(r"^\d+\.\s*", "", l))}</li>' for l in b.split('\n') if l.strip()) + '</ol>')
+        elif re.match(r'^[*-]\s', b):
+            out.append('<ul>' + ''.join(f'<li>{inl(re.sub(r"^[*-]\s*", "", l))}</li>' for l in b.split('\n') if l.strip()) + '</ul>')
+        else:
+            out.append(f'<p>{inl(b)}</p>')
+    return '\n'.join(out)
+
+
+def svg_flow(title, src_lbl, targets, dst_lbl, note=''):
+    """схема «как мы проверяем»: слева точка проверки, в середине что проверяем, справа результат. Рисуется кодом — точная, без ИИ-картинок"""
+    n = len(targets); H = 120 + n * 86; cy = H / 2
+    g = [f'<svg viewBox="0 0 980 {H}" role="img" aria-label="{title}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">',
+         '<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c6f24e"/></marker></defs>',
+         f'<rect x="1" y="1" width="978" height="{H - 2}" rx="18" fill="#0f1113" stroke="rgba(237,235,230,.08)"/>',
+         f'<rect x="28" y="{cy - 44}" width="230" height="88" rx="14" fill="#16181b" stroke="#c6f24e" stroke-opacity=".6"/>',
+         f'<text x="143" y="{cy - 8}" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="17" font-weight="700" fill="#edebe6">{src_lbl[0]}</text>',
+         f'<text x="143" y="{cy + 18}" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="13.5" fill="#9a9890">{src_lbl[1]}</text>',
+         f'<rect x="722" y="{cy - 44}" width="230" height="88" rx="14" fill="#16181b" stroke="#c6f24e" stroke-opacity=".6"/>',
+         f'<text x="837" y="{cy - 8}" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="17" font-weight="700" fill="#edebe6">{dst_lbl[0]}</text>',
+         f'<text x="837" y="{cy + 18}" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="13.5" fill="#9a9890">{dst_lbl[1]}</text>']
+    for i, (a, b2, ok) in enumerate(targets):
+        y = 60 + i * 86 + 18
+        col = '#c6f24e' if ok else '#ff7a6b'
+        g.append(f'<path d="M258 {cy} C 300 {cy}, 300 {y + 26}, 340 {y + 26}" fill="none" stroke="{col}" stroke-opacity=".7" stroke-width="2" marker-end="url(#ar)"/>')
+        g.append(f'<rect x="346" y="{y}" width="300" height="52" rx="12" fill="#16181b" stroke="rgba(237,235,230,.12)"/>')
+        g.append(f'<circle cx="368" cy="{y + 26}" r="6" fill="{col}"/>')
+        g.append(f'<text x="384" y="{y + 22}" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="15" font-weight="600" fill="#edebe6">{a}</text>')
+        g.append(f'<text x="384" y="{y + 41}" font-family="SF Mono,Menlo,monospace" font-size="11.5" fill="#9a9890">{b2}</text>')
+        g.append(f'<path d="M646 {y + 26} C 686 {y + 26}, 686 {cy}, 716 {cy}" fill="none" stroke="#c6f24e" stroke-opacity=".45" stroke-width="2" marker-end="url(#ar)"/>')
+    if note:
+        g.append(f'<text x="490" y="{H - 18}" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="12.5" fill="#6a6862">{note}</text>')
+    g.append('</svg>')
+    return '\n'.join(g)
+
+
+def seo_block(md, fig_svg, fig_cap, intro_md=''):
+    full = (intro_md.strip() + '\n\n' + md.strip()).strip()
+    parts = re.split(r'\n(?=## )', full, maxsplit=1)
+    first = md2html(parts[0]); rest = md2html(parts[1]) if len(parts) > 1 else ''
+    return (f'<article class="card seo">{first}<figure class="fig">{fig_svg}<figcaption>{fig_cap}</figcaption></figure>{rest}</article>')
+
+
+SEO_CSS = """<style>
+  .seo {{ padding: 30px 34px; }} .seo h2 {{ font-size: clamp(21px, 2.4vw, 26px); margin: 28px 0 10px; letter-spacing: -.01em; }} .seo h2:first-child {{ margin-top: 0; }}
+  .seo p, .seo li {{ color: #cfd3cf; font-size: 16.5px; line-height: 1.65; max-width: 48em; }} .seo b {{ color: var(--text); }}
+  .seo ul, .seo ol {{ padding-left: 22px; }} .seo li {{ margin: 6px 0; }}
+  .fig {{ margin: 22px 0 8px; }} .fig figcaption {{ color: var(--muted); font-size: 13.5px; margin-top: 8px; text-align: center; }}
+  @media (max-width: 720px) {{ .seo {{ padding: 22px 18px; }} }}
+</style>""".replace('{{', '{').replace('}}', '}')
+pv_fig = svg_flow('Как работает проверка сайта', ('Ваш сайт', 'адрес из поля выше'),
+                  [('Сервер в России, без VPN', 'как обычный посетитель', True), ('Сервер за рубежом', 'как посетитель с VPN', True),
+                   ('DNS, сертификат, домен, почта', 'whois · MX · NS · SSL', True)], ('Итог + что делать', 'и бот @rebornlab_bot'),
+                  'Две точки проверки показывают разницу «без VPN» и «с VPN»: сайт может открываться только в одной из них')
 script = script.replace('__HB__', HB).replace('__HOST_LINKS__', json.dumps(HOST_LINKS, ensure_ascii=False)).replace('__AD_NOTE__', json.dumps(AD_NOTE, ensure_ascii=False))
-main = main.replace('__HB__', HB)
+main = main.replace('__HB__', HB).replace('__SEO__', seo_block(SEO['_proverka'], pv_fig, 'Схема: две точки проверки — из России без VPN и из-за рубежа — плюс проверка DNS, сертификата, домена и почты'))
+head = head.replace('</style>', '</style>\n' + SEO_CSS, 1)
 html = head + hdr + '\n' + main + '\n' + foot + mainjs + '\n' + script + '</body>\n</html>\n'
-out = ROOT / ('proverka-dostupnosti-sajta' if PUBLISH else 'demo/draft-proverka') / 'index.html'
+out = ROOT / PV.strip('/') / 'index.html'
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(html)
 print('готово:', out, len(html) // 1024, 'КБ')
@@ -411,7 +479,7 @@ def page(title, desc, url, h1, body_main, body_script, lds, og_title=None):
             f'{robots_}<title>{title}</title>\n<meta name="description" content="{desc}">\n<link rel="canonical" href="https://rebornlab.ru{url}">\n'
             f'<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">\n<meta property="og:title" content="{og_title or h1}">\n'
             f'<meta property="og:description" content="{desc}">\n<meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">\n{css_link}\n{ldh}\n'
-            f'{style_block}\n{HCSS}\n</head>\n<body>\n{hdr}\n{body_main}\n{foot}{mainjs}\n{body_script}</body>\n</html>\n')
+            f'{style_block}\n{HCSS}\n{SEO_CSS}\n</head>\n<body>\n{hdr}\n{body_main}\n{foot}{mainjs}\n{body_script}</body>\n</html>\n')
 
 
 def crumbs(items):
@@ -484,6 +552,26 @@ for slug, name, typ, panel, ns in HOSTS:
         ad = (f'<p style="margin:14px 0 0"><a class="btn btn-ghost" href="{HOST_LINKS[name]}" target="_blank" rel="noopener sponsored">Сайт {name} →</a> '
               f'<span class="ad">{AD_NOTE.get(name, "Реклама")}</span></p>')
     faq_h = ''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in faq)
+    TYPE_P = {
+        'Хостинг': f'У виртуального хостинга сайты, базы данных и почта клиентов живут на общих серверах {name}. Поэтому сбой сервера хостинга сразу виден по сайтам клиентов, а сбой панели — нет: сайты продолжают работать, просто владельцы не могут зайти в настройки.',
+        'Облако': f'В облаке {name} сайты работают на виртуальных серверах клиентов. Если не открывается панель {name}, это ещё не значит, что ваши серверы выключены: чаще всего сайты продолжают работать. Поэтому мы смотрим и на панель, и на реальные сайты.',
+        'VPS': f'На VPS у {name} каждый клиент сам настраивает свой сервер. Сбой панели {name} не останавливает уже запущенные серверы, а вот проблемы в сети хостинга видны сразу по всем сайтам — их мы и ловим по выборке.',
+        'Конструктор сайтов': f'Сайты на {name} работают на серверах самого конструктора. Если {name} недоступна, не открываются сразу все сайты на ней, и на стороне владельца сделать ничего нельзя — остаётся ждать восстановления сервиса.',
+    }
+    tp = TYPE_P.get(typ) or (TYPE_P['Облако'] if 'облак' in typ.lower() else TYPE_P['VPS'] if 'vps' in typ.lower() or 'Серверы' in typ else TYPE_P['Хостинг'])
+    if 'Домены' in typ:
+        tp = f'{name} — прежде всего регистратор доменов. Если не отвечают DNS-серверы {name}, домены на них перестают открываться у новых посетителей, даже если сам сайт размещён у другого хостинга. Поэтому для {name} главное в мониторинге — DNS.'
+    lst = [f'**Панель управления** — открываем {host}, как обычный пользователь.']
+    lst.append(f'**DNS-серверы** — опрашиваем {nsl}: они отвечают за то, чтобы домены клиентов открывались.' if ns else '**DNS** — у этого сервиса мы его не проверяем: клиенты используют разные DNS.')
+    lst.append('**Сайты клиентов** — не проверяем: хостинг ограничивает наши проверки.' if slug in NO_SITES else '**Сайты клиентов** — открываем выборку реальных сайтов, которые работают у этого хостинга.')
+    intro = f'## Как мы проверяем {name}\n\nМониторинг {name} идёт раз в 30 минут с сервера в России без VPN — так, как сайты видит обычный посетитель:\n\n' + '\n'.join('- ' + x for x in lst) + f'\n\n{tp}'
+    ai = SEO.get(slug, '')
+    ai = '\n\n'.join(b for b in re.split(r'\n(?=## )', ai) if not re.match(r'## (Что мы проверяем|Как узнать о сбое)', b))   # эти разделы уже есть выше/в блоке бота
+    targets = [('Панель управления', host, True), (('DNS-серверы' if ns else 'DNS не проверяем'), (', '.join(ns[:2]) + (' …' if len(ns) > 2 else '')) if ns else 'разные у клиентов', bool(ns)),
+               ('Сайты клиентов', 'выборка реальных сайтов' if slug not in NO_SITES else 'не проверяем', slug not in NO_SITES)]
+    fig = svg_flow(f'Как мы проверяем {name}', ('Сервер в России', 'без VPN · каждые 30 мин'), targets, (f'Статус {name}', 'здесь и в боте'),
+                   (f'Мониторинг {name}: красная точка — этот пункт у {name} не проверяем' if not all(t[2] for t in targets) else f'Независимый мониторинг {name} · REBORN LAB'))
+    seo_h = seo_block(ai, fig, f'Схема мониторинга {name}: что именно мы проверяем и откуда', intro)
     url = f'{HB}{slug}/'
     h1 = f'Проверка {name}: работает ли {name} сейчас без VPN'   # 12.11 Ник: в H1 — «Проверка», в title — «Мониторинг», в тексте сначала «мониторинг'
     body = f'''<main class="pw">
@@ -505,6 +593,7 @@ for slug, name, typ, panel, ns in HOSTS:
     <div class="f"><div class="k">Что проверяем</div><div class="v" style="font-size:15px">панель{", DNS" if ns else ""}{"" if slug in NO_SITES else ", сайты клиентов"}</div><div class="d">из России, без VPN, каждые 30 минут</div></div>
   </div></div>
   {BOT_CTA}
+  {seo_h}
   <div class="card"><h2>Вопросы о {name}</h2>{faq_h}</div>
   <div class="card"><h2>Другие хостинги сейчас <a class="lnk" href="{HB}" style="font-size:15px;font-weight:500;margin-left:8px">все →</a></h2><div class="hosts compact" id="others"></div></div>
   <p class="hint">Мы не связаны с {name} и не представляем его. Ответ панели и DNS не гарантирует работу всех сайтов и услуг хостинга.</p>
@@ -533,6 +622,7 @@ hub_main = f'''<main class="pw">
   <div class="card"><div class="tabs" id="tabs"><button class="on" data-t="all">Все</button><button data-t="host">Хостинг</button><button data-t="cloud">Облака и VPS</button><button data-t="bad">Со сбоями</button></div>
     <p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all"></div></div>
   {BOT_CTA}
+  __HUBSEO__
   <div class="card"><h2>Вопросы</h2>{''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in hub_faq)}</div>
   <p class="hint">Мы не связаны с хостингами из списка. Ответ панели и DNS не гарантирует работу всех сайтов и услуг хостинга.</p>
 </main>'''
@@ -565,6 +655,10 @@ hub_js = r'''<script>
 })();
 </script>
 '''
+hub_fig = svg_flow('Как устроен мониторинг хостингов', ('Сервер в России', 'без VPN · каждые 30 мин'),
+                   [('Панели управления', '27 хостингов и облаков', True), ('DNS-серверы', 'серверы доменов клиентов', True), ('Сайты клиентов', 'выборка реальных сайтов', True)],
+                   ('Статус и история', 'на сайте и в боте'), 'Независимый мониторинг REBORN LAB · Beget — отдельный, каждые 15 минут')
+hub_main = hub_main.replace('__HUBSEO__', seo_block(SEO['_hub'], hub_fig, 'Схема: что мы проверяем у каждого хостинга'))
 hub_url = HB
 o = ROOT / hub_url.strip('/') / 'index.html'
 o.parent.mkdir(parents=True, exist_ok=True)

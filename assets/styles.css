@@ -493,3 +493,6 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
   .srch-btn { order: 0 !important; margin-left: auto !important; margin-right: -6px !important; }
 }
 .cookie.mini{bottom:auto;top:74px;left:auto;right:12px;max-width:340px;padding:10px 12px;gap:10px}.cookie.mini p{font-size:12px}.cookie.mini .btn{padding:8px 14px}
+
+/* 12.11: заметный значок «Проверка сайта» в меню */
+.nav-ic-acc { color: var(--acc); }

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мониторинг хостингов: какой хостинг не работает сейчас — статус без VPN</title>
+<meta name="description" content="Мониторинг хостингов: работают ли REG.RU, Timeweb, SpaceWeb, Джино, Selectel и ещё 20+ хостингов прямо сейчас: панели, DNS и сайты клиентов — наша проверка из России без VPN каждые 30 минут.">
+<link rel="canonical" href="https://rebornlab.ru/hosting/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Проверка хостингов: какой хостинг не работает сейчас">
+<meta property="og:description" content="Мониторинг хостингов: работают ли REG.RU, Timeweb, SpaceWeb, Джино, Selectel и ещё 20+ хостингов прямо сейчас: панели, DNS и сайты клиентов — наша проверка из России без VPN каждые 30 минут.">
+<meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
+<link rel="stylesheet" href="/assets/styles.css?v=c0c4eee5">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Главная", "item": "https://rebornlab.ru/"}, {"@type": "ListItem", "position": 2, "name": "Мониторинг хостингов", "item": "https://rebornlab.ru/hosting/"}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Как узнать, какой хостинг сейчас не работает?", "acceptedAnswer": {"@type": "Answer", "text": "Посмотрите список выше: хостинги со сбоями стоят первыми. Цвет — итог последней проверки: панель управления, DNS-серверы и выборка сайтов клиентов, открываем всё из России без VPN."}}, {"@type": "Question", "name": "Хостинг работает, а мой сайт — нет. Почему?", "acceptedAnswer": {"@type": "Answer", "text": "Статус хостинга не гарантирует работу каждого сайта: сайт может не открываться из-за своей ошибки, сертификата, версии PHP или привязки домена. Проверьте свой сайт — покажем, в чём дело и как исправить."}}, {"@type": "Question", "name": "Почему важно проверять без VPN?", "acceptedAnswer": {"@type": "Answer", "text": "Большинство посетителей открывают сайты без VPN. С VPN сайт может открываться, а у людей — нет (и наоборот). Мы проверяем из России без VPN, а проверка сайта дополнительно показывает, открывается ли он из-за рубежа."}}, {"@type": "Question", "name": "Как часто обновляются данные?", "acceptedAnswer": {"@type": "Answer", "text": "Каждые 30 минут. Beget — отдельно, подробный мониторинг каждые 15 минут на странице rebornlab.ru/beget/."}}]}</script>
+<style>
+  .pw { max-width: var(--max); margin: 0 auto; padding: 40px 22px 80px; }
+  .pw h1 { font-size: clamp(30px, 5vw, 54px); letter-spacing: -.03em; line-height: 1.05; margin: 14px 0 12px; }
+  .pw .lead { color: var(--muted); font-size: 18px; max-width: 46em; }
+  .pw .live { display: inline-flex; align-items: center; gap: 8px; font: 13px var(--mono); color: var(--muted); }
+  .pw .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--acc); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198,242,78,.5) } 70% { box-shadow: 0 0 0 10px rgba(198,242,78,0) } 100% { box-shadow: 0 0 0 0 rgba(198,242,78,0) } }
+  .pq { display: flex; gap: 10px; margin: 26px 0 8px; max-width: 760px; }
+  .pq input { flex: 1; min-width: 0; font-size: 18px; padding: 16px 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+  .pq input:focus { outline: none; border-color: var(--acc); }
+  .pq button { font-size: 17px; padding: 0 26px; white-space: nowrap; }
+  .gives { list-style: none; padding: 0; margin: 18px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 8px 22px; max-width: 980px; }
+  .gives li { color: var(--muted); font-size: 15.5px; padding-left: 26px; position: relative; } .gives li:before { content: "✓"; position: absolute; left: 4px; color: var(--acc); font-weight: 700; }
+  .gives b { color: var(--text); font-weight: 600; }
+  .hint { color: var(--muted); font-size: 14px; } .hint a { color: var(--muted); text-decoration: underline dotted; cursor: pointer; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px 24px; margin: 16px 0; }
+  .card h2 { font-size: 22px; margin: 0 0 6px; letter-spacing: -.01em; } .card .sub { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+  #res { display: none; } #res.on { display: block; }
+  .verdict { display: flex; gap: 16px; align-items: flex-start; border-width: 2px; }
+  .verdict .ic { font-size: 40px; line-height: 1; }
+  .verdict h2 { font-size: clamp(22px, 3vw, 30px); }
+  .verdict.ok { border-color: rgba(198,242,78,.55); } .verdict.warn { border-color: rgba(255,204,77,.6); } .verdict.bad { border-color: rgba(255,122,107,.6); }
+  .fix { margin: 12px 0 0; padding-left: 20px; } .fix li { margin: 6px 0; }
+  .errl { display: block; margin-top: 10px; font: 13px/1.5 var(--mono); color: #ffb4a8; background: #0b0c0e; border-radius: 10px; padding: 10px 12px; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  .pts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pt { background: var(--card-2); border-radius: 14px; padding: 16px 18px; }
+  .pt .w { font-size: 14px; color: var(--muted); } .pt .s { font-size: 22px; font-weight: 700; margin-top: 6px; } .pt .m { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .s.ok { color: var(--acc); } .s.warn { color: #ffcc4d; } .s.bad { color: #ff7a6b; }
+  .note { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: rgba(255,204,77,.08); border: 1px solid rgba(255,204,77,.3); font-size: 15px; }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .f { background: var(--card-2); border-radius: 14px; padding: 14px 16px; }
+  .f .k { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; } .f .v { font-size: 17px; font-weight: 600; margin-top: 6px; word-break: break-word; }
+  .f .d { font-size: 13.5px; color: var(--muted); margin-top: 4px; word-break: break-word; }
+  .f .d a, .card a.lnk { color: var(--acc); }
+  .cta { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; border: 1px solid rgba(198,242,78,.45); }
+  .cta p { margin: 4px 0 0; color: var(--muted); max-width: 40em; }
+  .cta .btn { font-size: 17px; padding: 14px 22px; }
+  .wait { display: flex; gap: 12px; align-items: center; color: var(--muted); }
+  .spin { width: 22px; height: 22px; border: 3px solid var(--line); border-top-color: var(--acc); border-radius: 50%; animation: sp 1s linear infinite; }
+  @keyframes sp { to { transform: rotate(360deg) } }
+  .steps { margin: 8px 0 0; padding: 0; list-style: none; font-size: 15px; } .steps li { margin: 6px 0; color: var(--muted); } .steps li.done { color: var(--text); } .steps li.done:before { content: "✓ "; color: var(--acc); }
+  .hosts { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .h { background: var(--card-2); border-radius: 14px; padding: 16px; }
+  .h .n { font-weight: 700; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+  .h .n i { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); display: inline-block; }
+  .h .n i.ok { background: var(--acc); box-shadow: 0 0 10px rgba(198,242,78,.6); } .h .n i.warn { background: #ffcc4d; } .h .n i.bad { background: #ff7a6b; }
+  .h .l { color: var(--muted); font-size: 14px; margin-top: 8px; line-height: 1.5; }
+  .h a { color: var(--acc); font-size: 14px; }
+  a.h.hl { display: block; color: inherit; text-decoration: none; transition: border-color .2s, transform .2s; border: 1px solid transparent; } a.h.hl:hover { border-color: var(--acc); transform: translateY(-2px); }
+  .hosts.compact { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); } .hosts.compact .h { padding: 12px 14px; } .hosts.compact .n { font-size: 16px; } .hosts.compact .l { font-size: 13px; margin-top: 4px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .chk { margin: 0; padding-left: 20px; color: var(--muted); } .chk li { margin: 6px 0; } .chk b { color: var(--text); }
+  details.qa { border-bottom: 1px solid var(--line); padding: 14px 0; } details.qa summary { cursor: pointer; font-weight: 600; font-size: 17px; } details.qa p { color: var(--muted); margin: 10px 0 0; }
+  @media (max-width: 720px) { .pts, .grid2 { grid-template-columns: 1fr; } .pq { flex-direction: column; } .pq button { padding: 14px; } .verdict .ic { font-size: 32px; } }
+</style>
+<style>
+  .hs { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; align-items: stretch; }
+  .big { display: flex; gap: 16px; align-items: center; } .big .dotb { width: 22px; height: 22px; border-radius: 50%; background: var(--muted); flex: none; }
+  .dotb.ok { background: var(--acc); box-shadow: 0 0 18px rgba(198,242,78,.7); } .dotb.warn { background: #ffcc4d; box-shadow: 0 0 18px rgba(255,204,77,.6); } .dotb.bad { background: #ff7a6b; box-shadow: 0 0 18px rgba(255,122,107,.6); }
+  .big b { font-size: clamp(24px, 3.4vw, 34px); letter-spacing: -.02em; }
+  .rows { margin-top: 16px; display: grid; gap: 10px; } .row { display: flex; justify-content: space-between; gap: 14px; padding: 12px 14px; background: var(--card-2); border-radius: 12px; font-size: 15px; }
+  .row span:first-child { color: var(--muted); } .row .g { color: var(--acc); } .row .y { color: #ffcc4d; } .row .r { color: #ff7a6b; }
+  .strip { display: flex; gap: 2px; height: 34px; align-items: stretch; margin-top: 10px; } .strip i { flex: 1; border-radius: 2px; background: var(--card-2); }
+  .strip i.o { background: rgba(198,242,78,.75); } .strip i.w { background: #ffcc4d; } .strip i.d { background: #ff7a6b; }
+  .strip-l { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; margin-top: 6px; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 14px; } .tabs button { background: var(--card-2); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; font-size: 14px; }
+  .tabs button.on { border-color: var(--acc); color: var(--acc); }
+  .ad { font-size: 12px; color: var(--muted); }
+  .facts2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  @media (max-width: 720px) { .hs { grid-template-columns: 1fr; } }
+</style>
+<style>
+  .seo { padding: 30px 34px; } .seo h2 { font-size: clamp(21px, 2.4vw, 26px); margin: 28px 0 10px; letter-spacing: -.01em; } .seo h2:first-child { margin-top: 0; }
+  .seo p, .seo li { color: #cfd3cf; font-size: 16.5px; line-height: 1.65; max-width: 48em; } .seo b { color: var(--text); }
+  .seo ul, .seo ol { padding-left: 22px; } .seo li { margin: 6px 0; }
+  .fig { margin: 22px 0 8px; } .fig figcaption { color: var(--muted); font-size: 13.5px; margin-top: 8px; text-align: center; }
+  @media (max-width: 720px) { .seo { padding: 22px 18px; } }
+</style>
+</head>
+<body>
+<!--HDR:START--><header class="hdr"><div class="wrap">
+  <a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a>
+  <nav class="nav" aria-label="Основное меню"><a href="/proverka-sajta/" aria-current="page"><svg class="nav-ic nav-ic-acc" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>Проверка<span class="nav-x"> сайта</span></a><a href="/vosstanovlenie-sajta/"><svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Восстановление<span class="nav-x"> сайтов</span></a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/beget/">Статус Beget</a><a href="/beget/server/"><svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг<span class="nav-x"> серверов</span></a><a class="nav-cta" href="/contact/" data-goal="cta_menu">Обсудить идею →</a></nav>
+  <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
+  <button class="srch-btn" type="button" aria-label="Поиск по сайту" data-search><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 16.5 21 21M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg></button>
+  <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
+</div></header><!--HDR:END-->
+<main class="pw">
+  <span class="live"><span class="dot"></span>27 хостингов и облаков + Beget · из России без VPN · каждые 30 минут</span>
+  <h1>Проверка хостингов: какой хостинг не работает сейчас</h1>
+  <p class="lead">Мониторинг хостингов из России без VPN: раз в 30 минут открываем панели управления, опрашиваем DNS-серверы и проверяем сайты клиентов — как обычный посетитель. Сначала — хостинги со сбоями.</p>
+  <div class="card"><h2>Не открывается ваш сайт?</h2><p class="sub">Хостинг может работать, а сайт — нет. Проверим ваш адрес из России без VPN и из-за рубежа и подскажем, как исправить.</p>
+    <form class="pq" data-pv="/proverka-sajta/" onsubmit="event.preventDefault();var v=this.q.value.trim();if(v)location.href=this.dataset.pv+'#'+encodeURIComponent(v);"><input name="q" type="text" inputmode="url" placeholder="Адрес сайта, например mysite.ru" aria-label="Адрес сайта" required><button class="btn btn-acc" type="submit">Проверить без VPN</button></form></div>
+  <div class="card"><div class="tabs" id="tabs"><button class="on" data-t="all">Все</button><button data-t="host">Хостинг</button><button data-t="cloud">Облака и VPS</button><button data-t="bad">Со сбоями</button></div>
+    <p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all"></div></div>
+  <div class="card cta"><div><h2>🔔 Узнавайте первым, когда сайт упал или заработал</h2><p>Бесплатный бот @rebornlab_bot проверяет ваш сайт каждые 10 минут и сразу пишет в Telegram. Без рекламы и регистрации.</p></div><a class="btn btn-acc" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="hosting_bot">Открыть бота</a></div>
+  <article class="card seo"><h2>Что мы проверяем у хостинга</h2>
+<p>Раз в 30 минут с сервера в России, без VPN, мы делаем три вещи: открываем <b>панель управления</b> хостинга, опрашиваем его <b>DNS-серверы</b> (те, что указаны у доменов клиентов) и открываем <b>выборку реальных сайтов</b>, которые на нём работают. Цвет в списке — итог последней проверки: зелёный — всё отвечает, жёлтый — частичный сбой, красный — сбой.</p><figure class="fig"><svg viewBox="0 0 980 378" role="img" aria-label="Как устроен мониторинг хостингов" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c6f24e"/></marker></defs>
+<rect x="1" y="1" width="978" height="376" rx="18" fill="#0f1113" stroke="rgba(237,235,230,.08)"/>
+<rect x="28" y="145.0" width="230" height="88" rx="14" fill="#16181b" stroke="#c6f24e" stroke-opacity=".6"/>
+<text x="143" y="181.0" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="17" font-weight="700" fill="#edebe6">Сервер в России</text>
+<text x="143" y="207.0" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="13.5" fill="#9a9890">без VPN · каждые 30 мин</text>
+<rect x="722" y="145.0" width="230" height="88" rx="14" fill="#16181b" stroke="#c6f24e" stroke-opacity=".6"/>
+<text x="837" y="181.0" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="17" font-weight="700" fill="#edebe6">Статус и история</text>
+<text x="837" y="207.0" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="13.5" fill="#9a9890">на сайте и в боте</text>
+<path d="M258 189.0 C 300 189.0, 300 104, 340 104" fill="none" stroke="#c6f24e" stroke-opacity=".7" stroke-width="2" marker-end="url(#ar)"/>
+<rect x="346" y="78" width="300" height="52" rx="12" fill="#16181b" stroke="rgba(237,235,230,.12)"/>
+<circle cx="368" cy="104" r="6" fill="#c6f24e"/>
+<text x="384" y="100" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="15" font-weight="600" fill="#edebe6">Панели управления</text>
+<text x="384" y="119" font-family="SF Mono,Menlo,monospace" font-size="11.5" fill="#9a9890">27 хостингов и облаков</text>
+<path d="M646 104 C 686 104, 686 189.0, 716 189.0" fill="none" stroke="#c6f24e" stroke-opacity=".45" stroke-width="2" marker-end="url(#ar)"/>
+<path d="M258 189.0 C 300 189.0, 300 190, 340 190" fill="none" stroke="#c6f24e" stroke-opacity=".7" stroke-width="2" marker-end="url(#ar)"/>
+<rect x="346" y="164" width="300" height="52" rx="12" fill="#16181b" stroke="rgba(237,235,230,.12)"/>
+<circle cx="368" cy="190" r="6" fill="#c6f24e"/>
+<text x="384" y="186" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="15" font-weight="600" fill="#edebe6">DNS-серверы</text>
+<text x="384" y="205" font-family="SF Mono,Menlo,monospace" font-size="11.5" fill="#9a9890">серверы доменов клиентов</text>
+<path d="M646 190 C 686 190, 686 189.0, 716 189.0" fill="none" stroke="#c6f24e" stroke-opacity=".45" stroke-width="2" marker-end="url(#ar)"/>
+<path d="M258 189.0 C 300 189.0, 300 276, 340 276" fill="none" stroke="#c6f24e" stroke-opacity=".7" stroke-width="2" marker-end="url(#ar)"/>
+<rect x="346" y="250" width="300" height="52" rx="12" fill="#16181b" stroke="rgba(237,235,230,.12)"/>
+<circle cx="368" cy="276" r="6" fill="#c6f24e"/>
+<text x="384" y="272" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="15" font-weight="600" fill="#edebe6">Сайты клиентов</text>
+<text x="384" y="291" font-family="SF Mono,Menlo,monospace" font-size="11.5" fill="#9a9890">выборка реальных сайтов</text>
+<path d="M646 276 C 686 276, 686 189.0, 716 189.0" fill="none" stroke="#c6f24e" stroke-opacity=".45" stroke-width="2" marker-end="url(#ar)"/>
+<text x="490" y="360" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,Arial" font-size="12.5" fill="#6a6862">Независимый мониторинг REBORN LAB · Beget — отдельный, каждые 15 минут</text>
+</svg><figcaption>Схема: что мы проверяем у каждого хостинга</figcaption></figure><h2>Хостинг или ваш сайт: как понять</h2>
+<ul><li>Хостинг зелёный, а ваш сайт не открывается — дело в сайте: ошибка, сертификат, версия PHP, привязка домена. Проверьте сайт — покажем, что именно.</li><li>Хостинг жёлтый или красный — сбой на стороне хостинга, правки на сайте не помогут: ждите и следите за статусом.</li><li>Не открывается только панель, а сайты работают — сбой затронул панель, сайты и почта продолжают работать.</li></ul>
+<h2>Почему без VPN</h2>
+<p>Посетители сайтов в основном заходят без VPN. С включённым VPN можно увидеть работающий сайт там, где у людей ошибка, — и наоборот. Поэтому все проверки идут с российского сервера без VPN, как у обычного посетителя.</p>
+<h2>Что делать, если хостинг не работает</h2>
+<ol><li>Откройте страницу своего хостинга в списке — там видно, что именно не отвечает и с какого времени.</li><li>Проверьте свой сайт: возможно, он работает, несмотря на сбой панели.</li><li>Если есть своя копия сайта — его можно поднять у другого хостинга, не дожидаясь восстановления.</li><li>Напишите в поддержку хостинга: время сбоя и что не работает.</li></ol>
+<h2>Как узнать о сбое первым</h2>
+<p>Добавьте свой сайт в бесплатного бота @rebornlab_bot. Он проверяет сайт каждые 10 минут на любом хостинге и сразу пишет в Telegram, когда сайт упал или заработал.</p></article>
+  <div class="card"><h2>Вопросы</h2><details class="qa"><summary>Как узнать, какой хостинг сейчас не работает?</summary><p>Посмотрите список выше: хостинги со сбоями стоят первыми. Цвет — итог последней проверки: панель управления, DNS-серверы и выборка сайтов клиентов, открываем всё из России без VPN.</p></details><details class="qa"><summary>Хостинг работает, а мой сайт — нет. Почему?</summary><p>Статус хостинга не гарантирует работу каждого сайта: сайт может не открываться из-за своей ошибки, сертификата, версии PHP или привязки домена. Проверьте свой сайт — покажем, в чём дело и как исправить.</p></details><details class="qa"><summary>Почему важно проверять без VPN?</summary><p>Большинство посетителей открывают сайты без VPN. С VPN сайт может открываться, а у людей — нет (и наоборот). Мы проверяем из России без VPN, а проверка сайта дополнительно показывает, открывается ли он из-за рубежа.</p></details><details class="qa"><summary>Как часто обновляются данные?</summary><p>Каждые 30 минут. Beget — отдельно, подробный мониторинг каждые 15 минут на странице rebornlab.ru/beget/.</p></details></div>
+  <p class="hint">Мы не связаны с хостингами из списка. Ответ панели и DNS не гарантирует работу всех сайтов и услуг хостинга.</p>
+</main>
+<footer class="ftr"><div class="wrap">
+  <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© 2026 REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a><a href="/oferta/">Публичная оферта</a></div></div>
+  <div><a href="/#uslugi">Услуги</a><a href="/vosstanovlenie-sajta/">Восстановление сайтов</a><a href="/proverka-sajta/">Проверка сайта без VPN</a><a href="/hosting/">Мониторинг хостингов</a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/contact/">Контакты</a></div>
+  <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
+</div></footer>
+<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
+<script src="/assets/main.js?v=c0c4eee5" defer></script>
+<script>
+(function () {
+  var HB = '/hosting/', TYPES = {"regru": "host", "timeweb": "host", "spaceweb": "host", "ru-center": "host", "jino": "host", "sprinthost": "host", "hostland": "host", "mchost": "host", "majordomo": "host", "ihc": "host", "netangels": "host", "masterhost": "host", "ruweb": "host", "tilda": "host", "selectel": "cloud", "yandex-cloud": "cloud", "vk-cloud": "cloud", "cloud-ru": "cloud", "serverspace": "cloud", "firstvds": "cloud", "vdsina": "cloud", "adminvps": "cloud", "aeza": "cloud", "justhost": "cloud", "fornex": "cloud", "hostkey": "cloud", "4vps": "cloud"}, H = null, T = 'all', BG = null;
+  fetch('https://api.rebornlab.ru/beget.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (b) { var p = Math.round(100 * b.sites_up / b.sites_total); BG = {p: p, c: p > 85 ? 'ok' : p > 30 ? 'warn' : 'bad'}; draw(); }).catch(function () {});
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+  function draw() {
+    if (!H) return;
+    var ks = Object.keys(H.providers), rank = {down: 0, warn: 1, ok: 2};
+    ks.sort(function (a, b) { return rank[H.providers[a].level] - rank[H.providers[b].level]; });
+    var cards = ks.filter(function (k) { var x = H.providers[k]; return T === 'all' || (T === 'bad' ? x.level !== 'ok' : TYPES[k] === T); }).map(function (k) {
+      var x = H.providers[k], c = x.level === 'ok' ? 'ok' : x.level === 'warn' ? 'warn' : 'bad', d = [];
+      d.push('панель ' + (x.panel ? 'открывается' : '<b style="color:#ff7a6b">не открывается</b>'));
+      if (x.dns_total) d.push('DNS ' + x.dns_ok + '/' + x.dns_total);
+      if (x.sites_total >= 3) d.push('сайтов ' + x.sites_ok + '/' + x.sites_total);
+      return '<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + c + '"></i>' + esc(x.name) + '</div><div class="l">' + esc(x.type || '') + ' · ' + (c === 'ok' ? 'работает' : c === 'warn' ? 'частичные сбои' : 'сбой') + '<br>' + d.join(' · ') + '</div></a>';
+    });
+    if (BG && (T === 'all' || T === 'host' || (T === 'bad' && BG.c !== 'ok'))) cards.unshift('<a class="h hl" href="/beget/"><div class="n"><i class="' + BG.c + '"></i>Beget</div><div class="l">Хостинг · ' + (BG.c === 'ok' ? 'работает' : BG.c === 'warn' ? 'частичные сбои' : 'серьёзный сбой') + '<br>сайтов из выборки открывается ' + BG.p + '% · подробный мониторинг</div></a>');
+    document.getElementById('all').innerHTML = cards.join('') || '<div class="h"><div class="l">Сбоев сейчас нет 🎉</div></div>';
+  }
+  [].forEach.call(document.querySelectorAll('#tabs button'), function (b) { b.addEventListener('click', function () { T = b.dataset.t; [].forEach.call(document.querySelectorAll('#tabs button'), function (x) { x.className = x === b ? 'on' : ''; }); draw(); }); });
+  fetch('/hm/status.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (h) {
+    H = h; var bad = Object.keys(h.providers).filter(function (k) { return h.providers[k].level !== 'ok'; }).length;
+    document.getElementById('hupd').textContent = 'Проверено в ' + new Date(h.updated * 1000).toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit'}) + ' МСК · со сбоями сейчас: ' + bad + ' (без учёта Beget) · нажмите на хостинг — подробности и история';
+    draw();
+  }).catch(function () {});
+})();
+</script>
+</body>
+</html>
