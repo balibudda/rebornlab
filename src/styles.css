@@ -499,3 +499,6 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 
 /* 12.11: «Поделиться страницей» в подвале */
 .ftr .wrap.ftr-sh{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-bottom:22px;margin-bottom:26px;border-bottom:1px solid var(--line)}.ftr-sh b{margin-right:6px;font-weight:600;color:var(--text);width:auto}.ftr .ftr-sh a.btn-sh,.ftr .ftr-sh button.btn-sh{display:inline-block;margin:0;width:auto;color:var(--muted);font-size:14px;padding:8px 15px}.ftr .ftr-sh .btn-sh:hover{color:var(--acc);border-color:var(--acc)}@media (max-width:600px){.ftr-sh b{width:100%;margin-bottom:2px}}
+
+/* 12.11: на узкой шапке два «Мониторинг» не путаем — у Бегета короткая подпись «Серверы Бегет» */
+.nav-s{display:none}@media (max-width:1280px){.nav .nav-s{display:inline}}
