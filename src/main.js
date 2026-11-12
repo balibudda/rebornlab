@@ -362,9 +362,9 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   function b64(v) { return btoa(unescape(encodeURIComponent(v))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '').slice(0, 62) }
   function ago(t) { var m = Math.max(0, Math.round((Date.now() / 1000 - t) / 60)); return m < 1 ? 'только что' : m < 60 ? m + ' мин' : m < 1440 ? Math.round(m / 60) + ' ч' : Math.round(m / 1440) + ' дн' }
   var KIND = {site: 'сайт', ip: 'сервер', net: 'подсеть'}
-  function feed() {   // лента — из бота: последние 10 подписок, адреса скрыты (bos•••••s.ru) — как в ленте проверок
+  function feed() {   // лента — из бота: последние 27 подписок, адреса скрыты (bos•••••s.ru) — как в ленте проверок
     fetch('https://api.rebornlab.ru/watch-feed.json', {cache: 'no-store'}).then(function (r) { return r.json() }).then(function (f) {
-      var html = (f.items || []).slice(0, 10).map(function (x) {
+      var html = (f.items || []).slice(0, 27).map(function (x) {
         var c = x.up === true ? 'ok' : x.up === false ? 'bad' : 'wait'
         return '<li><i class="' + c + '"></i><b>' + esc(x.a || KIND[x.k]) + '</b> <span>' + (x.a ? KIND[x.k] + ' · ' : '') + (x.h ? esc(x.h) + ' · ' : '') + ago(x.t) + '</span></li>'
       }).join('') || '<li class="wbx-e">Пока пусто — добавьте первым</li>'
