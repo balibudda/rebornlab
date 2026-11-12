@@ -109,7 +109,7 @@ function HEADER(current = '') {
 </div></header>`
 }
 function BEGET_BAR(at = '') {
-  const L = [['/beget/', 'Статус'], ['/beget/vosstanovit/', '♻️ Восстановить сайт'], ['/beget/#news', 'Новости'], ['/beget/voprosy/', '❓ Вопросы и ответы'], ['https://t.me/rebornlab_bot', '🔔 Бот']]   // 07.11: короче — кнопка бота не влезала
+  const L = [['/beget/vosstanovit/', '♻️ Восстановить сайт'], ['/beget/voprosy/', '❓ Вопросы и ответы'], ['https://t.me/rebornlab_bot', '🔔 Бот']]   // 07.11: короче — кнопка бота не влезала
   return `<div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет</span>${L.map(([h, t]) => `<a href="${h}"${h === at ? ' aria-current="page"' : ''}${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${t}</a>`).join('')}</div></div>`
 }
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
