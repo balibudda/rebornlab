@@ -496,3 +496,6 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 
 /* 12.11: заметный значок «Проверка сайта» в меню */
 .nav-ic-acc { color: var(--acc); }
+
+/* 12.11: «Поделиться страницей» в подвале */
+.ftr-sh{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-bottom:22px;margin-bottom:26px;border-bottom:1px solid var(--line)}.ftr-sh b{margin-right:6px;font-weight:600}

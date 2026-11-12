@@ -338,3 +338,18 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     try { history.replaceState(null, '', location.pathname); } catch (e) {}
   }
 })();
+
+// 12.11.2026 (Ник): «Поделиться страницей» в подвале всех страниц. Ссылка — api.rebornlab.ru/s/<путь>: там роботы Telegram/VK/WhatsApp
+// получают превью (до нашего российского сервера Telegram не достаёт), а человек по ссылке сразу попадает на оригинал rebornlab.ru (301).
+;(function () {
+  var box = document.querySelector('[data-pageshare]'); if (!box) return
+  var p = location.pathname
+  if (document.querySelector('.share') || /^\/demo\//.test(p) || location.hostname !== 'rebornlab.ru') { box.remove(); return }   // у статей свой блок
+  var url = 'https://api.rebornlab.ru/s' + p, u = encodeURIComponent(url), t = encodeURIComponent(document.title.replace(/\s+—\s+REBORN LAB$/, ''))
+  var H = {tg: 'https://t.me/share/url?url=' + u + '&text=' + t, vk: 'https://vk.com/share.php?url=' + u + '&title=' + t, wa: 'https://wa.me/?text=' + t + '%20' + u, ok: 'https://connect.ok.ru/offer?url=' + u + '&title=' + t}
+  box.querySelectorAll('[data-sh]').forEach(function (a) {
+    var k = a.getAttribute('data-sh')
+    if (H[k]) a.href = H[k]
+    else if (k === 'copy') a.onclick = function () { try { navigator.clipboard.writeText(url) } catch (e) {} a.textContent = 'Ссылка скопирована' }
+  })
+})()

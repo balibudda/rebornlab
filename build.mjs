@@ -27,7 +27,8 @@ const isoDT = (p) => (p.time ? `${p.date}T${p.time}:00+03:00` : p.date)
 // 06.11.2026 Ник: во всех новостях о Бегет (Beget) — ссылка на бота
 // 09.11.2026 (Ник): под каждой статьёй — «Поделиться». 10.11: комментарии убраны (Ник: «никто не пишет»)
 const SHARE_COMMENTS = (p) => {
-  const url = `https://rebornlab.ru/journal/${p.slug}/`, u = encodeURIComponent(url), t = encodeURIComponent(p.title)
+  // 12.11 (Ник): делимся через api.rebornlab.ru/s/… — роботы мессенджеров берут там превью (до vpn-ru Telegram не достаёт), люди сразу попадают на оригинал (301)
+  const url = `https://api.rebornlab.ru/s/journal/${p.slug}/`, u = encodeURIComponent(url), t = encodeURIComponent(p.title)
   return `<div class="share" style="margin:40px 0 0;padding:20px 0;border-top:1px solid rgba(255,255,255,.12)"><b style="display:block;margin-bottom:12px">Поделиться статьёй</b>
 <div style="display:flex;flex-wrap:wrap;gap:10px">
 <a class="btn-sh" href="https://t.me/share/url?url=${u}&text=${t}" target="_blank" rel="noopener">Telegram</a>
@@ -148,7 +149,7 @@ ${HEADER(current)}${canonical === '/' || /^\/(beget|journal\/beget)/.test(canoni
 <main>
 ${body}
 </main>
-<footer class="ftr"><div class="wrap">
+<footer class="ftr"><div class="wrap ftr-sh" data-pageshare><b>Поделиться страницей</b><a class="btn-sh" data-sh="tg" target="_blank" rel="noopener">Telegram</a><a class="btn-sh" data-sh="vk" target="_blank" rel="noopener">ВКонтакте</a><a class="btn-sh" data-sh="wa" target="_blank" rel="noopener">WhatsApp</a><a class="btn-sh" data-sh="ok" target="_blank" rel="noopener">Одноклассники</a><button type="button" class="btn-sh" data-sh="copy">Скопировать ссылку</button></div><div class="wrap">
   <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© ${new Date().getFullYear()} REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a>${HAS_SELLER ? '<a href="/oferta/">Публичная оферта</a>' : ''}</div></div>
   <div><a href="/#uslugi">Услуги</a><a href="/vosstanovlenie-sajta/">Восстановление сайтов</a><a href="/proverka-sajta/">Проверка сайта без VPN</a><a href="/hosting/">Мониторинг хостингов</a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/contact/">Контакты</a></div>
   <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="/rss.xml">RSS журнала</a></div>
