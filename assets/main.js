@@ -122,9 +122,13 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   if (agreed) { window.RL_LOAD_METRIKA && window.RL_LOAD_METRIKA(); }
   else if (ck) {
     ck.hidden = false;
+    // 12.11: плашка не должна закрывать кнопки форм — под неё отступ, а при заполнении формы она уезжает наверх и становится маленькой
+    var ckPad = function () { document.body.style.paddingBottom = ck.hidden ? '' : (ck.offsetHeight + 32) + 'px'; };
+    ckPad(); addEventListener('resize', ckPad);
+    document.addEventListener('focusin', function (e) { if (!ck.hidden && e.target.closest && e.target.closest('form') && !e.target.closest('.cookie')) { ck.classList.add('mini'); ckPad(); } });
     document.getElementById('cookie-ok').addEventListener('click', function () {
       try { localStorage.setItem('rl_cookie_ok', '1'); } catch (e) {}
-      ck.hidden = true; window.RL_LOAD_METRIKA && window.RL_LOAD_METRIKA();
+      ck.hidden = true; ckPad(); window.RL_LOAD_METRIKA && window.RL_LOAD_METRIKA();
     });
   }
 

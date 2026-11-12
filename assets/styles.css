@@ -492,3 +492,4 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
   .hdr.open .nav a { padding: 12px 0; font-size: 17px; color: var(--text); }
   .srch-btn { order: 0 !important; margin-left: auto !important; margin-right: -6px !important; }
 }
+.cookie.mini{bottom:auto;top:74px;left:auto;right:12px;max-width:340px;padding:10px 12px;gap:10px}.cookie.mini p{font-size:12px}.cookie.mini .btn{padding:8px 14px}

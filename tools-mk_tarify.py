@@ -70,7 +70,7 @@ style = src[src.index('<style>'):style_end].replace('</style>', '''
   .plan .pick:hover { background: var(--acc); color: #111; }
   .tform select { -webkit-appearance: none; appearance: none; text-align: left; text-align-last: left; width: 100%; font: inherit; line-height: 1.3; padding: 12px 40px 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c6f24e' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat right 14px center; color: var(--fg); cursor: pointer; }
   .tform .agree { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); margin: 0 0 14px; } .tform .agree a { color: var(--acc); }
-  .tform.need-agree .agree { color: #ff9b9b; } .tmsg { margin: 10px 0 0; font-size: 14px; }
+  .tform.need-agree .agree { color: #ff9b9b; } .tform.need-agree .agree input { outline: 2px solid #ff9b9b; outline-offset: 2px; } .tmsg { margin: 12px 0 0; font-size: 15px; font-weight: 600; color: #ff9b9b; } .tmsg:empty { display: none; }
   @media (max-width: 600px) { .tgrid { grid-template-columns: 1fr; } }
 </style>''')
 seg = src[style_end:src.index('<!--HDR:START-->')]
