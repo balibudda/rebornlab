@@ -194,7 +194,9 @@ const JDIR = path.join(ROOT, 'content', 'journal')
 const POSTS = (existsSync(JDIR) ? readdirSync(JDIR).filter((f) => f.endsWith('.md')) : []).map((f) => {
   const { meta, body } = frontMatter(readFileSync(path.join(JDIR, f), 'utf8'))
   const slug = meta.slug || f.replace(/\.md$/, '')
-  const img = existsSync(path.join(ROOT, 'src/assets/journal', slug + '.jpg')) ? `/assets/journal/${slug}.jpg` : ''   // 06.11: обложка статьи
+  const imgF = path.join(ROOT, 'src/assets/journal', slug + '.jpg')
+  // 06.11: обложка статьи. 12.11: + ?v=<хеш файла> — браузеры и мессенджеры держат картинку 7 дней; новая обложка видна сразу, адрес статьи тот же
+  const img = existsSync(imgF) ? `/assets/journal/${slug}.jpg?v=${createHash('md5').update(readFileSync(imgF)).digest('hex').slice(0, 8)}` : ''
   return { ...meta, slug, image: meta.image || img, html: md(body), words: body.split(/\s+/).length }
 }).filter((p) => p.date <= new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10) && p.draft !== 'true').sort((a, b) => (isoDT(a) < isoDT(b) ? 1 : -1))   // 11.11: дата статьи — по Москве (было по UTC: статьи после 00:00 МСК прятались до 03:00); сортировка — новые сверху (комментарий не ставить перед .sort!)
 const postCard = (p) => `<a class="post rv" href="/journal/${p.slug}/">${p.image ? `<img src="${p.image}" alt="" loading="lazy" width="1200" height="630" style="display:block;width:100%;height:auto;border-radius:12px;margin:0 0 14px">` : ''}<div class="meta">${esc(JOURNAL_CATEGORIES[p.category] || p.category)} · ${ruDT(p)}</div><h3>${esc(p.title)}</h3><p>${esc(p.description)}</p></a>`
