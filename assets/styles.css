@@ -502,3 +502,18 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 
 /* 12.11: на узкой шапке два «Мониторинг» не путаем — у Бегета короткая подпись «Серверы Бегет» */
 .nav-s{display:none}@media (max-width:1280px){.nav .nav-s{display:inline}}
+
+/* 12.11: «Добавить в мониторинг» (блок [data-watch]) */
+.wbx{border:1px solid rgba(198,242,78,.45);background:var(--card,#121417);border-radius:var(--r-lg,18px);padding:22px 24px}.wbx h2{margin:0 0 6px;font-size:22px;letter-spacing:-.01em}.wbx .sub{color:var(--muted);margin:0 0 14px;font-size:15.5px;max-width:52em}
+.wbx-f{display:flex;gap:10px;max-width:760px}.wbx-f input{flex:1;min-width:0;font-size:17px;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--card-2,#16181b);color:var(--text)}
+.wbx-f input:focus{outline:none;border-color:var(--acc)}.wbx-f .btn{white-space:nowrap}
+.wbx-r{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--card-2,#16181b);font-size:15px}.wbx-r.ok{border:1px solid rgba(198,242,78,.4)}.wbx-r.bad{border:1px solid rgba(255,122,107,.45)}
+.wbx-r a{color:var(--acc)}.wbx-bot{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:10px}.wbx-bot span{color:var(--muted)}.wbx-bot .btn{color:#0b0c0e}
+.wbx-how{margin-top:12px}.wbx-how summary{cursor:pointer;color:var(--muted);font-size:14.5px}.wbx-how ul{color:var(--muted);font-size:14.5px;padding-left:20px}.wbx-how li{margin:6px 0}.wbx-how b{color:var(--text)}.wbx-how a{color:var(--acc)}
+.wbx-feed{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}.wbx-ft{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.wbx-ft .dot{width:8px;height:8px;border-radius:50%;background:var(--acc);display:inline-block}
+.wbx-feed ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px 18px}
+.wbx-feed li{font-size:14px;display:flex;align-items:center;gap:8px;padding:4px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wbx-feed li span{color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.wbx-feed i{width:8px;height:8px;border-radius:50%;flex:none;background:var(--muted)}.wbx-feed i.ok{background:var(--acc)}.wbx-feed i.bad{background:#ff7a6b}.wbx-feed i.wait{background:#ffcc4d}
+@media (max-width:600px){.wbx-f{flex-direction:column}}
+.wbx-home{margin:14px 0 28px}.wbx-home .wbx{background:rgba(14,16,18,.92);border-radius:18px}

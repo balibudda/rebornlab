@@ -25,7 +25,7 @@
 <meta name="theme-color" content="#08090a">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="alternate" type="application/rss+xml" title="REBORN LAB — Журнал" href="/rss.xml">
-<link rel="stylesheet" href="/assets/styles.css?v=9b3d5d35">
+<link rel="stylesheet" href="/assets/styles.css?v=a81a4eff">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"REBORN LAB","url":"https://rebornlab.ru","logo":"https://rebornlab.ru/assets/logo.png","description":"Цифровая лаборатория: сайты, сервисы, AI и автоматизация под конкретную задачу","sameAs":["https://t.me/Reborn_Lab"]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"REBORN LAB","url":"https://rebornlab.ru","inLanguage":"ru"}</script>
 <script>window.RL_METRIKA=113418511;window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113418511','ym');ym(113418511,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>
@@ -37,13 +37,14 @@
   <a class="hdr-cta" href="/contact/" data-goal="cta_header">Обсудить идею</a>
   <button class="srch-btn" type="button" aria-label="Поиск по сайту" data-search><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 16.5 21 21M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg></button>
   <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
-</div></header><div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет</span><a href="/beget/">Статус</a><a href="/beget/server/">📡 Мониторинг серверов</a><a href="/beget/vosstanovit/">♻️ Восстановить сайт</a><a href="/beget/#news">Новости</a><a href="/beget/voprosy/">❓ Вопросы и ответы</a><a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">🔔 Бот</a></div></div>
+</div></header><div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет</span><a href="/beget/">Статус</a><a href="/beget/vosstanovit/">♻️ Восстановить сайт</a><a href="/beget/#news">Новости</a><a href="/beget/voprosy/">❓ Вопросы и ответы</a><a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">🔔 Бот</a></div></div>
 <main>
 
 <section class="hero" aria-labelledby="h1">
   <canvas id="lab" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="bnow" id="bnow"><div><span class="bnow-t"><i></i>Ситуация с Бегет</span><p id="bnow-p">Живой статус серверов, проверка своего сайта и ответы на вопросы. Бесплатно.</p><form class="bnow-s" data-bnow-s role="search"><input type="search" name="q" placeholder="IP, адрес сайта или вопрос" aria-label="Поиск: сервер, сайт или вопрос о Бегет" autocomplete="off"><button type="submit" class="btn btn-acc">Найти</button></form></div><div class="bnow-a"><a class="btn btn-acc" href="/beget/" data-goal="home_beget">Смотреть статус <span class="arrow">→</span></a><a class="bnow-l" href="/beget/server/" data-goal="home_beget_ip">Проверить свой сервер</a></div></div>
+    <div class="wbx-home"><section class="card wbx" data-watch><div class="wbx-h"><h2>➕ Добавить в мониторинг</h2><p class="sub">Любой сайт, IP сервера или подсеть — на любом хостинге в мире. Проверяем каждые 30 минут из России без VPN. Бесплатно и без регистрации.</p></div><form class="wbx-f" autocomplete="off"><input name="a" type="text" inputmode="url" placeholder="mysite.ru, 45.130.41.12 или 45.130.41.0/24" aria-label="Сайт, IP или подсеть" required><button class="btn btn-acc" type="submit" data-goal="watch_site">Добавить</button></form><div class="wbx-r" hidden></div><details class="wbx-how"><summary>Как узнать IP сервера и что именно мы проверяем?</summary><ul><li><b>Сайт</b> — открываем его как обычный посетитель: открывается ли, нет ли заглушки или ошибки. Сайт попадает в выборку своего хостинга — так статус хостинга точнее.</li><li><b>IP сервера</b> — отвечает ли сервер на портах 443 и 80. IP сайта видно в нашей <a href="/monitoring-saitov/">проверке сайта</a> или командой <code>nslookup mysite.ru</code>.</li><li><b>Подсеть</b> (вида <code>45.130.41.0/24</code>) — отвечают ли её первые серверы: видно, лежит ли вся сеть хостинга.</li><li>Хостинги, которые закрывают наши проверки (Timeweb), добавить нельзя — честно об этом скажем.</li><li>Чтобы узнавать о сбое первым — после добавления подключите бесплатного бота @rebornlab_bot: он пишет в Telegram, когда сайт или сервер упал и заработал.</li></ul></details><div class="wbx-feed"><div class="wbx-ft"><span class="dot"></span>Только что добавили <span data-wtot></span></div><ul data-wfeed><li class="wbx-e">загружаем…</li></ul></div></section></div>
     <div class="kicker">Digital laboratory · идея → система → продукт</div>
     <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
     <p class="sub">Восстанавливаем и переносим сайты, делаем так, чтобы они открывались у всех. Собираем сайты, ботов, автоматизацию и AI под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
@@ -136,6 +137,6 @@
   <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
-<script src="/assets/main.js?v=9b3d5d35" defer></script>
+<script src="/assets/main.js?v=a81a4eff" defer></script>
 </body>
 </html>

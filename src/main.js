@@ -353,3 +353,49 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     else if (k === 'copy') a.onclick = function () { try { navigator.clipboard.writeText(url) } catch (e) {} a.textContent = 'Ссылка скопирована' }
   })
 })()
+
+// 12.11.2026 (Ник): «Добавить в мониторинг» — любой сайт, IP или подсеть; сразу на мониторинг (rebornlab.ru/api/check?watch=…, служба hostcheck),
+// потом мягко — подписка в боте. Лента «только что добавили» — ?feed=1 (адреса частично скрыты). Один блок на /monitoring-saitov/, /hosting/*, главной.
+;(function () {
+  var boxes = document.querySelectorAll('[data-watch]'); if (!boxes.length) return
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c] }) }
+  function b64(v) { return btoa(unescape(encodeURIComponent(v))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '').slice(0, 62) }
+  function ago(t) { var m = Math.max(0, Math.round((Date.now() / 1000 - t) / 60)); return m < 1 ? 'только что' : m < 60 ? m + ' мин назад' : m < 1440 ? Math.round(m / 60) + ' ч назад' : Math.round(m / 1440) + ' дн назад' }
+  var KIND = {site: 'сайт', ip: 'сервер', net: 'подсеть'}
+  function feed() {
+    fetch('/api/check?feed=1', {cache: 'no-store'}).then(function (r) { return r.json() }).then(function (f) {
+      var html = (f.items || []).slice(0, 8).map(function (x) {
+        var c = x.up === true ? 'ok' : x.up === false ? 'bad' : 'wait'
+        return '<li><i class="' + c + '"></i><b>' + esc(x.a) + '</b> <span>' + KIND[x.k] + (x.h ? ' · ' + esc(x.h) : '') + ' · ' + ago(x.t) + '</span></li>'
+      }).join('') || '<li class="wbx-e">Пока пусто — добавьте первым</li>'
+      boxes.forEach(function (b) { var u = b.querySelector('[data-wfeed]'); if (u) u.innerHTML = html; var t = b.querySelector('[data-wtot]'); if (t && f.total) t.textContent = '· на мониторинге ' + f.total })
+    }).catch(function () {})
+  }
+  function add(a, box) {
+    var r = box.querySelector('.wbx-r'); r.hidden = false; r.className = 'wbx-r'; r.innerHTML = 'Добавляем ' + esc(a) + '…'
+    try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'watch_site') } catch (e) {}
+    fetch('/api/check?watch=' + encodeURIComponent(a), {cache: 'no-store'}).then(function (x) { return x.json() }).then(function (j) {
+      if (j.ok) {
+        var bot = 'https://t.me/rebornlab_bot?start=w_' + b64(j.addr)
+        r.className = 'wbx-r ok'
+        r.innerHTML = '✅ <b>' + esc(j.addr) + '</b> ' + (j.already ? 'уже на мониторинге' : 'на мониторинге') + (j.hoster ? ' · хостинг ' + esc(j.hoster) : '') +
+          '. Статус появится в ленте ниже в течение 30 минут.' + (j.key && j.key !== 'beget' ? ' <a href="/hosting/' + esc(j.key) + '/">Статус ' + esc(j.hoster) + ' →</a>' : j.key === 'beget' ? ' <a href="/beget/server/">Мониторинг Бегет →</a>' : '') +
+          '<div class="wbx-bot"><span>Хотите узнавать о сбое первым? Бот напишет в Telegram, когда ' + (j.kind === 'site' ? 'сайт' : 'сервер') + ' упадёт или заработает.</span>' +
+          '<a class="btn btn-acc" href="' + bot + '" target="_blank" rel="noopener" data-goal="watch_bot">🔔 Получать уведомления</a></div>'
+        feed()
+      } else {
+        r.className = 'wbx-r bad'
+        r.innerHTML = j.error === 'blocked' ? '⛔ Это хостинг ' + esc(j.hoster) + ': он закрывает наши проверки, поэтому следить за ним мы не можем.' :
+          j.error === 'nodns' ? 'Не нашли такой домен в DNS — проверьте адрес.' : j.error === 'private' ? 'Это внутренний адрес — проверяем только сайты и серверы в интернете.' :
+          j.error === 'limit' ? 'Слишком много добавлений подряд — подождите несколько минут.' : 'Не похоже на адрес сайта, IP или подсеть. Пример: mysite.ru, 45.130.41.12 или 45.130.41.0/24.'
+      }
+    }).catch(function () { r.className = 'wbx-r bad'; r.textContent = 'Не получилось — попробуйте через минуту.' })
+  }
+  window.RL_WATCH_ADD = function (a) { var b = boxes[0]; if (b) { b.querySelector('input[name=a]').value = a; add(a, b); b.scrollIntoView({behavior: 'smooth', block: 'center'}) } }
+  boxes.forEach(function (box) {
+    var f = box.querySelector('.wbx-f'), h = box.getAttribute('data-host')
+    if (h) f.querySelector('input').placeholder = 'Сайт на ' + h + ' или IP сервера'
+    f.addEventListener('submit', function (e) { e.preventDefault(); var v = f.querySelector('input').value.trim(); if (v) add(v, box) })
+  })
+  feed(); setInterval(feed, 60000)
+})()

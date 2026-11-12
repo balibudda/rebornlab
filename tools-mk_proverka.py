@@ -26,6 +26,9 @@ HOST_LINKS = {'REG.RU': '/go/reg-hosting'}   # 12.11 Ник: «разрешаю 
 AD_NOTE = {'REG.RU': 'партнёрская ссылка'}
 AD_FOOT = {'REG.RU': 'Ссылка «Сайт REG.RU» — партнёрская: если вы купите хостинг по ней, REG.RU заплатит нам вознаграждение. Ничего не скрываем: на результаты мониторинга и проверки это не влияет — статус REG.RU считается так же, как у всех хостингов.'}
 
+# 12.11 (Ник): «Добавить в мониторинг» — любой сайт/IP/подсеть, лента «только что добавили»; логика — src/main.js ([data-watch])
+WATCH_BOX = '<section class="card wbx" data-watch{host}><div class="wbx-h"><h2>➕ Добавить в мониторинг</h2><p class="sub">Любой сайт, IP сервера или подсеть — на любом хостинге в мире. Проверяем каждые 30 минут из России без VPN. Бесплатно и без регистрации.</p></div><form class="wbx-f" autocomplete="off"><input name="a" type="text" inputmode="url" placeholder="mysite.ru, 45.130.41.12 или 45.130.41.0/24" aria-label="Сайт, IP или подсеть" required><button class="btn btn-acc" type="submit" data-goal="watch_site">Добавить</button></form><div class="wbx-r" hidden></div><details class="wbx-how"><summary>Как узнать IP сервера и что именно мы проверяем?</summary><ul><li><b>Сайт</b> — открываем его как обычный посетитель: открывается ли, нет ли заглушки или ошибки. Сайт попадает в выборку своего хостинга — так статус хостинга точнее.</li><li><b>IP сервера</b> — отвечает ли сервер на портах 443 и 80. IP сайта видно в нашей <a href="/monitoring-saitov/">проверке сайта</a> или командой <code>nslookup mysite.ru</code>.</li><li><b>Подсеть</b> (вида <code>45.130.41.0/24</code>) — отвечают ли её первые серверы: видно, лежит ли вся сеть хостинга.</li><li>Хостинги, которые закрывают наши проверки (Timeweb), добавить нельзя — честно об этом скажем.</li><li>Чтобы узнавать о сбое первым — после добавления подключите бесплатного бота @rebornlab_bot: он пишет в Telegram, когда сайт или сервер упал и заработал.</li></ul></details><div class="wbx-feed"><div class="wbx-ft"><span class="dot"></span>Только что добавили <span data-wtot></span></div><ul data-wfeed><li class="wbx-e">загружаем…</li></ul></div></section>'
+
 FAQ = [
     ('Как проверить, на каком хостинге сайт?', 'Введите адрес сайта в поле выше. Мы найдём IP-адрес, на который указывает домен, узнаем, какой сети он принадлежит, и по имени сети и сервера определим хостинг: Beget, Timeweb, REG.RU, SpaceWeb и другие. Если сайт закрыт защитным сервисом или CDN (Cloudflare, DDoS-Guard), мы честно покажем их, а не хостинг: настоящий сервер за ними снаружи не виден.'),
     ('Как проверить доступность сайта?', 'Введите адрес — мы откроем сайт как браузер с двух точек: с сервера в России и с сервера за рубежом. Покажем, отвечает ли он, сколько времени занял ответ и что видит посетитель: сам сайт, заглушку хостинга, ошибку PHP или базы данных. Две точки нужны, чтобы отличить «сайт лежит» от «сайт не открывается только из России или только с VPN».'),
@@ -151,6 +154,7 @@ main = f'''<main class="pw">
     <div id="out"></div>
   </div>
 
+  {WATCH_BOX.replace('{host}', '')}
   <div class="card">
     <h2>Хостинги сейчас <a class="lnk" href="__HB__" style="font-size:15px;font-weight:500;margin-left:8px">все хостинги →</a></h2>
     <p class="sub" id="hupd">Наш независимый мониторинг: панели управления, DNS и выборка реальных сайтов. Не официальные данные хостингов.</p>
@@ -285,7 +289,7 @@ script = r'''<script>
   function cta(d, okNow) {
     return '<div class="card cta"><div><h2>🔔 ' + (okNow ? 'Следить за ' + esc(dshow(d)) : 'Узнать, когда ' + esc(dshow(d)) + ' заработает') + '</h2><p>' +
       (okNow ? 'Бот @rebornlab_bot проверяет сайт каждые 10 минут и сразу напишет в Telegram, если он упадёт, откроется с ошибкой или пропадёт сертификат.' : 'Бот @rebornlab_bot проверяет сайт каждые 10 минут и напишет в Telegram, как только он откроется.') +
-      ' Бесплатно, без рекламы.</p></div><a class="btn btn-acc" href="' + botUrl(d) + '" target="_blank" rel="noopener" data-goal="hc_watch">Следить в боте</a></div>';
+      ' Бесплатно, без рекламы.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn btn-ghost" onclick="window.RL_WATCH_ADD&&RL_WATCH_ADD(\'' + esc(d) + '\')">➕ Добавить в мониторинг</button><a class="btn btn-acc" href="' + botUrl(d) + '" target="_blank" rel="noopener" data-goal="hc_watch">Следить в боте</a></div></div>';
   }
 
   var busy = false;
@@ -587,6 +591,7 @@ for slug, name, typ, panel, ns in HOSTS:
   </div>
   <div class="card"><h2>Проверить свой сайт на {name}</h2><p class="sub">Статус хостинга и вашего сайта могут отличаться. Проверим из России без VPN и из-за рубежа, покажем ошибку и как её исправить.</p>
     {CHECK_FORM.format(pv=PV, ph="Адрес сайта на " + name)}</div>
+  {WATCH_BOX.replace('{host}', ' data-host="' + name + '"')}
   <div class="card"><h2>{name}: что мы знаем</h2><div class="facts2">
     <div class="f"><div class="k">Услуга</div><div class="v">{typ}</div></div>
     <div class="f"><div class="k">Панель управления</div><div class="v">{host}</div></div>
@@ -620,6 +625,7 @@ hub_main = f'''<main class="pw">
   <p class="lead">Мониторинг хостингов из России без VPN: раз в 30 минут открываем панели управления, опрашиваем DNS-серверы и проверяем сайты клиентов — как обычный посетитель. Сначала — хостинги со сбоями.</p>
   <div class="card"><h2>Не открывается ваш сайт?</h2><p class="sub">Хостинг может работать, а сайт — нет. Проверим ваш адрес из России без VPN и из-за рубежа и подскажем, как исправить.</p>
     {CHECK_FORM.format(pv=PV, ph="Адрес сайта, например mysite.ru")}</div>
+  {WATCH_BOX.replace('{host}', '')}
   <div class="card"><div class="tabs" id="tabs"><button class="on" data-t="all">Все</button><button data-t="host">Хостинг</button><button data-t="cloud">Облака и VPS</button><button data-t="bad">Со сбоями</button></div>
     <p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all"></div></div>
   {BOT_CTA}
