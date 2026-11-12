@@ -93,7 +93,7 @@ const svIcon = (s) => `<svg class="sv-ico" width="28" height="28" viewBox="0 0 2
 const svPains = (s) => s.pains ? `<div class="sv-pain"><b>Если у вас:</b><ul>${s.pains.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''
 const HAS_SELLER = !!SITE.operator   // 10.11: оферта с ФИО самозанятого; ИНН добавится, когда будет   // оферта и данные продавца — только с реквизитами
 // 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
-const NAV = [['/#uslugi', 'Услуги'], ['/journal/', 'Журнал'], ['/about/', 'Обо мне'], ['/beget/', 'Статус Beget'], ['/beget/server/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг серверов']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
+const NAV = [['/#uslugi', 'Услуги'], ['/vosstanovlenie-sajta/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Восстановление сайтов'], ['/journal/', 'Журнал'], ['/about/', 'Обо мне'], ['/beget/', 'Статус Beget'], ['/beget/server/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 12h3l3-7 4 14 3-7h5"/></svg>Мониторинг серверов']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
 
 // 07.11.2026 Ник: одна шапка везде (и на ручных страницах /beget/ — вставляется ниже, при обработке), на страницах о Beget — полоса навигации по теме
 function HEADER(current = '') {
@@ -150,7 +150,7 @@ ${body}
 </main>
 <footer class="ftr"><div class="wrap">
   <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© ${new Date().getFullYear()} REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a>${HAS_SELLER ? '<a href="/oferta/">Публичная оферта</a>' : ''}</div></div>
-  <div><a href="/#uslugi">Услуги</a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/contact/">Контакты</a></div>
+  <div><a href="/#uslugi">Услуги</a><a href="/vosstanovlenie-sajta/">Восстановление сайтов</a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/contact/">Контакты</a></div>
   <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
@@ -306,6 +306,7 @@ for (const s of SERVICES) {
   const related = (x.related || []).map((k) => SERVICES.find((z) => z.slug === k)).filter(Boolean)
   const ctaTop = s.slug === 'site-fix' ? '<a class="btn btn-acc" href="#task" data-goal="cta_service">Обсудить задачу <span class="arrow">→</span></a>'
     : s.slug === 'redesign' ? '<a class="btn btn-acc" href="#task" data-goal="cta_service_demo">Получить бесплатное демо <span class="arrow">→</span></a>'
+    : s.slug === 'site-restore' ? '<a class="btn btn-acc" href="/vosstanovlenie-sajta/" data-goal="cta_restore_tarify">Тарифы и сроки · демо за 2–3 часа <span class="arrow">→</span></a> <a class="btn" href="#task" data-goal="cta_service">Обсудить задачу</a>'
     : '<a class="btn btn-acc" href="#task" data-goal="cta_service">Обсудить задачу <span class="arrow">→</span></a>'
   write(`services/${s.slug}/index.html`, shell({
     title: x.title ? `${x.title} | REBORN LAB` : `${s.seoTitle} — REBORN LAB`,
@@ -538,7 +539,7 @@ const urls = [['/', today, '1.0'], ['/journal/', POSTS[0]?.date || today, '0.8']
     { t: 'Мониторинг серверов Бегет по IP', u: '/beget/server/', d: 'Проверка сервера: включён ли, на каком сервере сайт, имя сервера, очередь восстановления', k: 'Бегет' },
     { t: 'Можно ли восстановить сайт', u: '/beget/vosstanovit/', d: 'Что сохранилось в веб-архиве и Яндекс Картинках', k: 'Бегет' },
     { t: 'Вопросы и ответы', u: '/beget/voprosy/', d: 'Сайт, почта, домен, копии, переезд', k: 'Бегет' },
-    { t: 'Восстановление сайта: цены и сроки', u: '/vosstanovlenie-sajta/', d: 'Варианты и стоимость', k: 'Услуги' },
+    { t: 'Восстановление сайта: тарифы и сроки', u: '/vosstanovlenie-sajta/', d: 'Вернём сайт после сбоя хостинга · демо за 2–3 часа', k: 'Услуги' },
     { t: 'Услуги', u: '/#uslugi', d: 'Сайты, сервисы, AI, автоматизация, SEO', k: 'Услуги' },
     { t: 'Журнал', u: '/journal/', d: 'Разборы, кейсы и инструкции', k: 'Журнал' },
     { t: 'Обо мне', u: '/about/', d: 'Николай Чечельницкий — кто стоит за REBORN LAB', k: 'Страница' },
