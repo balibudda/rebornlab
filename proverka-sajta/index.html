@@ -199,7 +199,7 @@
 <script>
 (function () {
   var RU = '/api/check', AB = 'https://api.rebornlab.ru/check', HB = '/hosting/';
-  var HOST_LINKS = {}, AD_NOTE = {"REG.RU": "Реклама · ООО «Регистратор доменных имён РЕГ.РУ»"};   // партнёрские ссылки через наш домен; AD_NOTE — пометка «Реклама»
+  var HOST_LINKS = {"REG.RU": "/go/reg-hosting"}, AD_NOTE = {"REG.RU": "партнёрская ссылка"};   // партнёрские ссылки через наш домен; AD_NOTE — пометка «Реклама»
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
   function goal(g) { try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', g); } catch (e) {} }
