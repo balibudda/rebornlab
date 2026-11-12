@@ -14,10 +14,16 @@ import json, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).parent
 PUBLISH = len(sys.argv) > 1 and sys.argv[1] == 'publish'
+# 12.11 (Ник): + страницы хостингов. В черновике всё лежит под /demo/draft-proverka/ (закрыто паролем), при публикации — боевые адреса
+PV = '/proverka-dostupnosti-sajta/' if PUBLISH else '/demo/draft-proverka/'
+HB = '/hosting/' if PUBLISH else '/demo/draft-proverka/hosting/'
 URL = 'https://rebornlab.ru/proverka-dostupnosti-sajta/'
-TITLE = 'Проверка сайта на доступность: открывается ли и на каком хостинге — бесплатно'
-DESC = ('Введите адрес сайта — проверим из России и из-за рубежа: открывается ли он, что видит посетитель, на каком хостинге и сервере, '
-        'сертификат, домен и почта. Подскажем, как исправить ошибку, и предупредим в Telegram, когда сайт упадёт или заработает.')
+TITLE = 'Проверка сайта без VPN: открывается ли в России и за рубежом, хостинг, SSL — бесплатно'
+DESC = ('Открывается ли сайт без VPN? Проверим из России и из-за рубежа: что видит посетитель, какая ошибка и как её исправить, '
+        'на каком хостинге и сервере, сертификат, домен и почта. Бесплатно, без регистрации, с уведомлением в Telegram.')
+# партнёрские ссылки — через наш домен (/go/… на vpn-ru → 302 на партнёрку). ⚠️ Перед публикацией — erid (маркировка рекламы)
+HOST_LINKS = {'REG.RU': '/go/reg-hosting'}
+AD_NOTE = {'REG.RU': 'Реклама · ООО «Регистратор доменных имён РЕГ.РУ»'}
 
 FAQ = [
     ('Как проверить, на каком хостинге сайт?', 'Введите адрес сайта в поле выше. Мы найдём IP-адрес, на который указывает домен, узнаем, какой сети он принадлежит, и по имени сети и сервера определим хостинг: Beget, Timeweb, REG.RU, SpaceWeb и другие. Если сайт закрыт защитным сервисом или CDN (Cloudflare, DDoS-Guard), мы честно покажем их, а не хостинг: настоящий сервер за ними снаружи не виден.'),
@@ -54,8 +60,8 @@ head = f'''<!doctype html>
 <meta name="description" content="{DESC}">
 <link rel="canonical" href="{URL}">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<meta property="og:title" content="Проверка сайта: открывается ли и на каком хостинге">
-<meta property="og:description" content="Из России и из-за рубежа, с подсказкой, как исправить ошибку. Бесплатно, без регистрации.">
+<meta property="og:title" content="Открывается ли сайт без VPN? Проверка из России и из-за рубежа">
+<meta property="og:description" content="Что видит посетитель, на каком хостинге сайт, сертификат, домен и почта — и как исправить ошибку. Бесплатно.">
 <meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
 {css_link}
 <script type="application/ld+json">{json.dumps(ld_app, ensure_ascii=False)}</script>
@@ -71,6 +77,9 @@ head = f'''<!doctype html>
   .pq input {{ flex: 1; min-width: 0; font-size: 18px; padding: 16px 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); color: var(--text); }}
   .pq input:focus {{ outline: none; border-color: var(--acc); }}
   .pq button {{ font-size: 17px; padding: 0 26px; white-space: nowrap; }}
+  .gives {{ list-style: none; padding: 0; margin: 18px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 8px 22px; max-width: 980px; }}
+  .gives li {{ color: var(--muted); font-size: 15.5px; padding-left: 26px; position: relative; }} .gives li:before {{ content: "✓"; position: absolute; left: 4px; color: var(--acc); font-weight: 700; }}
+  .gives b {{ color: var(--text); font-weight: 600; }}
   .hint {{ color: var(--muted); font-size: 14px; }} .hint a {{ color: var(--muted); text-decoration: underline dotted; cursor: pointer; }}
   .card {{ background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px 24px; margin: 16px 0; }}
   .card h2 {{ font-size: 22px; margin: 0 0 6px; letter-spacing: -.01em; }} .card .sub {{ color: var(--muted); font-size: 14px; margin: 0 0 14px; }}
@@ -105,6 +114,8 @@ head = f'''<!doctype html>
   .h .n i.ok {{ background: var(--acc); box-shadow: 0 0 10px rgba(198,242,78,.6); }} .h .n i.warn {{ background: #ffcc4d; }} .h .n i.bad {{ background: #ff7a6b; }}
   .h .l {{ color: var(--muted); font-size: 14px; margin-top: 8px; line-height: 1.5; }}
   .h a {{ color: var(--acc); font-size: 14px; }}
+  a.h.hl {{ display: block; color: inherit; text-decoration: none; transition: border-color .2s, transform .2s; border: 1px solid transparent; }} a.h.hl:hover {{ border-color: var(--acc); transform: translateY(-2px); }}
+  .hosts.compact {{ grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }} .hosts.compact .h {{ padding: 12px 14px; }} .hosts.compact .n {{ font-size: 16px; }} .hosts.compact .l {{ font-size: 13px; margin-top: 4px; }}
   .grid2 {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
   .chk {{ margin: 0; padding-left: 20px; color: var(--muted); }} .chk li {{ margin: 6px 0; }} .chk b {{ color: var(--text); }}
   details.qa {{ border-bottom: 1px solid var(--line); padding: 14px 0; }} details.qa summary {{ cursor: pointer; font-weight: 600; font-size: 17px; }} details.qa p {{ color: var(--muted); margin: 10px 0 0; }}
@@ -118,8 +129,15 @@ faq_html = ''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></detai
 
 main = f'''<main class="pw">
   <span class="live"><span class="dot"></span>бесплатно · без регистрации · из России и из-за рубежа</span>
-  <h1>Проверка сайта: открывается ли и на каком хостинге</h1>
-  <p class="lead">Введите адрес — за 10–20 секунд откроем сайт с двух серверов, в России и за рубежом, и покажем, что видит посетитель, где размещён сайт, что с сертификатом, доменом и почтой. Если что-то сломано — подскажем, как исправить.</p>
+  <h1>Открывается ли сайт без VPN? Проверка из России и из-за рубежа</h1>
+  <p class="lead">Введите адрес — за 10–20 секунд откроем сайт как обычный посетитель: с сервера в России без VPN и с сервера за рубежом.</p>
+  <ul class="gives">
+    <li><b>Открывается ли без VPN</b> — в России и из-за границы, время ответа</li>
+    <li><b>Что видит посетитель</b> — сайт, заглушку, ошибку PHP или базы — и как это исправить</li>
+    <li><b>Где размещён сайт</b> — хостинг, сервер, движок и статус хостинга сейчас</li>
+    <li><b>Сертификат, домен и почта</b> — сколько дней осталось, где продлевать, кто принимает письма</li>
+    <li><b>Если сайт лежит</b> — есть ли копия в веб-архиве и как узнать, когда заработает</li>
+  </ul>
   <form class="pq" id="pq" autocomplete="off">
     <input id="q" type="text" inputmode="url" placeholder="Адрес сайта, например mysite.ru" aria-label="Адрес сайта" required>
     <button class="btn btn-acc" type="submit" data-goal="hc_check">Проверить</button>
@@ -133,9 +151,9 @@ main = f'''<main class="pw">
   </div>
 
   <div class="card">
-    <h2>Хостинги сейчас</h2>
+    <h2>Хостинги сейчас <a class="lnk" href="__HB__" style="font-size:15px;font-weight:500;margin-left:8px">все хостинги →</a></h2>
     <p class="sub" id="hupd">Наш независимый мониторинг: панели управления, DNS и выборка реальных сайтов. Не официальные данные хостингов.</p>
-    <div class="hosts" id="hosts"><div class="h"><div class="l">Загружаем…</div></div></div>
+    <div class="hosts compact" id="hosts"><div class="h"><div class="l">Загружаем…</div></div></div>
   </div>
 
   <div class="grid2">
@@ -180,8 +198,8 @@ main = f'''<main class="pw">
 
 script = r'''<script>
 (function () {
-  var RU = '/api/check', AB = 'https://api.rebornlab.ru/check';
-  var HOST_LINKS = {};   // потом (Ник): партнёрские ссылки хостингов {'Timeweb': 'https://…'} — появятся в карточках и результате
+  var RU = '/api/check', AB = 'https://api.rebornlab.ru/check', HB = '__HB__';
+  var HOST_LINKS = __HOST_LINKS__, AD_NOTE = __AD_NOTE__;   // партнёрские ссылки через наш домен; AD_NOTE — пометка «Реклама»
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
   function goal(g) { try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', g); } catch (e) {} }
@@ -237,7 +255,7 @@ script = r'''<script>
   function facts(d, r) {
     var c = r.check || {}, s = r.server || {}, out = [], hl = HOST_LINKS[r.hoster];
     var hv = r.hoster || (s.as_name ? s.as_name.replace(/^AS-?|-AS\b/g, '').split(',')[0] : 'не определили');
-    out.push(['Хостинг', esc(hv) + (hl ? ' · <a href="' + hl + '" target="_blank" rel="noopener sponsored">сайт хостинга</a>' : ''), (s.ip ? 'IP ' + esc(s.ip) : '') + (s.ptr ? ' · ' + esc(s.ptr) : '') + (s.asn ? '<br>сеть AS' + esc(s.asn) + ' ' + esc((s.as_name || '').split(' - ')[0]) : '')]);
+    out.push(['Хостинг', esc(hv) + (r.hoster && HOST_LINKS[r.hoster] ? ' · <a href="' + hl + '" target="_blank" rel="noopener sponsored">сайт хостинга</a> <small style="color:var(--muted);font-weight:400">' + esc(AD_NOTE[r.hoster] || 'Реклама') + '</small>' : ''), (s.ip ? 'IP ' + esc(s.ip) : '') + (s.ptr ? ' · ' + esc(s.ptr) : '') + (s.asn ? '<br>сеть AS' + esc(s.asn) + ' ' + esc((s.as_name || '').split(' - ')[0]) : '')]);
     if (r.beget && r.beget.known) {
       var st = r.beget.state === 'up' ? '🟢 сервер включён' : r.beget.state === 'down' ? '🔴 сервер не отвечает' : 'нет данных';
       out.push(['Сервер Beget', st, 'в его сети отвечают ' + r.beget.net_up + ' из ' + r.beget.net_total + ' · <a href="/beget/server/#' + esc(s.ip) + '">карта сети</a>']);
@@ -307,22 +325,250 @@ script = r'''<script>
     var b = a[0], h = a[1], cards = [];
     if (b) {
       var p = Math.round(100 * b.sites_up / b.sites_total), cls = p > 85 ? 'ok' : p > 30 ? 'warn' : 'bad';   // по сайтам: в сетях много пустых адресов
-      cards.push('<div class="h"><div class="n"><i class="' + cls + '"></i>Beget</div><div class="l">' + (cls === 'ok' ? 'работает штатно' : cls === 'warn' ? 'частичные сбои' : 'серьёзный сбой') + ' · отвечает ' + b.hosting_up_all.toLocaleString('ru-RU') + ' серверов хостинга<br>сайтов из выборки открывается ' + b.sites_up + ' из ' + b.sites_total + ' (' + p + '%)</div><a href="/beget/">подробно →</a></div>');
+      cards.push('<a class="h hl" href="/beget/"><div class="n"><i class="' + cls + '"></i>Beget</div><div class="l">' + (cls === 'ok' ? 'работает' : cls === 'warn' ? 'частичные сбои' : 'серьёзный сбой') + ' · сайтов открывается ' + p + '%</div></a>');
     }
-    if (h && h.providers) Object.keys(h.providers).forEach(function (k) {
-      var x = h.providers[k], cls = x.level === 'ok' ? 'ok' : x.level === 'warn' ? 'warn' : 'bad';
-      cards.push('<div class="h"><div class="n"><i class="' + cls + '"></i>' + esc(x.name) + '</div><div class="l">' + (cls === 'ok' ? 'работает штатно' : cls === 'warn' ? 'частичные сбои' : 'сбой') + ' · панель ' + (x.panel ? 'открывается' : 'не открывается') + ' · DNS ' + x.dns_ok + '/' + x.dns_total + '<br>сайтов из выборки работает ' + x.sites_ok + ' из ' + x.sites_total + '</div>' + (HOST_LINKS[x.name] ? '<a href="' + HOST_LINKS[x.name] + '" target="_blank" rel="noopener sponsored">сайт хостинга →</a>' : '') + '</div>');
-    });
+    if (h && h.providers) {
+      var ks = Object.keys(h.providers), rank = {down: 0, warn: 1, ok: 2};
+      ks.sort(function (a, b2) { return (rank[h.providers[a].level] - rank[h.providers[b2].level]) || 0; });
+      ks.forEach(function (k) {
+        var x = h.providers[k], cls = x.level === 'ok' ? 'ok' : x.level === 'warn' ? 'warn' : 'bad';
+        var sl = x.sites_total >= 3 ? 'сайтов открывается ' + x.sites_ok + ' из ' + x.sites_total : (x.dns_total ? 'DNS ' + x.dns_ok + ' из ' + x.dns_total : 'панель ' + (x.panel ? 'открывается' : 'не открывается'));
+        cards.push('<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + cls + '"></i>' + esc(x.name) + '</div><div class="l">' + (cls === 'ok' ? 'работает' : cls === 'warn' ? 'частичные сбои' : 'сбой') + ' · ' + sl + '</div></a>');
+      });
+    }
     if (cards.length) $('hosts').innerHTML = cards.join('');
     var t = Math.max(b ? b.updated : 0, h ? h.updated : 0);
-    if (t) $('hupd').innerHTML = 'Наш независимый мониторинг: панели управления, DNS и выборка реальных сайтов, обновлено в ' + new Date(t * 1000).toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit'}) + ' МСК. Не официальные данные хостингов. Скоро добавим другие хостинги.';
+    if (t) $('hupd').innerHTML = 'Наш независимый мониторинг: панели управления, DNS и выборка реальных сайтов, обновлено в ' + new Date(t * 1000).toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit'}) + ' МСК. Не официальные данные хостингов. Сначала — хостинги со сбоями.';
   });
 })();
 </script>
 '''
 
+script = script.replace('__HB__', HB).replace('__HOST_LINKS__', json.dumps(HOST_LINKS, ensure_ascii=False)).replace('__AD_NOTE__', json.dumps(AD_NOTE, ensure_ascii=False))
+main = main.replace('__HB__', HB)
 html = head + hdr + '\n' + main + '\n' + foot + mainjs + '\n' + script + '</body>\n</html>\n'
 out = ROOT / ('proverka-dostupnosti-sajta' if PUBLISH else 'demo/draft-proverka') / 'index.html'
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(html)
 print('готово:', out, len(html) // 1024, 'КБ')
+
+# ===================== 12.11: страницы хостингов — /hosting/ и /hosting/<slug>/ =====================
+# Данные — те же, что в мониторинге (tkanimix/server/hostmon/hostmon.py, P): панель и DNS-серверы проверены dig 12.11.
+# Живой статус — /hm/status.json (раз в 30 мин из России без VPN), история 7 дней — полоса «как на статус-страницах».
+HOSTS = [
+    ('regru', 'REG.RU', 'Хостинг и домены', 'https://www.reg.ru/user/account/', ['ns1.reg.ru', 'ns2.reg.ru']),
+    ('timeweb', 'Timeweb', 'Хостинг и облако', 'https://hosting.timeweb.ru/', ['ns1.timeweb.ru', 'ns2.timeweb.ru', 'ns3.timeweb.org', 'ns4.timeweb.org']),
+    ('spaceweb', 'SpaceWeb', 'Хостинг', 'https://cp.sweb.ru/', ['ns1.sweb.ru', 'ns2.sweb.ru', 'ns4.sweb.ru']),
+    ('ru-center', 'RU-CENTER', 'Домены и хостинг', 'https://www.nic.ru/manager/', ['ns3.nic.ru', 'ns4.nic.ru', 'ns8.nic.ru']),
+    ('jino', 'Джино', 'Хостинг', 'https://cp.jino.ru/', ['ns1.jino.ru', 'ns2.jino.ru']),
+    ('sprinthost', 'Sprinthost', 'Хостинг', 'https://cp.sprinthost.ru/', ['ns1.sprinthost.ru', 'ns2.sprinthost.ru']),
+    ('hostland', 'Hostland', 'Хостинг', 'https://panel.hostland.ru/', ['ns.hostland.ru', 'ns3.hostland.ru']),
+    ('mchost', 'Макхост', 'Хостинг', 'https://cp.mchost.ru/', ['ns1.mchost.ru', 'ns2.mchost.ru']),
+    ('majordomo', 'Majordomo', 'Хостинг', 'https://hms.majordomo.ru/', ['ns.majordomo.ru', 'ns2.majordomo.ru', 'ns3.majordomo.ru']),
+    ('ihc', 'IHC', 'Хостинг', 'https://my.ihc.ru/', ['ns1.ihc.ru', 'ns2.ihc.ru']),
+    ('netangels', 'NetAngels', 'Хостинг', 'https://panel.netangels.ru/', ['ns1.netangels.ru', 'ns2.netangels.ru']),
+    ('masterhost', 'Masterhost', 'Хостинг', 'https://cp.masterhost.ru/', ['ns.masterhost.ru', 'ns1.masterhost.ru', 'ns2.masterhost.ru']),
+    ('ruweb', 'RuWeb', 'Хостинг', 'https://ruweb.net/', ['ns1.ruweb.net', 'ns2.ruweb.net']),
+    ('tilda', 'Tilda', 'Конструктор сайтов', 'https://tilda.ru/login/', []),
+    ('selectel', 'Selectel', 'Облако', 'https://my.selectel.ru/', ['ns1.selectel.org', 'ns2.selectel.org', 'ns3.selectel.org', 'ns4.selectel.org']),
+    ('yandex-cloud', 'Yandex Cloud', 'Облако', 'https://console.yandex.cloud/', ['ns1.yandexcloud.net', 'ns2.yandexcloud.net']),
+    ('vk-cloud', 'VK Cloud', 'Облако', 'https://msk.cloud.vk.com/app/', ['ns1.mcs.mail.ru', 'ns2.mcs.mail.ru']),
+    ('cloud-ru', 'Cloud.ru', 'Облако', 'https://console.cloud.ru/', []),
+    ('serverspace', 'Serverspace', 'Облако', 'https://my.serverspace.ru/', []),
+    ('firstvds', 'FirstVDS', 'VPS', 'https://my.firstvds.ru/', ['ns1.firstvds.ru', 'ns2.firstvds.ru']),
+    ('vdsina', 'VDSina', 'VPS', 'https://cp.vdsina.ru/', ['ns1.vdsina.ru', 'ns2.vdsina.ru']),
+    ('adminvps', 'AdminVPS', 'VPS', 'https://my.adminvps.ru/', ['ns1.adminvps.ru', 'ns2.adminvps.ru']),
+    ('aeza', 'Aeza', 'VPS', 'https://my.aeza.net/', []),
+    ('justhost', 'JustHost', 'VPS', 'https://justhost.ru/billing/', ['ns1.justhost.ru', 'ns2.justhost.ru']),
+    ('fornex', 'Fornex', 'VPS и хостинг', 'https://fornex.com/my/', ['ns1.fornex.com', 'ns2.fornex.com']),
+    ('hostkey', 'HOSTKEY', 'Серверы', 'https://invapi.hostkey.com/', ['ns1.hostkey.ru', 'ns2.hostkey.ru']),
+    ('4vps', '4VPS', 'VPS', 'https://4vps.su/account', []),
+]
+NO_SITES = {'timeweb'}   # сайты клиентов не проверяем: хостинг закрывает наши проверки (Ник 11.11)
+style_block = head[head.index('<style>'):head.index('</style>') + 8]
+HCSS = '''<style>
+  .hs {{ display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; align-items: stretch; }}
+  .big {{ display: flex; gap: 16px; align-items: center; }} .big .dotb {{ width: 22px; height: 22px; border-radius: 50%; background: var(--muted); flex: none; }}
+  .dotb.ok {{ background: var(--acc); box-shadow: 0 0 18px rgba(198,242,78,.7); }} .dotb.warn {{ background: #ffcc4d; box-shadow: 0 0 18px rgba(255,204,77,.6); }} .dotb.bad {{ background: #ff7a6b; box-shadow: 0 0 18px rgba(255,122,107,.6); }}
+  .big b {{ font-size: clamp(24px, 3.4vw, 34px); letter-spacing: -.02em; }}
+  .rows {{ margin-top: 16px; display: grid; gap: 10px; }} .row {{ display: flex; justify-content: space-between; gap: 14px; padding: 12px 14px; background: var(--card-2); border-radius: 12px; font-size: 15px; }}
+  .row span:first-child {{ color: var(--muted); }} .row .g {{ color: var(--acc); }} .row .y {{ color: #ffcc4d; }} .row .r {{ color: #ff7a6b; }}
+  .strip {{ display: flex; gap: 2px; height: 34px; align-items: stretch; margin-top: 10px; }} .strip i {{ flex: 1; border-radius: 2px; background: var(--card-2); }}
+  .strip i.o {{ background: rgba(198,242,78,.75); }} .strip i.w {{ background: #ffcc4d; }} .strip i.d {{ background: #ff7a6b; }}
+  .strip-l {{ display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; margin-top: 6px; }}
+  .tabs {{ display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 14px; }} .tabs button {{ background: var(--card-2); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; font-size: 14px; }}
+  .tabs button.on {{ border-color: var(--acc); color: var(--acc); }}
+  .ad {{ font-size: 12px; color: var(--muted); }}
+  .facts2 {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }}
+  @media (max-width: 720px) {{ .hs {{ grid-template-columns: 1fr; }} }}
+</style>'''.replace('{{', '{').replace('}}', '}')
+
+
+def page(title, desc, url, h1, body_main, body_script, lds, og_title=None):
+    robots_ = '' if PUBLISH else '<meta name="robots" content="noindex,nofollow">\n'
+    ldh = ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in lds)
+    return (f'<!doctype html>\n<html lang="ru">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+            f'{robots_}<title>{title}</title>\n<meta name="description" content="{desc}">\n<link rel="canonical" href="https://rebornlab.ru{url}">\n'
+            f'<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">\n<meta property="og:title" content="{og_title or h1}">\n'
+            f'<meta property="og:description" content="{desc}">\n<meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">\n{css_link}\n{ldh}\n'
+            f'{style_block}\n{HCSS}\n</head>\n<body>\n{hdr}\n{body_main}\n{foot}{mainjs}\n{body_script}</body>\n</html>\n')
+
+
+def crumbs(items):
+    return {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
+        {'@type': 'ListItem', 'position': i + 1, 'name': n, 'item': 'https://rebornlab.ru' + u} for i, (n, u) in enumerate(items)]}
+
+
+def faq_ld(f):
+    return {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
+        {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': re.sub(r'<[^>]+>', '', a)}} for q, a in f]}
+
+
+BOT_CTA = ('<div class="card cta"><div><h2>🔔 Узнавайте первым, когда сайт упал или заработал</h2><p>Бесплатный бот @rebornlab_bot '
+           'проверяет ваш сайт каждые 10 минут и сразу пишет в Telegram. Без рекламы и регистрации.</p></div>'
+           '<a class="btn btn-acc" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="hosting_bot">Открыть бота</a></div>')
+CHECK_FORM = ('<form class="pq" data-pv="{pv}" onsubmit="event.preventDefault();var v=this.q.value.trim();if(v)location.href=this.dataset.pv+\'#\'+encodeURIComponent(v);">'
+              '<input name="q" type="text" inputmode="url" placeholder="{ph}" aria-label="Адрес сайта" required>'
+              '<button class="btn btn-acc" type="submit">Проверить без VPN</button></form>')
+
+HOST_JS = r'''<script>
+(function () {
+  var KEY = '__KEY__', HB = '__HB__';
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+  function hm(t) { return new Date(t * 1000).toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit'}); }
+  function pl(n) { var m = n % 10, c = n % 100; return n + ' ' + (m === 1 && c !== 11 ? 'проверка' : m >= 2 && m <= 4 && (c < 12 || c > 14) ? 'проверки' : 'проверок'); }
+  fetch('/hm/status.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (h) {
+    var x = (h.providers || {})[KEY]; if (!x) return;
+    var cls = x.level === 'ok' ? 'ok' : x.level === 'warn' ? 'warn' : 'bad';
+    var word = cls === 'ok' ? 'работает' : cls === 'warn' ? 'частичные сбои' : 'не работает';
+    document.getElementById('st-dot').className = 'dotb ' + cls;
+    document.getElementById('st-w').textContent = x.name + ' ' + word;
+    document.getElementById('st-t').textContent = 'проверено в ' + hm(h.updated) + ' МСК из России, без VPN · обновляется каждые 30 минут';
+    var rows = [];
+    rows.push(['Панель управления', x.panel ? '<span class="g">открывается</span>' : '<span class="r">не открывается</span>']);
+    if (x.dns_total) rows.push(['DNS-серверы для доменов', '<span class="' + (x.dns_ok === x.dns_total ? 'g' : x.dns_ok ? 'y' : 'r') + '">отвечают ' + x.dns_ok + ' из ' + x.dns_total + '</span>']);
+    if (!x.sites_checked) rows.push(['Сайты клиентов', 'не проверяем — хостинг ограничивает наши проверки']);
+    else if (x.sites_total) rows.push(['Сайты клиентов из нашей выборки', '<span class="' + (x.sites_ok / x.sites_total >= .85 ? 'g' : x.sites_ok / x.sites_total >= .5 ? 'y' : 'r') + '">открываются ' + x.sites_ok + ' из ' + x.sites_total + '</span>' + (x.sites_total < 10 ? ' <small style="color:var(--muted)">(выборка мала — статус по ней не решаем)</small>' : '')]);
+    else rows.push(['Сайты клиентов', 'выборка пока собирается — проверьте свой сайт выше']);
+    document.getElementById('st-rows').innerHTML = rows.map(function (r) { return '<div class="row"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>'; }).join('');
+    var hist = (h.history || []).filter(function (p) { return p[KEY]; }).slice(-96), bad = 0;
+    document.getElementById('strip').innerHTML = hist.map(function (p) { var l = p[KEY].l; if (l !== 'o') bad++; return '<i class="' + l + '" title="' + hm(p.t) + ' — ' + (l === 'o' ? 'работает' : l === 'w' ? 'частичные сбои' : 'сбой') + '"></i>'; }).join('');
+    document.getElementById('strip-n').textContent = hist.length ? (bad ? 'сбоев за период: ' + bad + ' из ' + pl(hist.length) : 'сбоев не было — ' + pl(hist.length) + ' подряд') : 'история копится';
+    // другие хостинги: сначала со сбоями
+    var ks = Object.keys(h.providers).filter(function (k) { return k !== KEY; }), rank = {down: 0, warn: 1, ok: 2};
+    ks.sort(function (a, b) { return rank[h.providers[a].level] - rank[h.providers[b].level]; });
+    document.getElementById('others').innerHTML = ks.map(function (k) { var y = h.providers[k], c = y.level === 'ok' ? 'ok' : y.level === 'warn' ? 'warn' : 'bad'; return '<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + c + '"></i>' + esc(y.name) + '</div><div class="l">' + (c === 'ok' ? 'работает' : c === 'warn' ? 'частичные сбои' : 'сбой') + '</div></a>'; }).join('') + '<a class="h hl" href="/beget/"><div class="n"><i></i>Beget</div><div class="l">свой подробный мониторинг</div></a>';
+  }).catch(function () {});
+})();
+</script>
+'''
+
+hub_cards = []
+for slug, name, typ, panel, ns in HOSTS:
+    host = re.sub(r'^https?://', '', panel).split('/')[0]
+    nsl = ', '.join(ns)
+    sites_txt = ('Сайты клиентов этого хостинга мы не проверяем: он ограничивает наши проверки. Поэтому статус — по панели управления и DNS-серверам.'
+                 if slug in NO_SITES else 'Ещё проверяем выборку реальных сайтов, которые работают у этого хостинга: открываются ли они без VPN.')
+    faq = [
+        (f'Как понять, что не работает именно {name}, а не мой сайт?', f'Посмотрите статус выше: если панель {name} открывается, DNS-серверы отвечают и сайты других клиентов открываются — хостинг в целом работает, и дело в конкретном сайте. Проверьте свой сайт в поле на этой странице: покажем, что видит посетитель и какая ошибка, и подскажем, как её исправить.'),
+        (f'Где панель управления {name}?', f'Вход в панель — {host}. Если панель не открывается, а сайты работают, — сбой затронул только панель: сайты и почта обычно продолжают работать.'),
+    ]
+    if ns:
+        faq.append((f'Какие DNS-серверы у {name}?', f'Для доменов на DNS {name} обычно указывают: {nsl}. Мы раз в 30 минут проверяем, что эти серверы отвечают. Если не отвечают все — сайты на таких доменах перестают открываться у новых посетителей.'))
+    faq += [
+        (f'Сайт на {name} не открывается с VPN — почему?', 'Хостинг или защита сайта могут закрывать доступ с зарубежных адресов. Наша проверка сайта показывает обе точки — из России без VPN и из-за рубежа, — так видно, в этом ли дело.'),
+        (f'Как узнать, когда {name} или мой сайт снова заработает?', 'Добавьте сайт в бесплатного бота @rebornlab_bot: он проверяет его каждые 10 минут и сразу пишет в Telegram, когда сайт упадёт или заработает.'),
+    ]
+    ad = ''
+    if name in HOST_LINKS:
+        ad = (f'<p style="margin:14px 0 0"><a class="btn btn-ghost" href="{HOST_LINKS[name]}" target="_blank" rel="noopener sponsored">Сайт {name} →</a> '
+              f'<span class="ad">{AD_NOTE.get(name, "Реклама")}</span></p>')
+    faq_h = ''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in faq)
+    url = f'{HB}{slug}/'
+    h1 = f'Проверка {name}: работает ли {name} сейчас без VPN'   # 12.11 Ник: в H1 — «Проверка», в title — «Мониторинг», в тексте сначала «мониторинг'
+    body = f'''<main class="pw">
+  <span class="live"><span class="dot"></span>мониторинг {name} · {typ.lower()} · из России без VPN</span>
+  <h1>{h1}</h1>
+  <p class="lead">Мониторинг {name} из России без VPN: раз в 30 минут открываем панель управления {name} и опрашиваем его DNS-серверы — как обычный посетитель. {sites_txt}</p>
+  <div class="hs">
+    <div class="card"><div class="big"><span class="dotb" id="st-dot"></span><b id="st-w">Загружаем статус {name}…</b></div>
+      <p class="sub" id="st-t" style="margin:8px 0 0"></p><div class="rows" id="st-rows"></div>{ad}</div>
+    <div class="card"><h2>Последние 48 часов</h2><p class="sub">Каждая полоска — одна проверка. Зелёный — работает, жёлтый — частичные сбои, красный — сбой.</p>
+      <div class="strip" id="strip"></div><div class="strip-l"><span id="strip-n"></span><span>сейчас →</span></div></div>
+  </div>
+  <div class="card"><h2>Проверить свой сайт на {name}</h2><p class="sub">Статус хостинга и вашего сайта могут отличаться. Проверим из России без VPN и из-за рубежа, покажем ошибку и как её исправить.</p>
+    {CHECK_FORM.format(pv=PV, ph="Адрес сайта на " + name)}</div>
+  <div class="card"><h2>{name}: что мы знаем</h2><div class="facts2">
+    <div class="f"><div class="k">Услуга</div><div class="v">{typ}</div></div>
+    <div class="f"><div class="k">Панель управления</div><div class="v">{host}</div></div>
+    {f'<div class="f"><div class="k">DNS для доменов</div><div class="v" style="font-size:15px">{nsl}</div></div>' if ns else ''}
+    <div class="f"><div class="k">Что проверяем</div><div class="v" style="font-size:15px">панель{", DNS" if ns else ""}{"" if slug in NO_SITES else ", сайты клиентов"}</div><div class="d">из России, без VPN, каждые 30 минут</div></div>
+  </div></div>
+  {BOT_CTA}
+  <div class="card"><h2>Вопросы о {name}</h2>{faq_h}</div>
+  <div class="card"><h2>Другие хостинги сейчас <a class="lnk" href="{HB}" style="font-size:15px;font-weight:500;margin-left:8px">все →</a></h2><div class="hosts compact" id="others"></div></div>
+  <p class="hint">Мы не связаны с {name} и не представляем его. Ответ панели и DNS не гарантирует работу всех сайтов и услуг хостинга.</p>
+</main>'''
+    title = f'Мониторинг {name}: не работает {name} сегодня? Статус сейчас без VPN'
+    desc = f'Мониторинг {name}: работает ли {name} прямо сейчас — панель управления{", DNS-серверы" if ns else ""}{"" if slug in NO_SITES else " и сайты клиентов"} — проверка из России без VPN каждые 30 минут. Проверьте свой сайт и получите уведомление в Telegram.'
+    lds = [crumbs([('Главная', '/'), ('Мониторинг хостингов', HB), (name, url)]), faq_ld(faq)]
+    o = ROOT / url.strip('/') / 'index.html'
+    o.parent.mkdir(parents=True, exist_ok=True)
+    o.write_text(page(title, desc, url, h1, body, HOST_JS.replace('__KEY__', slug).replace('__HB__', HB), lds))
+    hub_cards.append((slug, name, typ))
+
+# хаб /hosting/
+hub_faq = [
+    ('Как узнать, какой хостинг сейчас не работает?', 'Посмотрите список выше: хостинги со сбоями стоят первыми. Цвет — итог последней проверки: панель управления, DNS-серверы и выборка сайтов клиентов, открываем всё из России без VPN.'),
+    ('Хостинг работает, а мой сайт — нет. Почему?', 'Статус хостинга не гарантирует работу каждого сайта: сайт может не открываться из-за своей ошибки, сертификата, версии PHP или привязки домена. Проверьте свой сайт — покажем, в чём дело и как исправить.'),
+    ('Почему важно проверять без VPN?', 'Большинство посетителей открывают сайты без VPN. С VPN сайт может открываться, а у людей — нет (и наоборот). Мы проверяем из России без VPN, а проверка сайта дополнительно показывает, открывается ли он из-за рубежа.'),
+    ('Как часто обновляются данные?', 'Каждые 30 минут. Beget — отдельно, подробный мониторинг каждые 15 минут на странице rebornlab.ru/beget/.'),
+]
+hub_main = f'''<main class="pw">
+  <span class="live"><span class="dot"></span>27 хостингов и облаков + Beget · из России без VPN · каждые 30 минут</span>
+  <h1>Проверка хостингов: какой хостинг не работает сейчас</h1>
+  <p class="lead">Мониторинг хостингов из России без VPN: раз в 30 минут открываем панели управления, опрашиваем DNS-серверы и проверяем сайты клиентов — как обычный посетитель. Сначала — хостинги со сбоями.</p>
+  <div class="card"><h2>Не открывается ваш сайт?</h2><p class="sub">Хостинг может работать, а сайт — нет. Проверим ваш адрес из России без VPN и из-за рубежа и подскажем, как исправить.</p>
+    {CHECK_FORM.format(pv=PV, ph="Адрес сайта, например mysite.ru")}</div>
+  <div class="card"><div class="tabs" id="tabs"><button class="on" data-t="all">Все</button><button data-t="host">Хостинг</button><button data-t="cloud">Облака и VPS</button><button data-t="bad">Со сбоями</button></div>
+    <p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all"></div></div>
+  {BOT_CTA}
+  <div class="card"><h2>Вопросы</h2>{''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in hub_faq)}</div>
+  <p class="hint">Мы не связаны с хостингами из списка. Ответ панели и DNS не гарантирует работу всех сайтов и услуг хостинга.</p>
+</main>'''
+TYPES = {s: ('host' if t in ('Хостинг', 'Хостинг и домены', 'Домены и хостинг', 'Хостинг и облако', 'Конструктор сайтов') else 'cloud') for s, n, t in hub_cards}
+hub_js = r'''<script>
+(function () {
+  var HB = '__HB__', TYPES = __TYPES__, H = null, T = 'all', BG = null;
+  fetch('https://api.rebornlab.ru/beget.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (b) { var p = Math.round(100 * b.sites_up / b.sites_total); BG = {p: p, c: p > 85 ? 'ok' : p > 30 ? 'warn' : 'bad'}; draw(); }).catch(function () {});
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+  function draw() {
+    if (!H) return;
+    var ks = Object.keys(H.providers), rank = {down: 0, warn: 1, ok: 2};
+    ks.sort(function (a, b) { return rank[H.providers[a].level] - rank[H.providers[b].level]; });
+    var cards = ks.filter(function (k) { var x = H.providers[k]; return T === 'all' || (T === 'bad' ? x.level !== 'ok' : TYPES[k] === T); }).map(function (k) {
+      var x = H.providers[k], c = x.level === 'ok' ? 'ok' : x.level === 'warn' ? 'warn' : 'bad', d = [];
+      d.push('панель ' + (x.panel ? 'открывается' : '<b style="color:#ff7a6b">не открывается</b>'));
+      if (x.dns_total) d.push('DNS ' + x.dns_ok + '/' + x.dns_total);
+      if (x.sites_total >= 3) d.push('сайтов ' + x.sites_ok + '/' + x.sites_total);
+      return '<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + c + '"></i>' + esc(x.name) + '</div><div class="l">' + esc(x.type || '') + ' · ' + (c === 'ok' ? 'работает' : c === 'warn' ? 'частичные сбои' : 'сбой') + '<br>' + d.join(' · ') + '</div></a>';
+    });
+    if (BG && (T === 'all' || T === 'host' || (T === 'bad' && BG.c !== 'ok'))) cards.unshift('<a class="h hl" href="/beget/"><div class="n"><i class="' + BG.c + '"></i>Beget</div><div class="l">Хостинг · ' + (BG.c === 'ok' ? 'работает' : BG.c === 'warn' ? 'частичные сбои' : 'серьёзный сбой') + '<br>сайтов из выборки открывается ' + BG.p + '% · подробный мониторинг</div></a>');
+    document.getElementById('all').innerHTML = cards.join('') || '<div class="h"><div class="l">Сбоев сейчас нет 🎉</div></div>';
+  }
+  [].forEach.call(document.querySelectorAll('#tabs button'), function (b) { b.addEventListener('click', function () { T = b.dataset.t; [].forEach.call(document.querySelectorAll('#tabs button'), function (x) { x.className = x === b ? 'on' : ''; }); draw(); }); });
+  fetch('/hm/status.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (h) {
+    H = h; var bad = Object.keys(h.providers).filter(function (k) { return h.providers[k].level !== 'ok'; }).length;
+    document.getElementById('hupd').textContent = 'Проверено в ' + new Date(h.updated * 1000).toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit'}) + ' МСК · со сбоями сейчас: ' + bad + ' (без учёта Beget) · нажмите на хостинг — подробности и история';
+    draw();
+  }).catch(function () {});
+})();
+</script>
+'''
+hub_url = HB
+o = ROOT / hub_url.strip('/') / 'index.html'
+o.parent.mkdir(parents=True, exist_ok=True)
+o.write_text(page('Мониторинг хостингов: какой хостинг не работает сейчас — статус без VPN', 'Мониторинг хостингов: работают ли REG.RU, Timeweb, SpaceWeb, Джино, Selectel и ещё 20+ хостингов прямо сейчас: панели, DNS и сайты клиентов — наша проверка из России без VPN каждые 30 минут.', hub_url,
+                  'Проверка хостингов: какой хостинг не работает сейчас', hub_main, hub_js.replace('__HB__', HB).replace('__TYPES__', json.dumps(TYPES)),
+                  [crumbs([('Главная', '/'), ('Мониторинг хостингов', hub_url)]), faq_ld(hub_faq)]))
+print('хостингов:', len(hub_cards), '+ хаб', hub_url)
