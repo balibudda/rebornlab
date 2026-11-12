@@ -360,7 +360,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   var boxes = document.querySelectorAll('[data-watch]'); if (!boxes.length) return
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c] }) }
   function b64(v) { return btoa(unescape(encodeURIComponent(v))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '').slice(0, 62) }
-  function ago(t) { var m = Math.max(0, Math.round((Date.now() / 1000 - t) / 60)); return m < 1 ? 'только что' : m < 60 ? m + ' мин назад' : m < 1440 ? Math.round(m / 60) + ' ч назад' : Math.round(m / 1440) + ' дн назад' }
+  function ago(t) { var m = Math.max(0, Math.round((Date.now() / 1000 - t) / 60)); return m < 1 ? 'только что' : m < 60 ? m + ' мин' : m < 1440 ? Math.round(m / 60) + ' ч' : Math.round(m / 1440) + ' дн' }
   var KIND = {site: 'сайт', ip: 'сервер', net: 'подсеть'}
   function feed() {
     fetch('/api/check?feed=1', {cache: 'no-store'}).then(function (r) { return r.json() }).then(function (f) {
@@ -395,7 +395,12 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   boxes.forEach(function (box) {
     var f = box.querySelector('.wbx-f'), h = box.getAttribute('data-host')
     if (h) f.querySelector('input').placeholder = 'Сайт на ' + h + ' или IP сервера'
-    f.addEventListener('submit', function (e) { e.preventDefault(); var v = f.querySelector('input').value.trim(); if (v) add(v, box) })
+    f.addEventListener('submit', function (e) {   // 12.11: исправляем опечатки сами — «site..com», пробелы, http://, путь
+      e.preventDefault(); var inp = f.querySelector('input')
+      var v = inp.value.trim().toLowerCase().replace(/^[a-z]+:\/\//, '').replace(/\s+/g, '').replace(/,/g, '.').replace(/\.{2,}/g, '.')
+      if (!/\/\d+$/.test(v)) v = v.split('/')[0]
+      v = v.replace(/^\.+|\.+$/g, ''); inp.value = v; if (v) add(v, box)
+    })
   })
   feed(); setInterval(feed, 60000)
 })()
