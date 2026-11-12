@@ -379,7 +379,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     fetch('/api/check?watch=' + encodeURIComponent(a), {cache: 'no-store'}).then(function (x) { return x.json() }).then(function (j) {
       if (j.ok) {
         var n = j.now || {}, st, cls
-        if (j.kind === 'site') { var s0 = STATE[n.kind] || ['bad', 'не открывается']; cls = s0[0]; st = s0[1] + (n.code ? ' · код ' + n.code : '') + (n.ms ? ' · ' + (n.ms / 1000).toFixed(1).replace('.', ',') + ' с' : '') + (n.cert_bad ? ' · сертификат недействителен' : '') }
+        if (j.kind === 'site') { var s0 = STATE[n.kind] || ['bad', 'не открывается']; cls = s0[0]; st = s0[1] + (n.code ? ' · код ' + n.code : '') + (n.ms ? ' · ' + (n.ms / 1000).toFixed(n.ms < 1000 ? 2 : 1).replace('.', ',') + ' с' : '') + (n.cert_bad ? ' · сертификат недействителен' : '') }
         else if (j.kind === 'ip') { cls = n.up ? 'ok' : 'bad'; st = n.up ? 'сервер отвечает (порты 443/80)' : 'сервер не отвечает на портах 443/80' }
         else { cls = n.up ? (n.up >= n.of / 2 ? 'ok' : 'warn') : 'bad'; st = 'отвечают ' + n.up + ' из ' + n.of + ' первых серверов подсети' }
         var ic = cls === 'ok' ? '🟢' : cls === 'warn' ? '🟠' : '🔴', hl = j.hm_level === 'ok' ? 'работает' : j.hm_level === 'warn' ? 'частичные сбои' : j.hm_level === 'down' ? 'сбой' : ''
