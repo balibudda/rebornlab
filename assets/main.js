@@ -362,32 +362,40 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   function b64(v) { return btoa(unescape(encodeURIComponent(v))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '').slice(0, 62) }
   function ago(t) { var m = Math.max(0, Math.round((Date.now() / 1000 - t) / 60)); return m < 1 ? 'только что' : m < 60 ? m + ' мин' : m < 1440 ? Math.round(m / 60) + ' ч' : Math.round(m / 1440) + ' дн' }
   var KIND = {site: 'сайт', ip: 'сервер', net: 'подсеть'}
-  function feed() {
-    fetch('/api/check?feed=1', {cache: 'no-store'}).then(function (r) { return r.json() }).then(function (f) {
-      var html = (f.items || []).slice(0, 8).map(function (x) {
+  function feed() {   // лента — из бота: последние 10 подписок, адреса скрыты (bos•••••s.ru) — как в ленте проверок
+    fetch('https://api.rebornlab.ru/watch-feed.json', {cache: 'no-store'}).then(function (r) { return r.json() }).then(function (f) {
+      var html = (f.items || []).slice(0, 10).map(function (x) {
         var c = x.up === true ? 'ok' : x.up === false ? 'bad' : 'wait'
-        return '<li><i class="' + c + '"></i><b>' + esc(x.a) + '</b> <span>' + KIND[x.k] + (x.h ? ' · ' + esc(x.h) : '') + ' · ' + ago(x.t) + '</span></li>'
+        return '<li><i class="' + c + '"></i><b>' + esc(x.a || KIND[x.k]) + '</b> <span>' + (x.a ? KIND[x.k] + ' · ' : '') + (x.h ? esc(x.h) + ' · ' : '') + ago(x.t) + '</span></li>'
       }).join('') || '<li class="wbx-e">Пока пусто — добавьте первым</li>'
-      boxes.forEach(function (b) { var u = b.querySelector('[data-wfeed]'); if (u) u.innerHTML = html; var t = b.querySelector('[data-wtot]'); if (t && f.total) t.textContent = '· на мониторинге ' + f.total })
+      boxes.forEach(function (b) { var u = b.querySelector('[data-wfeed]'); if (u) u.innerHTML = html; var t = b.querySelector('[data-wtot]'); if (t && f.total) t.textContent = '· всего на слежении ' + Number(f.total).toLocaleString('ru-RU') })
     }).catch(function () {})
   }
+  var STATE = {ok: ['ok', 'открывается'], shield: ['ok', 'открывается (за защитой от ботов)'], unlinked: ['warn', 'заглушка «домен не прилинкован»'], stub: ['warn', 'вместо сайта заглушка'],
+               broken: ['warn', 'открывается с ошибкой PHP'], dberror: ['warn', 'ошибка базы данных'], http_error: ['bad', 'сервер отвечает ошибкой'], down: ['bad', 'не отвечает'], timeout: ['bad', 'не дождались ответа']}
   function add(a, box) {
-    var r = box.querySelector('.wbx-r'); r.hidden = false; r.className = 'wbx-r'; r.innerHTML = 'Добавляем ' + esc(a) + '…'
+    var r = box.querySelector('.wbx-r'); r.hidden = false; r.className = 'wbx-r'; r.innerHTML = '<span class="wbx-spin"></span> Проверяем ' + esc(a) + '…'
     try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'watch_site') } catch (e) {}
     fetch('/api/check?watch=' + encodeURIComponent(a), {cache: 'no-store'}).then(function (x) { return x.json() }).then(function (j) {
       if (j.ok) {
+        var n = j.now || {}, st, cls
+        if (j.kind === 'site') { var s0 = STATE[n.kind] || ['bad', 'не открывается']; cls = s0[0]; st = s0[1] + (n.code ? ' · код ' + n.code : '') + (n.ms ? ' · ' + (n.ms / 1000).toFixed(1).replace('.', ',') + ' с' : '') + (n.cert_bad ? ' · сертификат недействителен' : '') }
+        else if (j.kind === 'ip') { cls = n.up ? 'ok' : 'bad'; st = n.up ? 'сервер отвечает (порты 443/80)' : 'сервер не отвечает на портах 443/80' }
+        else { cls = n.up ? (n.up >= n.of / 2 ? 'ok' : 'warn') : 'bad'; st = 'отвечают ' + n.up + ' из ' + n.of + ' первых серверов подсети' }
+        var ic = cls === 'ok' ? '🟢' : cls === 'warn' ? '🟠' : '🔴', hl = j.hm_level === 'ok' ? 'работает' : j.hm_level === 'warn' ? 'частичные сбои' : j.hm_level === 'down' ? 'сбой' : ''
+        var hostLink = j.key === 'beget' ? '<a href="/beget/server/">мониторинг Beget →</a>' : j.key ? '<a href="/hosting/' + esc(j.key) + '/">статус ' + esc(j.hoster) + (hl ? ': ' + hl : '') + ' →</a>' : ''
         var bot = 'https://t.me/rebornlab_bot?start=w_' + b64(j.addr)
-        r.className = 'wbx-r ok'
-        r.innerHTML = '✅ <b>' + esc(j.addr) + '</b> ' + (j.already ? 'уже на мониторинге' : 'на мониторинге') + (j.hoster ? ' · хостинг ' + esc(j.hoster) : '') +
-          '. Статус появится в ленте ниже в течение 30 минут.' + (j.key && j.key !== 'beget' ? ' <a href="/hosting/' + esc(j.key) + '/">Статус ' + esc(j.hoster) + ' →</a>' : j.key === 'beget' ? ' <a href="/beget/server/">Мониторинг Бегет →</a>' : '') +
-          '<div class="wbx-bot"><span>Хотите узнавать о сбое первым? Бот напишет в Telegram, когда ' + (j.kind === 'site' ? 'сайт' : 'сервер') + ' упадёт или заработает.</span>' +
-          '<a class="btn btn-acc" href="' + bot + '" target="_blank" rel="noopener" data-goal="watch_bot">🔔 Получать уведомления</a></div>'
-        feed()
+        r.className = 'wbx-r ' + (cls === 'ok' ? 'ok' : 'bad')
+        r.innerHTML = '<div class="wbx-now">' + ic + ' <b>' + esc(j.addr) + '</b> — ' + st + '</div>' +
+          '<div class="wbx-meta">' + (j.hoster ? 'Хостинг: ' + esc(j.hoster) : 'Хостинг не определили') + (hostLink ? ' · ' + hostLink : '') +
+          (j.kind === 'site' ? ' · <a href="/monitoring-saitov/#' + encodeURIComponent(j.addr) + '">подробная проверка →</a>' : '') + '</div>' +
+          '<div class="wbx-bot"><span><b>Чтобы следить постоянно</b> — откройте бота: адрес сразу будет в вашем списке, проверка каждые 10 минут, сообщение в Telegram при сбое и восстановлении. Бесплатно, до 10 адресов.</span>' +
+          '<a class="btn btn-acc" href="' + bot + '" target="_blank" rel="noopener" data-goal="watch_bot">🔔 Следить в боте</a></div>'
       } else {
         r.className = 'wbx-r bad'
         r.innerHTML = j.error === 'blocked' ? '⛔ Это хостинг ' + esc(j.hoster) + ': он закрывает наши проверки, поэтому следить за ним мы не можем.' :
           j.error === 'nodns' ? 'Не нашли такой домен в DNS — проверьте адрес.' : j.error === 'private' ? 'Это внутренний адрес — проверяем только сайты и серверы в интернете.' :
-          j.error === 'limit' ? 'Слишком много добавлений подряд — подождите несколько минут.' : 'Не похоже на адрес сайта, IP или подсеть. Пример: mysite.ru, 45.130.41.12 или 45.130.41.0/24.'
+          j.error === 'limit' ? 'Слишком много проверок подряд — подождите несколько минут.' : 'Не похоже на адрес сайта, IP или подсеть. Пример: mysite.ru, 45.130.41.12 или 45.130.41.0/24.'
       }
     }).catch(function () { r.className = 'wbx-r bad'; r.textContent = 'Не получилось — попробуйте через минуту.' })
   }
@@ -402,5 +410,5 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
       v = v.replace(/^\.+|\.+$/g, ''); inp.value = v; if (v) add(v, box)
     })
   })
-  feed(); setInterval(feed, 60000)
+  feed(); setInterval(feed, 120000)
 })()

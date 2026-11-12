@@ -518,9 +518,12 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 @media (max-width:600px){.wbx-f{flex-direction:column}}
 .wbx-home{margin:14px 0 28px}.wbx-home .wbx{background:rgba(14,16,18,.92);border-radius:18px}
 /* 12.11 (Ник): в шапке вместо «Обсудить идею» — кнопка бота мониторинга в Telegram */
-.hdr-cta.hdr-bot{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#2aabee,#229ed9);border-color:transparent;color:#fff;font-weight:600;padding:9px 16px;box-shadow:0 6px 22px rgba(34,158,217,.35)}
-.hdr-cta.hdr-bot:hover{color:#fff;border-color:transparent;filter:brightness(1.08);transform:translateY(-1px)}
+.hdr-cta.hdr-bot{display:inline-flex;align-items:center;gap:8px;background:rgba(42,171,238,.10);border:1px solid rgba(42,171,238,.55);color:#e9f5fc;font-weight:600;padding:8px 16px;box-shadow:none}
+.hdr-cta.hdr-bot .tg-ic{color:#3fb5f0}
+.hdr-cta.hdr-bot:hover{background:rgba(42,171,238,.20);border-color:#3fb5f0;color:#fff}
 .hdr-cta.hdr-bot .tg-ic{flex:none}
 .hdr.open .nav .nav-cta{display:flex;align-items:center;justify-content:center;gap:8px}
 .hdr.open .nav .nav-cta .tg-ic{flex:none}
 @media (max-width:1180px){.hdr-bot .hb-x{display:none}.hdr-cta.hdr-bot{padding:9px 14px}}
+
+.wbx-now{font-size:16.5px}.wbx-meta{color:var(--muted);font-size:14px;margin-top:6px}.wbx-meta a{color:var(--acc)}.wbx-spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--acc);border-radius:50%;animation:wbxsp 1s linear infinite;vertical-align:-2px;margin-right:6px}@keyframes wbxsp{to{transform:rotate(360deg)}}.wbx-feed ul{display:flex;flex-wrap:wrap;gap:6px 8px}.wbx-feed li{background:var(--card-2,#16181b);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13.5px}
