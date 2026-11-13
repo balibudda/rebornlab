@@ -314,10 +314,12 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   }
   function fail(l, msg) { l.insertAdjacentHTML('beforeend', '<p class="rlc-err">' + (msg || 'Не отправилось') + ' — или напишите <a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>.</p>'); }
   box.querySelector('.rlc-send-lead').addEventListener('click', function () {
+    var sb = this; if (sb.disabled) return;   // 13.11: заявки из чата приходили дважды — пока шла отправка, кнопку нажимали снова
     var d = leadData(); if (!d) return;
+    sb.disabled = true; var sbt = sb.textContent; sb.textContent = 'Отправляем…';
     fetch(LEAD, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topics: ['ИИ-консультант'], text: d.text, contact: d.contact, page: location.pathname, agree: true, hp: '', k: RL_T0.toString(36), t: Date.now() - RL_T0, h: RL_HUMAN ? 1 : 0 }) })
-      .then(function (r) { if (r.ok) { d.l.innerHTML = '<p>✅ Готово! Николай напишет вам (' + esc(d.contact) + ').</p><button type="button" class="rlc-lead-btn">← вернуться к чату</button>'; d.l.querySelector('button').addEventListener('click', function () { d.l.hidden = true; form.hidden = false; box.querySelector('.rlc-ft').hidden = false; }); try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_lead'); } catch (e) {} } else fail(d.l); })
-      .catch(function () { fail(d.l); });
+      .then(function (r) { if (r.ok) { d.l.innerHTML = '<p>✅ Готово! Николай напишет вам (' + esc(d.contact) + ').</p><button type="button" class="rlc-lead-btn">← вернуться к чату</button>'; d.l.querySelector('button').addEventListener('click', function () { d.l.hidden = true; form.hidden = false; box.querySelector('.rlc-ft').hidden = false; }); try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_lead'); } catch (e) {} } else { sb.disabled = false; sb.textContent = sbt; fail(d.l); } })
+      .catch(function () { sb.disabled = false; sb.textContent = sbt; fail(d.l); });
   });
   function open() { box.classList.add('on'); btn.classList.add('hide'); if (!log.children.length) render(); setTimeout(function () { inp.focus(); }, 50); try { if (window.ym && window.RL_METRIKA) ym(window.RL_METRIKA, 'reachGoal', 'chat_open'); } catch (e) {} }
   btn.addEventListener('click', open);
