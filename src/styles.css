@@ -533,3 +533,4 @@ body:has(.legal) .ftr .wrap { max-width: 860px; }
 .chip.hot.on { color: #0b0c0d; }
 .lf-proof { margin: 20px 0 18px; padding: 14px 18px; border-left: 3px solid var(--acc); background: rgba(198,242,78,.06); border-radius: 0 12px 12px 0; font-size: 15px; line-height: 1.5; color: #d6d4cd; max-width: 70ch; }
 .lf-proof b { color: var(--text); }
+form[data-lead] input.bad { border-color: #ff7a6b; }   /* 13.11: неверный контакт */

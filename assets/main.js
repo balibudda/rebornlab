@@ -94,6 +94,19 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
       b.classList.toggle('on');
     });
   });
+  // 13.11 (Ник: «маркировка номера»): маска телефона и проверка контакта во всех формах
+  function RL_FMT_PHONE(v) { var d = v.replace(/\D/g, ''); if (!d) return ''; if (d[0] === '8' && d.length > 1) d = '7' + d.slice(1); else if (d[0] === '9') d = '7' + d;
+    if (d[0] !== '7') return '+' + d.slice(0, 15); d = d.slice(0, 11); var o = '+7'; if (d.length > 1) o += ' (' + d.slice(1, 4); if (d.length >= 4) o += ')';
+    if (d.length > 4) o += ' ' + d.slice(4, 7); if (d.length > 7) o += '-' + d.slice(7, 9); if (d.length > 9) o += '-' + d.slice(9, 11); return o; }
+  function RL_CONTACT_ERR(v, kind) { var d = v.replace(/\D/g, ''), ph = d.length >= 11 && d.length <= 15, em = /^[^\s@]+@[^\s@]+\.[a-zа-я]{2,}$/i.test(v), tg = /^@?[A-Za-z][A-Za-z0-9_]{4,31}$/.test(v);
+    if (kind === 'WhatsApp') return ph ? '' : 'Введите номер WhatsApp полностью, например +7 (999) 123-45-67';
+    if (kind === 'Telegram') return (tg || ph) ? '' : 'Укажите ник Telegram (@ivan_petrov) или номер телефона';
+    if (kind === 'Почта') return em ? '' : 'Укажите почту, например name@mail.ru';
+    return (em || ph || /^@[A-Za-z][A-Za-z0-9_]{4,31}$/.test(v)) ? '' : 'Укажите почту, @ник Telegram или телефон +7 (999) 123-45-67'; }
+  window.RL_FMT_PHONE = RL_FMT_PHONE; window.RL_CONTACT_ERR = RL_CONTACT_ERR;
+  document.querySelectorAll('form[data-lead] input[name=contact]').forEach(function (ci) {   // номер начали вводить цифрами — сразу маска
+    ci.addEventListener('input', function () { var v = ci.value; if (/^[+\d8(]/.test(v) && !/[@a-zа-яё]/i.test(v)) ci.value = RL_FMT_PHONE(v); ci.classList.remove('bad'); });
+  });
   document.querySelectorAll('form[data-lead]').forEach(function (f) {
     f.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -102,7 +115,8 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
       var contact = (f.querySelector('input[name=contact]') || {}).value || '';
       var ok = f.querySelector('.ok-msg'), btn = f.querySelector('button[type=submit]');
       if (text.trim().length < 5 && !topics.length) { f.querySelector('textarea').focus(); return; }
-      if (contact.trim().length < 3) { var ci = f.querySelector('input[name=contact]'); ci && ci.focus(); return; }
+      var ci = f.querySelector('input[name=contact]'), cerr = RL_CONTACT_ERR(contact.trim(), '');
+      if (cerr) { if (ci) { ci.focus(); ci.classList.add('bad'); ci.setCustomValidity(cerr); ci.reportValidity(); setTimeout(function () { ci.setCustomValidity(''); }, 3000); } return; }
       var ag = f.querySelector('input[name=agree]');
       if (ag && !ag.checked) { f.classList.add('need-agree'); ag.focus(); return; }
       f.classList.remove('need-agree');
@@ -298,12 +312,13 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   box.querySelector('.rlc-lead-btn').addEventListener('click', openLead);
   box.querySelector('.rlc-back').addEventListener('click', closeLead);
   var ctSel = box.querySelector('select[name=ct]'), ctIn = box.querySelector('input[name=c]');
-  var PH = { 'Почта': 'name@mail.ru', 'Telegram': '@ваш_ник', 'WhatsApp': '+7 900 000-00-00' };
+  var PH = { 'Почта': 'name@mail.ru', 'Telegram': '@ваш_ник или телефон', 'WhatsApp': '+7 (999) 123-45-67' };
   ctSel.addEventListener('change', function () { ctIn.placeholder = PH[ctSel.value]; ctIn.focus(); });
+  ctIn.addEventListener('input', function () { var v = ctIn.value; if (ctSel.value === 'WhatsApp' || (ctSel.value === 'Telegram' && /^[+\d8(]/.test(v) && !/@/.test(v))) ctIn.value = RL_FMT_PHONE(v); ctIn.classList.remove('bad'); });
   function leadData() {
     var l = box.querySelector('.rlc-lead'), c = ctIn.value.trim(), a = l.querySelector('input[name=a]');
     if (c.length < 3) { ctIn.focus(); return null; }
-    if (ctSel.value === 'Почта' && !/^[^\s@]+@[^\s@]+\.[a-zа-я]{2,}$/i.test(c)) { ctIn.focus(); ctIn.classList.add('bad'); return null; }
+    var cE = RL_CONTACT_ERR(c, ctSel.value); if (cE) { ctIn.focus(); ctIn.classList.add('bad'); ctIn.setCustomValidity(cE); ctIn.reportValidity(); setTimeout(function () { ctIn.setCustomValidity(''); }, 3000); return null; }
     ctIn.classList.remove('bad');
     if (!a.checked) { l.classList.add('need'); return null; }
     var site = ''; hist.forEach(function (m) { if (m.role === 'user') { var x = m.content.match(/([a-zа-яё0-9-]+\.)+(ru|рф|com|net|org|su|info|pro|online|site|shop|store|biz|me|io|by|kz|ua)\b/i); if (x) site = x[0]; } });

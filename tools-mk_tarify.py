@@ -70,6 +70,7 @@ style = src[src.index('<style>'):style_end].replace('</style>', '''
   .plan .pick:hover { background: var(--acc); color: #111; }
   .tform select { -webkit-appearance: none; appearance: none; text-align: left; text-align-last: left; width: 100%; font: inherit; line-height: 1.3; padding: 12px 40px 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c6f24e' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat right 14px center; color: var(--fg); cursor: pointer; }
   .tform input:not([type=checkbox]):focus, .tform textarea:focus, .tform select:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 3px rgba(198,242,78,.15); }   /* 13.11: вместо синей рамки браузера */
+  .tform input.bad { border-color: #ff9b9b; }   /* 13.11: неверный контакт */
   .tform .agree { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--muted); margin: 0 0 14px; } .tform .agree a { color: var(--acc); }
   .tform.need-agree .agree { color: #ff9b9b; } .tform.need-agree .agree input { outline: 2px solid #ff9b9b; outline-offset: 2px; } .tmsg { margin: 12px 0 0; font-size: 15px; font-weight: 600; color: #ff9b9b; } .tmsg:empty { display: none; }
   @media (max-width: 600px) { .tgrid { grid-template-columns: 1fr; } }
@@ -147,12 +148,24 @@ after = after[:after.index('<script>\n(function () {')] + '''<script>
 (function () {
   var f = document.getElementById('tform'), msg = document.getElementById('tmsg'); if (!f) return;
   document.querySelectorAll('.pick').forEach(function (b) { b.addEventListener('click', function () { var sel = f.plan; for (var i = 0; i < sel.options.length; i++) if (sel.options[i].text === b.dataset.plan) sel.selectedIndex = i; setTimeout(function () { f.site.focus(); }, 400); }); });
-  var PH = {'WhatsApp': '+7 999 123-45-67', 'Telegram': '@ваш_ник', 'Другое': 'как с вами связаться'}; f.via.addEventListener('change', function () { f.contact.placeholder = PH[f.via.value]; }); f.contact.placeholder = PH[f.via.value];
+  var PH = {'WhatsApp': '+7 (999) 123-45-67', 'Telegram': '@ваш_ник или +7 (999) 123-45-67', 'Другое': 'почта или телефон'};
+  // 13.11 RL_FMT_PHONE: маска номера — только цифры, вид +7 (999) 123-45-67; 8… и 9… → +7
+  function RL_FMT_PHONE(v) { var d = v.replace(/\\D/g, ''); if (!d) return ''; if (d[0] === '8' && d.length > 1) d = '7' + d.slice(1); else if (d[0] === '9') d = '7' + d;
+    if (d[0] !== '7') return '+' + d.slice(0, 15); d = d.slice(0, 11); var o = '+7'; if (d.length > 1) o += ' (' + d.slice(1, 4); if (d.length >= 4) o += ')';
+    if (d.length > 4) o += ' ' + d.slice(4, 7); if (d.length > 7) o += '-' + d.slice(7, 9); if (d.length > 9) o += '-' + d.slice(9, 11); return o; }
+  function setVia() { var w = f.via.value === 'WhatsApp'; f.contact.placeholder = PH[f.via.value]; f.contact.setAttribute('inputmode', w ? 'tel' : 'text'); f.contact.setAttribute('autocomplete', w ? 'tel' : 'off'); if (w && f.contact.value) f.contact.value = RL_FMT_PHONE(f.contact.value); }
+  f.via.addEventListener('change', function () { setVia(); f.contact.focus(); }); setVia();
+  f.contact.addEventListener('input', function () { var v = f.contact.value; if (f.via.value === 'WhatsApp' || (f.via.value === 'Telegram' && /^[+\\d8(]/.test(v) && !/@/.test(v))) f.contact.value = RL_FMT_PHONE(v); });
+  function contactErr(v) { var d = v.replace(/\\D/g, '');
+    if (f.via.value === 'WhatsApp') return (d.length >= 11 && d.length <= 15) ? '' : 'Введите номер WhatsApp полностью, например +7 (999) 123-45-67.';
+    if (f.via.value === 'Telegram') return (/^@?[A-Za-z][A-Za-z0-9_]{4,31}$/.test(v) || (d.length >= 11 && d.length <= 15)) ? '' : 'Укажите ник Telegram (например @ivan_petrov) или номер телефона.';
+    return (/^[^\\s@]+@[^\\s@]+\\.[a-zа-я]{2,}$/i.test(v) || (d.length >= 11 && d.length <= 15)) ? '' : 'Укажите почту (name@mail.ru) или телефон.'; }
   var T0 = Date.now(), HUMAN = false; ['mousemove', 'touchstart', 'keydown', 'scroll'].forEach(function (ev) { addEventListener(ev, function () { HUMAN = true; }, {once: true, passive: true}); });
   f.addEventListener('submit', function (e) {
     e.preventDefault();
     var site = f.site.value.trim(), contact = f.contact.value.trim(), ag = f.agree;
     if (!site || !contact) { msg.textContent = 'Укажите адрес сайта и как с вами связаться.'; return; }
+    var ce = contactErr(contact); if (ce) { msg.textContent = ce; f.contact.focus(); f.contact.classList.add('bad'); return; } f.contact.classList.remove('bad');
     if (!ag.checked) { f.classList.add('need-agree'); msg.textContent = 'Отметьте согласие на обработку данных.'; return; }
     f.classList.remove('need-agree');
     var btn = f.querySelector('button'); btn.disabled = true; msg.textContent = 'Отправляем…';
