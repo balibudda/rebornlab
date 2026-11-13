@@ -21,6 +21,7 @@ function write(rel, html) {
   writeFileSync(f, html)
 }
 const ru = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+// 13.11.2026: front matter `h1:` — заголовок на странице статьи, *слова в звёздочках* — салатовым (title для поиска не меняется)
 // 06.11.2026 Ник: у новостей — время публикации по Москве (front matter `time: ЧЧ:ММ`)
 const ruDT = (p) => ru(p.date) + (p.time ? `, ${p.time} МСК` : '')
 const isoDT = (p) => (p.time ? `${p.date}T${p.time}:00+03:00` : p.date)
@@ -176,17 +177,18 @@ function projCard(p, big = false) {
       <div class="tags">${p.stack.slice(0, big ? 8 : 4).map((s) => `<span class="tag">${esc(s)}</span>`).join('')}</div>
       <span class="card-link">Как сделано <span class="arrow">→</span></span></div></a>`
 }
-function leadForm(id, label = 'Разобрать задачу') {
+function leadForm(id, label = 'Отправить заявку') {   // 13.11 (Ник): на первом месте — восстановить / создать сайт
   return `<form data-lead id="${id}" novalidate>
-    <div class="chips" data-chips>${['Есть идея', 'Нужен сайт', 'Автоматизировать бизнес', 'Нужен AI', 'Нужно продвижение', 'Другая задача'].map((c) => `<button type="button" class="chip">${c}</button>`).join('')}</div>
+    <p class="lf-proof"><b>Что мы делаем каждый день:</b> возвращаем сайты, которые упали вместе с хостингом, — из копии или из веб-архива, и собираем новые. В ноябре так вернули к жизни 10 сайтов клиентов: каталоги, научный журнал, сайты на Битриксе и MODX.</p>
+    <div class="chips" data-chips>${['🛟 Восстановить сайт', '✨ Создать новый сайт'].map((c) => `<button type="button" class="chip hot">${c}</button>`).join('')}${['Сайт не открывается', 'Перенести на другой хостинг', 'Автоматизация и AI', 'Другая задача'].map((c) => `<button type="button" class="chip">${c}</button>`).join('')}</div>
     <label class="sr" for="${id}-t">Опишите задачу</label>
-    <textarea class="ym-disable-keys" id="${id}-t" name="text" placeholder="Опишите проблему или идею обычными словами. Например: «заявок много, менеджеры не успевают отвечать»"></textarea>
+    <textarea class="ym-disable-keys" id="${id}-t" name="text" placeholder="Адрес сайта и что случилось. Например: «мой-сайт.ru не открывается с 4 ноября, копии нет» или «нужен сайт для салона красоты»"></textarea>
     <div class="form-row"><label class="sr" for="${id}-c">Контакт</label><input class="ym-disable-keys" type="text" id="${id}-c" name="contact" placeholder="Почта, Telegram или WhatsApp — мы пишем, не звоним" style="flex:1;min-width:220px"></div>
     <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
     <label class="agree"><input type="checkbox" name="agree" required> <span>Даю <a href="/consent/" target="_blank">согласие на обработку персональных данных</a> и принимаю <a href="/privacy/" target="_blank">политику конфиденциальности</a></span></label>
     <div class="form-row"><button class="btn btn-acc" type="submit" data-label="${label} →">${label} <span class="arrow">→</span></button><a class="btn btn-ghost" href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener" data-goal="telegram">Написать в Telegram</a></div>
-    <p class="ok-msg">Получили ✓ Разберём задачу и ответим вам лично.</p>
-    <p class="hint">Отвечаем лично. Без спама и обязательств — сначала разбираемся, потом предлагаем.</p>
+    <p class="ok-msg">Получили ✓ Посмотрю сайт и напишу вам лично.</p>
+    <p class="hint">Отвечаю лично и письменно. Сначала смотрю сайт и что сохранилось — потом предлагаю, как вернуть.</p>
     <p class="err-msg">Отметьте согласие на обработку данных — без него мы не можем принять заявку.</p>
   </form>`
 }
@@ -232,7 +234,7 @@ const home = shell({
     <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
     <p class="sub">Восстанавливаем и переносим сайты, делаем так, чтобы они открывались у всех. Собираем сайты, ботов, автоматизацию и AI под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
     <div class="row">
-      <a class="btn btn-acc" href="#task" data-goal="cta_hero">Разобрать задачу <span class="arrow">→</span></a>
+      <a class="btn btn-acc" href="#task" data-goal="cta_hero">Восстановить или создать сайт <span class="arrow">→</span></a>
     </div>
     <div class="hero-meta"><span>Восстановление · Переезд · Сайты · Боты · AI</span><span>от прототипа до продукта</span></div>
   </div>
@@ -277,10 +279,10 @@ ${POSTS.length ? `<section class="sec"><div class="wrap">
 </div></section>` : ''}
 
 <section class="sec final" id="contact"><div class="wrap"><div class="final-box rv">
-  <div class="kicker">У вас есть идея?</div>
-  <h2>Принесите её. <em>Даже если звучит странно.</em></h2>
+  <div class="kicker">Сайт не работает или нужен новый?</div>
+  <h2>Восстановим или соберём заново. <em>Быстро.</em></h2>
   <p class="muted" style="font-size:18px;max-width:40em;margin:0">Разберём задачу, предложим архитектуру и покажем, как превратить её в работающий цифровой продукт.</p>
-  <div class="contact-grid"><div>${leadForm('f-final', 'Запустить проект')}</div>
+  <div class="contact-grid"><div>${leadForm('f-final')}</div>
   <div class="contact-side"><div><div class="kicker">Напрямую</div><p style="font-size:20px;margin:8px 0 0"><a href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener" data-goal="telegram">Telegram @${SITE.telegram}</a></p></div><p>Отвечаем лично. Сначала разбираемся в задаче, потом называем срок и стоимость — без навязанных пакетов.</p></div></div>
 </div></div></section>`,
 })
@@ -302,7 +304,7 @@ write('services/index.html', shell({
   </div></section>
   <div class="wrap"><h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Направления работы</h2><div class="caps">${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/">${svImg(s)}<div class="sv-top">${svIcon(s)}<span class="code">${s.code} · ${esc(s.short)}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}<ul>${s.items.slice(0, 4).map((i) => `<li>${esc(i)}</li>`).join('')}</ul><span class="card-link">Подробнее <span class="arrow">→</span></span></a>`).join('')}
   <a class="cap ask rv" href="/contact/"><span class="code">06</span><h3>Другая задача</h3><p>Опишите её — предложим решение.</p></a></div></div>
-  <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Не знаете, что выбрать? <em>Опишите задачу.</em></h2>${leadForm('f-svc')}</div></div></section>`,
+  <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Нужно вернуть сайт или сделать новый? <em>Напишите.</em></h2>${leadForm('f-svc')}</div></div></section>`,
 }))
 for (const s of SERVICES) {
   const proofs = []   // 05.11: проекты не показываем
@@ -348,7 +350,7 @@ write('journal/index.html', shell({
   jsonLd: [crumbsLd([['Главная', '/'], ['Журнал', '/journal/']])],
   body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Журнал', '/journal/']])}<div class="kicker" style="margin-top:18px">Lab notes</div><h1>Журнал <span style="color:var(--acc)">лаборатории</span></h1><p class="sub">Разборы, кейсы и инструкции — то, что сами применяем в проектах.</p></div>
   <div class="wrap"><h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Все статьи</h2><div class="posts">${POSTS.map(postCard).join('') || '<p class="muted">Скоро здесь появятся первые материалы.</p>'}</div></div>
-  <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Узнали свою задачу? <em>Разберём.</em></h2>${leadForm('f-jr')}</div></div></section>`,
+  <section class="sec"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Сайт не открывается или нужен новый? <em>Поможем.</em></h2>${leadForm('f-jr')}</div></div></section>`,
 }))
 for (const p of POSTS) {
   const related = POSTS.filter((x) => x.slug !== p.slug).sort((a, b) => (a.category === p.category ? -1 : 0) - (b.category === p.category ? -1 : 0)).slice(0, 3)
@@ -358,9 +360,9 @@ for (const p of POSTS) {
     canonical: `/journal/${p.slug}/`, current: '/journal/', ogType: 'article', ...(p.image ? { image: p.image } : {}),
     jsonLd: [crumbsLd([['Главная', '/'], ['Журнал', '/journal/'], [p.title, `/journal/${p.slug}/`]]),
       { '@context': 'https://schema.org', '@type': 'Article', headline: p.title, description: p.description, datePublished: isoDT(p), dateModified: p.updated || isoDT(p), inLanguage: 'ru', author: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url }, publisher: { '@type': 'Organization', name: 'REBORN LAB', logo: { '@type': 'ImageObject', url: SITE.url + '/assets/logo.png' } }, mainEntityOfPage: SITE.url + `/journal/${p.slug}/`, image: SITE.url + (p.image || '/assets/og.jpg'), articleSection: JOURNAL_CATEGORIES[p.category] || p.category, wordCount: p.words }],
-    body: `<article><div class="wrap page-hd">${crumbs([['Главная', '/'], ['Журнал', '/journal/'], [p.title, '']])}<div class="kicker" style="margin-top:18px">${esc(JOURNAL_CATEGORIES[p.category] || p.category)} · ${ruDT(p)} · ${Math.max(1, Math.round(p.words / 180))} мин</div><h1 style="max-width:20ch">${esc(p.title)}</h1><p class="sub">${esc(p.description)}</p>${p.image ? `<img src="${p.image}" alt="${esc(p.title)}" width="1200" height="630" style="display:block;width:100%;max-width:900px;height:auto;border-radius:16px;margin-top:22px">` : ''}</div>
+    body: `<article><div class="wrap page-hd">${crumbs([['Главная', '/'], ['Журнал', '/journal/'], [p.title, '']])}<div class="kicker" style="margin-top:18px">${esc(JOURNAL_CATEGORIES[p.category] || p.category)} · ${ruDT(p)} · ${Math.max(1, Math.round(p.words / 180))} мин</div><h1 style="max-width:20ch">${p.h1 ? esc(p.h1).replace(/\*([^*]+)\*/g, '<span style="color:var(--acc)">$1</span>') : esc(p.title)}</h1><p class="sub">${esc(p.description)}</p>${p.image ? `<img src="${p.image}" alt="${esc(p.title)}" width="1200" height="630" style="display:block;width:100%;max-width:900px;height:auto;border-radius:16px;margin-top:22px">` : ''}</div>
     <div class="wrap"><div class="prose">${p.slug.startsWith('beget') ? BOT_BOX : ''}${p.html}${SHARE_COMMENTS(p)}</div></div></article>
-    <section class="sec"><div class="wrap"><div class="final-box rv"><div class="kicker">Применим к вашей задаче</div><h2 style="font-size:clamp(30px,4vw,52px)">Хотите так же? <em>Разберём бесплатно.</em></h2>${leadForm('f-post')}</div></div></section>
+    <section class="sec"><div class="wrap"><div class="final-box rv"><div class="kicker">Восстановление и создание сайтов</div><h2 style="font-size:clamp(30px,4vw,52px)">Нужно вернуть сайт или сделать новый? <em>Сделаем быстро.</em></h2>${leadForm('f-post')}</div></div></section>
     ${related.length ? `<section class="sec" style="padding-top:0"><div class="wrap"><div class="kicker rv">Читайте также</div><div class="posts" style="margin-top:18px">${related.map(postCard).join('')}</div></div></section>` : ''}`,
   }))
 }
@@ -426,7 +428,7 @@ write('contact/index.html', shell({
   canonical: '/contact/', current: '/contact/',
   jsonLd: [crumbsLd([['Главная', '/'], ['Контакты', '/contact/']])],
   body: `<div class="wrap page-hd">${crumbs([['Главная', '/'], ['Контакты', '']])}<h1>Что хотите <span style="color:var(--acc)">сделать?</span></h1><p class="sub">Выберите направление и расскажите подробнее. Не нужно ТЗ — достаточно описать задачу своими словами.</p></div>
-  <div class="wrap"><div class="contact-grid" style="margin-top:0"><div class="ask-box" style="position:static">${leadForm('f-contact', 'Запустить проект')}</div>
+  <div class="wrap"><div class="contact-grid" style="margin-top:0"><div class="ask-box" style="position:static">${leadForm('f-contact')}</div>
   <div class="contact-side"><div><div class="kicker">Напрямую</div><p style="font-size:22px;margin:8px 0 0"><a href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener" data-goal="telegram">Telegram @${SITE.telegram}</a></p></div><p>Отвечаем лично. Сначала разбираемся в задаче, потом предлагаем решение, срок и стоимость.</p></div></div></div>
   <div style="height:80px"></div>`,
 }))
