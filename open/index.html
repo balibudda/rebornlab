@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Открываем…</title>
+<!-- 13.11.2026: переходник для Mini App кабинета заявок — Telegram не открывает mailto:/tel: внутри себя,
+     поэтому кабинет открывает эту страницу во внешнем браузере, а она передаёт ссылку почте/звонилке. Только mailto: и tel:. -->
+<style>body{margin:0;background:#0b0c0d;color:#edebe6;font:17px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif;display:grid;place-items:center;min-height:90vh;text-align:center;padding:0 20px}a{color:#c6f24e}</style>
+</head><body><main><p id="m">Открываем…</p></main>
+<script>
+(function () {
+  var u = '';
+  try { u = decodeURIComponent((location.hash || '').slice(1)); } catch (e) {}
+  var m = document.getElementById('m');
+  if (!/^(mailto:[^\s<>"]+|tel:\+?[\d\s()-]{6,})$/i.test(u)) { m.textContent = 'Ссылка не распознана.'; return; }
+  var label = u.replace(/^mailto:/i, '').replace(/^tel:/i, '').split('?')[0];
+  m.innerHTML = 'Если приложение не открылось само — <a id="go"></a>';
+  var a = document.getElementById('go'); a.href = u; a.textContent = (/^mailto:/i.test(u) ? 'написать на ' : 'позвонить ') + label;
+  location.href = u;
+})();
+</script></body></html>
