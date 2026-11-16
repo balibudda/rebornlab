@@ -263,7 +263,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   var est = null;
   function save() { try { sessionStorage.setItem('rl_chat_hist', JSON.stringify(hist.slice(-20))); } catch (e) {} }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function fmt(s) { return esc(s).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)»])/g, '<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/@Reborn_Lab/g, '<a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>').replace(/\n/g, '<br>'); }
+  function fmt(s) { return esc(s).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)»])/g, '<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/@rebornlab_bot\b/g, '<a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">@rebornlab_bot</a>').replace(/\binfo@rebornlab\.ru\b/g, '<a href="mailto:info@rebornlab.ru">info@rebornlab.ru</a>').replace(/@Reborn_Lab/g, '<a href="https://t.me/Reborn_Lab" target="_blank" rel="noopener">@Reborn_Lab</a>').replace(/\n/g, '<br>'); }
   var btn = document.createElement('button'); btn.className = 'rlc-btn'; btn.type = 'button'; btn.setAttribute('aria-label', 'Ник на связи — спросить');
   btn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></svg><span>Ник на связи</span>';
   var box = document.createElement('div'); box.className = 'rlc'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Ник на связи — помощник REBORN LAB');
@@ -276,7 +276,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   document.body.appendChild(btn); document.body.appendChild(box);
   var log = box.querySelector('.rlc-log'), form = box.querySelector('.rlc-in'), inp = form.querySelector('input'), busy = false;
   function add(role, text) { var d = document.createElement('div'); d.className = 'rlc-m ' + (role === 'user' ? 'u' : 'a'); d.innerHTML = fmt(text); log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
-  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Я ИИ-помощник Николая из REBORN LAB. Подскажу, что с вашим сайтом и можно ли его вернуть. Напишите адрес сайта и вопрос — проверим. А если удобнее сразу поговорить с человеком, нажмите «Написать Николаю».'); hist.forEach(function (m) { add(m.role, m.content); }); }
+  function render() { log.innerHTML = ''; if (!hist.length) add('assistant', 'Здравствуйте! Я ИИ-помощник Николая из REBORN LAB. Подскажу, что с вашим сайтом и можно ли его вернуть. Напишите адрес сайта и вопрос — проверим. А если удобнее сразу поговорить с человеком — напишите Николаю в Telegram @Reborn_Lab или на почту info@rebornlab.ru.'); hist.forEach(function (m) { add(m.role, m.content); }); }
   function ask(text) {
     if (busy || !text.trim()) return; busy = true;
     hist.push({ role: 'user', content: text.trim() }); save(); add('user', text.trim());
