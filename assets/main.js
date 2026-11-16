@@ -130,11 +130,11 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   });
   document.querySelectorAll('input[name=agree]').forEach(function (a) { a.addEventListener('change', function () { if (a.checked) a.closest('form').classList.remove('need-agree'); }); });
 
-  // ---------- cookie consent: Metrika loads only after «Согласен» ----------
+  // ---------- cookie: Метрика грузится сразу (16.11, Ник), плашка — только уведомление ----------
   var ck = document.getElementById('cookie'), agreed = false;
   try { agreed = localStorage.getItem('rl_cookie_ok') === '1'; } catch (e) {}
-  if (agreed) { window.RL_LOAD_METRIKA && window.RL_LOAD_METRIKA(); }
-  else if (ck) {
+  window.RL_LOAD_METRIKA && window.RL_LOAD_METRIKA();
+  if (!agreed && ck) {
     ck.hidden = false;
     // 12.11: плашка не должна закрывать кнопки форм — под неё отступ, а при заполнении формы она уезжает наверх и становится маленькой
     var ckPad = function () { document.body.style.paddingBottom = ck.hidden ? '' : (ck.offsetHeight + 32) + 'px'; };
@@ -142,7 +142,7 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
     document.addEventListener('focusin', function (e) { if (!ck.hidden && e.target.closest && e.target.closest('form') && !e.target.closest('.cookie')) { ck.classList.add('mini'); ckPad(); } });
     document.getElementById('cookie-ok').addEventListener('click', function () {
       try { localStorage.setItem('rl_cookie_ok', '1'); } catch (e) {}
-      ck.hidden = true; ckPad(); window.RL_LOAD_METRIKA && window.RL_LOAD_METRIKA();
+      ck.hidden = true; ckPad();
     });
   }
 

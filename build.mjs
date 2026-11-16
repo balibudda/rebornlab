@@ -113,9 +113,11 @@ function BEGET_BAR(at = '') {
   const L = [['/beget/server/', '📡 Мониторинг серверов'], ['/beget/vosstanovit/', '♻️ Восстановить сайт'], ['/beget/voprosy/', '❓ Вопросы и ответы'], ['https://t.me/rebornlab_bot', '🔔 Бот']]   // 07.11: короче — кнопка бота не влезала
   return `<div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет</span>${L.map(([h, t]) => `<a href="${h}"${h === at ? ' aria-current="page"' : ''}${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${t}</a>`).join('')}</div></div>`
 }
+// 16.11 (Ник): Метрика грузится сразу на ВСЕХ страницах (и на статичных /hosting/, /monitoring-saitov/, /beget/* — вставляется ниже)
+const METRIKA_TAG = SITE.metrikaId ? `<script>window.RL_METRIKA=${SITE.metrikaId};window.RL_LOAD_METRIKA=function(){if(window.RL_YM_ON)return;window.RL_YM_ON=1;(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=${SITE.metrikaId}','ym');ym(${SITE.metrikaId},'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>` : ''
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
   const url = SITE.url + canonical
-  const metrika = SITE.metrikaId ? `<script>window.RL_METRIKA=${SITE.metrikaId};window.RL_LOAD_METRIKA=function(){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=${SITE.metrikaId}','ym');ym(${SITE.metrikaId},'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>` : ''
+  const metrika = METRIKA_TAG
   return `<!doctype html>
 <html lang="ru">
 <head>
@@ -157,7 +159,7 @@ ${body}
   <div><a href="/#uslugi">Услуги</a><a href="/vosstanovlenie-sajta/">Восстановление сайтов</a><a href="/monitoring-saitov/">Проверка сайта без VPN</a><a href="/hosting/">Мониторинг хостингов</a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/contact/">Контакты</a></div>
   <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="/rss.xml">RSS журнала</a></div>
 </div></footer>
-<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Нажимая «Согласен», вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Согласен</button></div>
+<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Продолжая пользоваться сайтом, вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Понятно</button></div>
 <script src="/assets/main.js?v=${ASSET_V}" defer></script>
 </body>
 </html>`
@@ -435,7 +437,7 @@ write('contact/index.html', shell({
 
 
 // ---------- LEGAL (152-ФЗ) ----------
-const LEGAL_DATE = '12.11.2026'
+const LEGAL_DATE = '16.11.2026'
 const OPERATOR = SITE.operator
   ? `${SITE.operator}${SITE.operatorInn ? ', ИНН ' + SITE.operatorInn : ''}${SITE.operatorOgrn ? ', ОГРНИП ' + SITE.operatorOgrn : ''}${SITE.operatorAddress ? ', адрес: ' + SITE.operatorAddress : ''}`
   : 'владелец сайта rebornlab.ru (REBORN LAB)'
@@ -453,7 +455,7 @@ write('privacy/index.html', shell({
   <h2>2. Чьи данные, какие и зачем</h2>
   <table><tr><th>Кто</th><th>Какие данные</th><th>Цель</th><th>Основание</th><th>Срок</th></tr>
   <tr><td>Посетитель, отправивший заявку</td><td>контакт (почта, ник в Telegram или номер WhatsApp), текст заявки, адрес сайта (если указан), IP-адрес, страница, дата и время</td><td>ответить на заявку, обсудить задачу, подготовить предложение; защита от спама</td><td>согласие (п. 1 ч. 1 ст. 6)</td><td>до достижения цели, не дольше 3 лет с последнего общения, или до отзыва согласия</td></tr>
-  <tr><td>Посетитель сайта</td><td>cookie и данные о посещении через Яндекс Метрику: страницы, источник перехода, устройство, действия на странице (Вебвизор, без содержимого полей форм)</td><td>статистика и улучшение сайтов</td><td>согласие, данное кнопкой «Согласен»</td><td>по правилам Яндекс Метрики, не дольше 12 месяцев</td></tr>
+  <tr><td>Посетитель сайта</td><td>cookie и данные о посещении через Яндекс Метрику: страницы, источник перехода, устройство, действия на странице (Вебвизор, без содержимого полей форм)</td><td>статистика и улучшение сайтов</td><td>согласие (продолжение пользования сайтом после уведомления о cookie)</td><td>по правилам Яндекс Метрики, не дольше 12 месяцев</td></tr>
   <tr><td>Посетитель, написавший в чат-помощник «Ник на связи»</td><td>текст сообщений, адрес сайта (если указан), страница; почта и телефоны вырезаются из текста автоматически до обработки, IP-адрес в журнал не записывается</td><td>ответить на вопрос, проверить сайт и передать вопрос оператору</td><td>согласие (п. 1 ч. 1 ст. 6), выраженное отправкой сообщения</td><td>не дольше 1 года</td></tr>
   <tr><td>Заказчик, оплативший услугу</td><td>контакт для связи, адрес сайта, описание задачи, сведения о платеже (номер, сумма, статус; данные карты получает только ЮKassa)</td><td>оказание услуги, расчёты, чек</td><td>договор (п. 5 ч. 1 ст. 6)</td><td>5 лет — для расчётных документов, остальное — как для заявок</td></tr></table>
   <p>Специальные категории данных (здоровье, убеждения и т. п.) и биометрию мы не запрашиваем и не обрабатываем — пожалуйста, не указывайте их в заявках.</p>
@@ -476,7 +478,7 @@ write('privacy/index.html', shell({
   <h2>7. Ваши права</h2>
   <p>Вы можете узнать, какие ваши данные у нас есть, потребовать уточнить, заблокировать или удалить их, отозвать согласие. Напишите: ${PD_CONTACT}. Ответим в течение 10 рабочих дней. Вы вправе обратиться в Роскомнадзор или в суд.</p>
   <h2>8. Cookie</h2>
-  <p>Cookie используются для статистики посещений (Яндекс Метрика, включая Вебвизор) и подключаются только после нажатия «Согласен». Отключить cookie можно в настройках браузера — сайт продолжит работать.</p>
+  <p>Cookie используются для статистики посещений (Яндекс Метрика, включая Вебвизор) и подключаются при входе на сайт; при первом посещении показывается уведомление. Отключить cookie можно в настройках браузера — сайт продолжит работать.</p>
   <h2>9. Изменения</h2>
   <p>Политика может обновляться; актуальная редакция всегда на этой странице. Согласие на обработку данных для заявки — <a href="/consent/">на отдельной странице</a>.</p></div>`,
 }))
@@ -579,6 +581,7 @@ write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите зад�
     const noBar = f.startsWith('monitoring-saitov/') || f.startsWith('hosting/')   // 12.11: инструмент для любого сайта — без полосы «Бегет»
     const hdr = `<!--HDR:START-->${HEADER(at === '/beget/pravila/' ? '' : at.startsWith('/hosting/') ? '/monitoring-saitov/' : at)}${noBar ? '' : BEGET_BAR(at)}<!--HDR:END-->`
     let src = readFileSync(fp, 'utf8')
+    if (METRIKA_TAG && !src.includes('RL_LOAD_METRIKA')) src = src.replace('</head>', () => METRIKA_TAG + '\n</head>')
     src = src.includes('<!--HDR:START-->') ? src.replace(/<!--HDR:START-->[\s\S]*?<!--HDR:END-->/, () => hdr) : src.replace(/<body>/, () => '<body>\n' + hdr)
     const html = src.replace(/<footer class="ftr">[\s\S]*?<\/footer>/, () => foot)
       .replace(/<!--NEWS:START-->[\s\S]*?<!--NEWS:END-->/, () => `<!--NEWS:START--><div class="news-grid">${news}</div><!--NEWS:END-->`)
