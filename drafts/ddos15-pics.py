@@ -22,7 +22,7 @@ day = f'''<svg width="{W}" height="{H + 40}" style="overflow:visible;font-size:1
 <path d="{path('s', lo, hi)}" fill="none" stroke="#c6f24e" stroke-width="4"/>
 <path d="{path('h', lo, hi)}" fill="none" stroke="#7aa7ff" stroke-width="4"/>
 {xlab()}</svg>'''
-hrs = [('12–15', 6, 19, 2, 8), ('15–18', 7, 21, 16, 29), ('18–21', 1, 25, 4, 6), ('21–22:30', 28, 60, 1, 6)]
+hrs = [('12–15', 6, 19, 2, 8), ('15–18', 7, 21, 16, 29), ('18–21', 1, 25, 4, 6), ('21–24', 28, 60, 6, 10)]
 mx = 60
 cols = ''.join(f'''<div class="col"><div class="bars">
 <i class="a" style="height:{a / mx * 280:.0f}px"><b>{a}</b></i><i class="b" style="height:{b / mx * 280:.0f}px"><b>{b}</b></i>
@@ -54,7 +54,7 @@ html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><style>{CS
 <div class="h">Сайты и серверы Бегета <em>в день атаки</em></div>
 <div style="padding-left:44px">{day}</div>
 <div class="lg"><span class="u">сайтов открывается (из 1 000)</span><span class="s">серверов хостинга отвечает (из 1 524)</span></div><div class="site">rebornlab.ru</div></div>
-<div class="pic" id="hours"><div class="k">Бот @rebornlab_bot, ~1 600 сайтов, время московское (15.11 — до 22:30)</div>
+<div class="pic" id="hours"><div class="k">Бот @rebornlab_bot, ~1 600 сайтов, время московское</div>
 <div class="h">Падения и возвращения сайтов: <em>14 и 15 ноября</em></div>
 <div class="chart">{cols}</div>
 <div class="lg"><span class="a">14.11 упал</span><span class="b">14.11 вернулся</span><span class="c">15.11 упал</span><span class="d">15.11 вернулся</span></div><div class="site">rebornlab.ru</div></div>
