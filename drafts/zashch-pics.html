@@ -1,0 +1,119 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<!-- Картинки статьи kejs-troyan-v-bitrikse (18.11.2026): #cover 1200×630, #hours 1200×560, #chain 1200×600. Данные — журнал хостинга клиента и ловушка. -->
+<style>
+*{box-sizing:border-box}body{margin:0;background:#000;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#edebe6}
+.c{width:1200px;position:relative;overflow:hidden;background:radial-gradient(900px 500px at 100% 0,rgba(198,242,78,.12),transparent 60%),#08090a;padding:52px 64px;margin-bottom:20px}
+.k{font:700 17px "SF Mono",Menlo,monospace;letter-spacing:.06em;color:#c6f24e;text-transform:uppercase}
+.logo{position:absolute;right:64px;top:56px;font:700 19px -apple-system,Arial;letter-spacing:.22em}.logo span{color:#9a9890;font-weight:500}
+h1{font-size:56px;line-height:1.06;margin:18px 0 26px;font-weight:800;letter-spacing:-.01em}h1 em{font-style:normal;color:#c6f24e}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.nums div{background:#121417;border:1px solid rgba(237,235,230,.1);border-radius:12px;padding:16px 18px}
+.nums b{display:block;font-size:40px;font-weight:800;color:#c6f24e;line-height:1}.nums span{display:block;margin-top:8px;font-size:17px;color:#b9b7b0;line-height:1.3}
+.term{margin-top:18px;background:#0b0c0e;border:1px solid rgba(237,235,230,.12);border-radius:12px;padding:14px 20px;font:17px/1.6 "SF Mono",Menlo,monospace;color:#cfd3cf}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.chips span{border:1px solid rgba(198,242,78,.35);color:#dfe8c4;border-radius:30px;padding:8px 14px;font-size:16px}
+.term .p{color:#c6f24e}.term .r{color:#ff7a6b}.term .d{color:#6a6862}
+h2{font-size:30px;margin:6px 0 4px}.sub{color:#9a9890;font-size:17px;margin-bottom:22px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:300px;border-bottom:1px solid rgba(237,235,230,.2);padding-bottom:0}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bar i{display:block;width:100%;background:#c6f24e;border-radius:4px 4px 0 0}.bar.n i{background:#ff7a6b}
+.bar em{font-style:normal;font-size:13px;color:#b9b7b0;margin-bottom:5px}
+.hrs{display:flex;gap:8px;margin-top:6px}.hrs span{flex:1;text-align:center;font:13px "SF Mono",Menlo,monospace;color:#6a6862}
+.leg{display:flex;gap:22px;margin-top:16px;font-size:15px;color:#b9b7b0}.leg span:before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;background:#ff7a6b;margin-right:7px;vertical-align:-1px}.leg span.g:before{background:#c6f24e}
+.chain{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:8px}
+.st{background:#121417;border:1px solid rgba(237,235,230,.1);border-radius:12px;padding:16px;position:relative;min-height:220px}
+.st b{display:block;font:700 14px "SF Mono",Menlo,monospace;color:#ff7a6b;margin-bottom:10px}.st h3{margin:0 0 8px;font-size:19px;line-height:1.2}.st p{margin:0;font-size:15px;color:#b9b7b0;line-height:1.4}
+.st code{font:13px "SF Mono",Menlo,monospace;color:#c6f24e;word-break:break-all}
+.fix{margin-top:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.fix div{border-top:3px solid #c6f24e;padding-top:10px;font-size:14px;color:#cfd3cf;line-height:1.35}
+.tl{position:relative;margin:40px 0 0;height:250px}.tl:before{content:"";position:absolute;left:0;right:0;top:110px;height:4px;background:linear-gradient(90deg,#ff7a6b 0,#ff7a6b 88%,#c6f24e 88%)}
+.ev{position:absolute;top:0;width:150px;transform:translateX(-50%);text-align:center}.ev i{display:block;width:22px;height:22px;border-radius:50%;background:#ff7a6b;margin:99px auto 14px;border:4px solid #08090a}.ev.g i{background:#c6f24e}
+.ev b{position:absolute;top:30px;left:0;right:0;font-size:22px;color:#ff7a6b}.ev.g b{color:#c6f24e}.ev span{display:block;font-size:15px;color:#b9b7b0;line-height:1.35}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:10px}.cmp>div{background:#121417;border:1px solid rgba(237,235,230,.1);border-radius:14px;padding:22px 24px}
+.cmp h3{margin:0 0 18px;font-size:22px}.row{display:flex;align-items:center;gap:12px;margin:12px 0}.row em{font-style:normal;width:70px;color:#9a9890;font-size:15px}
+.row i{display:block;height:34px;border-radius:6px;background:#ff7a6b}.row.g i{background:#c6f24e}.row b{font-size:22px;white-space:nowrap}.big{margin-top:14px;font-size:17px;color:#cfd3cf}.big strong{color:#c6f24e;font-size:30px}
+.flt{display:grid;grid-template-columns:1fr 180px 1fr;gap:18px;align-items:center;margin-top:10px}.col{background:#121417;border-radius:14px;padding:18px 20px;border:1px solid rgba(237,235,230,.1)}
+.col h3{margin:0 0 12px;font-size:20px}.col.ok h3{color:#c6f24e}.col.no h3{color:#ff7a6b}.col li{font-size:16px;color:#cfd3cf;margin:7px 0;list-style:none}.col ul{margin:0;padding:0}
+.col.ok li:before{content:"✓ ";color:#c6f24e;font-weight:700}.col.no li:before{content:"✕ ";color:#ff7a6b;font-weight:700}
+.gate{text-align:center}.gate div{width:120px;height:120px;margin:0 auto;border-radius:24px;border:3px solid #c6f24e;display:flex;align-items:center;justify-content:center;font-size:54px}.gate p{color:#9a9890;font-size:15px;margin:12px 0 0}
+.pl{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:10px}.pl>div{background:#121417;border:1px solid rgba(255,122,107,.3);border-radius:14px;padding:20px}
+.pl h3{margin:0 0 6px;font-size:20px}.pl p{margin:0 0 14px;color:#ff7a6b;font-size:15px}.pl code{display:inline-block;font:14px "SF Mono",Menlo,monospace;background:#1b1d21;color:#edebe6;border-radius:6px;padding:5px 9px;margin:0 6px 7px 0;text-decoration:line-through;text-decoration-color:#ff7a6b}
+.note{margin-top:18px;font-size:16px;color:#b9b7b0}.note b{color:#c6f24e}
+</style></head><body>
+
+<div class="c" id="cover" style="height:630px">
+ <div class="k">Кейс · Битрикс из веб-архива</div><div class="logo">REBORN <span>LAB</span></div>
+ <h1>Сайт работал,<br>а внутри <em>жил троян</em></h1>
+ <div class="nums">
+  <div><b>33 325</b><span>товаров восстановили<br>на Битриксе с нуля</span></div>
+  <div><b>332</b><span>захода бота<br>к трояну за 10 дней</span></div>
+  <div><b>973</b><span>фальшивые<br>подписки</span></div>
+  <div><b>0</b><span>расхождений<br>на 256 страницах</span></div>
+ </div>
+ <div class="term"><span class="p">$</span> grep -rl "unserialize(\$_POST" include/ ajax/<br><span class="r">include/mainpage/comp_catalog_ajax.php</span> <span class="d"># дыра в шаблоне 2023 года, через неё и заходили</span></div>
+
+ <div class="chips"><span>закрыли дыру в шаблоне</span><span>ловушка вместо трояна</span><span>защита от спама без капчи</span><span>сторож в Telegram</span><span>бэкапы без лишнего</span><span>SEO-чистка</span></div>
+ </div>
+
+<div class="c" id="hours" style="height:560px">
+ <h2>Когда бот приходит к трояну</h2><div class="sub">Обращения к файлу-трояну по часам (МСК), 10 дней журнала хостинга, около 350 запросов с 38 IP</div>
+ <div class="bars" id="bars"></div><div class="hrs" id="hrs"></div>
+ <div class="leg"><span>ночь, 00–06</span><span class="g">день</span></div>
+</div>
+
+<div class="c" id="chain" style="height:470px">
+ <h2>Как устроен такой взлом</h2><div class="sub">Реальная цепочка, восстановленная по отчётам антивируса и ловушке</div>
+ <div class="chain">
+  <div class="st"><b>01</b><h3>Дыра в шаблоне</h3><p>Файл шаблона передаёт данные из запроса прямо в <code>unserialize()</code>. Шаблон не обновлялся 2,5 года.</p></div>
+  <div class="st"><b>02</b><h3>Подброшенный файл</h3><p>В папке <code>/ajax/</code> появляется <code>932152f1caff.php</code>. Снаружи он отвечает только числом.</p></div>
+  <div class="st"><b>03</b><h3>Проверка раз в 10 минут</h3><p>Бот с разных IP проверяет, жив ли файл. Пароль в cookie у всех один.</p></div>
+  <div class="st"><b>04</b><h3>Размножиться</h3><p>Команда записать копию трояна в <code>/assets/images/</code> каждого сайта на хостинге.</p></div>
+  <div class="st"><b>05</b><h3>Снести защиту</h3><p>Удалить плагины безопасности WordPress. На Битриксе бесполезно, значит атака массовая.</p></div>
+ </div>
+ <div class="fix"><div>Закрыли <code>unserialize</code> в 10 файлах</div><div>Чужие PHP в /ajax/ и /include/ не запускаются</div><div>Троян заменён ловушкой, которая только пишет журнал</div><div>Сайты изолированы друг от друга</div><div>Сторож шлёт тревогу в Telegram</div></div>
+</div>
+
+<div class="c" id="timeline" style="height:470px">
+ <h2>Год и девять месяцев с троянами</h2><div class="sub">Находки антивируса хостинга (время МСК) — и когда закрыли саму дыру</div>
+ <div class="tl">
+  <div class="ev" style="left:6%"><b>05.02.2025</b><i></i><span>09:10 — 2 трояна<br>в /ajax/ и /assets/</span></div>
+  <div class="ev" style="left:30%"><b>26.04.2025</b><i></i><span>06:44 — 3 трояна,<br>главный вернулся</span></div>
+  <div class="ev" style="left:52%"><b>01.08.2025</b><i></i><span>06:21 — снова<br>главный + копия в корне</span></div>
+  <div class="ev" style="left:70%"><b>02.08.2025</b><i></i><span>06:25 — опять<br>в корне сайта</span></div>
+  <div class="ev g" style="left:93%"><b>17.11.2026</b><i></i><span>дыру закрыли,<br>вместо трояна ловушка</span></div>
+ </div>
+ <div class="note">Антивирус удалял файлы, но дыра оставалась открытой — поэтому всё повторялось. <b>Сдерживал, но не лечил.</b></div>
+</div>
+
+<div class="c" id="speed" style="height:380px">
+ <h2>Сайт стал легче</h2><div class="sub">Тот же вид и качество, меньше веса — быстрее открывается на телефоне</div>
+ <div class="cmp">
+  <div><h3>Картинки (226 шт.) → WebP</h3><div class="row"><em>было</em><i style="width:250px"></i><b>103 МБ</b></div><div class="row g"><em>стало</em><i style="width:73px"></i><b>30 МБ</b></div><div class="big"><strong>−71%</strong></div></div>
+  <div><h3>PDF-каталоги (11 шт.)</h3><div class="row"><em>было</em><i style="width:250px"></i><b>492 МБ</b></div><div class="row g"><em>стало</em><i style="width:89px"></i><b>175 МБ</b></div><div class="big"><strong>−64%</strong> · самый тяжёлый 177 → 50 МБ</div></div>
+ </div>
+</div>
+
+<div class="c" id="filter" style="height:400px">
+ <h2>Кого пускает фильтр</h2><div class="sub">Для поиска сайт открыт как раньше, чужим — отказ</div>
+ <div class="flt">
+  <div class="col ok"><h3>Проходят</h3><ul><li>Яндекс, Google, Bing, Mail.ru</li><li>Яндекс Метрика</li><li>веб-архив</li><li>превью ссылок в мессенджерах</li><li>обычные посетители</li></ul></div>
+  <div class="gate"><div style="font:800 22px -apple-system,Arial;color:#c6f24e;letter-spacing:.05em">ФИЛЬТР</div><p>журнал + фильтр<br>+ автобан</p></div>
+  <div class="col no"><h3>Получают отказ</h3><ul><li>копировщики сайтов</li><li>парсеры каталогов и цен</li><li>SEO-сборщики</li><li>сканеры .env, .git, бэкапов — бан 7 дней</li><li>60 отказов за 10 минут — бан на сутки</li></ul></div>
+ </div>
+</div>
+
+<div class="c" id="plugins" style="height:400px">
+ <h2>WordPress: какие плагины запретили ставить</h2><div class="sub">Их нельзя найти в каталоге, загрузить архивом или включить. Обычные плагины — как раньше</div>
+ <div class="pl">
+  <div><h3>Файловые менеджеры</h3><p>доступ ко всем файлам из админки</p><code>WP File Manager</code><code>File Manager Advanced</code><code>Filester</code><code>FileOrganizer</code></div>
+  <div><h3>Вставка PHP-кода</h3><p>пароль редактора = доступ к серверу</p><code>Insert PHP</code><code>PHP Everywhere</code><code>Code Snippets</code><code>WPCode</code><code>Woody Snippets</code><code>Exec-PHP</code></div>
+  <div><h3>База из админки</h3><p>выгрузка и правка всей базы</p><code>Adminer</code><code>WP phpMyAdmin</code><code>WP-DBManager</code><code>SQL Executioner</code></div>
+ </div>
+ <div class="note">Плюс отключён встроенный редактор тем и плагинов, а сайт видит только свою папку.</div>
+</div>
+
+<script>
+const d={0:2,1:16,2:71,3:27,4:11,5:23,6:3,7:5,8:4,9:18,10:26,11:59,12:30,13:17,14:9,15:10,16:0,17:0,18:0,19:5,20:0,21:0,22:0,23:5};
+const mx=Math.max(...Object.values(d)); let b='',h='';
+for(let i=0;i<24;i++){const v=d[i]||0; b+=`<div class="bar ${i<=6?'n':''}"><em>${v||''}</em><i style="height:${Math.max(v/mx*240,v?3:0)}px"></i></div>`; h+=`<span>${String(i).padStart(2,'0')}</span>`;}
+document.getElementById('bars').innerHTML=b; document.getElementById('hrs').innerHTML=h;
+</script>
+</body></html>
