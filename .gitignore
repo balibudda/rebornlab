@@ -17,3 +17,12 @@ drafts/ppm-pics.*
 drafts/ppm-build.sh
 # 15.11: черновик DDoS
 demo/draft-ddos/
+/_live/
+# 18.11: черновик кейса «троян в Битриксе»
+demo/draft-zashchita/
+content/journal/kejs-troyan-v-bitrikse-zashchita-sajta.md
+src/assets/journal/kejs-troyan-v-bitrikse-zashchita-sajta.jpg
+src/assets/journal/zashch-*.png
+assets/journal/kejs-troyan-v-bitrikse-zashchita-sajta.jpg
+assets/journal/zashch-*.png
+drafts/zashch-pics.*
