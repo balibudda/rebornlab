@@ -158,7 +158,7 @@ main = f'''<main class="pw">
   <div class="card">
     <h2>Хостинги сейчас <a class="lnk" href="__HB__" style="font-size:15px;font-weight:500;margin-left:8px">все хостинги →</a></h2>
     <p class="sub" id="hupd">Наш независимый мониторинг: панели управления, DNS и выборка реальных сайтов. Не официальные данные хостингов.</p>
-    <div class="hosts compact" id="hosts"><div class="h"><div class="l">Загружаем…</div></div></div>
+    <div class="hosts compact" id="hosts">__HOSTLINKS__</div>
   </div>
 
   <div class="grid2">
@@ -689,7 +689,7 @@ hub_main = f'''<main class="pw">
     {CHECK_FORM.format(pv=PV, ph="Адрес сайта, например mysite.ru")}</div>
   {WATCH_BOX.replace('{host}', '')}
   <div class="card"><div class="tabs" id="tabs"><button class="on" data-t="all">Все</button><button data-t="host">Хостинг</button><button data-t="cloud">Облака и VPS</button><button data-t="bad">Со сбоями</button></div>
-    <p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all"></div></div>
+    <p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all">{"".join(f'<a class="h hl" href="{HB}{k}/"><div class="n"><i></i>{n}</div><div class="l">{t.lower()}</div></a>' for k, n, t in hub_cards)}</div></div>
   {BOT_CTA}
   __HUBSEO__
   <div class="card"><h2>Вопросы</h2>{''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in hub_faq)}</div>
@@ -735,3 +735,6 @@ o.write_text(page('Мониторинг хостингов: какой хост�
                   'Проверка хостингов: какой хостинг не работает сейчас', hub_main, hub_js.replace('__HB__', HB).replace('__TYPES__', json.dumps(TYPES)),
                   [crumbs([('Главная', '/'), ('Мониторинг хостингов', hub_url)]), faq_ld(hub_faq)]))
 print('хостингов:', len(hub_cards), '+ хаб', hub_url)
+# 19.11: ссылки на страницы хостингов в HTML страницы проверки (раньше только скриптом — Яндекс их не видел)
+_pvf = ROOT / PV.strip('/') / 'index.html'
+_pvf.write_text(_pvf.read_text().replace('__HOSTLINKS__', ''.join(f'<a class="h hl" href="{HB}{k}/"><div class="n"><i></i>{n}</div><div class="l">статус {n}</div></a>' for k, n, *_ in HOSTS)))
