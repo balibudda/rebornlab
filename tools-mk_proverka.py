@@ -362,6 +362,10 @@ def md2html(md):
             out.append(f'<h3>{inl(b[4:])}</h3>')
         elif b.startswith('## '):
             out.append(f'<h2>{inl(b[3:])}</h2>')
+        elif b.startswith('|'):   # 19.11: таблицы (замеры по дням)
+            rows = [[c.strip() for c in l.strip().strip('|').split('|')] for l in b.split('\n') if l.strip() and not re.match(r'^\|[-|\s]+\|$', l.strip())]
+            out.append('<div class="tbl"><table><thead><tr>' + ''.join(f'<th>{inl(c)}</th>' for c in rows[0]) + '</tr></thead><tbody>'
+                       + ''.join('<tr>' + ''.join(f'<td>{inl(c)}</td>' for c in r) + '</tr>' for r in rows[1:]) + '</tbody></table></div>')
         elif re.match(r'^\d+\.\s', b):
             out.append('<ol>' + ''.join(f'<li>{inl(re.sub(r"^\d+\.\s*", "", l))}</li>' for l in b.split('\n') if l.strip()) + '</ol>')
         elif re.match(r'^[*-]\s', b):
@@ -536,6 +540,63 @@ HOST_JS = r'''<script>
 </script>
 '''
 
+
+# 19.11.2026 (Ник: «страницы хостингов давно висят без индекса… текст уникальный, без ИИ-штампов»): тексты YandexGPT (12.11) были
+# почти одинаковые у всех 27 (совпадение 84–90%) — убраны. Вместо них у каждого хостинга свой раздел с нашими замерами за неделю:
+# drafts/hm-week.json (vpn-ru: /root/hmstats.py по /var/lib/hostmon/history.json). Обновить: ssh vpn-ru python3 /root/hmstats.py > drafts/hm-week.json
+WEEK = json.loads((ROOT / 'drafts' / 'hm-week.json').read_text()) if (ROOT / 'drafts' / 'hm-week.json').exists() else {'providers': {}}
+
+
+def _pl(n, a, b, c):
+    m, h = n % 10, n % 100
+    return f'{n} {a if m == 1 and h != 11 else b if 2 <= m <= 4 and not 12 <= h <= 14 else c}'
+
+
+def _hours(k):   # k проверок по 30 минут
+    m = k * 30
+    return _pl(m, 'минуту', 'минуты', 'минут') if m < 60 else (f'около {_pl(round(m / 60), "часа", "часов", "часов")}' if m % 60 else _pl(m // 60, 'час', 'часа', 'часов'))
+
+
+def week_md(slug, name):
+    w = WEEK['providers'].get(slug)
+    if not w:
+        return '', ''
+    per = f"{WEEK['from'][:5]}–{WEEK['to'][:5]}"
+    t = [f"## {name} за неделю: наши замеры\n\nС {WEEK['from'][:5]} по {WEEK['to'][:5]} мы проверили {name} {_pl(w['checks'], 'раз', 'раза', 'раз')}."]
+    if not w['bad']:
+        t.append(' Ни одна проверка не показала сбоя: панель открывалась, DNS-серверы отвечали.' if w['dns_total'] else ' Ни одна проверка не показала сбоя: панель открывалась каждый раз.')
+        short = f'за неделю ({per}) сбоев не было — {w["checks"]} проверок подряд'
+    else:
+        t.append(f" Жёлтым или красным отмечены {_pl(w['bad'], 'проверка', 'проверки', 'проверок')}.")
+        if w['streak'] >= 2:
+            t.append(f" Самый долгий сбой длился {_hours(w['streak'])}: с {w['streak_from']} по {w['streak_to']} МСК.")
+        else:
+            t.append(' Все сбои были короткими: к следующей проверке через полчаса всё приходило в норму.')
+        why = []
+        if w['panel_fail']:
+            why.append(f"панель не открылась {_pl(w['panel_fail'], 'раз', 'раза', 'раз')}")
+        if w['dns_fail']:
+            why.append(f"хотя бы один DNS-сервер не ответил в {_pl(w['dns_fail'], 'проверке', 'проверках', 'проверках')}")
+        if why:
+            t.append(' Что именно: ' + ', '.join(why) + '.')
+        short = f'за неделю ({per}) — {w["bad"]} сбоев из {w["checks"]} проверок'
+    rows = ''.join(f"| {d} | {r[0]} | {r[1] or '—'} | {r[2] or '—'} | {(r[3] or '—') if w['dns_total'] else 'не проверяем'} |\n" for d, r in w.get('days', {}).items())
+    if rows:
+        t.append('\n\n### По дням\n\n| День | Проверок | Со сбоем | Панель не открылась | DNS не ответил |\n|---|---|---|---|---|\n' + rows.rstrip('\n'))
+    if w['dns_ms']:
+        lo, hi = min(w['dns_ms']), max(w['dns_ms'])
+        t.append(f" Сейчас DNS-серверы {name} отвечают нам из России за {lo} мс." if lo == hi else f" Сейчас DNS-серверы {name} отвечают нам из России за {lo}–{hi} мс.")
+    if slug in NO_SITES:
+        t.append(f'\n\nСайты клиентов {name} мы не проверяем: хостинг закрывает доступ нашим проверкам. Поэтому о сбоях на стороне серверов с сайтами судим только по панели и DNS.')
+    elif w['sample'] >= 10 and w['avail'] is not None:
+        t.append(f"\n\nВ нашей выборке {_pl(w['sample'], 'сайт', 'сайта', 'сайтов')} клиентов {name}. В среднем за неделю из них открывалось {str(w['avail']).replace('.', ',')}%. "
+                 'Те, что не открываются, не всегда говорят о сбое хостинга: сайт может быть сломан или заброшен самим владельцем. Поэтому статус ставим, только когда перестают открываться сразу многие.')
+    elif w['sample']:
+        t.append(f"\n\nСайтов клиентов {name} в нашей выборке пока {w['sample']} — слишком мало, чтобы судить по ним о хостинге. Статус ставим по панели и DNS.")
+    else:
+        t.append(f'\n\nСайтов клиентов {name} в нашей выборке пока нет, поэтому статус ставим по панели{" и DNS" if w["dns_total"] else ""}. Проверить свой сайт можно в поле выше.')
+    return ''.join(t), short
+
 hub_cards = []
 for slug, name, typ, panel, ns in HOSTS:
     host = re.sub(r'^https?://', '', panel).split('/')[0]
@@ -548,10 +609,7 @@ for slug, name, typ, panel, ns in HOSTS:
     ]
     if ns:
         faq.append((f'Какие DNS-серверы у {name}?', f'Для доменов на DNS {name} обычно указывают: {nsl}. Мы раз в 30 минут проверяем, что эти серверы отвечают. Если не отвечают все — сайты на таких доменах перестают открываться у новых посетителей.'))
-    faq += [
-        (f'Сайт на {name} не открывается с VPN — почему?', 'Хостинг или защита сайта могут закрывать доступ с зарубежных адресов. Наша проверка сайта показывает обе точки — из России без VPN и из-за рубежа, — так видно, в этом ли дело.'),
-        (f'Как узнать, когда {name} или мой сайт снова заработает?', 'Добавьте сайт в бесплатного бота @rebornlab_bot: он проверяет его каждые 10 минут и сразу пишет в Telegram, когда сайт упадёт или заработает.'),
-    ]
+    # 19.11: общие вопросы (VPN, бот) убраны — одинаковые на 27 страницах; бот и проверка сайта и так есть на странице
     ad = ''
     if name in HOST_LINKS:
         ad = (f'<p style="margin:14px 0 0"><a class="btn btn-ghost" href="{HOST_LINKS[name]}" target="_blank" rel="noopener sponsored">Сайт {name} →</a> '
@@ -570,8 +628,7 @@ for slug, name, typ, panel, ns in HOSTS:
     lst.append(f'**DNS-серверы** — опрашиваем {nsl}: они отвечают за то, чтобы домены клиентов открывались.' if ns else '**DNS** — у этого сервиса мы его не проверяем: клиенты используют разные DNS.')
     lst.append('**Сайты клиентов** — не проверяем: хостинг ограничивает наши проверки.' if slug in NO_SITES else '**Сайты клиентов** — открываем выборку реальных сайтов, которые работают у этого хостинга.')
     intro = f'## Как мы проверяем {name}\n\nМониторинг {name} идёт раз в 30 минут с сервера в России без VPN — так, как сайты видит обычный посетитель:\n\n' + '\n'.join('- ' + x for x in lst) + f'\n\n{tp}'
-    ai = SEO.get(slug, '')
-    ai = '\n\n'.join(b for b in re.split(r'\n(?=## )', ai) if not re.match(r'## (Что мы проверяем|Как узнать о сбое)', b))   # эти разделы уже есть выше/в блоке бота
+    ai, wshort = week_md(slug, name)   # 19.11: вместо текстов YandexGPT — свои замеры за неделю
     targets = [('Панель управления', host, True), (('DNS-серверы' if ns else 'DNS не проверяем'), (', '.join(ns[:2]) + (' …' if len(ns) > 2 else '')) if ns else 'разные у клиентов', bool(ns)),
                ('Сайты клиентов', 'выборка реальных сайтов' if slug not in NO_SITES else 'не проверяем', slug not in NO_SITES)]
     fig = svg_flow(f'Как мы проверяем {name}', ('Сервер в России', 'без VPN · каждые 30 мин'), targets, (f'Статус {name}', 'здесь и в боте'),
@@ -591,7 +648,7 @@ for slug, name, typ, panel, ns in HOSTS:
   </div>
   <div class="card"><h2>Проверить свой сайт на {name}</h2><p class="sub">Статус хостинга и вашего сайта могут отличаться. Проверим из России без VPN и из-за рубежа, покажем ошибку и как её исправить.</p>
     {CHECK_FORM.format(pv=PV, ph="Адрес сайта на " + name)}</div>
-  {WATCH_BOX.replace('{host}', ' data-host="' + name + '"')}
+  {re.sub(r'<details class="wbx-how">.*?</details>', '', WATCH_BOX).replace('{host}', ' data-host="' + name + '"')}   <!-- 19.11: без общей справки — одинаковый текст на 27 страницах -->
   <div class="card"><h2>{name}: что мы знаем</h2><div class="facts2">
     <div class="f"><div class="k">Услуга</div><div class="v">{typ}</div></div>
     <div class="f"><div class="k">Панель управления</div><div class="v">{host}</div></div>
@@ -605,7 +662,7 @@ for slug, name, typ, panel, ns in HOSTS:
   <p class="hint">Мы не связаны с {name} и не представляем его. Ответ панели и DNS не гарантирует работу всех сайтов и услуг хостинга.{(' ' + AD_FOOT[name]) if name in AD_FOOT else ''}</p>
 </main>'''
     title = f'Мониторинг {name}: не работает {name} сегодня? Статус сейчас без VPN'
-    desc = f'Мониторинг {name}: работает ли {name} прямо сейчас — панель управления{", DNS-серверы" if ns else ""}{"" if slug in NO_SITES else " и сайты клиентов"} — проверка из России без VPN каждые 30 минут. Проверьте свой сайт и получите уведомление в Telegram.'
+    desc = f'Работает ли {name} сейчас: панель{", DNS" if ns else ""}{"" if slug in NO_SITES else ", сайты клиентов"} — проверка из России без VPN раз в 30 минут. ' + (wshort[:1].upper() + wshort[1:] + '.' if wshort else 'Уведомления в Telegram.')
     lds = [crumbs([('Главная', '/'), ('Мониторинг хостингов', HB), (name, url)]), faq_ld(faq)]
     o = ROOT / url.strip('/') / 'index.html'
     o.parent.mkdir(parents=True, exist_ok=True)
