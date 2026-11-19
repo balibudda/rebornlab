@@ -339,7 +339,7 @@ script = r'''<script>
       ks.forEach(function (k) {
         var x = h.providers[k], cls = x.level === 'ok' ? 'ok' : x.level === 'warn' ? 'warn' : 'bad';
         var sl = x.sites_total >= 3 ? 'сайтов открывается ' + x.sites_ok + ' из ' + x.sites_total : (x.dns_total ? 'DNS ' + x.dns_ok + ' из ' + x.dns_total : 'панель ' + (x.panel ? 'открывается' : 'не открывается'));
-        cards.push('<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + cls + '"></i>' + esc(x.name) + '</div><div class="l">' + (cls === 'ok' ? 'работает' : cls === 'warn' ? 'частичные сбои' : 'сбой') + ' · ' + sl + '</div></a>');
+        cards.push('<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + cls + '"></i>' + (window.RL_LG && RL_LG[k] ? '<img class="hl-logo" src="/assets/hosting-logos/' + RL_LG[k] + '" alt="" width="22" height="22">' : '') + esc(x.name) + '</div><div class="l">' + (cls === 'ok' ? 'работает' : cls === 'warn' ? 'частичные сбои' : 'сбой') + ' · ' + sl + '</div></a>');
       });
     }
     if (cards.length) $('hosts').innerHTML = cards.join('');
@@ -534,7 +534,7 @@ HOST_JS = r'''<script>
     // другие хостинги: сначала со сбоями
     var ks = Object.keys(h.providers).filter(function (k) { return k !== KEY; }), rank = {down: 0, warn: 1, ok: 2};
     ks.sort(function (a, b) { return rank[h.providers[a].level] - rank[h.providers[b].level]; });
-    document.getElementById('others').innerHTML = ks.map(function (k) { var y = h.providers[k], c = y.level === 'ok' ? 'ok' : y.level === 'warn' ? 'warn' : 'bad'; return '<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + c + '"></i>' + esc(y.name) + '</div><div class="l">' + (c === 'ok' ? 'работает' : c === 'warn' ? 'частичные сбои' : 'сбой') + '</div></a>'; }).join('') + '<a class="h hl" href="/beget/"><div class="n"><i></i>Beget</div><div class="l">свой подробный мониторинг</div></a>';
+    document.getElementById('others').innerHTML = ks.map(function (k) { var y = h.providers[k], c = y.level === 'ok' ? 'ok' : y.level === 'warn' ? 'warn' : 'bad'; return '<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + c + '"></i>' + (window.RL_LG && RL_LG[k] ? '<img class="hl-logo" src="/assets/hosting-logos/' + RL_LG[k] + '" alt="" width="22" height="22">' : '') + esc(y.name) + '</div><div class="l">' + (c === 'ok' ? 'работает' : c === 'warn' ? 'частичные сбои' : 'сбой') + '</div></a>'; }).join('') + '<a class="h hl" href="/beget/"><div class="n"><i></i>Beget</div><div class="l">свой подробный мониторинг</div></a>';
   }).catch(function () {});
 })();
 </script>
@@ -597,6 +597,13 @@ def week_md(slug, name):
         t.append(f'\n\nСайтов клиентов {name} в нашей выборке пока нет, поэтому статус ставим по панели{" и DNS" if w["dns_total"] else ""}. Проверить свой сайт можно в поле выше.')
     return ''.join(t), short
 
+LOGOS = {f.stem: f.name for f in (ROOT / 'assets' / 'hosting-logos').iterdir()} if (ROOT / 'assets' / 'hosting-logos').exists() else {}   # 19.11: иконки с официальных сайтов
+
+
+def logo_i(k, n, sz=22):
+    return f'<img class="hl-logo" src="/assets/hosting-logos/{LOGOS[k]}" alt="{n}" width="{sz}" height="{sz}" loading="lazy">' if k in LOGOS else ''
+
+
 hub_cards = []
 for slug, name, typ, panel, ns in HOSTS:
     host = re.sub(r'^https?://', '', panel).split('/')[0]
@@ -654,7 +661,7 @@ for slug, name, typ, panel, ns in HOSTS:
   <div class="card"><h2>Проверить свой сайт на {name}</h2><p class="sub">Статус хостинга и вашего сайта могут отличаться. Проверим из России без VPN и из-за рубежа, покажем ошибку и как её исправить.</p>
     {CHECK_FORM.format(pv=PV, ph="Адрес сайта на " + name)}</div>
   {re.sub(r'<details class="wbx-how">.*?</details>', '', WATCH_BOX).replace('{host}', ' data-host="' + name + '"')}   <!-- 19.11: без общей справки — одинаковый текст на 27 страницах -->
-  <div class="card"><h2>{name}: что мы знаем</h2><div class="facts2">
+  <div class="card"><h2 style="display:flex;align-items:center;gap:10px">{logo_i(slug, name, 32)}{name}: что мы знаем</h2><div class="facts2">
     <div class="f"><div class="k">Услуга</div><div class="v">{typ}</div></div>
     <div class="f"><div class="k">Панель управления</div><div class="v">{host}</div></div>
     {f'<div class="f"><div class="k">DNS для доменов</div><div class="v" style="font-size:15px">{nsl}</div></div>' if ns else ''}
@@ -663,7 +670,7 @@ for slug, name, typ, panel, ns in HOSTS:
   {BOT_CTA}
   {seo_h}
   <div class="card"><h2>Вопросы о {name}</h2>{faq_h}</div>
-  <div class="card"><h2>Другие хостинги сейчас <a class="lnk" href="{HB}" style="font-size:15px;font-weight:500;margin-left:8px">все →</a></h2><div class="hosts compact" id="others">{"".join(f'<a class="h hl" href="{HB}{k}/"><div class="n"><i></i>{n}</div><div class="l">статус {n}</div></a>' for k, n, *_ in HOSTS if k != slug)}</div></div>
+  <div class="card"><h2>Другие хостинги сейчас <a class="lnk" href="{HB}" style="font-size:15px;font-weight:500;margin-left:8px">все →</a></h2><div class="hosts compact" id="others">{"".join(f'<a class="h hl" href="{HB}{k}/"><div class="n">{logo_i(k, n)}{n}</div><div class="l">статус {n}</div></a>' for k, n, *_ in HOSTS if k != slug)}</div></div>
   <p class="hint">Мы не связаны с {name} и не представляем его. Ответ панели и DNS не гарантирует работу всех сайтов и услуг хостинга.{(' ' + AD_FOOT[name]) if name in AD_FOOT else ''}</p>
 </main>'''
     title = f'Мониторинг {name}: не работает {name} сегодня? Статус сейчас без VPN'
@@ -689,7 +696,7 @@ hub_main = f'''<main class="pw">
     {CHECK_FORM.format(pv=PV, ph="Адрес сайта, например mysite.ru")}</div>
   {WATCH_BOX.replace('{host}', '')}
   <div class="card"><div class="tabs" id="tabs"><button class="on" data-t="all">Все</button><button data-t="host">Хостинг</button><button data-t="cloud">Облака и VPS</button><button data-t="bad">Со сбоями</button></div>
-    <p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all">{"".join(f'<a class="h hl" href="{HB}{k}/"><div class="n"><i></i>{n}</div><div class="l">{t.lower()}</div></a>' for k, n, t in hub_cards)}</div></div>
+    <p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all">{"".join(f'<a class="h hl" href="{HB}{k}/"><div class="n">{logo_i(k, n)}{n}</div><div class="l">{t.lower()}</div></a>' for k, n, t in hub_cards)}</div></div>
   {BOT_CTA}
   __HUBSEO__
   <div class="card"><h2>Вопросы</h2>{''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in hub_faq)}</div>
@@ -710,7 +717,7 @@ hub_js = r'''<script>
       d.push('панель ' + (x.panel ? 'открывается' : '<b style="color:#ff7a6b">не открывается</b>'));
       if (x.dns_total) d.push('DNS ' + x.dns_ok + '/' + x.dns_total);
       if (x.sites_total >= 3) d.push('сайтов ' + x.sites_ok + '/' + x.sites_total);
-      return '<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + c + '"></i>' + esc(x.name) + '</div><div class="l">' + esc(x.type || '') + ' · ' + (c === 'ok' ? 'работает' : c === 'warn' ? 'частичные сбои' : 'сбой') + '<br>' + d.join(' · ') + '</div></a>';
+      return '<a class="h hl" href="' + HB + k + '/"><div class="n"><i class="' + c + '"></i>' + (window.RL_LG && RL_LG[k] ? '<img class="hl-logo" src="/assets/hosting-logos/' + RL_LG[k] + '" alt="" width="22" height="22">' : '') + esc(x.name) + '</div><div class="l">' + esc(x.type || '') + ' · ' + (c === 'ok' ? 'работает' : c === 'warn' ? 'частичные сбои' : 'сбой') + '<br>' + d.join(' · ') + '</div></a>';
     });
     if (BG && (T === 'all' || T === 'host' || (T === 'bad' && BG.c !== 'ok'))) cards.unshift('<a class="h hl" href="/beget/"><div class="n"><i class="' + BG.c + '"></i>Beget</div><div class="l">Хостинг · ' + (BG.c === 'ok' ? 'работает' : BG.c === 'warn' ? 'частичные сбои' : 'серьёзный сбой') + '<br>сайтов из выборки открывается ' + BG.p + '% · подробный мониторинг</div></a>');
     document.getElementById('all').innerHTML = cards.join('') || '<div class="h"><div class="l">Сбоев сейчас нет 🎉</div></div>';
@@ -738,3 +745,10 @@ print('хостингов:', len(hub_cards), '+ хаб', hub_url)
 # 19.11: ссылки на страницы хостингов в HTML страницы проверки (раньше только скриптом — Яндекс их не видел)
 _pvf = ROOT / PV.strip('/') / 'index.html'
 _pvf.write_text(_pvf.read_text().replace('__HOSTLINKS__', ''.join(f'<a class="h hl" href="{HB}{k}/"><div class="n"><i></i>{n}</div><div class="l">статус {n}</div></a>' for k, n, *_ in HOSTS)))
+# 19.11: иконки хостингов — карта для скриптов, которые перерисовывают списки живыми статусами
+_lgjs = '<script>window.RL_LG=' + json.dumps(LOGOS) + ';</script>'
+_lgcss = '<style>.hl-logo{width:22px;height:22px;border-radius:6px;background:#fff;padding:2px;object-fit:contain;flex:none;vertical-align:middle;margin-right:8px}.h .n{display:flex;align-items:center}</style>'
+for _f in [_pvf, ROOT / HB.strip('/') / 'index.html'] + [ROOT / HB.strip('/') / k / 'index.html' for k, *_ in HOSTS]:
+    _t = _f.read_text()
+    if 'window.RL_LG=' not in _t:
+        _f.write_text(_t.replace('</head>', _lgcss + '</head>', 1).replace('<main', _lgjs + '<main', 1))
