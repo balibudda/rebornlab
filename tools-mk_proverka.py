@@ -663,7 +663,7 @@ for slug, name, typ, panel, ns in HOSTS:
   {BOT_CTA}
   {seo_h}
   <div class="card"><h2>Вопросы о {name}</h2>{faq_h}</div>
-  <div class="card"><h2>Другие хостинги сейчас <a class="lnk" href="{HB}" style="font-size:15px;font-weight:500;margin-left:8px">все →</a></h2><div class="hosts compact" id="others"></div></div>
+  <div class="card"><h2>Другие хостинги сейчас <a class="lnk" href="{HB}" style="font-size:15px;font-weight:500;margin-left:8px">все →</a></h2><div class="hosts compact" id="others">{"".join(f'<a class="h hl" href="{HB}{k}/"><div class="n"><i></i>{n}</div><div class="l">статус {n}</div></a>' for k, n, *_ in HOSTS if k != slug)}</div></div>
   <p class="hint">Мы не связаны с {name} и не представляем его. Ответ панели и DNS не гарантирует работу всех сайтов и услуг хостинга.{(' ' + AD_FOOT[name]) if name in AD_FOOT else ''}</p>
 </main>'''
     title = f'Мониторинг {name}: не работает {name} сегодня? Статус сейчас без VPN'
