@@ -696,7 +696,7 @@ hub_main = f'''<main class="pw">
     {CHECK_FORM.format(pv=PV, ph="Адрес сайта, например mysite.ru")}</div>
   {WATCH_BOX.replace('{host}', '')}
   <div class="card"><div class="tabs" id="tabs"><button class="on" data-t="all">Все</button><button data-t="host">Хостинг</button><button data-t="cloud">Облака и VPS</button><button data-t="bad">Со сбоями</button></div>
-    <p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all">{"".join(f'<a class="h hl" href="{HB}{k}/"><div class="n">{logo_i(k, n)}{n}</div><div class="l">{t.lower()}</div></a>' for k, n, t in hub_cards)}</div></div>
+    <p class="sub" style="margin:0 0 10px"><a href="{HB}reyting/"><b>Рейтинг хостингов 2026</b></a> — кто работал без сбоев за неделю · <a href="{HB}reyting-2027/"><b>Рейтинг 2027 по категориям</b></a> — хостинг, VPS, облако, Битрикс</p><p class="sub" id="hupd">Загружаем…</p><div class="hosts" id="all">{"".join(f'<a class="h hl" href="{HB}{k}/"><div class="n">{logo_i(k, n)}{n}</div><div class="l">{t.lower()}</div></a>' for k, n, t in hub_cards)}</div></div>
   {BOT_CTA}
   __HUBSEO__
   <div class="card"><h2>Вопросы</h2>{''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in hub_faq)}</div>
