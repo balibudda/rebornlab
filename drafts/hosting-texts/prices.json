@@ -1,0 +1,396 @@
+{
+ "checked": "2026-11-19",
+ "hosts": {
+  "regru": {
+   "shared": {
+    "price": null,
+    "plan": "",
+    "note": "страница reg.ru/hosting/ не открылась (защита от ботов, JS-заглушка); в поиске — PDF-прайс 08.04.2025: Host-Lite 229 ₽/мес, пакет янв. 2026 — 235 ₽/мес; не проверено"
+   },
+   "vps": {
+    "price": null,
+    "plan": "",
+    "note": "reg.ru/vps/ не открылся (защита); в поиске сниппет «от 390 ₽/мес», не проверено"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": "не проверено — сайт закрыт защитой"
+   },
+   "url": "https://www.reg.ru/hosting/",
+   "url_vps": "https://www.reg.ru/vps/"
+  },
+  "timeweb": {
+   "shared": {
+    "price": 729,
+    "plan": "Optimo",
+    "note": "729 ₽ — помесячно; 510 ₽/мес при оплате за год"
+   },
+   "vps": {
+    "price": 1242,
+    "plan": "VDS/VPS (Cloud)",
+    "note": "«VDS и VPS от 1 242 ₽/месяц» в меню timeweb.com; на timeweb.cloud видимый минимум — MSK Ultra 15 (1×3,3 ГГц/1 ГБ/15 ГБ NVMe, Москва) 1 920 ₽/мес, ещё 4 тарифа скрыты кнопкой"
+   },
+   "bitrix": {
+    "price": 852,
+    "plan": "1Сайт (хостинг для 1С-Битрикс)",
+    "note": "852 ₽ помесячно; 596 ₽/мес при оплате за год"
+   },
+   "url": "https://timeweb.com/ru/services/hosting/",
+   "url_vps": "https://timeweb.cloud/services/vds-vps",
+   "url_bitrix": "https://timeweb.com/ru/services/cms/bitrix/"
+  },
+  "spaceweb": {
+   "shared": {
+    "price": 311,
+    "plan": "Взлёт",
+    "note": "311 ₽ помесячно; 249 ₽/мес при оплате за год"
+   },
+   "vps": {
+    "price": 463.26,
+    "plan": "VPS NVMe (Промо 1×3,2 ГГц/1 ГБ/10 ГБ NVMe)",
+    "note": "«от 463,26 ₽/мес» на странице VPS; Промо: 1-й месяц 0 ₽, 4 818 ₽/год; Москва/СПб/Амстердам"
+   },
+   "bitrix": {
+    "price": 1499,
+    "plan": "Уран (рекомендован для 1С-Битрикс)",
+    "note": "отдельной линейки нет — на странице хостинга для Битрикс самый младший «Уран»: 1 499 ₽ помесячно, 1 199 ₽/мес за год"
+   },
+   "url": "https://sweb.ru/hosting/",
+   "url_vps": "https://sweb.ru/vds/",
+   "url_bitrix": "https://sweb.ru/hosting/bitrix/"
+  },
+  "ru-center": {
+   "shared": {
+    "price": null,
+    "plan": "",
+    "note": "nic.ru не открылся (защита от ботов); в поиске старые страницы: «Сайт 3» от 889 ₽/мес, справка — от 293 ₽/мес; не проверено"
+   },
+   "vps": {
+    "price": null,
+    "plan": "",
+    "note": "не проверено — сайт закрыт защитой"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": ""
+   },
+   "url": "https://www.nic.ru/hosting/",
+   "url_vps": "https://www.nic.ru/catalog/hosting/"
+  },
+  "jino": {
+   "shared": {
+    "price": 405,
+    "plan": "X1 (конструктор: X1 + 20 ГБ + MySQL + PHP + SSH)",
+    "note": "тариф X1 сам по себе 129 ₽/мес, но рабочая сборка на странице — 405 ₽/мес; первые 30 дней 0 ₽; только помесячно"
+   },
+   "vps": {
+    "price": 730,
+    "plan": "1×2 ГГц / 1,5 ГБ / 10 ГБ",
+    "note": "акция −30%, без акции 1 040 ₽/мес; публичный IP +200 ₽/мес"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": "вкладка «1С-Битрикс» есть, цены на странице нет"
+   },
+   "url": "https://jino.ru/hosting/",
+   "url_vps": "https://jino.ru/vps/"
+  },
+  "sprinthost": {
+   "shared": {
+    "price": 190,
+    "plan": "X-1",
+    "note": "190 ₽ помесячно; 1 788 ₽/год (149 ₽/мес); промо 99 ₽/мес (из данных страницы тарифов)"
+   },
+   "vps": {
+    "price": null,
+    "plan": "",
+    "note": "страница VDS грузится скриптом, цены не видны; в поиске «ГИПЕР VDS от 189 ₽/мес», не проверено"
+   },
+   "bitrix": {
+    "price": 800,
+    "plan": "Ultra Bitrix-1",
+    "note": "800 ₽ помесячно; 7 680 ₽/год (640 ₽/мес); промо 599 ₽"
+   },
+   "url": "https://sprinthost.ru/tariffs",
+   "url_vps": "https://sprinthost.ru/tariffs/vds"
+  },
+  "hostland": {
+   "shared": {
+    "price": 109,
+    "plan": "Старт",
+    "note": "109 ₽ помесячно; 97 ₽/мес при оплате за 12 мес."
+   },
+   "vps": {
+    "price": 972,
+    "plan": "VDS/VPS",
+    "note": "«От 972 руб./мес.» на главной; конфигурация не видна (страница /vds грузится скриптом)"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": "отдельного тарифа нет"
+   },
+   "url": "https://www.hostland.ru/hosting/start",
+   "url_vps": "https://hostland.ru/"
+  },
+  "mchost": {
+   "shared": {
+    "price": 264,
+    "plan": "Мак-3",
+    "note": "264 ₽ помесячно; 232 ₽/мес при оплате за год"
+   },
+   "vps": {
+    "price": 473,
+    "plan": "KVM-1 (1 ядро/1 ГБ/15 ГБ NVMe)",
+    "note": "473 ₽ помесячно; 417 ₽/мес за год; есть KVM-NEW 143 ₽/мес (0,6 ГБ, 10 ГБ SSD, не более 1 заказа на клиента, «распродажа»)"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": "CMS-хостинг от 905 ₽/мес (не именно Битрикс)"
+   },
+   "url": "https://mchost.ru/",
+   "url_vps": "https://mchost.ru/"
+  },
+  "majordomo": {
+   "shared": {
+    "price": 259,
+    "plan": "Старт",
+    "note": "259 ₽ за 1 месяц (базовая 360 ₽, −28%); 219 ₽/мес за год; минимум «179 ₽» — при долгой оплате"
+   },
+   "vps": {
+    "price": 719,
+    "plan": "VPS-1-RU Lite",
+    "note": "719 ₽ помесячно; 659 ₽/мес за год; минимум 629 ₽/мес при долгой оплате; Россия"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": ""
+   },
+   "url": "https://majordomo.ru/hosting",
+   "url_vps": "https://majordomo.ru/vps"
+  },
+  "ihc": {
+   "shared": {
+    "price": 147,
+    "plan": "IHC-2",
+    "note": "147 ₽ помесячно; 123 ₽/мес при оплате за год (1 470 ₽/год)"
+   },
+   "vps": {
+    "price": 380,
+    "plan": "ssdVPS:1 (1 CPU/1 ГБ/20 ГБ SSD)",
+    "note": "380 ₽ помесячно, 317 ₽/мес за год; на странице «Распродано»"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": ""
+   },
+   "url": "https://www.ihc.ru/hosting.html",
+   "url_vps": "https://www.ihc.ru/vps.html"
+  },
+  "netangels": {
+   "shared": {
+    "price": 179,
+    "plan": "",
+    "note": "«Виртуальный хостинг от 179 ₽/мес» (заголовок страницы); таблица тарифов грузится скриптом, название не видно; почасовая оплата"
+   },
+   "vps": {
+    "price": 130,
+    "plan": "Старт",
+    "note": "«Старт от 130 ₽/мес»; конфигурация не указана"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": "страница Битрикс — те же тарифы «от 179 ₽/мес», отдельного нет"
+   },
+   "url": "https://www.netangels.ru/hosting/",
+   "url_vps": "https://www.netangels.ru/cloud/"
+  },
+  "masterhost": {
+   "shared": {
+    "price": 206,
+    "plan": "v2-start",
+    "note": "206 ₽ помесячно; 185 ₽/мес при оплате за год; тест-драйв 30 дней за 1 ₽"
+   },
+   "vps": {
+    "price": 423,
+    "plan": "Andromeda (1×3,0 ГГц/1 ГБ/10 ГБ NVMe)",
+    "note": "на странице метка «Скидка 10%», период оплаты не уточнён"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": "отдельного тарифа нет; для Битрикс предлагают «Сервер на троих» 3 802 ₽/мес (3 042 за год)"
+   },
+   "url": "https://masterhost.ru/hosting/",
+   "url_vps": "https://masterhost.ru/vps/"
+  },
+  "ruweb": {
+   "shared": {
+    "price": 254,
+    "plan": "FERRUM",
+    "note": "254 ₽ помесячно; на странице также «минимальная конфигурация от 75 ₽/мес» (конструктор, для юрлиц 90 ₽)"
+   },
+   "vps": {
+    "price": 393,
+    "plan": "KVMv-NANO (1 CPU/0,5 ГБ/12 ГБ, Москва)",
+    "note": "393 ₽ помесячно; в заголовке страницы «от 169 ₽/месяц» — тариф не найден"
+   },
+   "bitrix": {
+    "price": null,
+    "plan": "",
+    "note": ""
+   },
+   "url": "https://ruweb.net/hosting/",
+   "url_vps": "https://ruweb.net/vds/"
+  },
+  "tilda": {
+   "tilda": {
+    "personal": {
+     "price": 750,
+     "price_year": 500
+    },
+    "business": {
+     "price": 1250,
+     "price_year": 1000
+    },
+    "note": "750 / 1 250 ₽ помесячно; 500 / 1 000 ₽/мес при оплате за год; есть бесплатный Free"
+   },
+   "url": "https://tilda.ru/pricing/",
+   "shared": {
+    "price": 750,
+    "plan": "Personal",
+    "note": "конструктор: 750 ₽ помесячно, 500 ₽/мес при оплате за год"
+   }
+  },
+  "selectel": {
+   "cloud": {
+    "price": 948.5,
+    "plan": "Standard Line",
+    "note": "«от 948,50 ₽/мес», с НДС 22%; есть Shared Line (10/20/50% vCPU) — цены на странице нет"
+   },
+   "vps": {
+    "price": null,
+    "plan": "",
+    "note": "VPS как отдельной услуги нет — см. cloud"
+   },
+   "url": "https://selectel.ru/services/cloud/servers/",
+   "url_vps": "https://selectel.ru/services/cloud/servers/"
+  },
+  "yandex-cloud": {
+   "cloud": {
+    "price": null,
+    "plan": "",
+    "note": "понятной цифры «от … ₽/мес» нет, только калькулятор и почасовые ставки: vCPU Ice Lake 20% — 0,52 ₽/ч, 100% — 1,24 ₽/ч, 1 ГБ RAM — 0,33 ₽/ч (с НДС), диск отдельно"
+   },
+   "url": "https://yandex.cloud/ru/docs/compute/pricing"
+  },
+  "vk-cloud": {
+   "cloud": {
+    "price": null,
+    "plan": "",
+    "note": "только поресурсно: CPU Intel Cascade Lake 820 ₽/30 дней, RAM 1 ГБ 223 ₽/30 дней (с НДС), диск отдельно"
+   },
+   "url": "https://cloud.vk.com/pricelist/"
+  },
+  "cloud-ru": {
+   "cloud": {
+    "price": 0,
+    "plan": "Evolution Compute free tier (2 vCPU 10%/4 ГБ/30 ГБ)",
+    "note": "на странице «Evolution Compute 0 ₽ в месяц с НДС» — бесплатный уровень, бессрочно; платные ВМ — почасово (pay-as-you-go), цифры «от … ₽/мес» нет"
+   },
+   "url": "https://cloud.ru/services/vps-vds"
+  },
+  "serverspace": {
+   "vps": {
+    "price": null,
+    "plan": "",
+    "note": "serverspace.ru не открылся (защита от ботов); в поиске баннеры «от 430 ₽/мес», не проверено"
+   },
+   "url": "https://serverspace.ru/"
+  },
+  "firstvds": {
+   "vps": {
+    "price": 299,
+    "plan": "VDS Старт",
+    "note": "«от 299 ₽/мес» на главной (Россия, Нидерланды, Казахстан); конфигурация грузится скриптом, не видна"
+   },
+   "url": "https://firstvds.ru/",
+   "url_vps": "https://firstvds.ru/products/vds_vps_hosting"
+  },
+  "vdsina": {
+   "vps": {
+    "price": 2400,
+    "plan": "Стандартный (4 ядра/8 ГБ/150 ГБ)",
+    "note": "на рублёвой странице единственный стандартный тариф: 2 400 ₽/мес (80 ₽/день); Москва/Амстердам"
+   },
+   "url": "https://vdsina.ru/pricing/standard"
+  },
+  "adminvps": {
+   "vps": {
+    "price": 314,
+    "plan": "VPS Стандарт",
+    "note": "«VPS от 314 ₽/мес»; конфигурация минимального тарифа не видна (конфигуратор по умолчанию 1×3,6 ГГц/2 ГБ/20 ГБ NVMe — 500 ₽/мес)"
+   },
+   "url": "https://adminvps.ru/vps/"
+  },
+  "aeza": {
+   "vps": {
+    "price": 5.93,
+    "currency": "EUR",
+    "plan": "WAWs-1 (1 ядро/2 ГБ/30 ГБ NVMe)",
+    "note": "€5.93/мес — Варшава; Москва есть в списке локаций, но её цены грузятся скриптом и не видны"
+   },
+   "url": "https://aeza.net/ru/virtual-servers"
+  },
+  "justhost": {
+   "vps": {
+    "price": 744.3,
+    "plan": "Сириус (1 ядро/1 ГБ/20 ГБ NVMe)",
+    "note": "744,30 ₽ помесячно; 595,44 ₽/мес при оплате за 12 мес.; «от 229 ₽» — VPS Promo только на первый месяц (512 МБ/5 ГБ)"
+   },
+   "url": "https://justhost.ru/"
+  },
+  "fornex": {
+   "vps": {
+    "price": null,
+    "plan": "",
+    "note": "fornex.com закрыт Cloudflare-проверкой; в поиске — Cloud NVMe 1 от €7/мес, не проверено"
+   },
+   "shared": {
+    "price": null,
+    "plan": "",
+    "note": "не проверено"
+   },
+   "url": "https://fornex.com/ru/vps/"
+  },
+  "hostkey": {
+   "vps": {
+    "price": 490,
+    "plan": "vm.pico (1 vCPU/1 ГБ/40 ГБ SSD)",
+    "note": "490 ₽/мес; на главной: «VPS/VDS в Европе и США с оплатой в рублях» — не Россия"
+   },
+   "url": "https://hostkey.ru/vps/"
+  },
+  "4vps": {
+   "shared": {
+    "price": 90,
+    "plan": "",
+    "note": "«Хостинг сайтов от 90 руб.» — период не указан"
+   },
+   "vps": {
+    "price": null,
+    "plan": "",
+    "note": "тарифы грузятся скриптом; в поиске LP-cx01 80 ₽/мес и RU-cx01 420 ₽/мес (Россия), не проверено"
+   },
+   "url": "https://4vps.su/",
+   "url_vps": "https://4vps.su/vps/ru"
+  }
+ }
+}

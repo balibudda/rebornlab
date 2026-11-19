@@ -52,14 +52,17 @@ PR = json.loads(PRF.read_text()) if PRF.exists() else {'hosts': {}}
 PK = {'shared': ('shared',), 'vps': ('vps',), 'cloud': ('cloud', 'vps'), 'bitrix': ('bitrix', 'shared', 'vps'), 'wordpress': ('shared',), 'shop': ('shared', 'cloud', 'vps')}
 
 
+def _money(x):
+    v = x['price']; cur = {'EUR': '€', 'USD': '$'}.get(x.get('currency'), '€' if '€' in str(x.get('note') or '')[:3] else '₽')
+    s = f'{v:,.0f}'.replace(',', ' ') if float(v).is_integer() else f'{v:,.2f}'.replace(',', ' ').replace('.', ',')
+    return f'от {s} {cur}/мес'
+
 def price(s, cat):
     h = PR['hosts'].get(s, {})
     for k in PK.get(cat, ('shared',)):
         x = h.get(k) or {}
         if x.get('price'):
-            note = str(x.get('note') or '')
-            cur = '$' if '$' in note else '€' if '€' in note else '₽'
-            return f'от {x["price"]:,.0f} {cur}/мес'.replace(',', ' ')
+            return _money(x)
     return ''
 
 

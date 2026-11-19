@@ -19,14 +19,17 @@ PRF = ROOT / 'drafts' / 'hosting-texts' / 'prices.json'   # 19.11: цены с �
 PR = json.loads(PRF.read_text()) if PRF.exists() else {'hosts': {}}
 
 
+def _money(x):
+    v = x['price']; cur = {'EUR': '€', 'USD': '$'}.get(x.get('currency'), '€' if '€' in str(x.get('note') or '')[:3] else '₽')
+    s = f'{v:,.0f}'.replace(',', ' ') if float(v).is_integer() else f'{v:,.2f}'.replace(',', ' ').replace('.', ',')
+    return f'от {s} {cur}/мес'
+
 def price(slug, kinds=('shared', 'vps', 'cloud', 'bitrix')):
     h = PR['hosts'].get(slug, {})
     for k in kinds:
         x = h.get(k) or {}
         if x.get('price'):
-            v = x['price']
-            cur = '₽' if not any(c in str(x.get('note', '')) for c in ('$', '€')) else ('$' if '$' in str(x.get('note', '')) else '€')
-            return f'от {v:,.0f} {cur}'.replace(',', ' ') + ('/мес' if k != 'tilda' else '/мес')
+            return _money(x)
     return ''
 
 
