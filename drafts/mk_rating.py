@@ -15,6 +15,21 @@ HOSTS = eval(re.search(r'^HOSTS = (\[.*?\n\])', src, re.S | re.M).group(1))
 HOST_LINKS = eval(re.search(r'^HOST_LINKS = (\{.*?\})', src, re.M).group(1))
 AD_NOTE = eval(re.search(r'^AD_NOTE = (\{.*?\})', src, re.M).group(1))
 W = json.loads((ROOT / 'drafts' / 'hm-week.json').read_text())
+PRF = ROOT / 'drafts' / 'hosting-texts' / 'prices.json'   # 19.11: цены с сайтов хостингов (обновлять раз в месяц)
+PR = json.loads(PRF.read_text()) if PRF.exists() else {'hosts': {}}
+
+
+def price(slug, kinds=('shared', 'vps', 'cloud', 'bitrix')):
+    h = PR['hosts'].get(slug, {})
+    for k in kinds:
+        x = h.get(k) or {}
+        if x.get('price'):
+            v = x['price']
+            cur = '₽' if not any(c in str(x.get('note', '')) for c in ('$', '€')) else ('$' if '$' in str(x.get('note', '')) else '€')
+            return f'от {v:,.0f} {cur}'.replace(',', ' ') + ('/мес' if k != 'tilda' else '/мес')
+    return ''
+
+
 PREV = ROOT / 'drafts' / 'rating-prev.json'          # места прошлой недели — для стрелок ↑↓
 prev = json.loads(PREV.read_text()) if PREV.exists() else {}
 
@@ -38,10 +53,8 @@ def logo(slug, name):
     return f'<img class="hl-logo" src="/assets/hosting-logos/{LOGOS[slug]}" alt="{html.escape(name)}" width="28" height="28" loading="lazy">' if slug in LOGOS else ''
 
 
-def name_link(r):   # Ник 19.11: партнёрская ссылка — на названии; одна общая пометка под таблицей
-    if r['name'] in HOST_LINKS:
-        return f'<a href="{HOST_LINKS[r["name"]]}" target="_blank" rel="noopener sponsored">{html.escape(r["name"])}</a>'
-    return f'<a href="/hosting/{r["slug"]}/">{html.escape(r["name"])}</a>'
+def name_link(r):   # Ник 19.11: всё, что ведёт на сайт хостинга, — через /go/h-<slug> (nginx snippets/rl-go-hosting.conf: туда ставим партнёрские коды)
+    return f'<a href="/go/h-{r["slug"]}" target="_blank" rel="noopener sponsored">{html.escape(r["name"])}</a>'
 
 
 rows = []
@@ -69,7 +82,8 @@ trs = ''.join(
     f'<td><div class="hn">{logo(r["slug"], r["name"])}<div>{name_link(r)}<div class="ty">{html.escape(r["typ"].lower())} · <a href="/hosting/{r["slug"]}/">статус и замеры</a></div></div></div></td>'
     f'<td class="num">{r["checks"]}</td><td class="num"><b>{str(round(r["ok"], 1)).replace(".", ",")}%</b></td><td class="num">{r["bad"]}</td><td class="num">{dur(r["streak"]) if r["streak"] else "0"}</td>'
     f'<td class="num">{r["panel_fail"]}</td><td class="num">{r["dns_fail"] if r["dns_total"] else "нет общих DNS"}</td>'
-    f'<td class="num">{str(r["dns"]) + " мс" if r["dns"] is not None else "—"}</td></tr>'
+    f'<td class="num">{str(r["dns"]) + " мс" if r["dns"] is not None else "—"}</td>'
+    f'<td class="num">{("<a class=\"pr\" href=\"/go/h-" + r["slug"] + "\" target=\"_blank\" rel=\"noopener sponsored\">" + price(r["slug"]) + "</a>") if price(r["slug"]) else "—"}</td></tr>'
     for r in rows)
 top3 = ', '.join(r['name'] for r in rows[:3])
 desc = (f'Рейтинг 27 хостингов по доступности за неделю {per}: панель и DNS, 336 проверок у каждого из России без VPN. '
@@ -97,16 +111,16 @@ CSS = '''<style>
 .rt{width:100%;border-collapse:collapse;font-size:15px}.rt th{text-align:left;color:var(--muted);font-weight:600;font-size:13px;padding:8px 10px;border-bottom:1px solid rgba(237,235,230,.12);white-space:nowrap}
 .rt td{padding:10px;border-bottom:1px solid rgba(237,235,230,.07);vertical-align:top}.rt .num{white-space:nowrap}.rt .pl{font-weight:800;white-space:nowrap}
 .rt .ty{color:var(--muted);font-size:12.5px}.rt .up{color:#c6f24e;font-size:12px}.rt .dn{color:#ff8a65;font-size:12px}.rt .ad{color:var(--muted);font-size:11.5px}
-.rt a.go{white-space:nowrap}.rtw{overflow-x:auto}.hn{display:flex;gap:10px;align-items:center}.hl-logo{width:28px;height:28px;border-radius:7px;background:#fff;padding:3px;object-fit:contain;flex:none}
+.rt a.go{white-space:nowrap}.rt a.pr{white-space:nowrap;font-weight:700;color:#c6f24e;text-decoration:none}.rtw{overflow-x:auto}.hn{display:flex;gap:10px;align-items:center}.hl-logo{width:28px;height:28px;border-radius:7px;background:#fff;padding:3px;object-fit:contain;flex:none}
 </style>'''
 VER = time.strftime('%Y%m%d')
 main = f'''<main class="pw">
   <span class="live"><span class="dot"></span>рейтинг · обновляется по понедельникам · замеры из России без VPN</span>
   <h1>{h1}</h1>
   <p class="lead">Мы проверяем 27 хостингов одинаково: раз в 30 минут открываем панель управления и опрашиваем DNS-серверы — из России, без VPN, как обычный клиент. Ниже — кто за неделю {per} работал ровнее всех. Без сбоев прошли {pl(len(clean), "хостинг", "хостинга", "хостингов")}{": " + ", ".join(r["name"] for r in clean[:8]) + ("…" if len(clean) > 8 else "") if clean else ""}.</p>
-  <div class="card"><div class="rtw"><table class="rt"><thead><tr><th>Место</th><th>Хостинг</th><th>Проверок</th><th>Без сбоев</th><th>Сбойных</th><th>Самый долгий сбой</th><th>Панель не открылась</th><th>DNS не ответил</th><th>Скорость DNS</th></tr></thead><tbody>{trs}</tbody></table></div>
+  <div class="card"><div class="rtw"><table class="rt"><thead><tr><th>Место</th><th>Хостинг</th><th>Проверок</th><th>Без сбоев</th><th>Сбойных</th><th>Самый долгий сбой</th><th>Панель не открылась</th><th>DNS не ответил</th><th>Скорость DNS</th><th>Цена</th></tr></thead><tbody>{trs}</tbody></table></div>
   <p class="sub" style="margin:12px 0 0">«Сбоев» — сколько проверок из {rows[0]["checks"]} показали проблему (каждая — 30 минут). «Без сбоев» — доля проверок без проблем. При равенстве выше тот, у кого реже не открывалась панель и быстрее отвечает DNS.</p>
-  <p class="sub" style="margin:8px 0 0">Ссылки на сайты хостингов в таблице — партнёрские. На место в рейтинге это не влияет.</p></div>
+  <p class="sub" style="margin:8px 0 0">Цена — самый дешёвый тариф с сайта хостинга{(' на ' + PR['checked'][8:10] + '.' + PR['checked'][5:7]) if PR.get('checked') else ''}, точную смотрите у хостинга. Ссылки на сайты хостингов — партнёрские. На место в рейтинге это не влияет.</p></div>
   <article class="card seo"><h2>Как устроен рейтинг</h2>
   <figure class="fig"><img src="/assets/rating/rating-how.png?v={VER}" alt="Как составляется рейтинг хостингов: сервер в России, панель и DNS, 48 проверок в сутки, меньше сбоев — выше" width="1200" height="396" loading="lazy" style="width:100%;height:auto;border-radius:14px"></figure>
   <p>Мы не берём данные у самих хостингов и не опираемся на отзывы. Каждые 30 минут наш сервер в России открывает панель управления каждого хостинга и опрашивает его DNS-серверы. Если панель не открылась или не ответили DNS, проверка засчитывается как сбой. Место определяет число таких проверок за неделю, потом — длительность самого долгого сбоя.</p>
