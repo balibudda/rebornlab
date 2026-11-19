@@ -614,6 +614,11 @@ for slug, name, typ, panel, ns in HOSTS:
     if name in HOST_LINKS:
         ad = (f'<p style="margin:14px 0 0"><a class="btn btn-ghost" href="{HOST_LINKS[name]}" target="_blank" rel="noopener sponsored">Сайт {name} →</a> '
               f'<span class="ad">{AD_NOTE.get(name, "Реклама")}</span></p>')
+    # 19.11 (Ник: «уникальные тексты и вопросы, хотя бы 15, информативнее одной строчки»): свои тексты — drafts/hosting-texts/<slug>.json
+    TX = json.loads((ROOT / 'drafts' / 'hosting-texts' / f'{slug}.json').read_text()) if (ROOT / 'drafts' / 'hosting-texts' / f'{slug}.json').exists() else {}
+    if len(TX.get('faq', [])) >= 10:
+        import html as _h
+        faq = [(_h.escape(q, quote=False), _h.escape(a, quote=False)) for q, a in TX['faq']]   # тексты — простые, экранируем на всякий случай
     faq_h = ''.join(f'<details class="qa"><summary>{q}</summary><p>{a}</p></details>' for q, a in faq)
     TYPE_P = {
         'Хостинг': f'У виртуального хостинга сайты, базы данных и почта клиентов живут на общих серверах {name}. Поэтому сбой сервера хостинга сразу виден по сайтам клиентов, а сбой панели — нет: сайты продолжают работать, просто владельцы не могут зайти в настройки.',
@@ -633,7 +638,7 @@ for slug, name, typ, panel, ns in HOSTS:
                ('Сайты клиентов', 'выборка реальных сайтов' if slug not in NO_SITES else 'не проверяем', slug not in NO_SITES)]
     fig = svg_flow(f'Как мы проверяем {name}', ('Сервер в России', 'без VPN · каждые 30 мин'), targets, (f'Статус {name}', 'здесь и в боте'),
                    (f'Мониторинг {name}: красная точка — этот пункт у {name} не проверяем' if not all(t[2] for t in targets) else f'Независимый мониторинг {name} · REBORN LAB'))
-    seo_h = seo_block(ai, fig, f'Схема мониторинга {name}: что именно мы проверяем и откуда', intro)
+    seo_h = seo_block(ai, fig, f'Схема мониторинга {name}: что именно мы проверяем и откуда', (TX.get('intro', '').strip() + '\n\n' + intro) if TX.get('intro') else intro)
     url = f'{HB}{slug}/'
     h1 = f'Проверка {name}: работает ли {name} сейчас без VPN'   # 12.11 Ник: в H1 — «Проверка», в title — «Мониторинг», в тексте сначала «мониторинг'
     body = f'''<main class="pw">
