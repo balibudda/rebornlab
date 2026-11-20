@@ -49,7 +49,7 @@ TRUST = {'regru'}   # 20.11 Ник: ссылка наружу — только R
 def nlink(s, cls=''):
     if s in TRUST:
         return f'<a class="{cls}" href="/go/h-{s}" target="_blank" rel="noopener sponsored">{E(NAME[s])}</a>'
-    return f'<a class="{cls}" href="/hosting/{s}/">{E(NAME[s])}</a>'
+    return f'<b class="{cls}">{E(NAME[s])}</b>'   # 20.11 Ник: просто название
 
 
 PRF = ROOT / 'drafts' / 'hosting-texts' / 'prices.json'
@@ -134,7 +134,7 @@ CSS = '''<style>
 .rest{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:8px}
 .it{display:flex;align-items:center;gap:10px;background:#121418;border-radius:12px;padding:9px 12px;font-size:14.5px}
 .it .n{width:22px;color:#7c8290;font-weight:700}.it img{width:28px;height:28px;border-radius:7px;background:#fff;padding:2px;object-fit:contain}
-.it .nm a{color:#eef;text-decoration:none;font-weight:600}.it .st{margin-left:auto;color:#8f96a3;font-size:12.5px;text-align:right}
+.it .nm a,.it .nm b{color:#eef;text-decoration:none;font-weight:600}.pd .nm b{color:#fff}.it .st{margin-left:auto;color:#8f96a3;font-size:12.5px;text-align:right}
 .chk{columns:2;column-gap:34px;padding-left:20px}.chk li{margin:0 0 10px;break-inside:avoid;color:#cfd3cf;line-height:1.55}
 @media (max-width:720px){.podium{grid-template-columns:1fr}.pd.p1,.pd.p2,.pd.p3{order:0}.chk{columns:1}.it .st{display:none}}
 </style>'''

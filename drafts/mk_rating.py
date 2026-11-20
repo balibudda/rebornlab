@@ -62,7 +62,7 @@ TRUST = {'regru'}   # 20.11 Ник: ссылка на сайт хостинга 
 def name_link(r):
     if r['slug'] in TRUST:
         return f'<a href="/go/h-{r["slug"]}" target="_blank" rel="noopener sponsored">{html.escape(r["name"])}</a>'
-    return f'<a href="/hosting/{r["slug"]}/">{html.escape(r["name"])}</a>'
+    return f'<b class="hnm">{html.escape(r["name"])}</b>'   # 20.11 Ник: у остальных — просто название, без ссылки
 
 
 rows = []
@@ -119,7 +119,7 @@ CSS = '''<style>
 .rt{width:100%;border-collapse:collapse;font-size:15px}.rt th{text-align:left;color:var(--muted);font-weight:600;font-size:13px;padding:8px 10px;border-bottom:1px solid rgba(237,235,230,.12);white-space:nowrap}
 .rt td{padding:10px;border-bottom:1px solid rgba(237,235,230,.07);vertical-align:top}.rt .num{white-space:nowrap}.rt .pl{font-weight:800;white-space:nowrap}
 .rt .ty{color:var(--muted);font-size:12.5px}.rt .up{color:#c6f24e;font-size:12px}.rt .dn{color:#ff8a65;font-size:12px}.rt .ad{color:var(--muted);font-size:11.5px}
-.rt a.go{white-space:nowrap}.rt a.pr{white-space:nowrap;font-weight:700;color:#c6f24e;text-decoration:none}.rtw{overflow-x:auto}.hn{display:flex;gap:10px;align-items:center}.hl-logo{width:28px;height:28px;border-radius:7px;background:#fff;padding:3px;object-fit:contain;flex:none}
+.rt a.go{white-space:nowrap}.rt a.pr{white-space:nowrap;font-weight:700;color:#c6f24e;text-decoration:none}.rtw{overflow-x:auto}.hnm{font-weight:700;color:var(--text)}.hn{display:flex;gap:10px;align-items:center}.hl-logo{width:28px;height:28px;border-radius:7px;background:#fff;padding:3px;object-fit:contain;flex:none}
 </style>'''
 VER = time.strftime('%Y%m%d')
 main = f'''<main class="pw">
