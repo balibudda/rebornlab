@@ -541,7 +541,8 @@ for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', '
 
 // 12.11: страницы мониторинга хостингов (генерит tools-mk_proverka.py publish) — в карту сайта, поиск, шапку/подвал
 const HOSTING_PAGES = existsSync(path.join(ROOT, 'hosting')) ? readdirSync(path.join(ROOT, 'hosting')).filter((d) => existsSync(path.join(ROOT, 'hosting', d, 'index.html'))).sort() : []
-const urls = [['/', today, '1.0'], ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/monitoring-saitov/', today, '0.9'], ['/hosting/', today, '0.8'], ...HOSTING_PAGES.map((h) => [`/hosting/${h}/`, today, '0.7']), ['/beget/pravila/', today, '0.4'], ['/oferta/', today, '0.3'],
+const urls = [['/', today, '1.0'], ['/wildberries/', today, '0.8'],   // 20.11 (Ник): досье WB открыто для индексации (страница собирается в ~/WebstormProjects/wb-dossier)
+  ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/monitoring-saitov/', today, '0.9'], ['/hosting/', today, '0.8'], ...HOSTING_PAGES.map((h) => [`/hosting/${h}/`, today, '0.7']), ['/beget/pravila/', today, '0.4'], ['/oferta/', today, '0.3'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 // 09.11 (Ник): поиск по всему сайту — индекс /search.json (страницы, услуги, статьи, вопросы); noindex и закрытое сюда не попадает
 {
