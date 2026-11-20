@@ -43,8 +43,13 @@ def logo(s, sz):
     return f'<img src="/assets/hosting-logos/{LOGOS[s]}" alt="{E(NAME[s])}" width="{sz}" height="{sz}" loading="lazy">' if s in LOGOS else ''
 
 
-def nlink(s, cls=''):   # всё, что ведёт на сайт хостинга, — через /go/h-<slug> (партнёрские коды ставятся на сервере)
-    return f'<a class="{cls}" href="/go/h-{s}" target="_blank" rel="noopener sponsored">{E(NAME[s])}</a>'
+TRUST = {'regru'}   # 20.11 Ник: ссылка наружу — только REG.RU (пользуемся сами); остальным — название, логотип, цена текстом
+
+
+def nlink(s, cls=''):
+    if s in TRUST:
+        return f'<a class="{cls}" href="/go/h-{s}" target="_blank" rel="noopener sponsored">{E(NAME[s])}</a>'
+    return f'<a class="{cls}" href="/hosting/{s}/">{E(NAME[s])}</a>'
 
 
 PRF = ROOT / 'drafts' / 'hosting-texts' / 'prices.json'
@@ -68,6 +73,9 @@ def price(s, cat):
 
 def pbtn(s, cat):
     p = price(s, cat)
+    if s not in TRUST:
+        return f'<div class="ptx">{p}</div>' if p else ''
+
     return f'<a class="pbtn" href="/go/h-{s}" target="_blank" rel="noopener sponsored">{p} →</a>' if p else f'<a class="pbtn" href="/go/h-{s}" target="_blank" rel="noopener sponsored">сайт хостинга →</a>'
 
 
@@ -87,11 +95,11 @@ for k, title, members in CATS:
     m = sorted({s for s in members if s in W['providers']}, key=score)
     ct = TX.get('cats', {}).get(k, {})
     pod = ''.join(
-        f'<div class="pd p{i + 1}"><div class="pl">{i + 1}</div><a class="lg" href="/go/h-{s}" target="_blank" rel="noopener sponsored">{logo(s, 56)}</a><div class="nm">{nlink(s)}</div>'
+        f'<div class="pd p{i + 1}"><div class="pl">{i + 1}</div><span class="lg">{logo(s, 56)}</span><div class="nm">{nlink(s)}</div>'
         f'<div class="st">{stat_line(s)}</div>{pbtn(s, k)}<a class="more" href="/hosting/{s}/">статус и замеры</a></div>'
         for i, s in enumerate(m[:3]))
     rest = ''.join(
-        f'<div class="it"><span class="n">{j + 4}</span><a href="/go/h-{s}" target="_blank" rel="noopener sponsored">{logo(s, 28)}</a><span class="nm">{nlink(s)}</span><span class="st">{stat_line(s)}</span>{("<a class=\"ip\" href=\"/go/h-" + s + "\" target=\"_blank\" rel=\"noopener sponsored\">" + price(s, k) + "</a>") if price(s, k) else ""}</div>'
+        f'<div class="it"><span class="n">{j + 4}</span>{logo(s, 28)}<span class="nm">{nlink(s)}</span><span class="st">{stat_line(s)}</span>{(("<a class=\"ip\" href=\"/go/h-" + s + "\" target=\"_blank\" rel=\"noopener sponsored\">" + price(s, k) + "</a>") if s in TRUST else ("<span class=\"ip\">" + price(s, k) + "</span>")) if price(s, k) else ""}</div>'
         for j, s in enumerate(m[3:]))
     sections += (f'<section class="cat" id="{k}"><h2>{E(ct.get("title") or title + " — рейтинг 2027")}</h2>'
                  + (f'<p class="ctx">{E(ct["text"])}</p>' if ct.get('text') else '')
@@ -122,7 +130,7 @@ CSS = '''<style>
 .pd .nm{font-size:19px;font-weight:800;margin:10px 0 6px}.pd .nm a{color:#fff;text-decoration:none}
 .pd .st{color:#aeb4bf;font-size:13.5px;line-height:1.45;min-height:40px}.pd .more{display:block;margin-top:8px;font-size:13px;color:#8f96a3}
 .pbtn{display:inline-block;margin-top:12px;padding:9px 16px;border-radius:12px;background:var(--acc);color:#0b0c0d;font-weight:800;text-decoration:none;font-size:15px}
-.it .ip{margin-left:10px;white-space:nowrap;font-weight:700;color:var(--acc);text-decoration:none;font-size:13.5px}
+.ptx{margin-top:12px;font-weight:800;color:#dfe6ff;font-size:15px}.it .ip{margin-left:10px;white-space:nowrap;font-weight:700;color:var(--acc);text-decoration:none;font-size:13.5px}
 .rest{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:8px}
 .it{display:flex;align-items:center;gap:10px;background:#121418;border-radius:12px;padding:9px 12px;font-size:14.5px}
 .it .n{width:22px;color:#7c8290;font-weight:700}.it img{width:28px;height:28px;border-radius:7px;background:#fff;padding:2px;object-fit:contain}
@@ -134,9 +142,10 @@ main = f'''<main class="pw r27">
   <span class="live"><span class="dot"></span>рейтинг на 2027 год · обновляется по понедельникам · замеры из России без VPN</span>
   <h1>{h1}</h1>
   <p class="lead">{E(TX.get("lead", "Хостинги по категориям — по нашим замерам: раз в 30 минут из России без VPN проверяем панель управления и DNS каждого хостинга."))}</p>
+  {(ROOT / 'drafts' / 'rl-msg.html').read_text()}
   <nav class="tabs" aria-label="Категории">{tabs}</nav>
   {sections}
-  <p class="sub">Неделя замеров: {per}. Цены — самые дешёвые тарифы с сайтов хостингов{(' на ' + PR['checked'][8:10] + '.' + PR['checked'][5:7]) if PR.get('checked') else ''}; точную цену смотрите у хостинга. Ссылки на сайты хостингов — партнёрские. На место в рейтинге это не влияет.</p>
+  <p class="sub">Неделя замеров: {per}. Цены — самые дешёвые тарифы с сайтов хостингов{(' на ' + PR['checked'][8:10] + '.' + PR['checked'][5:7]) if PR.get('checked') else ''}; точную цену смотрите у хостинга. Ссылка на сайт есть только у REG.RU — мы сами им пользуемся; ссылка партнёрская. На место в рейтинге это не влияет.</p>
   {('<div class="card seo"><h2>Перед покупкой хостинга проверьте сами</h2><ul class="chk">' + chk + '</ul></div>') if chk else ''}
   {('<article class="card seo"><h2>Как мы считаем</h2><p>' + E(TX["method"]) + '</p><p>Общая таблица всех 27 хостингов за неделю — на странице <a href="/hosting/reyting/">рейтинга хостингов 2026</a>, живой статус каждого — в <a href="/hosting/">мониторинге хостингов</a>.</p></article>') if TX.get('method') else ''}
   {('<div class="card"><h2>Вопросы о выборе хостинга на 2027 год</h2>' + faq_h + '</div>') if FAQ else ''}
