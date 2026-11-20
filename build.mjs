@@ -28,7 +28,7 @@ const isoDT = (p) => (p.time ? `${p.date}T${p.time}:00+03:00` : p.date)
 // 06.11.2026 Ник: во всех новостях о Бегет (Beget) — ссылка на бота
 // 09.11.2026 (Ник): под каждой статьёй — «Поделиться». 10.11: комментарии убраны (Ник: «никто не пишет»)
 const SHARE_COMMENTS = (p) => {
-  // 12.11 (Ник): делимся через api.rebornlab.ru/s/… — роботы мессенджеров берут там превью (до vpn-ru Telegram не достаёт), люди сразу попадают на оригинал (301)
+  // 12.11 (Ник): делимся через api.rebornlab.ru/s/… — роботы мессенджеров берут там превью (до ru Telegram не достаёт), люди сразу попадают на оригинал (301)
   const url = `https://api.rebornlab.ru/s/journal/${p.slug}/`, u = encodeURIComponent(url), t = encodeURIComponent(p.title)
   return `<div class="share" style="margin:40px 0 0;padding:20px 0;border-top:1px solid rgba(255,255,255,.12)"><b style="display:block;margin-bottom:12px">Поделиться статьёй</b>
 <div style="display:flex;flex-wrap:wrap;gap:10px">

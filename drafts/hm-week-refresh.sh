@@ -3,7 +3,7 @@
 # launchd ru.rebornlab.hm-week (понедельник 10:00). Лог — /tmp/hm-week-refresh.log
 set -e
 cd "$HOME/WebstormProjects/rebornlab"
-ssh -o BatchMode=yes -o ConnectTimeout=30 vpn-ru 'python3 /root/hmstats.py' > drafts/hm-week.json.new
+ssh -o BatchMode=yes -o ConnectTimeout=30 ru 'python3 /root/hmstats.py' > drafts/hm-week.json.new
 python3 -c "import json;d=json.load(open('drafts/hm-week.json.new'));assert len(d['providers'])>=20" && mv drafts/hm-week.json.new drafts/hm-week.json
 python3 tools-mk_proverka.py publish >/dev/null
 python3 drafts/rating-pics.py >/dev/null && node drafts/rating-pics.mjs >/dev/null || true   # картинки рейтинга

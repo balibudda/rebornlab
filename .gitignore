@@ -1,6 +1,6 @@
 CLAUDE.md
 
-# 11.11: закрытые черновики (под паролем на сервере) — не в открытый репо; кладутся на vpn-ru напрямую scp
+# 11.11: закрытые черновики (под паролем на сервере) — не в открытый репо; кладутся на ru напрямую scp
 demo/strahovka/
 demo/draft-podstrahovka/
 demo/hostingi/
@@ -27,3 +27,4 @@ demo/draft-reyting-hostingov/
 drafts/logos-sheet.html
 demo/draft-reyting-2027/
 demo/draft-wb-bank/
+demo/draft-wb-dossier/
