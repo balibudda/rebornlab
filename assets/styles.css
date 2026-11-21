@@ -548,7 +548,7 @@ form[data-lead] input.bad { border-color: #ff7a6b; }   /* 13.11: неверны�
 
 /* ===== 21.11.2026 (Ник): светлая тема — переключатель в шапке (data-theme="light" на <html>, localStorage rl_theme) ===== */
 html[data-theme="light"] {
-  --bg: #f3f3ef; --bg-2: #ebebe5; --card: #ffffff; --card-2: #f4f4f0;
+  --bg: #ffffff; --bg-2: #f6f6f3; --card: #ffffff; --card-2: #f6f6f3;
   --line: rgba(22, 24, 29, .10); --line-2: rgba(22, 24, 29, .18);
   --text: #16181d; --muted: #555b66; --dim: #7a7f8a; --text-2: #3b404a; --text-3: #2a2e36;
   --acc: #4f7d0a; --acc-dim: rgba(79, 125, 10, .10); --acc-ink: #4f7d0a; --cool: #1a4fbf;
@@ -633,3 +633,5 @@ html[data-theme="light"] input:focus, html[data-theme="light"] select:focus, htm
 html[data-theme="light"] .prose { background: #ffffff; border: 1px solid rgba(22, 24, 29, .10); border-radius: 22px; padding: clamp(20px, 4vw, 44px); box-shadow: 0 1px 4px rgba(22, 24, 29, .05); }
 html[data-theme="light"] .prose .tbl, html[data-theme="light"] .prose table { background: #ffffff; }
 html[data-theme="light"] .page-hd .sub { color: #3b404a; }
+/* 21.11 (Ник: «весь текст на белом»): фон страницы белый; карточки отделяются рамкой и тенью */
+html[data-theme="light"] .prose, html[data-theme="light"] .bnow, html[data-theme="light"] .wbx, html[data-theme="light"] .card, html[data-theme="light"] .proj, html[data-theme="light"] .news-card { box-shadow: 0 1px 4px rgba(22, 24, 29, .07); }
