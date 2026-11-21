@@ -635,3 +635,4 @@ html[data-theme="light"] .prose .tbl, html[data-theme="light"] .prose table { ba
 html[data-theme="light"] .page-hd .sub { color: #3b404a; }
 /* 21.11 (Ник: «весь текст на белом»): фон страницы белый; карточки отделяются рамкой и тенью */
 html[data-theme="light"] .prose, html[data-theme="light"] .bnow, html[data-theme="light"] .wbx, html[data-theme="light"] .card, html[data-theme="light"] .proj, html[data-theme="light"] .news-card { box-shadow: 0 1px 4px rgba(22, 24, 29, .07); }
+html[data-theme="light"] a.acc { background: #ffffff !important; box-shadow: 0 1px 4px rgba(22, 24, 29, .07); }
