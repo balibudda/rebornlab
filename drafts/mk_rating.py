@@ -56,12 +56,12 @@ def logo(slug, name):
     return f'<img class="hl-logo" src="/assets/hosting-logos/{LOGOS[slug]}" alt="{html.escape(name)}" width="28" height="28" loading="lazy">' if slug in LOGOS else ''
 
 
-TRUST = {'regru'}   # 20.11 Ник: ссылка на сайт хостинга — только тем, кем пользуемся сами (REG.RU). Остальным — название и логотип, без ссылок наружу
+TRUST = {'regru', 'timeweb', 'sprinthost', 'mchost', 'majordomo', 'ihc', 'jino', 'ruweb', 'netangels', 'spaceweb', 'fornex', 'vdsina', 'adminvps', 'firstvds'}   # 21.11 Ник: партнёрские ссылки всем, у кого они есть (nofollow); рекомендуем только REG.RU
 
 
 def name_link(r):
     if r['slug'] in TRUST:
-        return f'<a href="/go/h-{r["slug"]}" target="_blank" rel="noopener sponsored">{html.escape(r["name"])}</a>'
+        return f'<a href="/go/h-{r["slug"]}" target="_blank" rel="sponsored nofollow noopener">{html.escape(r["name"])}</a>'
     return f'<b class="hnm">{html.escape(r["name"])}</b>'   # 20.11 Ник: у остальных — просто название, без ссылки
 
 
@@ -91,7 +91,7 @@ trs = ''.join(
     f'<td class="num">{r["checks"]}</td><td class="num"><b>{str(round(r["ok"], 1)).replace(".", ",")}%</b></td><td class="num">{r["bad"]}</td><td class="num">{dur(r["streak"]) if r["streak"] else "0"}</td>'
     f'<td class="num">{r["panel_fail"]}</td><td class="num">{r["dns_fail"] if r["dns_total"] else "нет общих DNS"}</td>'
     f'<td class="num">{str(r["dns"]) + " мс" if r["dns"] is not None else "—"}</td>'
-    f'<td class="num">{(("<a class=\"pr\" href=\"/go/h-" + r["slug"] + "\" target=\"_blank\" rel=\"noopener sponsored\">" + price(r["slug"]) + "</a>") if r["slug"] in TRUST else price(r["slug"])) if price(r["slug"]) else "—"}</td></tr>'
+    f'<td class="num">{(("<a class=\"pr\" href=\"/go/h-" + r["slug"] + "\" target=\"_blank\" rel=\"sponsored nofollow noopener\">" + price(r["slug"]) + "</a>") if r["slug"] in TRUST else price(r["slug"])) if price(r["slug"]) else "—"}</td></tr>'
     for r in rows)
 top3 = ', '.join(r['name'] for r in rows[:3])
 desc = (f'Рейтинг 27 хостингов по доступности за неделю {per}: панель и DNS, 336 проверок у каждого из России без VPN. '

@@ -429,3 +429,12 @@ var RL_T0 = Date.now(), RL_HUMAN = false; ['mousemove', 'touchstart', 'keydown',
   })
   feed(); setInterval(feed, 120000)
 })()
+
+// 21.11.2026 (Ник: «где мониторинг хостингов — добавь им партнёрские ссылки»): карточка хостинга в мониторинге → + «сайт ↗» (партнёрская, nofollow).
+// Карточки собирают страницы /hosting/ и /monitoring-saitov/ (tools-mk_proverka.py): (window.rlhp || …)(slug, html)
+window.rlhp = function (k, s) {
+  var GO = {regru: 1, timeweb: 1, sprinthost: 1, mchost: 1, majordomo: 1, ihc: 1, jino: 1, ruweb: 1, netangels: 1, spaceweb: 1, fornex: 1, vdsina: 1, adminvps: 1, firstvds: 1};
+  if (!GO[k] || s.indexOf('<a class="h hl"') !== 0) return s;
+  return '<div class="h hl hp">' + s.replace('<a class="h hl"', '<a class="hp-in"') +
+    '<a class="hp-go" href="/go/h-' + k + '" target="_blank" rel="sponsored nofollow noopener" title="Сайт хостинга — партнёрская ссылка">сайт ↗</a></div>';
+};

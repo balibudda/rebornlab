@@ -43,12 +43,12 @@ def logo(s, sz):
     return f'<img src="/assets/hosting-logos/{LOGOS[s]}" alt="{E(NAME[s])}" width="{sz}" height="{sz}" loading="lazy">' if s in LOGOS else ''
 
 
-TRUST = {'regru'}   # 20.11 Ник: ссылка наружу — только REG.RU (пользуемся сами); остальным — название, логотип, цена текстом
+TRUST = {'regru', 'timeweb', 'sprinthost', 'mchost', 'majordomo', 'ihc', 'jino', 'ruweb', 'netangels', 'spaceweb', 'fornex', 'vdsina', 'adminvps', 'firstvds'}   # 21.11 Ник: партнёрские ссылки всем, у кого они есть (nofollow); рекомендуем только REG.RU
 
 
 def nlink(s, cls=''):
     if s in TRUST:
-        return f'<a class="{cls}" href="/go/h-{s}" target="_blank" rel="noopener sponsored">{E(NAME[s])}</a>'
+        return f'<a class="{cls}" href="/go/h-{s}" target="_blank" rel="sponsored nofollow noopener">{E(NAME[s])}</a>'
     return f'<b class="{cls}">{E(NAME[s])}</b>'   # 20.11 Ник: просто название
 
 
@@ -76,7 +76,7 @@ def pbtn(s, cat):
     if s not in TRUST:
         return f'<div class="ptx">{p}</div>' if p else ''
 
-    return f'<a class="pbtn" href="/go/h-{s}" target="_blank" rel="noopener sponsored">{p} →</a>' if p else f'<a class="pbtn" href="/go/h-{s}" target="_blank" rel="noopener sponsored">сайт хостинга →</a>'
+    return f'<a class="pbtn" href="/go/h-{s}" target="_blank" rel="sponsored nofollow noopener">{p} →</a>' if p else f'<a class="pbtn" href="/go/h-{s}" target="_blank" rel="sponsored nofollow noopener">сайт хостинга →</a>'
 
 
 def stat_line(s):
@@ -99,7 +99,7 @@ for k, title, members in CATS:
         f'<div class="st">{stat_line(s)}</div>{pbtn(s, k)}<a class="more" href="/hosting/{s}/">статус и замеры</a></div>'
         for i, s in enumerate(m[:3]))
     rest = ''.join(
-        f'<div class="it"><span class="n">{j + 4}</span>{logo(s, 28)}<span class="nm">{nlink(s)}</span><span class="st">{stat_line(s)}</span>{(("<a class=\"ip\" href=\"/go/h-" + s + "\" target=\"_blank\" rel=\"noopener sponsored\">" + price(s, k) + "</a>") if s in TRUST else ("<span class=\"ip\">" + price(s, k) + "</span>")) if price(s, k) else ""}</div>'
+        f'<div class="it"><span class="n">{j + 4}</span>{logo(s, 28)}<span class="nm">{nlink(s)}</span><span class="st">{stat_line(s)}</span>{(("<a class=\"ip\" href=\"/go/h-" + s + "\" target=\"_blank\" rel=\"sponsored nofollow noopener\">" + price(s, k) + "</a>") if s in TRUST else ("<span class=\"ip\">" + price(s, k) + "</span>")) if price(s, k) else ""}</div>'
         for j, s in enumerate(m[3:]))
     sections += (f'<section class="cat" id="{k}"><h2>{E(ct.get("title") or title + " — рейтинг 2027")}</h2>'
                  + (f'<p class="ctx">{E(ct["text"])}</p>' if ct.get('text') else '')
