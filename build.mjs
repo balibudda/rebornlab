@@ -234,7 +234,7 @@ const home = shell({
 <section class="hero" aria-labelledby="h1">
   <canvas id="lab" aria-hidden="true"></canvas>
   <div class="wrap">
-    <div class="bnow bnow-bank"><div><span class="bnow-t"><i></i>Блокировки в банках</span><p>Где чаще блокируют карты и счета и чем это заканчивается: сравнение 12 банков, 800+ историй клиентов WB Банка, анонимный опрос «вернули ли деньги». Бесплатно, без рекламы.</p></div><div class="bnow-a"><a class="btn btn-acc" href="/banki/" data-goal="home_banki">Смотреть по банкам <span class="arrow">→</span></a><a class="bnow-l" href="/wbbank/" data-goal="home_wbbank">Разбор WB Банка</a></div></div>   <!-- 21.11 Ник: вместо «Ситуация с Бегет» (тема на спаде) -->
+    <div class="bnow bnow-bank"><div><span class="bnow-t"><i></i>Блокировки в банках</span><p>В каких банках больше жалоб на блокировки карт и счетов и чем они заканчиваются: сравнение 12 банков, 800+ историй клиентов WB Банка, анонимный опрос «вернули ли деньги». Бесплатно, без рекламы.</p></div><div class="bnow-a"><a class="btn btn-acc" href="/banki/" data-goal="home_banki">Смотреть по банкам <span class="arrow">→</span></a><a class="bnow-l" href="/wbbank/" data-goal="home_wbbank">Разбор WB Банка</a></div></div>   <!-- 21.11 Ник: вместо «Ситуация с Бегет» (тема на спаде) -->
     <div class="wbx-home">${WATCH_BOX}</div>
     <div class="kicker">Digital laboratory · идея → система → продукт</div>
     <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
