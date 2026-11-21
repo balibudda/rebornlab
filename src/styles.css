@@ -629,3 +629,7 @@ html[data-theme="light"] .errl { background: #fff1f0; border-color: rgba(179, 38
 html[data-theme="light"] input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]):not([type=range]), html[data-theme="light"] select, html[data-theme="light"] textarea {
   background-color: #ffffff; border-color: rgba(22, 24, 29, .18); color: #16181d; }
 html[data-theme="light"] input:focus, html[data-theme="light"] select:focus, html[data-theme="light"] textarea:focus { border-color: #4f7d0a; outline: none; box-shadow: 0 0 0 3px rgba(79, 125, 10, .15); }
+/* 21.11 (Ник: «в журнале, обо мне — текст на белом»): основной текст статей и страниц — белая подложка в светлой теме */
+html[data-theme="light"] .prose { background: #ffffff; border: 1px solid rgba(22, 24, 29, .10); border-radius: 22px; padding: clamp(20px, 4vw, 44px); box-shadow: 0 1px 4px rgba(22, 24, 29, .05); }
+html[data-theme="light"] .prose .tbl, html[data-theme="light"] .prose table { background: #ffffff; }
+html[data-theme="light"] .page-hd .sub { color: #3b404a; }
