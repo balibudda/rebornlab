@@ -30,3 +30,8 @@ demo/draft-wb-bank/
 demo/draft-wb-dossier/
 demo/wildberries-2022-2026/
 wildberries/
+# 20.11: витрина демо (черновик)
+demo/draft-demo-polka/
+demo/draft-vc-wildberries/
+drafts/mk_demo_polka.py
+drafts/demo-polka-shots.mjs
