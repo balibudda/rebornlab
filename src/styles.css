@@ -609,3 +609,16 @@ html[data-theme="light"] [style*="color:#c6f24e"] { color: #3f6b06 !important; }
 html[data-theme="light"] [style*="color:#cfd3cf"] { color: #2f343d !important; }
 html[data-theme="light"] [style*="color:#7aa7ff"] { color: #1a4fbf !important; }
 html[data-theme="light"] [style*="color:#ff7a6b"] { color: #b3261e !important; }
+/* 21.11 (Ник: «где блоки с текстом — на белом фоне, везде»): в светлой теме подложки блоков белые, поля ввода белые */
+html[data-theme="light"] .final-box, html[data-theme="light"] .cap, html[data-theme="light"] .cap.ask, html[data-theme="light"] .sv-flow li,
+html[data-theme="light"] .sv-prices a, html[data-theme="light"] .sl-band, html[data-theme="light"] .lf-proof, html[data-theme="light"] .wbx-r,
+html[data-theme="light"] .prose pre, html[data-theme="light"] .card, html[data-theme="light"] .ask-box, html[data-theme="light"] .pair, html[data-theme="light"] .faq details {
+  background: #ffffff; }
+html[data-theme="light"] .final-box, html[data-theme="light"] .cap, html[data-theme="light"] .sv-flow li, html[data-theme="light"] .sv-prices a, html[data-theme="light"] .sl-band { border-color: rgba(22, 24, 29, .12); box-shadow: 0 1px 3px rgba(22, 24, 29, .05); }
+html[data-theme="light"] .cap:hover { background: #ffffff; border-color: rgba(79, 125, 10, .45); }
+html[data-theme="light"] textarea, html[data-theme="light"] input[type=text], html[data-theme="light"] input[type=search], html[data-theme="light"] input[type=email], html[data-theme="light"] input[type=tel],
+html[data-theme="light"] .bnow-s input, html[data-theme="light"] .rlc-in input, html[data-theme="light"] .rlc-lead input[type=text], html[data-theme="light"] .rlc-lead textarea, html[data-theme="light"] .wbx-f input {
+  background: #ffffff; border-color: rgba(22, 24, 29, .18); color: #16181d; }
+html[data-theme="light"] textarea::placeholder, html[data-theme="light"] input::placeholder { color: #8a8f99; }
+html[data-theme="light"] .lf-proof { border-left-color: #4f7d0a; box-shadow: 0 1px 3px rgba(22, 24, 29, .05); }
+html[data-theme="light"] .sv-bar i, html[data-theme="light"] .cap li { background: #f1f1ec; }
