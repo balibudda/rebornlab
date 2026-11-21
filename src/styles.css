@@ -588,3 +588,24 @@ html[data-theme="light"] .bbar { background: rgba(255, 255, 255, .9); border-bot
 html[data-theme="light"] .bbar a { color: #3b404a; }
 html[data-theme="light"] .bbar a:hover { color: #16181d; border-color: rgba(22, 24, 29, .18); }
 html[data-theme="light"] .bbar a[aria-current] { background: #c6f24e; color: #0b0c0d; }
+/* 21.11 вечер: светлая тема — бледный текст на страницах с собственными стилями (хостинги, мониторинг, Бегет), форма, подвал */
+html[data-theme="light"] { --dim: #5f6470; }
+html[data-theme="light"] .lf-proof { color: #3b404a; background: rgba(79, 125, 10, .06); }
+html[data-theme="light"] .seo p, html[data-theme="light"] .seo li { color: #2f343d; }
+html[data-theme="light"] .errl { color: #b3261e; }
+html[data-theme="light"] .s.warn, html[data-theme="light"] .row .y { color: #8a5a00; }
+html[data-theme="light"] .s.bad, html[data-theme="light"] .row .r, html[data-theme="light"] .rt .dn { color: #b3261e; }
+html[data-theme="light"] .rt .up, html[data-theme="light"] .rt a.pr { color: #3f6b06; }
+html[data-theme="light"] .slog .dn, html[data-theme="light"] span.dn { color: #8a4b00; }
+html[data-theme="light"] .news-d { color: #4a4f59; }
+html[data-theme="light"] .chklog, html[data-theme="light"] .chklog td, html[data-theme="light"] .chklog th { color: #3b404a; }
+html[data-theme="light"] .rfl .fv.part { color: #8a5a00; } html[data-theme="light"] .rfl .fv.no { color: #b3261e; }
+html[data-theme="light"] .rfl .fv.works, html[data-theme="light"] .strip span.o { color: #1a4fbf; }
+html[data-theme="light"] .ftr { background: #ffffff; color: #3b404a; border-top-color: rgba(22, 24, 29, .10); }
+html[data-theme="light"] .ftr a { color: #2a2e36; }
+html[data-theme="light"] .ftr a:hover { color: #4f7d0a; }
+html[data-theme="light"] .ftr-legal a { color: #4a4f59; }
+html[data-theme="light"] [style*="color:#c6f24e"] { color: #3f6b06 !important; }
+html[data-theme="light"] [style*="color:#cfd3cf"] { color: #2f343d !important; }
+html[data-theme="light"] [style*="color:#7aa7ff"] { color: #1a4fbf !important; }
+html[data-theme="light"] [style*="color:#ff7a6b"] { color: #b3261e !important; }
