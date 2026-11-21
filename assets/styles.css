@@ -622,3 +622,10 @@ html[data-theme="light"] .bnow-s input, html[data-theme="light"] .rlc-in input, 
 html[data-theme="light"] textarea::placeholder, html[data-theme="light"] input::placeholder { color: #8a8f99; }
 html[data-theme="light"] .lf-proof { border-left-color: #4f7d0a; box-shadow: 0 1px 3px rgba(22, 24, 29, .05); }
 html[data-theme="light"] .sv-bar i, html[data-theme="light"] .cap li { background: #f1f1ec; }
+/* 21.11: карточки хостингов и результаты проверки (/monitoring-saitov/, /hosting/*) — белые в светлой теме */
+html[data-theme="light"] main .h, html[data-theme="light"] main .pt, html[data-theme="light"] main .f { background: #ffffff; border: 1px solid rgba(22, 24, 29, .12); box-shadow: 0 1px 3px rgba(22, 24, 29, .05); }
+html[data-theme="light"] .errl { background: #fff1f0; border-color: rgba(179, 38, 30, .25); }
+/* 21.11: все поля ввода и списки в светлой теме — белые (в т. ч. без type и select) */
+html[data-theme="light"] input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]):not([type=range]), html[data-theme="light"] select, html[data-theme="light"] textarea {
+  background-color: #ffffff; border-color: rgba(22, 24, 29, .18); color: #16181d; }
+html[data-theme="light"] input:focus, html[data-theme="light"] select:focus, html[data-theme="light"] textarea:focus { border-color: #4f7d0a; outline: none; box-shadow: 0 0 0 3px rgba(79, 125, 10, .15); }
