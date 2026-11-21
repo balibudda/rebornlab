@@ -548,14 +548,15 @@ form[data-lead] input.bad { border-color: #ff7a6b; }   /* 13.11: неверны�
 
 /* ===== 21.11.2026 (Ник): светлая тема — переключатель в шапке (data-theme="light" на <html>, localStorage rl_theme) ===== */
 html[data-theme="light"] {
-  --bg: #ffffff; --bg-2: #f5f5f2; --card: #ffffff; --card-2: #f3f3ef;
+  --bg: #f3f3ef; --bg-2: #ebebe5; --card: #ffffff; --card-2: #f4f4f0;
   --line: rgba(22, 24, 29, .10); --line-2: rgba(22, 24, 29, .18);
   --text: #16181d; --muted: #555b66; --dim: #7a7f8a; --text-2: #3b404a; --text-3: #2a2e36;
   --acc: #4f7d0a; --acc-dim: rgba(79, 125, 10, .10); --acc-ink: #4f7d0a; --cool: #1a4fbf;
   --hdr-bg: rgba(255, 255, 255, .86); --veil: 255, 255, 255;
   color-scheme: light;
 }
-html[data-theme="light"] .btn-acc { background: #c6f24e; color: #0b0c0d; box-shadow: 0 8px 26px rgba(120, 160, 20, .22); }
+html[data-theme="light"] .btn-acc { background: #c6f24e; color: #0b0c0d; box-shadow: 0 1px 2px rgba(22, 24, 29, .12); }
+html[data-theme="light"] .btn-acc:hover { box-shadow: 0 4px 14px rgba(22, 24, 29, .14); }
 html[data-theme="light"] ::selection { background: #c6f24e; color: #0b0c0d; }
 html[data-theme="light"] .card, html[data-theme="light"] .proj, html[data-theme="light"] .wbx, html[data-theme="light"] .news-card { box-shadow: 0 1px 3px rgba(22, 24, 29, .06); }
 html[data-theme="light"] img.logo-inv, html[data-theme="light"] .sl-logo { filter: invert(1) hue-rotate(180deg); }
@@ -563,7 +564,7 @@ html[data-theme="light"] img.logo-inv, html[data-theme="light"] .sl-logo { filte
 .theme-btn:hover { border-color: var(--acc); color: var(--acc); }
 .theme-btn svg { width: 18px; height: 18px; }
 .theme-btn .ic-sun { display: none; } html[data-theme="light"] .theme-btn .ic-sun { display: block; } html[data-theme="light"] .theme-btn .ic-moon { display: none; }
-html[data-theme="light"] .bnow, html[data-theme="light"] .wbx-home .wbx { background: #fbfdf5; border-color: rgba(79, 125, 10, .35); }
+html[data-theme="light"] .bnow, html[data-theme="light"] .wbx-home .wbx, html[data-theme="light"] .wbx { background: #ffffff; border-color: rgba(22, 24, 29, .12); box-shadow: 0 1px 3px rgba(22, 24, 29, .05); }
 html[data-theme="light"] .cookie { background: rgba(255, 255, 255, .97); box-shadow: 0 8px 30px rgba(22, 24, 29, .14); }
 html[data-theme="light"] .hdr-cta.hdr-bot { background: rgba(42, 171, 238, .08); color: #0b5d8a; border-color: rgba(42, 171, 238, .55); }
 html[data-theme="light"] .hdr-cta.hdr-bot:hover { background: rgba(42, 171, 238, .16); color: #08486b; }
@@ -578,3 +579,12 @@ html[data-theme="light"] .sl-band h3 em, html[data-theme="light"] .sl-band .card
 @media (max-width: 1100px) { .theme-btn { order: 0; margin-left: auto; } .srch-btn { margin-left: 0 !important; } }
 @media (max-width: 560px) { .hdr .wrap { gap: 8px; } .theme-btn, .srch-btn, .burger { width: 34px; height: 34px; } .theme-btn svg { width: 16px; height: 16px; } .hdr-cta.hdr-bot { padding: 6px 11px; } }
 @media (max-width: 380px) { .logo span, .logo .lab { display: none; } }
+html[data-theme="light"] .logo svg path, html[data-theme="light"] .logo svg line { stroke: #16181d; }
+html[data-theme="light"] .logo { color: #16181d; }
+html[data-theme="light"] .rlc-btn { background: #16181d; color: #fff; }
+html[data-theme="light"] .wbx-feed li { background: #f4f4f0; }
+html[data-theme="light"] .hdr { border-bottom-color: rgba(22, 24, 29, .08); }
+html[data-theme="light"] .bbar { background: rgba(255, 255, 255, .9); border-bottom-color: rgba(22, 24, 29, .08); }
+html[data-theme="light"] .bbar a { color: #3b404a; }
+html[data-theme="light"] .bbar a:hover { color: #16181d; border-color: rgba(22, 24, 29, .18); }
+html[data-theme="light"] .bbar a[aria-current] { background: #c6f24e; color: #0b0c0d; }
