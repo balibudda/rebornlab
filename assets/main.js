@@ -438,3 +438,12 @@ window.rlhp = function (k, s) {
   return '<div class="h hl hp">' + s.replace('<a class="h hl"', '<a class="hp-in"') +
     '<a class="hp-go" href="/go/h-' + k + '" target="_blank" rel="sponsored nofollow noopener" title="Сайт хостинга — партнёрская ссылка">сайт ↗</a></div>';
 };
+
+// 21.11.2026 (Ник): переключатель фона — светлый / тёмный, запоминается в браузере
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-theme-toggle]'); if (!b) return
+  const light = document.documentElement.getAttribute('data-theme') !== 'light'
+  if (light) document.documentElement.setAttribute('data-theme', 'light'); else document.documentElement.removeAttribute('data-theme')
+  try { localStorage.setItem('rl_theme', light ? 'light' : 'dark') } catch (_) {}
+  try { window.ym && ym(window.RL_METRIKA, 'reachGoal', light ? 'theme_light' : 'theme_dark') } catch (_) {}
+})

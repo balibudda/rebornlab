@@ -97,7 +97,7 @@ const HAS_SELLER = !!SITE.operator   // 10.11: оферта с ФИО самоз
 // 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
 // 12.11 (Ник): «Добавить в мониторинг» на главной (тот же блок, что на /monitoring-saitov/ и /hosting/*; логика — src/main.js)
 const WATCH_BOX = "<section class=\"card wbx\" data-watch><div class=\"wbx-h\"><h2>➕ Добавить сайт или сервер на слежение</h2><p class=\"sub\">Любой сайт, IP сервера или подсеть — на любом хостинге в мире. Сразу покажем, что с ним сейчас, а следить будет бесплатный бот @rebornlab_bot и напишет в Telegram, когда упадёт или заработает. Пока сайт не открывается, бот проверяет его каждые 10 минут, работающий — раз в 3 часа, сервер по IP — каждые 5 минут.</p></div><form class=\"wbx-f\" autocomplete=\"off\"><input name=\"a\" type=\"text\" inputmode=\"url\" placeholder=\"mysite.ru, 45.130.41.12 или 45.130.41.0/24\" aria-label=\"Сайт, IP или подсеть\" required><button class=\"btn btn-acc\" type=\"submit\" data-goal=\"watch_site\">Добавить и следить</button></form><div class=\"wbx-r\" hidden></div><details class=\"wbx-how\"><summary>Как узнать IP сервера и как работает слежение?</summary><ul><li><b>Сайт</b> — открываем его как обычный посетитель: открывается ли, нет ли заглушки, ошибки PHP или проблем с сертификатом.</li><li><b>IP сервера</b> — отвечает ли сервер на портах 443 и 80. IP сайта видно в нашей <a href=\"/monitoring-saitov/\">проверке сайта</a> или командой <code>nslookup mysite.ru</code>.</li><li><b>Подсеть</b> (вида <code>45.130.41.0/24</code>) — сколько её первых серверов отвечает: видно, лежит ли вся сеть хостинга.</li><li><b>Постоянное слежение — в Telegram-боте</b>: нажмите «Следить в боте» после проверки — адрес сразу окажется в списке. До 10 сайтов и серверов на человека, бесплатно.</li><li>Хостинги, которые закрывают наши проверки (Timeweb), добавить нельзя — честно об этом скажем.</li></ul></details><div class=\"wbx-feed\"><div class=\"wbx-ft\"><span class=\"dot\"></span>Только что поставили на слежение в боте <span data-wtot></span></div><ul data-wfeed><li class=\"wbx-e\">загружаем…</li></ul></div></section>"
-const NAV = [['/monitoring-saitov/', '<svg class="nav-ic nav-ic-acc" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>Мониторинг<span class="nav-x"> сайтов</span>'], ['/vosstanovlenie-sajta/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Восстановление<span class="nav-x"> сайтов</span>'], ['/journal/', 'Журнал'], ['/about/', 'Обо мне'], ['/beget/', 'Статус Beget']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
+const NAV = [['/monitoring-saitov/', '<svg class="nav-ic nav-ic-acc" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>Мониторинг<span class="nav-x"> сайтов</span>'], ['/vosstanovlenie-sajta/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Восстановление<span class="nav-x"> сайтов</span>'], ['/journal/', 'Журнал'], ['/about/', 'Обо мне'], ['/banki/', 'Банки'], ['/beget/', 'Статус Beget']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
 
 // 07.11.2026 Ник: одна шапка везде (и на ручных страницах /beget/ — вставляется ниже, при обработке), на страницах о Beget — полоса навигации по теме
 function HEADER(current = '') {
@@ -105,6 +105,7 @@ function HEADER(current = '') {
   ${LOGO}
   <nav class="nav" aria-label="Основное меню">${NAV.map(([h, t]) => `<a href="${h}"${current === h ? ' aria-current="page"' : ''}>${t}</a>`).join('')}<a class="nav-cta" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="bot_menu"><svg class="tg-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.9 4.6c.3-1.3-.5-1.8-1.4-1.5L2.9 9.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3zM8.6 12.4l9.4-5.9c.4-.3.8-.1.5.2l-7.7 7-.3 3.4-1.9-4.7z"/></svg>Бот мониторинга в Telegram</a></nav>
   <a class="hdr-cta hdr-bot" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="bot_header" title="Бесплатный мониторинг сайтов в Telegram"><svg class="tg-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.9 4.6c.3-1.3-.5-1.8-1.4-1.5L2.9 9.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3zM8.6 12.4l9.4-5.9c.4-.3.8-.1.5.2l-7.7 7-.3 3.4-1.9-4.7z"/></svg><span>Бот<span class="hb-x"> мониторинга</span></span></a>   <!-- 12.11 Ник: вместо «Обсудить идею» — кнопка бота -->
+  <button class="theme-btn" type="button" data-theme-toggle aria-label="Светлая или тёмная тема" title="Светлый / тёмный фон"><svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
   <button class="srch-btn" type="button" aria-label="Поиск по сайту" data-search><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 16.5 21 21M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg></button>
   <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
 </div></header>`
@@ -113,6 +114,8 @@ function BEGET_BAR(at = '') {
   const L = [['/beget/server/', '📡 Мониторинг серверов'], ['/beget/vosstanovit/', '♻️ Восстановить сайт'], ['/beget/voprosy/', '❓ Вопросы и ответы'], ['https://t.me/rebornlab_bot', '🔔 Бот']]   // 07.11: короче — кнопка бота не влезала
   return `<div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет</span>${L.map(([h, t]) => `<a href="${h}"${h === at ? ' aria-current="page"' : ''}${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${t}</a>`).join('')}</div></div>`
 }
+// 21.11 (Ник): светлая/тёмная тема — до отрисовки, чтобы не мигало
+const THEME_TAG = `<script>try{if(localStorage.getItem('rl_theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>`
 // 16.11 (Ник): Метрика грузится сразу на ВСЕХ страницах (и на статичных /hosting/, /monitoring-saitov/, /beget/* — вставляется ниже)
 const METRIKA_TAG = SITE.metrikaId ? `<script>window.RL_METRIKA=${SITE.metrikaId};window.RL_LOAD_METRIKA=function(){if(window.RL_YM_ON)return;window.RL_YM_ON=1;(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=${SITE.metrikaId}','ym');ym(${SITE.metrikaId},'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>` : ''
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
@@ -123,6 +126,7 @@ function shell({ title, description, canonical, body, jsonLd = [], ogType = 'web
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+${THEME_TAG}
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 ${noindex ? '<meta name="robots" content="noindex, nofollow, noarchive">' : `<link rel="canonical" href="${url}">`}
@@ -150,7 +154,7 @@ ${jsonLd.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</sc
 ${metrika}
 </head>
 <body>
-${HEADER(current)}${canonical === '/' || /^\/(beget|journal\/beget)/.test(canonical) ? BEGET_BAR(canonical) : ''}
+${HEADER(current)}${/^\/(beget|journal\/beget)/.test(canonical) ? BEGET_BAR(canonical) : ''}
 <main>
 ${body}
 </main>
@@ -230,7 +234,7 @@ const home = shell({
 <section class="hero" aria-labelledby="h1">
   <canvas id="lab" aria-hidden="true"></canvas>
   <div class="wrap">
-    <div class="bnow" id="bnow"><div><span class="bnow-t"><i></i>Ситуация с Бегет</span><p id="bnow-p">Живой статус серверов, проверка своего сайта и ответы на вопросы. Бесплатно.</p><form class="bnow-s" data-bnow-s role="search"><input type="search" name="q" placeholder="IP, адрес сайта или вопрос" aria-label="Поиск: сервер, сайт или вопрос о Бегет" autocomplete="off"><button type="submit" class="btn btn-acc">Найти</button></form></div><div class="bnow-a"><a class="btn btn-acc" href="/beget/" data-goal="home_beget">Смотреть статус <span class="arrow">→</span></a><a class="bnow-l" href="/beget/server/" data-goal="home_beget_ip">Проверить свой сервер</a></div></div>
+    <div class="bnow bnow-bank"><div><span class="bnow-t"><i></i>Блокировки в банках</span><p>Где чаще блокируют карты и счета и чем это заканчивается: сравнение 12 банков, 800+ историй клиентов WB Банка, анонимный опрос «вернули ли деньги». Бесплатно, без рекламы.</p></div><div class="bnow-a"><a class="btn btn-acc" href="/banki/" data-goal="home_banki">Смотреть по банкам <span class="arrow">→</span></a><a class="bnow-l" href="/wbbank/" data-goal="home_wbbank">Разбор WB Банка</a></div></div>   <!-- 21.11 Ник: вместо «Ситуация с Бегет» (тема на спаде) -->
     <div class="wbx-home">${WATCH_BOX}</div>
     <div class="kicker">Digital laboratory · идея → система → продукт</div>
     <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
@@ -583,6 +587,7 @@ write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите зад�
     const hdr = `<!--HDR:START-->${HEADER(at === '/beget/pravila/' ? '' : at.startsWith('/hosting/') ? '/monitoring-saitov/' : at)}${noBar ? '' : BEGET_BAR(at)}<!--HDR:END-->`
     let src = readFileSync(fp, 'utf8')
     if (METRIKA_TAG && !src.includes('RL_LOAD_METRIKA')) src = src.replace('</head>', () => METRIKA_TAG + '\n</head>')
+    if (!src.includes("localStorage.getItem('rl_theme')")) src = src.replace(/<head>/, () => '<head>\n' + THEME_TAG)
     src = src.includes('<!--HDR:START-->') ? src.replace(/<!--HDR:START-->[\s\S]*?<!--HDR:END-->/, () => hdr) : src.replace(/<body>/, () => '<body>\n' + hdr)
     const html = src.replace(/<footer class="ftr">[\s\S]*?<\/footer>/, () => foot)
       .replace(/<!--NEWS:START-->[\s\S]*?<!--NEWS:END-->/, () => `<!--NEWS:START--><div class="news-grid">${news}</div><!--NEWS:END-->`)
