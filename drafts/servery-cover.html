@@ -1,0 +1,54 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0}
+body{background:#08090a;font-family:Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#edebe6}
+#cover{position:relative;width:1200px;height:630px;overflow:hidden;background:radial-gradient(70% 90% at 82% 40%,rgba(198,242,78,.13),transparent 60%),radial-gradient(60% 80% at 0% 100%,rgba(122,167,255,.10),transparent 60%),#08090a}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(237,235,230,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(237,235,230,.045) 1px,transparent 1px);background-size:40px 40px}
+.l{position:absolute;left:64px;top:58px;width:640px}
+.k{font:600 18px/1 ui-monospace,Menlo,monospace;letter-spacing:.16em;color:#c6f24e;text-transform:uppercase;display:flex;align-items:center;gap:12px}
+.k i{width:11px;height:11px;border-radius:50%;background:#c6f24e;box-shadow:0 0 0 6px rgba(198,242,78,.18)}
+h1{font-size:64px;line-height:1.02;letter-spacing:-.035em;margin:26px 0 22px;font-weight:800}
+h1 em{font-style:normal;color:#c6f24e}
+p{font-size:23px;line-height:1.4;color:#a9a79f}
+.ch{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.ch span{font:600 18px/1 ui-monospace,Menlo,monospace;padding:12px 16px;border-radius:99px;border:1.5px solid rgba(237,235,230,.18);background:#121417;color:#d8d6cf}
+.ch span b{color:#c6f24e}
+.logo{position:absolute;left:64px;bottom:44px;font:800 22px/1 Inter,sans-serif;letter-spacing:.2em}
+.logo span{color:#6a6862;font-weight:600}
+.url{position:absolute;right:64px;bottom:44px;font:600 22px/1 ui-monospace,Menlo,monospace;color:#c6f24e}
+svg{position:absolute;right:30px;top:40px}
+</style></head><body>
+<div id="cover"><div class="grid"></div>
+<div class="l">
+ <div class="k"><i></i>Серверы и защита сайта</div>
+ <h1>Сервер, который <em>не&nbsp;боится ботов</em> и&nbsp;аварий хостинга</h1>
+ <p>Настройка VPS и облака, защита от парсеров и взлома без капчи, копии в другой стране, запасной сервер.</p>
+ <div class="ch"><span><b>3 469</b> запросов/с</span><span><b>7</b> серверов в 5 странах</span><span>копии <b>каждую ночь</b></span></div>
+</div>
+<svg width="470" height="470" viewBox="0 0 470 470" aria-hidden="true">
+ <defs><radialGradient id="g" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#c6f24e" stop-opacity=".16"/><stop offset="1" stop-color="#c6f24e" stop-opacity="0"/></radialGradient>
+ <clipPath id="c"><circle cx="235" cy="235" r="190"/></clipPath></defs>
+ <circle cx="235" cy="235" r="205" fill="url(#g)"/>
+ <circle cx="235" cy="235" r="190" fill="none" stroke="rgba(237,235,230,.14)" stroke-width="1.5"/>
+ <g clip-path="url(#c)" fill="#cfcdc6" id="dots"></g>
+ <g fill="none" stroke="#7aa7ff" stroke-width="2" stroke-opacity=".75">
+  <path d="M262 150 Q 300 80 345 150"/><path d="M262 150 Q 250 95 220 160"/><path d="M262 150 Q 330 230 360 300"/><path d="M345 150 Q 380 220 360 300"/><path d="M220 160 Q 150 260 150 330"/>
+ </g>
+ <g fill="#c6f24e"><circle cx="262" cy="150" r="9"/><circle cx="345" cy="150" r="7"/><circle cx="220" cy="160" r="7"/><circle cx="360" cy="300" r="7"/><circle cx="150" cy="330" r="7"/></g>
+ <g fill="none" stroke="#c6f24e" stroke-width="2" stroke-opacity=".45"><circle cx="262" cy="150" r="20"/><circle cx="262" cy="150" r="32" stroke-opacity=".2"/></g>
+ <g fill="#ff6b5e"><circle cx="70" cy="90" r="5"/><circle cx="430" cy="70" r="5"/><circle cx="440" cy="400" r="5"/><circle cx="40" cy="300" r="5"/></g>
+ <g fill="none" stroke="#ff6b5e" stroke-width="2"><circle cx="95" cy="112" r="11" stroke-opacity=".7"/><circle cx="405" cy="95" r="11" stroke-opacity=".7"/><circle cx="412" cy="378" r="11" stroke-opacity=".7"/></g>
+ <g transform="translate(205 360)"><path d="M30 0l30 12v20c0 20-13 34-30 40C13 66 0 52 0 32V12z" fill="#121417" stroke="#c6f24e" stroke-width="3"/><path d="M17 34l9 9 17-19" fill="none" stroke="#c6f24e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+</svg>
+<div class="logo">REBORN <span>LAB</span></div>
+<div class="url">rebornlab.ru/servery</div>
+</div>
+<script>
+const g=document.getElementById('dots'),L=[[50,-100,20,32],[35,-92,12,20],[-8,-60,16,16],[-28,-62,12,9],[50,12,9,18],[63,20,8,10],[10,15,14,24],[-14,25,15,13],[26,8,9,26],[56,90,14,55],[36,100,12,28],[22,79,10,8],[30,48,9,12],[66,125,9,40],[45,70,8,20],[-2,113,4,12],[-25,134,10,17]];
+const land=(a,o)=>L.some(b=>{let d=o-b[1];if(d>180)d-=360;if(d<-180)d+=360;return ((a-b[0])/b[2])**2+(d/b[3])**2<1});
+const N=2600,ga=Math.PI*(3-Math.sqrt(5)),rot=-55*Math.PI/180,t=-18*Math.PI/180;let h='';
+for(let i=0;i<N;i++){const y=1-2*(i+.5)/N,r=Math.sqrt(1-y*y),th=ga*i,la=Math.asin(y)*180/Math.PI,lo=((th*180/Math.PI)%360)-180;const isL=land(la,lo);if(!isL&&i%5)continue;
+ const f=la*Math.PI/180,a=lo*Math.PI/180+rot,x=Math.cos(f)*Math.sin(a),yy=Math.sin(f),z=Math.cos(f)*Math.cos(a),y2=yy*Math.cos(t)-z*Math.sin(t),z2=yy*Math.sin(t)+z*Math.cos(t);if(z2<0)continue;
+ h+=`<rect x="${(235+x*190-1).toFixed(1)}" y="${(235-y2*190-1).toFixed(1)}" width="${isL?2.4:1.5}" height="${isL?2.4:1.5}" opacity="${(isL?.25+.6*z2:.14*z2).toFixed(2)}"/>`}
+g.innerHTML=h;
+</script></body></html>
