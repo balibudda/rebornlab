@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Настрою VPS или облачный сервер под сайт, закрою от парсеров, сканеров и взлома без капчи, сделаю копии в другой стране и запасной сервер. Мониторинг и сопровождение, сигнал в Telegram. Разбор бесплатно.">
+<link rel="canonical" href="https://rebornlab.ru/servery/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="REBORN LAB">
+<meta property="og:title" content="Настройка VPS и облачных серверов, защита от парсеров и ботов, сопровождение | REBORN LAB">
+<meta property="og:description" content="Настрою VPS или облачный сервер под сайт, закрою от парсеров, сканеров и взлома без капчи, сделаю копии в другой стране и запасной сервер. Мониторинг и сопровождение, сигнал в Telegram. Разбор бесплатно.">
+<meta property="og:url" content="https://rebornlab.ru/servery/">
+<meta property="og:image" content="https://rebornlab.ru/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{if(localStorage.getItem('rl_theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
+<title>Настройка VPS и облачных серверов, защита от парсеров и ботов, сопровождение | REBORN LAB</title>
+<meta name="theme-color" content="#08090a">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="REBORN LAB — Журнал" href="/rss.xml">
+<link rel="stylesheet" href="/assets/styles.css?v=9996d339">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Главная", "item": "https://rebornlab.ru/"}, {"@type": "ListItem", "position": 2, "name": "Услуги", "item": "https://rebornlab.ru/#uslugi"}, {"@type": "ListItem", "position": 3, "name": "Серверы и защита", "item": "https://rebornlab.ru/servery/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Service", "name": "Настройка серверов, защита сайта от ботов и взлома, сопровождение", "description": "Настрою VPS или облачный сервер под сайт, закрою от парсеров, сканеров и взлома без капчи, сделаю копии в другой стране и запасной сервер. Мониторинг и сопровождение, сигнал в Telegram. Разбор бесплатно.", "provider": {"@type": "Organization", "name": "REBORN LAB", "url": "https://rebornlab.ru"}, "areaServed": "RU", "serviceType": "Настройка и сопровождение серверов", "url": "https://rebornlab.ru/servery/"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Вы работаете на моём сервере или переносите сайт к себе?", "acceptedAnswer": {"@type": "Answer", "text": "Как вам удобнее. Могу настроить ваш VPS у любого провайдера: нужен доступ root, лучше по ключу. Могу разместить сайт на своём сервере в России: тогда копии, фильтр ботов и мониторинг уже включены."}}, {"@type": "Question", "name": "Посетителям придётся вводить капчу?", "acceptedAnswer": {"@type": "Answer", "text": "Нет. Фильтр смотрит, кто пришёл: браузер человека, поисковый робот или программа-сборщик. Людям ничего не показываем. Отказ получают сканеры, парсеры, запросы с пустой подписью и те, кто перебирает служебные адреса вроде .env и wp-login."}}, {"@type": "Question", "name": "Не пострадает ли сайт в Яндексе и Google?", "acceptedAnswer": {"@type": "Answer", "text": "Нет. Поисковые роботы, Яндекс Метрика, веб-архив и превью ссылок в Telegram и ВКонтакте проходят. Отсекаются только боты, от которых сайту нет пользы."}}, {"@type": "Question", "name": "Что будет, если сервер упадёт ночью?", "acceptedAnswer": {"@type": "Answer", "text": "Мониторинг заметит это за несколько минут и пришлёт сигнал. Если сервер не поднимается, сайт можно включить на запасном сервере в другой стране из ночной копии и перевести на него домен."}}, {"@type": "Question", "name": "У меня копии делает хостинг. Этого мало?", "acceptedAnswer": {"@type": "Answer", "text": "Если хостинг ляжет целиком, его копии будут недоступны вместе с сайтом. В ноябре так и вышло у тысяч сайтов. Копия должна лежать у другого провайдера, а лучше в двух местах, и её нужно иногда пробовать восстановить."}}, {"@type": "Question", "name": "Сайт уже взломали. Поможете?", "acceptedAnswer": {"@type": "Answer", "text": "Да. Сначала снимаю копию как есть, потом ищу, как зашли и что оставили, вычищаю и закрываю вход. Удалить заражённые файлы мало: если чёрный ход остался, всё повторится."}}, {"@type": "Question", "name": "Сколько стоит?", "acceptedAnswer": {"@type": "Answer", "text": "Разбор бесплатный. Цену называю письменно после него: она зависит от числа сайтов, CMS и того, нужно ли сопровождение. Без сюрпризов в процессе."}}]}</script>
+<script>window.RL_METRIKA=113418511;window.RL_LOAD_METRIKA=function(){if(window.RL_YM_ON)return;window.RL_YM_ON=1;(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=113418511','ym');ym(113418511,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>
+</head>
+<body>
+<!--HDR:START--><header class="hdr"><div class="wrap">
+  <a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a>
+  <nav class="nav" aria-label="Основное меню"><a href="/monitoring-saitov/"><svg class="nav-ic nav-ic-acc" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>Мониторинг<span class="nav-x"> сайтов</span></a><a href="/vosstanovlenie-sajta/"><svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Восстановление<span class="nav-x"> сайтов</span></a><a href="/servery/" aria-current="page"><svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="18" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M7 7.5h.01M7 16.5h.01"/></svg>Серверы<span class="nav-x"> и защита</span></a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/banki/">Банки</a><a href="/beget/">Статус Beget</a><a class="nav-cta" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="bot_menu"><svg class="tg-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.9 4.6c.3-1.3-.5-1.8-1.4-1.5L2.9 9.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3zM8.6 12.4l9.4-5.9c.4-.3.8-.1.5.2l-7.7 7-.3 3.4-1.9-4.7z"/></svg>Бот мониторинга в Telegram</a></nav>
+  <a class="hdr-cta hdr-bot" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="bot_header" title="Бесплатный мониторинг сайтов в Telegram"><svg class="tg-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.9 4.6c.3-1.3-.5-1.8-1.4-1.5L2.9 9.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3zM8.6 12.4l9.4-5.9c.4-.3.8-.1.5.2l-7.7 7-.3 3.4-1.9-4.7z"/></svg><span>Бот<span class="hb-x"> мониторинга</span></span></a>   <!-- 12.11 Ник: вместо «Обсудить идею» — кнопка бота -->
+  <button class="theme-btn" type="button" data-theme-toggle aria-label="Светлая или тёмная тема" title="Светлый / тёмный фон"><svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+  <button class="srch-btn" type="button" aria-label="Поиск по сайту" data-search><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 16.5 21 21M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg></button>
+  <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
+</div></header><!--HDR:END-->
+<header class="hdr"><div class="wrap">
+  <a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a>
+  <nav class="nav" aria-label="Основное меню"><a href="/monitoring-saitov/"><svg class="nav-ic nav-ic-acc" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>Мониторинг<span class="nav-x"> сайтов</span></a><a href="/vosstanovlenie-sajta/"><svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Восстановление<span class="nav-x"> сайтов</span></a><a href="/servery/"><svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="18" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M7 7.5h.01M7 16.5h.01"/></svg>Серверы<span class="nav-x"> и защита</span></a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/banki/">Банки</a><a href="/beget/">Статус Beget</a><a class="nav-cta" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="bot_menu"><svg class="tg-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.9 4.6c.3-1.3-.5-1.8-1.4-1.5L2.9 9.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3zM8.6 12.4l9.4-5.9c.4-.3.8-.1.5.2l-7.7 7-.3 3.4-1.9-4.7z"/></svg>Бот мониторинга в Telegram</a></nav>
+  <a class="hdr-cta hdr-bot" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="bot_header" title="Бесплатный мониторинг сайтов в Telegram"><svg class="tg-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.9 4.6c.3-1.3-.5-1.8-1.4-1.5L2.9 9.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3zM8.6 12.4l9.4-5.9c.4-.3.8-.1.5.2l-7.7 7-.3 3.4-1.9-4.7z"/></svg><span>Бот<span class="hb-x"> мониторинга</span></span></a>   <!-- 12.11 Ник: вместо «Обсудить идею» — кнопка бота -->
+  <button class="theme-btn" type="button" data-theme-toggle aria-label="Светлая или тёмная тема" title="Светлый / тёмный фон"><svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+  <button class="srch-btn" type="button" aria-label="Поиск по сайту" data-search><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 16.5 21 21M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg></button>
+  <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
+</div></header>
+<main>
+<style>
+/* ===== /servery/ — лендинг «Серверы и защита» (24.11.2026). Цвета только через переменные темы ===== */
+.srv-hero{position:relative;overflow:hidden;padding:clamp(28px,5vw,60px) 0 30px}
+.srv-hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center}
+.srv-hero h1{font-size:clamp(34px,5vw,64px);line-height:1.02;letter-spacing:-.03em;margin:14px 0 18px}
+.srv-hero h1 em{font-style:normal;color:var(--acc-ink)}
+.srv-hero .sub{font-size:clamp(16px,1.6vw,19px);color:var(--muted);max-width:560px}
+.srv-badges{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 26px}
+.srv-badges span{font:500 13px/1 var(--mono);padding:8px 11px;border:1px solid var(--line-2);border-radius:99px;color:var(--text-2);background:var(--bg-2)}
+.srv-badges span i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--acc);margin-right:7px;box-shadow:0 0 0 0 var(--acc);animation:srvPing 2s infinite}
+@keyframes srvPing{0%{box-shadow:0 0 0 0 rgba(198,242,78,.55)}70%{box-shadow:0 0 0 9px rgba(198,242,78,0)}100%{box-shadow:0 0 0 0 rgba(198,242,78,0)}}
+.srv-globe{position:relative;aspect-ratio:1/1;width:100%;max-width:560px;justify-self:center}
+.srv-globe canvas{width:100%;height:100%;display:block}
+.srv-globe .gl-cap{position:absolute;left:0;right:0;bottom:-4px;text-align:center;font:12px/1.4 var(--mono);color:var(--dim)}
+.srv-feed{position:absolute;right:0;top:6%;width:min(250px,46%);font:11.5px/1.5 var(--mono);background:rgba(var(--veil),.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid var(--line-2);border-radius:14px;padding:10px 12px;color:var(--text-2);pointer-events:none}
+.srv-feed b{display:block;color:var(--text);font-weight:600;margin-bottom:4px;font-family:var(--font);font-size:12.5px}
+.srv-feed div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:srvIn .4s ease}
+.srv-feed .ok{color:var(--acc-ink)} .srv-feed .no{color:#ff6b5e}
+@keyframes srvIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+.srv-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;margin-top:16px}
+.srv-stats div{background:var(--bg-2);padding:22px 18px}
+.srv-stats b{display:block;font:700 clamp(26px,3vw,40px)/1 var(--font);letter-spacing:-.02em;color:var(--text)}
+.srv-stats b small{font-size:.5em;color:var(--acc-ink);margin-left:3px}
+.srv-stats span{display:block;margin-top:8px;color:var(--muted);font-size:14px;line-height:1.35}
+
+.srv-pain{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.srv-pain div{border:1px solid var(--line);border-radius:var(--r);padding:20px;background:var(--card)}
+.srv-pain b{display:block;font-size:17px;margin-bottom:6px}
+.srv-pain span{color:var(--muted);font-size:15px}
+
+.srv-shield{border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--bg-2);padding:clamp(18px,3vw,30px);display:grid;grid-template-columns:1.6fr 1fr;gap:26px;align-items:stretch}
+.srv-shield canvas{width:100%;height:320px;display:block;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.srv-sw{display:inline-flex;border:1px solid var(--line-2);border-radius:99px;padding:4px;gap:4px;background:var(--card)}
+.srv-sw button{font:600 14px/1 var(--font);border:0;border-radius:99px;padding:11px 16px;cursor:pointer;background:transparent;color:var(--muted)}
+.srv-sw button.on{background:var(--acc);color:#0b0c0d}
+.srv-sw button.on.bad{background:#ff6b5e;color:#160604}
+.srv-meter{margin-top:20px}
+.srv-meter label{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin:14px 0 6px}
+.srv-meter label b{color:var(--text);font-family:var(--mono)}
+.srv-bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.srv-bar i{display:block;height:100%;width:20%;border-radius:99px;background:var(--acc);transition:width .6s ease,background .6s}
+.srv-bar i.hot{background:#ff6b5e}
+.srv-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:13.5px;color:var(--muted)}
+.srv-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.srv-note{font-size:12.5px;color:var(--dim);margin-top:12px}
+
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.srv-card{position:relative;border:1px solid var(--line);border-radius:var(--r);padding:24px 22px;background:var(--card);overflow:hidden;transition:border-color .3s,transform .3s}
+.srv-card:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.srv-card:before{content:"";position:absolute;inset:-1px;border-radius:inherit;background:radial-gradient(400px 160px at var(--mx,50%) var(--my,-20%),var(--acc-dim),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.srv-card:hover:before{opacity:1}
+.srv-card .n{font:500 12px/1 var(--mono);color:var(--acc-ink)}
+.srv-card h3{font-size:19px;margin:12px 0 8px;line-height:1.25}
+.srv-card p{color:var(--muted);font-size:15px;margin:0 0 12px}
+.srv-card ul{margin:0;padding:0;list-style:none;font-size:14px;color:var(--text-2)}
+.srv-card li{padding:5px 0 5px 20px;position:relative;border-top:1px dashed var(--line)}
+.srv-card li:before{content:"✓";position:absolute;left:0;color:var(--acc-ink);font-weight:700}
+
+.srv-term{border:1px solid var(--line-2);border-radius:var(--r-lg);background:#0b0d0f;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.srv-term .bar{display:flex;gap:7px;padding:12px 14px;border-bottom:1px solid rgba(237,235,230,.08);align-items:center}
+.srv-term .bar i{width:11px;height:11px;border-radius:50%;background:#ff5f57}.srv-term .bar i:nth-child(2){background:#febc2e}.srv-term .bar i:nth-child(3){background:#28c840}
+.srv-term .bar span{margin-left:8px;font:12px var(--mono);color:#6a6862}
+.srv-term pre{margin:0;padding:18px 20px 22px;font:13.5px/1.75 var(--mono);color:#cfcdc6;min-height:420px;white-space:pre-wrap;word-break:break-word}
+.srv-term .g{color:#c6f24e}.srv-term .d{color:#6a6862}.srv-term .r{color:#ff6b5e}.srv-term .b{color:#7aa7ff}
+.srv-term .cur{display:inline-block;width:8px;height:16px;background:#c6f24e;vertical-align:-3px;animation:srvBlink 1s steps(1) infinite}
+@keyframes srvBlink{50%{opacity:0}}
+.srv-2col{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+
+.srv-layers{display:flex;flex-direction:column;gap:8px}
+.srv-layers div{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:13px 16px;background:var(--card);opacity:.35;transform:translateX(-10px);transition:all .5s cubic-bezier(.2,.7,.2,1)}
+.srv-layers div.lit{opacity:1;transform:none;border-color:var(--line-2)}
+.srv-layers div.lit em{background:var(--acc);color:#0b0c0d}
+.srv-layers em{font:700 13px/1 var(--mono);font-style:normal;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--line);color:var(--muted);transition:all .5s}
+.srv-layers b{display:block;font-size:16px}
+.srv-layers span{color:var(--muted);font-size:14px}
+
+.srv-cases{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.srv-case{border:1px solid var(--line);border-radius:var(--r);padding:26px;background:var(--card);display:flex;flex-direction:column}
+.srv-case .big{font:700 clamp(34px,4vw,52px)/1 var(--font);letter-spacing:-.03em;color:var(--acc-ink)}
+.srv-case h3{margin:12px 0 8px;font-size:19px}
+.srv-case p{color:var(--muted);font-size:15px;margin:0 0 10px;flex:1}
+.srv-case a{color:var(--text);font-weight:600;font-size:15px}
+
+.srv-care{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.srv-care div{border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--card)}
+.srv-care h3{font-size:17px;margin:0 0 10px;display:flex;gap:10px;align-items:center}
+.srv-care h3 i{font:600 11px/1 var(--mono);font-style:normal;padding:6px 8px;border-radius:8px;background:var(--acc-dim);color:var(--acc-ink)}
+.srv-care ul{margin:0;padding-left:18px;color:var(--text-2);font-size:14.5px}
+.srv-care li{margin:6px 0}
+
+.srv-faq details{border-top:1px solid var(--line);padding:18px 0}
+.srv-faq details:last-child{border-bottom:1px solid var(--line)}
+.srv-faq summary{cursor:pointer;font-size:17.5px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:20px}
+.srv-faq summary::-webkit-details-marker{display:none}
+.srv-faq summary:after{content:"+";color:var(--acc-ink);font-size:22px;line-height:1;transition:transform .3s}
+.srv-faq details[open] summary:after{transform:rotate(45deg)}
+.srv-faq p{color:var(--muted);margin:12px 0 0;font-size:16px;max-width:780px}
+
+@media (max-width:980px){
+ .srv-hero .wrap,.srv-shield,.srv-2col{grid-template-columns:1fr}
+ .srv-globe{max-width:440px}
+ .srv-stats{grid-template-columns:repeat(2,1fr)} .srv-stats div:last-child{grid-column:1/-1}
+ .srv-grid,.srv-care,.srv-pain{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+ .srv-grid,.srv-care,.srv-pain,.srv-cases{grid-template-columns:1fr}
+ .srv-feed{position:static;width:auto;margin-top:10px}
+ .srv-shield canvas{height:260px}
+ .srv-term pre{font-size:12px;min-height:380px}
+}
+html[data-theme="light"] .srv-feed{background:rgba(255,255,255,.88)}
+html[data-theme="light"] .srv-card,html[data-theme="light"] .srv-case,html[data-theme="light"] .srv-care div,html[data-theme="light"] .srv-pain div{box-shadow:0 1px 3px rgba(22,24,29,.06)}
+</style>
+
+<section class="srv-hero"><div class="wrap">
+ <div>
+  <div class="crumbs"><a href="/">Главная</a> / <a href="/#uslugi">Услуги</a> / Серверы и защита</div>
+  <div class="kicker" style="margin-top:18px">Серверы · безопасность · сопровождение</div>
+  <h1>Настройка серверов и <em>защита сайта</em> от ботов и взлома</h1>
+  <p class="sub">Поднимаю VPS и облачные серверы под ваш сайт, закрываю его от парсеров, сканеров и подбора паролей, настраиваю копии и запасной сервер. Потом слежу, чтобы всё работало: если что-то упадёт ночью, я узнаю об этом раньше вас.</p>
+  <div class="srv-badges"><span><i></i>7 серверов в 5 странах</span><span><i></i>проверка каждые 5 минут</span><span><i></i>копии каждую ночь</span></div>
+  <p style="display:flex;gap:12px;flex-wrap:wrap;margin:0"><a class="btn btn-acc" href="#task" data-goal="cta_service">Разобрать мой сервер <span class="arrow">→</span></a><a class="btn btn-ghost" href="#shield">Как работает защита</a></p>
+ </div>
+ <div class="srv-globe" aria-hidden="true">
+  <canvas id="srvGlobe"></canvas>
+  <div class="srv-feed" id="srvFeed"><b>Что прямо сейчас приходит на сайт</b></div>
+  <div class="gl-cap">наглядная схема: серверы, которые мы держим, и запросы к сайтам</div>
+ </div>
+</div>
+<div class="wrap"><div class="srv-stats rv">
+ <div><b data-cnt="3469">0</b><span>запросов в секунду выдержал сайт на сервере 2 ядра / 2 ГБ, 0 ошибок</span></div>
+ <div><b data-cnt="27">0</b><span>хостингов проверяем каждые 30 минут — <a href="/hosting/">мониторинг</a></span></div>
+ <div><b data-cnt="5">0</b><span>мест, где лежат копии: другой сервер, другая страна, облако</span></div>
+ <div><b data-cnt="10">0</b><span>сайтов клиентов вернули к жизни в ноябре после падения хостинга</span></div>
+ <div><b data-cnt="0" data-suf=" ₽">0</b><span>стоит разбор: смотрю сервер и пишу, что не так</span></div>
+</div></div>
+</section>
+
+<section class="sec" style="padding-top:30px"><div class="wrap">
+ <div class="sec-hd rv"><div><div class="kicker">Когда пора заняться сервером</div><h2>Если это <em>про вас</em></h2></div><p>Все пункты ниже — из обращений этого месяца. Обычно владелец узнаёт о проблеме последним: от клиента, от поисковика или от хостинга, который вдруг отключил сайт.</p></div>
+ <div class="srv-pain">
+  <div class="rv"><b>Сайт тормозит, а посетителей мало</b><span>Половину нагрузки дают боты: парсеры цен, SEO-сканеры, сборщики контента. Людям достаётся то, что осталось.</span></div>
+  <div class="rv"><b>Хостинг лёг — и сайт вместе с ним</b><span>Копии лежали у того же хостинга. Или их не было вовсе. Сайт возвращали неделями.</span></div>
+  <div class="rv"><b>Антивирус хостинга нашёл «что-то»</b><span>Файлы удалили, сайт вроде работает. А чёрный ход остался, и через месяц всё повторяется.</span></div>
+  <div class="rv"><b>Письма с сайта уходят в спам</b><span>Заявки не доходят, потому что у домена нет DKIM и SPF, а сервер отправляет письма «от чужого имени».</span></div>
+  <div class="rv"><b>Сайт не открывается у части клиентов</b><span>На мобильном интернете, у одного из провайдеров, из другого города. Онлайн-проверки говорят «всё хорошо».</span></div>
+  <div class="rv"><b>Купили VPS, а что дальше — непонятно</b><span>Пароль root, открытые порты, обновлений нет. Через неделю в журнале тысячи попыток входа.</span></div>
+ </div>
+</div></section>
+
+<section class="sec" id="shield" style="padding-top:0"><div class="wrap">
+ <div class="sec-hd rv"><div><div class="kicker">Фильтр ботов</div><h2>Включите защиту и <em>посмотрите на нагрузку</em></h2></div><p>Люди и поисковики проходят как обычно, без капчи. Сканеры, парсеры и подборщики паролей получают отказ ещё до того, как сайт начнёт работать, а за настойчивость — бан на сутки или неделю.</p></div>
+ <div class="srv-shield rv">
+  <canvas id="srvShield"></canvas>
+  <div>
+   <div class="srv-sw" role="group" aria-label="Режим"><button type="button" data-m="0" class="bad">Без защиты</button><button type="button" data-m="1" class="on">С защитой</button></div>
+   <div class="srv-meter">
+    <label>Нагрузка на процессор <b id="sLoad">18%</b></label><div class="srv-bar"><i id="sLoadB"></i></div>
+    <label>Время ответа для людей <b id="sResp">0,2 с</b></label><div class="srv-bar"><i id="sRespB"></i></div>
+    <label>Отсечено запросов ботов <b id="sCut">0</b></label>
+    <label>Пропущено людей и поисковиков <b id="sPass">0</b></label>
+   </div>
+   <div class="srv-legend"><span><i style="background:var(--acc)"></i>человек</span><span><i style="background:#7aa7ff"></i>поисковик, Метрика</span><span><i style="background:#ff6b5e"></i>сканер, парсер, подбор</span></div>
+   <p class="srv-note">Наглядная модель, не живые данные. Реальный фильтр стоит на всех сайтах наших клиентов с 16 ноября.</p>
+  </div>
+ </div>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap">
+ <div class="sec-hd rv"><div><div class="kicker">Что делаю</div><h2>Сервер от настройки <em>до сопровождения</em></h2></div><p>Можно заказать один пункт, можно всё сразу. Работаю на вашем сервере у любого провайдера или размещаю сайт у себя на сервере в России.</p></div>
+ <div class="srv-grid">
+  <div class="srv-card rv"><div class="n">01</div><h3>Настройка VPS и облачного сервера</h3><p>Сервер с нуля под ваш сайт: WordPress, Битрикс, MODX, OpenCart, статика или своё приложение.</p><ul><li>nginx, PHP нужной версии, база данных</li><li>сертификаты https с автопродлением</li><li>старый сайт на старом PHP — тоже запустим</li></ul></div>
+  <div class="srv-card rv"><div class="n">02</div><h3>Защита от парсеров и ненужных ботов</h3><p>Отсекаю сканеры, сборщики цен и контента, SEO-пауков, которые только грузят сервер.</p><ul><li>Яндекс, Google, Метрика, превью в мессенджерах проходят</li><li>капчи для людей нет</li><li>автобан за перебор адресов и флуд</li></ul></div>
+  <div class="srv-card rv"><div class="n">03</div><h3>Защита от взлома</h3><p>Закрываю то, через что обычно заходят: пароли, старые плагины, открытые служебные файлы.</p><ul><li>вход на сервер только по ключу</li><li>.env, .git, бэкапы и phpinfo снаружи не видны</li><li>в WordPress нельзя поставить «файловый менеджер»</li></ul></div>
+  <div class="srv-card rv"><div class="n">04</div><h3>Изоляция сайтов друг от друга</h3><p>Если на сервере несколько сайтов, взлом одного не должен открыть остальные.</p><ul><li>у каждого сайта свой пользователь и PHP</li><li>сайт не видит чужие папки и настройки</li><li>службы заявок пишут только в свою папку</li></ul></div>
+  <div class="srv-card rv"><div class="n">05</div><h3>Копии и запасной сервер</h3><p>Копия, которая лежит у того же хостинга, в аварию не поможет. Поэтому храню её в другом месте.</p><ul><li>каждую ночь, в зашифрованном виде</li><li>грузится, только если сайт изменился</li><li>запасной сервер в другой стране, переключение за минуты</li></ul></div>
+  <div class="srv-card rv"><div class="n">06</div><h3>Мониторинг и уведомления</h3><p>Сайт, сервер, место на диске, сертификат — всё под присмотром, сигнал приходит в Telegram.</p><ul><li>сайт не ответил — проверка каждые 10 минут</li><li>диск заполнен на 80% — предупреждение</li><li>бесплатно для любого сайта — <a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">бот</a></li></ul></div>
+  <div class="srv-card rv"><div class="n">07</div><h3>Почта сайта не в спаме</h3><p>Письма с форм уходят от вашего домена и доходят до ящика, а не в папку «Спам».</p><ul><li>DKIM, SPF и PTR для вашего домена</li><li>отправитель — site@ваш-домен</li><li>проверка по журналу почтового сервера</li></ul></div>
+  <div class="srv-card rv"><div class="n">08</div><h3>Доступность из России</h3><p>Сайт должен открываться на любом провайдере и на мобильном интернете, без обходных приложений.</p><ul><li>DNS без «оранжевого облака» Cloudflare</li><li>шрифты и скрипты — со своего сервера</li><li>проверка с разных точек</li></ul></div>
+  <div class="srv-card rv"><div class="n">09</div><h3>Скорость и нагрузка</h3><p>Настраиваю сервер так, чтобы наплыв посетителей после рассылки или рекламы его не уронил.</p><ul><li>кэш статики, сжатие, лимиты соединений</li><li>нагрузочный тест до и после</li><li>лимиты на формы и чат от спама</li></ul></div>
+ </div>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap srv-2col">
+ <div class="rv">
+  <div class="kicker">Как выглядит настройка</div>
+  <h2 style="font-size:clamp(28px,3.4vw,44px)">Каждый шаг <em>записан и проверен</em></h2>
+  <p class="sv-p">После настройки вы получаете не «всё сделано», а список: что включено, как проверено и как откатить. Перед любой правкой снимаю копию, чтобы вернуть сайт за минуту, если что-то пойдёт не так.</p>
+  <div class="srv-layers" id="srvLayers">
+   <div><em>L1</em><p style="margin:0"><b>Сеть</b><span>открыты только нужные порты, остальное закрыто</span></p></div>
+   <div><em>L2</em><p style="margin:0"><b>Вход на сервер</b><span>только по ключу, 3 попытки, бан за подбор</span></p></div>
+   <div><em>L3</em><p style="margin:0"><b>Фильтр ботов</b><span>сканеры и парсеры получают отказ</span></p></div>
+   <div><em>L4</em><p style="margin:0"><b>Изоляция</b><span>каждый сайт в своей «квартире»</span></p></div>
+   <div><em>L5</em><p style="margin:0"><b>Журнал</b><span>все заходы записаны, видно, кто ломится</span></p></div>
+   <div><em>L6</em><p style="margin:0"><b>Копии</b><span>каждую ночь, шифр, другая страна</span></p></div>
+   <div><em>L7</em><p style="margin:0"><b>Запасной сервер</b><span>сайт поднимается в другом месте</span></p></div>
+  </div>
+ </div>
+ <div class="srv-term rv" aria-label="Пример отчёта о настройке сервера"><div class="bar"><i></i><i></i><i></i><span>root@ваш-сервер — настройка</span></div><pre id="srvTerm"></pre></div>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap">
+ <div class="sec-hd rv"><div><div class="kicker">Из практики</div><h2>Что уже <em>сделано</em></h2></div><p>Без имён клиентов: они доверили мне сайты, а не право рассказывать о себе.</p></div>
+ <div class="srv-cases">
+  <div class="srv-case rv"><div class="big">1 г. 9 мес.</div><h3>Троян жил внутри Битрикса</h3><p>Антивирус хостинга трижды удалял файлы, а чёрный ход оставался. Нашли его, закрыли дыры в шаблоне, поставили фильтр ботов и журнал. Разбор по шагам и 10 проверок, которые можно сделать самому, — в статье.</p><a href="/journal/kejs-troyan-v-bitrikse-zashchita-sajta/">Читать кейс →</a></div>
+  <div class="srv-case rv"><div class="big">3 469 / с</div><h3>Нагрузочный тест после настройки</h3><p>5 000 запросов к главной по 200 одновременно на сервере 2 ядра и 2 ГБ: ни одной ошибки, 95% ответов быстрее 0,22 с. До настройки сервер упирался в лимит соединений.</p></div>
+  <div class="srv-case rv"><div class="big">10 сайтов</div><h3>Хостинг упал — сайты вернулись</h3><p>В ноябре крупный хостинг лёг на несколько дней. Сайты клиентов подняли на своих серверах из копий и веб-архива: каталоги, научный журнал, Битрикс и MODX. Теперь у каждого есть копия в другой стране.</p><a href="/vosstanovlenie-sajta/">Восстановление сайтов →</a></div>
+  <div class="srv-case rv"><div class="big">27</div><h3>Хостингов под наблюдением</h3><p>Каждые 30 минут проверяем панели, DNS и сайты клиентов крупных хостингов. Видно, кто лежит прямо сейчас и кто чаще падал за неделю.</p><a href="/hosting/">Мониторинг хостингов →</a></div>
+ </div>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap">
+ <div class="sec-hd rv"><div><div class="kicker">Сопровождение</div><h2>Сервер <em>под присмотром</em> каждый день</h2></div><p>Для тех, кто не хочет думать о сервере. Вы занимаетесь бизнесом, я — тем, чтобы сайт был доступен, обновлён и цел.</p></div>
+ <div class="srv-care">
+  <div class="rv"><h3><i>всегда</i>Каждые 5–10 минут</h3><ul><li>сайт и сервер отвечают</li><li>сертификат не истёк</li><li>места на диске хватает</li><li>сигнал в Telegram, если нет</li></ul></div>
+  <div class="rv"><h3><i>ночью</i>Каждый день</h3><ul><li>зашифрованная копия файлов и базы</li><li>копия в другой стране и в облаке</li><li>обновления безопасности системы</li><li>журнал: кто пытался зайти</li></ul></div>
+  <div class="rv"><h3><i>раз в месяц</i>Проверка по-настоящему</h3><ul><li>пробное восстановление из копии</li><li>обновление CMS и плагинов</li><li>чистка от лишних ботов в фильтре</li><li>короткий отчёт: что было и что сделано</li></ul></div>
+ </div>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap">
+ <div class="sv-flow rv"><div class="kicker" style="margin-bottom:14px">Как работаем</div><ol style="grid-template-columns:repeat(4,1fr)"><li><b>Разбор</b><span>Присылаете адрес сайта или сервера. Смотрю снаружи и пишу, что вижу: открытые двери, нагрузку, копии.</span></li><li><b>План и цена</b><span>Письменно: что сделаю, сколько это займёт и сколько стоит. Цена зависит от числа сайтов и серверов.</span></li><li><b>Настройка</b><span>Перед каждой правкой — копия для отката. Сайт продолжает работать, пока я настраиваю.</span></li><li><b>Отчёт и присмотр</b><span>Список сделанного с проверками. Дальше — сопровождение, если оно вам нужно.</span></li></ol></div>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap" style="max-width:900px">
+ <div class="kicker rv">Вопросы</div>
+ <h2 class="rv" style="font-size:clamp(28px,3.4vw,44px);margin-bottom:20px">Частые <em>вопросы</em></h2>
+ <div class="srv-faq">
+  <details class="rv"><summary>Вы работаете на моём сервере или переносите сайт к себе?</summary><p>Как вам удобнее. Могу настроить ваш VPS у любого провайдера: нужен доступ root, лучше по ключу. Могу разместить сайт на своём сервере в России: тогда копии, фильтр ботов и мониторинг уже включены.</p></details>
+  <details class="rv"><summary>Посетителям придётся вводить капчу?</summary><p>Нет. Фильтр смотрит, кто пришёл: браузер человека, поисковый робот или программа-сборщик. Людям ничего не показываем. Отказ получают сканеры, парсеры, запросы с пустой подписью и те, кто перебирает служебные адреса вроде .env и wp-login.</p></details>
+  <details class="rv"><summary>Не пострадает ли сайт в Яндексе и Google?</summary><p>Нет. Поисковые роботы, Яндекс Метрика, веб-архив и превью ссылок в Telegram и ВКонтакте проходят. Отсекаются только боты, от которых сайту нет пользы.</p></details>
+  <details class="rv"><summary>Что будет, если сервер упадёт ночью?</summary><p>Мониторинг заметит это за несколько минут и пришлёт сигнал. Если сервер не поднимается, сайт можно включить на запасном сервере в другой стране из ночной копии и перевести на него домен.</p></details>
+  <details class="rv"><summary>У меня копии делает хостинг. Этого мало?</summary><p>Если хостинг ляжет целиком, его копии будут недоступны вместе с сайтом. В ноябре так и вышло у тысяч сайтов. Копия должна лежать у другого провайдера, а лучше в двух местах, и её нужно иногда пробовать восстановить.</p></details>
+  <details class="rv"><summary>Сайт уже взломали. Поможете?</summary><p>Да. Сначала снимаю копию как есть, потом ищу, как зашли и что оставили, вычищаю и закрываю вход. Удалить заражённые файлы мало: если чёрный ход остался, всё повторится.</p></details>
+  <details class="rv"><summary>Сколько стоит?</summary><p>Разбор бесплатный. Цену называю письменно после него: она зависит от числа сайтов, CMS и того, нужно ли сопровождение. Без сюрпризов в процессе.</p></details>
+ </div>
+</div></section>
+
+<section class="sec" id="task" style="padding-top:0"><div class="wrap"><div class="final-box rv"><h2 style="font-size:clamp(30px,4vw,52px)">Пришлите адрес — <em>посмотрю сервер</em></h2><form data-lead id="f-servery" novalidate>
+ <p class="lf-proof"><b>Что я делаю каждый день:</b> держу сайты клиентов на своих серверах в России и в других странах, закрываю их от ботов и взлома, делаю копии и слежу, чтобы всё открывалось.</p>
+ <div class="chips" data-chips><button type="button" class="chip hot">🛡 Защита от ботов и парсеров</button><button type="button" class="chip hot">⚙️ Настроить сервер / VPS</button><button type="button" class="chip">Полная защита сайта</button><button type="button" class="chip">Сопровождение сервера</button><button type="button" class="chip">Копии и запасной сервер</button><button type="button" class="chip">Сайт взломали</button><button type="button" class="chip">Другая задача</button></div>
+ <label class="sr" for="f-servery-t">Опишите задачу</label>
+ <textarea class="ym-disable-keys" id="f-servery-t" name="text" placeholder="Адрес сайта и что беспокоит. Например: «мой-сайт.ru тормозит, на хостинге пишут про нагрузку» или «купил VPS, нужно перенести WordPress и защитить»"></textarea>
+ <div class="form-row"><label class="sr" for="f-servery-c">Контакт</label><input class="ym-disable-keys" type="text" id="f-servery-c" name="contact" placeholder="Почта, Telegram или WhatsApp — мы пишем, не звоним" style="flex:1;min-width:220px"></div>
+ <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+ <label class="agree"><input type="checkbox" name="agree" required> <span>Даю <a href="/consent/" target="_blank">согласие на обработку персональных данных</a> и принимаю <a href="/privacy/" target="_blank">политику конфиденциальности</a></span></label>
+ <div class="form-row"><button class="btn btn-acc" type="submit" data-label="Отправить заявку →">Отправить заявку <span class="arrow">→</span></button><a class="btn btn-ghost" href="https://t.me/Reborn_Lab" target="_blank" rel="noopener" data-goal="telegram">Написать в Telegram</a></div>
+ <p class="ok-msg">Получил ✓ Посмотрю сайт и напишу вам лично.</p>
+ <p class="hint">Отвечаю лично и письменно. Пароли в форму не пишите — доступ попрошу отдельно, когда договоримся.</p>
+ <p class="err-msg">Отметьте согласие на обработку данных — без него мы не можем принять заявку.</p>
+</form></div></div></section>
+
+<script>
+(function(){
+ var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||'#c6f24e'}
+ function light(){return document.documentElement.getAttribute('data-theme')==='light'}
+
+ /* ---------- глобус ---------- */
+ var cv=document.getElementById('srvGlobe'); if(cv){
+  var ctx=cv.getContext('2d'),W,H,R,DPR=Math.min(2,window.devicePixelRatio||1);
+  var LAND=[[50,-100,20,32],[35,-92,12,20],[63,-150,8,20],[20,-100,9,9],[72,-42,9,16],[60,-75,10,15],
+   [-8,-60,16,16],[-28,-62,12,9],[-45,-70,8,4],[8,-74,6,6],
+   [50,12,9,18],[63,20,8,10],[40,-4,5,6],[54,-2,4,3],[42,13,4,3],
+   [10,15,14,24],[-14,25,15,13],[26,8,9,26],[-30,23,6,8],
+   [56,90,14,55],[36,100,12,28],[22,79,10,8],[30,48,9,12],[15,103,7,5],[66,125,9,40],[45,70,8,20],
+   [-2,113,4,12],[-5,140,3,8],[-25,134,10,17],[37,138,5,3],[13,122,5,3],[64,-18,2,4]];
+  function isLand(la,lo){for(var i=0;i<LAND.length;i++){var b=LAND[i],dl=(la-b[0])/b[2],dd=lo-b[1];if(dd>180)dd-=360;if(dd<-180)dd+=360;dd/=b[3];if(dl*dl+dd*dd<1)return true}return false}
+  var P=[],N=2600,ga=Math.PI*(3-Math.sqrt(5));
+  for(var i=0;i<N;i++){var y=1-2*(i+.5)/N,r=Math.sqrt(1-y*y),th=ga*i,la=Math.asin(y)*180/Math.PI,lo=((th*180/Math.PI)%360)-180;if(isLand(la,lo))P.push([la,lo,1]);else if(i%5==0)P.push([la,lo,0])}
+  var NODES=[{n:'Россия',la:55.75,lo:37.6,main:1},{n:'Швеция',la:59.3,lo:18},{n:'Нидерланды',la:52.4,lo:4.9},{n:'Индонезия',la:-6.2,lo:106.8},{n:'Бразилия',la:-23.5,lo:-46.6}];
+  var LINKS=[[0,1],[0,2],[0,3],[1,2],[3,4],[2,4]];
+  var shots=[],rot=-40,tilt=-18*Math.PI/180;
+  function size(){var b=cv.getBoundingClientRect();W=b.width;H=b.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);R=Math.min(W,H)*.42}
+  function proj(la,lo){var a=(lo+rot)*Math.PI/180,f=la*Math.PI/180,x=Math.cos(f)*Math.sin(a),y=Math.sin(f),z=Math.cos(f)*Math.cos(a);
+   var y2=y*Math.cos(tilt)-z*Math.sin(tilt),z2=y*Math.sin(tilt)+z*Math.cos(tilt);return [W/2+x*R,H/2-y2*R,z2]}
+  function slerp(a,b,t){var A=toV(a),B=toV(b),d=Math.acos(Math.max(-1,Math.min(1,A[0]*B[0]+A[1]*B[1]+A[2]*B[2]))),s=Math.sin(d)||1,k1=Math.sin((1-t)*d)/s,k2=Math.sin(t*d)/s;
+   var v=[A[0]*k1+B[0]*k2,A[1]*k1+B[1]*k2,A[2]*k1+B[2]*k2],l=Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);return [Math.asin(v[1]/l)*180/Math.PI,Math.atan2(v[0],v[2])*180/Math.PI,1+.18*Math.sin(Math.PI*t)]}
+  function toV(n){var f=n.la*Math.PI/180,a=n.lo*Math.PI/180;return [Math.cos(f)*Math.sin(a),Math.sin(f),Math.cos(f)*Math.cos(a)]}
+  function projH(la,lo,h){var p=proj(la,lo);return [W/2+(p[0]-W/2)*h,H/2+(p[1]-H/2)*h,p[2]]}
+  function spawn(){var src=P[(Math.random()*P.length)|0];if(!src[2])return;var bad=Math.random()<.45,to=NODES[Math.random()<.6?0:(1+Math.random()*4)|0];shots.push({a:{la:src[0],lo:src[1]},b:to,t:0,bad:bad,sp:.008+Math.random()*.01})}
+  var t0=0;
+  function draw(ts){
+   var acc=css('--acc'),cool=css('--cool'),lt=light();ctx.clearRect(0,0,W,H);
+   var g=ctx.createRadialGradient(W/2-R*.3,H/2-R*.35,R*.1,W/2,H/2,R*1.1);g.addColorStop(0,lt?'rgba(79,125,10,.10)':'rgba(198,242,78,.10)');g.addColorStop(1,'rgba(0,0,0,0)');
+   ctx.fillStyle=g;ctx.beginPath();ctx.arc(W/2,H/2,R*1.08,0,7);ctx.fill();
+   ctx.strokeStyle=lt?'rgba(22,24,29,.12)':'rgba(237,235,230,.10)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(W/2,H/2,R,0,7);ctx.stroke();
+   for(var i=0;i<P.length;i++){var p=proj(P[i][0],P[i][1]);if(p[2]<0)continue;ctx.globalAlpha=P[i][2]?(.25+.65*p[2]):.12*p[2];ctx.fillStyle=P[i][2]?(lt?'#3b404a':'#cfcdc6'):(lt?'#7a7f8a':'#6a6862');ctx.fillRect(p[0]-1,p[1]-1,P[i][2]?2:1.4,P[i][2]?2:1.4)}
+   ctx.globalAlpha=1;
+   var ph=(ts/1000)%1;
+   LINKS.forEach(function(l,k){var a=NODES[l[0]],b=NODES[l[1]];ctx.beginPath();var vis=false;for(var s=0;s<=40;s++){var q=slerp(a,b,s/40),p=projH(q[0],q[1],q[2]);if(p[2]<-.05){vis=false;continue}if(!vis){ctx.moveTo(p[0],p[1]);vis=true}else ctx.lineTo(p[0],p[1])}
+    ctx.strokeStyle=lt?'rgba(26,79,191,.45)':'rgba(122,167,255,.45)';ctx.lineWidth=1.2;ctx.stroke();
+    var tt=(ph+k*.17)%1,q=slerp(a,b,tt),p=projH(q[0],q[1],q[2]);if(p[2]>0){ctx.fillStyle=cool;ctx.beginPath();ctx.arc(p[0],p[1],2.4,0,7);ctx.fill()}});
+   for(var j=shots.length-1;j>=0;j--){var s=shots[j];s.t+=s.sp;var end=s.bad?.82:1;if(s.t>=end){if(s.bad)s.boom=(s.boom||0)+1;else{shots.splice(j,1);continue}}
+    if(s.boom){s.boom++;var q=slerp(s.a,s.b,.82),p=projH(q[0],q[1],q[2]);if(p[2]>0){ctx.strokeStyle='rgba(255,107,94,'+(1-s.boom/18)+')';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(p[0],p[1],s.boom*.9,0,7);ctx.stroke()}if(s.boom>18)shots.splice(j,1);continue}
+    var q=slerp(s.a,s.b,s.t),p=projH(q[0],q[1],q[2]*0+1+.25*Math.sin(Math.PI*s.t));if(p[2]<0)continue;ctx.fillStyle=s.bad?'#ff6b5e':acc;ctx.beginPath();ctx.arc(p[0],p[1],1.8,0,7);ctx.fill()}
+   NODES.forEach(function(n){var p=proj(n.la,n.lo);if(p[2]<0)return;var pr=(((ts/1400+n.lo/90)%1)+1)%1;
+    ctx.strokeStyle=acc;ctx.globalAlpha=1-pr;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(p[0],p[1],5+pr*18,0,7);ctx.stroke();ctx.globalAlpha=1;
+    ctx.fillStyle=acc;ctx.beginPath();ctx.arc(p[0],p[1],n.main?5:4,0,7);ctx.fill();
+    ctx.font='600 12px Inter,system-ui,sans-serif';ctx.fillStyle=lt?'#16181d':'#edebe6';ctx.globalAlpha=Math.min(1,p[2]*2);ctx.fillText(n.n,p[0]+9,p[1]-7);ctx.globalAlpha=1});
+   if(!RM){rot+=.06;if(Math.random()<.5)spawn()}
+   requestAnimationFrame(draw)}
+  size();addEventListener('resize',size);requestAnimationFrame(draw);
+ }
+
+ /* ---------- лента запросов ---------- */
+ var fd=document.getElementById('srvFeed');
+ if(fd){var L=[['ok','✓ человек · Chrome · /catalog/'],['no','✕ сканер · /.env → отказ'],['ok','✓ Яндекс робот · /sitemap.xml'],['no','✕ python-requests · /price/ → отказ'],['ok','✓ человек · Safari iPhone · /'],['no','✕ подбор · /wp-login.php → бан 7 дней'],['ok','✓ превью Telegram · /'],['no','✕ пустая подпись · / → отказ'],['no','✕ /.git/config → отказ'],['ok','✓ Метрика · /'],['no','✕ SEO-парсер · /product/ → отказ'],['ok','✓ человек · Яндекс Браузер · /contacts/']],fi=0;
+  function push(){var d=document.createElement('div');d.className=L[fi][0];d.textContent=L[fi][1];fi=(fi+1)%L.length;fd.insertBefore(d,fd.children[1]||null);while(fd.children.length>7)fd.removeChild(fd.lastChild)}
+  for(var k=0;k<5;k++)push();if(!RM)setInterval(push,1300)}
+
+ /* ---------- счётчики ---------- */
+ var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;io.unobserve(e.target);var el=e.target,to=+el.getAttribute('data-cnt'),suf=el.getAttribute('data-suf')||'',t0=performance.now();
+  (function step(t){var k=Math.min(1,(t-t0)/1400),v=Math.round(to*(1-Math.pow(1-k,3)));el.textContent=v.toLocaleString('ru-RU')+suf;if(k<1)requestAnimationFrame(step)})(t0)})},{threshold:.4}):null;
+ document.querySelectorAll('[data-cnt]').forEach(function(el){if(io)io.observe(el);else el.textContent=(+el.getAttribute('data-cnt')).toLocaleString('ru-RU')+(el.getAttribute('data-suf')||'')});
+
+ /* ---------- щит ---------- */
+ var sc=document.getElementById('srvShield');if(sc){
+  var c=sc.getContext('2d'),w,h,on=1,dots=[],cut=0,pass=0,load=18,DP=Math.min(2,window.devicePixelRatio||1);
+  function sz(){var b=sc.getBoundingClientRect();w=b.width;h=b.height;sc.width=w*DP;sc.height=h*DP;c.setTransform(DP,0,0,DP,0,0)}
+  sz();addEventListener('resize',sz);
+  var bL=document.getElementById('sLoadB'),bR=document.getElementById('sRespB'),tL=document.getElementById('sLoad'),tR=document.getElementById('sResp'),tC=document.getElementById('sCut'),tP=document.getElementById('sPass');
+  document.querySelectorAll('.srv-sw button').forEach(function(b){b.addEventListener('click',function(){on=+b.getAttribute('data-m');document.querySelectorAll('.srv-sw button').forEach(function(x){x.classList.toggle('on',x===b)})})});
+  function sp(){var r=Math.random(),k=r<.58?'bad':(r<.85?'man':'bot');dots.push({x:-6,y:20+Math.random()*(h-40),vx:(k=='bad'?2.6:1.7)+Math.random()*1.2,vy:(Math.random()-.5)*.3,k:k,st:0})}
+  function fr(ts){var acc=css('--acc'),lt=light(),wall=w*.52,srv=w-58;c.clearRect(0,0,w,h);
+   c.strokeStyle=lt?'rgba(22,24,29,.06)':'rgba(237,235,230,.05)';for(var x=0;x<w;x+=28){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke()}
+   if(on){var gg=c.createLinearGradient(wall-30,0,wall+6,0);gg.addColorStop(0,'rgba(198,242,78,0)');gg.addColorStop(1,lt?'rgba(79,125,10,.22)':'rgba(198,242,78,.22)');c.fillStyle=gg;c.fillRect(wall-30,0,36,h);
+    c.strokeStyle=acc;c.lineWidth=2;c.setLineDash([6,6]);c.lineDashOffset=-ts/40;c.beginPath();c.moveTo(wall,8);c.lineTo(wall,h-8);c.stroke();c.setLineDash([]);
+    c.fillStyle=acc;c.font='600 11px ui-monospace,Menlo,monospace';c.save();c.translate(wall+12,h/2);c.rotate(-Math.PI/2);c.textAlign='center';c.fillText('ФИЛЬТР',0,0);c.restore()}
+   var hot=load>70;c.fillStyle=lt?'#f6f6f3':'#171a1e';c.strokeStyle=hot?'#ff6b5e':acc;c.lineWidth=2;
+   for(var i=0;i<3;i++){c.beginPath();c.roundRect?c.roundRect(srv,h/2-54+i*38,44,30,6):c.rect(srv,h/2-54+i*38,44,30);c.fill();c.stroke();c.fillStyle=hot&&(ts/200|0)%2?'#ff6b5e':acc;c.fillRect(srv+8,h/2-42+i*38,6,6);c.fillStyle=lt?'#f6f6f3':'#171a1e'}
+   c.fillStyle=lt?'#3b404a':'#9a9890';c.font='600 11px Inter,system-ui,sans-serif';c.textAlign='center';c.fillText('сервер',srv+22,h/2+70);c.textAlign='left';
+   if(!RM&&Math.random()<.42)sp();
+   var inc=0;
+   for(var j=dots.length-1;j>=0;j--){var d=dots[j];
+    if(d.st===2){d.a-=.05;d.r+=1.2;c.strokeStyle='rgba(255,107,94,'+Math.max(0,d.a)+')';c.lineWidth=1.5;c.beginPath();c.arc(d.x,d.y,d.r,0,7);c.stroke();if(d.a<=0)dots.splice(j,1);continue}
+    d.x+=d.vx;d.y+=d.vy;
+    if(on&&d.k=='bad'&&d.x>=wall-4){d.st=2;d.a=1;d.r=3;cut++;continue}
+    if(d.x>=srv){if(d.k!='bad')pass++;inc+=d.k=='bad'?1:.6;dots.splice(j,1);continue}
+    c.fillStyle=d.k=='bad'?'#ff6b5e':(d.k=='bot'?'#7aa7ff':acc);c.beginPath();c.arc(d.x,d.y,d.k=='bad'?2.6:3.2,0,7);c.fill();
+    c.globalAlpha=.25;c.fillRect(d.x-14,d.y-.8,12,1.6);c.globalAlpha=1}
+   var target=on?16+Math.random()*6:88+Math.random()*10;load+=(target-load)*.03;
+   var resp=on?.2:2.4+ (load-80)*.12;
+   if((ts/250|0)!==fr.k){fr.k=ts/250|0;bL.style.width=load.toFixed(0)+'%';bL.classList.toggle('hot',load>70);tL.textContent=load.toFixed(0)+'%';
+    var rv=Math.max(.15,resp);bR.style.width=Math.min(100,rv/3.5*100)+'%';bR.classList.toggle('hot',rv>1);tR.textContent=rv.toFixed(1).replace('.',',')+' с';
+    tC.textContent=cut.toLocaleString('ru-RU');tP.textContent=pass.toLocaleString('ru-RU')}
+   requestAnimationFrame(fr)}
+  requestAnimationFrame(fr)}
+
+ /* ---------- терминал ---------- */
+ var tm=document.getElementById('srvTerm');if(tm){
+  var LN=[['d','# настройка нового сервера, пример отчёта'],['b','$ ssh: вход по паролю'],['g','  ✓ выключен, только ключ · попыток 3 · бан за подбор'],['b','$ firewall'],['g','  ✓ открыты 22, 80, 443 · остальное закрыто'],['b','$ nginx + php-fpm'],['g','  ✓ свой пул PHP на каждый сайт · чужие папки не видны'],['b','$ https'],['g','  ✓ сертификат выпущен · продление само · HSTS'],['b','$ фильтр ботов'],['g','  ✓ поисковики и Метрика — проходят'],['r','  ✕ сканеры, парсеры, пустая подпись — отказ'],['b','$ fail2ban'],['g','  ✓ /.env /.git /wp-login: 3 раза за 10 мин → бан 7 дней'],['b','$ почта сайта'],['g','  ✓ DKIM + SPF · отправитель site@ваш-домен'],['b','$ копии'],['g','  ✓ каждую ночь · шифр · другая страна + облако'],['b','$ мониторинг'],['g','  ✓ сайт, диск, сертификат → сигнал в Telegram'],['b','$ нагрузочный тест'],['g','  ✓ 200 одновременно · 0 ошибок · 95% быстрее 0,22 с'],['d','# готово. откат любой правки — одной командой']];
+  var started=false;function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+  function run(){if(started)return;started=true;var i=0,ch=0,html='';
+   if(RM){tm.innerHTML=LN.map(function(l){return '<span class="'+l[0]+'">'+esc(l[1])+'</span>'}).join('\n');return}
+   (function tick(){if(i>=LN.length){tm.innerHTML=html+'<span class="cur"></span>';return}
+    var l=LN[i];ch+=l[0]=='b'?2:4;var part=l[1].slice(0,ch);tm.innerHTML=html+'<span class="'+l[0]+'">'+esc(part)+'</span><span class="cur"></span>';
+    if(ch>=l[1].length){html+='<span class="'+l[0]+'">'+esc(l[1])+'</span>\n';i++;ch=0;setTimeout(tick,l[0]=='b'?160:260)}else setTimeout(tick,18)})()}
+  var lay=[].slice.call(document.querySelectorAll('#srvLayers > div'));
+  function lit(){lay.forEach(function(d,k){setTimeout(function(){d.classList.add('lit')},RM?0:k*420)})}
+  if('IntersectionObserver' in window){var o2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run();lit();o2.disconnect()}})},{threshold:.3});o2.observe(tm)}else{run();lit()}}
+
+ /* ---------- подсветка карточек за курсором ---------- */
+ document.querySelectorAll('.srv-card').forEach(function(cd){cd.addEventListener('pointermove',function(e){var b=cd.getBoundingClientRect();cd.style.setProperty('--mx',(e.clientX-b.left)+'px');cd.style.setProperty('--my',(e.clientY-b.top)+'px')})});
+})();
+</script>
+
+</main>
+<footer class="ftr"><div class="wrap ftr-sh" data-pageshare><b>Поделиться страницей</b><a class="btn-sh" data-sh="tg" target="_blank" rel="noopener">Telegram</a><a class="btn-sh" data-sh="vk" target="_blank" rel="noopener">ВКонтакте</a><a class="btn-sh" data-sh="wa" target="_blank" rel="noopener">WhatsApp</a><a class="btn-sh" data-sh="ok" target="_blank" rel="noopener">Одноклассники</a><button type="button" class="btn-sh" data-sh="copy">Скопировать ссылку</button></div><div class="wrap">
+  <div><a class="logo" href="/" aria-label="REBORN LAB — на главную"><svg width="30" height="22" viewBox="0 0 30 22" aria-hidden="true"><path d="M1 15h10" stroke="#edebe6" stroke-width="2" stroke-linecap="round"/><circle cx="14.5" cy="15" r="2" fill="#c6f24e"/><path d="M18 15c4 0 5-9 11-9" stroke="#edebe6" stroke-width="2" fill="none" stroke-linecap="round"/></svg><b>REBORN</b><span>LAB</span></a><p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© 2026 REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a><a href="/oferta/">Публичная оферта</a></div></div>
+  <div><a href="/#uslugi">Услуги</a><a href="/vosstanovlenie-sajta/">Восстановление сайтов</a><a href="/servery/">Серверы и защита</a><a href="/monitoring-saitov/">Проверка сайта без VPN</a><a href="/hosting/">Мониторинг хостингов</a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/contact/">Контакты</a></div>
+  <div><a href="https://t.me/Reborn_Lab" rel="noopener" target="_blank">Telegram @Reborn_Lab</a><a href="/rss.xml">RSS журнала</a></div>
+</div></footer>
+<div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Продолжая пользоваться сайтом, вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Понятно</button></div>
+<script src="/assets/main.js?v=9996d339" defer></script>
+</body>
+</html>

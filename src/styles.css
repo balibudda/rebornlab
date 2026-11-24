@@ -636,3 +636,38 @@ html[data-theme="light"] .page-hd .sub { color: #3b404a; }
 /* 21.11 (Ник: «весь текст на белом»): фон страницы белый; карточки отделяются рамкой и тенью */
 html[data-theme="light"] .prose, html[data-theme="light"] .bnow, html[data-theme="light"] .wbx, html[data-theme="light"] .card, html[data-theme="light"] .proj, html[data-theme="light"] .news-card { box-shadow: 0 1px 4px rgba(22, 24, 29, .07); }
 html[data-theme="light"] a.acc { background: #ffffff !important; box-shadow: 0 1px 4px rgba(22, 24, 29, .07); }
+
+/* ===== 24.11.2026 (Ник): главная — блок «Серверы и защита» вместо «Блокировки в банках» ===== */
+@property --sp-a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+.srv-promo { position: relative; z-index: 2; display: grid; grid-template-columns: auto 1fr auto; gap: 20px 26px; align-items: center; margin: 0 0 30px; padding: 22px 24px; border-radius: 22px; color: var(--text); text-decoration: none; isolation: isolate;
+  background: radial-gradient(120% 140% at 0% 0%, var(--acc-dim), transparent 55%), var(--bg-2); box-shadow: 0 18px 50px rgba(0, 0, 0, .28); transition: transform .3s, box-shadow .3s; }
+.srv-promo::before { content: ""; position: absolute; inset: 0; padding: 1.5px; border-radius: inherit; z-index: -1; pointer-events: none;
+  background: conic-gradient(from var(--sp-a), var(--line-2) 0deg, var(--acc) 60deg, var(--cool) 120deg, var(--line-2) 180deg, var(--line-2) 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: spSpin 6s linear infinite; }
+@keyframes spSpin { to { --sp-a: 360deg; } }
+.srv-promo:hover { transform: translateY(-2px); box-shadow: 0 24px 60px rgba(0, 0, 0, .34); }
+.sp-ic { display: flex; flex-direction: column; gap: 6px; width: 74px; padding: 10px; border-radius: 16px; background: var(--card); border: 1px solid var(--line-2); }
+.sp-ic i { position: relative; display: block; height: 14px; border-radius: 4px; border: 1.5px solid var(--line-2); background: var(--card-2); }
+.sp-ic i::before, .sp-ic i::after { content: ""; position: absolute; top: 3.5px; width: 5px; height: 5px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 8px var(--acc); animation: spLed 1.6s steps(2) infinite; }
+.sp-ic i::before { left: 6px; } .sp-ic i::after { left: 15px; background: var(--cool); box-shadow: 0 0 8px var(--cool); animation-delay: .4s; }
+.sp-ic i:nth-child(2)::before { animation-delay: .7s; } .sp-ic i:nth-child(3)::before { animation-delay: 1.1s; } .sp-ic i:nth-child(3)::after { animation-delay: .2s; }
+@keyframes spLed { 50% { opacity: .25; } }
+.sp-tx { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.sp-k { display: inline-flex; align-items: center; gap: 8px; font: 600 12.5px/1 var(--mono); color: var(--acc-ink); text-transform: uppercase; letter-spacing: .04em; }
+.sp-k b { width: 8px; height: 8px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 0 0 rgba(198, 242, 78, .6); animation: srvPing2 2s infinite; }
+@keyframes srvPing2 { 70% { box-shadow: 0 0 0 9px rgba(198, 242, 78, 0); } 100% { box-shadow: 0 0 0 0 rgba(198, 242, 78, 0); } }
+.sp-tx strong { font-size: clamp(19px, 2vw, 24px); line-height: 1.2; letter-spacing: -.01em; }
+.sp-tx strong em { font-style: normal; color: var(--acc-ink); }
+.sp-d { color: var(--muted); font-size: 15px; line-height: 1.5; }
+.sp-ch { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.sp-ch span { font: 500 12.5px/1 var(--mono); padding: 7px 10px; border-radius: 99px; border: 1px solid var(--line-2); color: var(--text-2); background: var(--card); }
+.sp-go { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.sp-l { font-size: 14px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.srv-promo:hover .sp-l { color: var(--acc-ink); }
+@media (max-width: 860px) { .srv-promo { grid-template-columns: auto 1fr; } .sp-go { grid-column: 1 / -1; flex-direction: row; align-items: center; flex-wrap: wrap; } }
+@media (max-width: 560px) { .srv-promo { grid-template-columns: 1fr; padding: 18px 16px; gap: 14px; } .sp-ic { flex-direction: row; width: auto; } .sp-ic i { flex: 1; } .sp-go .btn { flex: 1 1 100%; justify-content: center; } }
+@media (prefers-reduced-motion: reduce) { .srv-promo::before, .sp-ic i::before, .sp-ic i::after, .sp-k b { animation: none; } }
+html[data-theme="light"] .srv-promo { box-shadow: 0 6px 24px rgba(22, 24, 29, .08); }
+/* 24.11: пункт «Серверы» в меню — подписи всегда короткие (шапка 1200 px), иначе не влезает */
+.nav .nav-x{display:none}
+.nav{gap:20px}
