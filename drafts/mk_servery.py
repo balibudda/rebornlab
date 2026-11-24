@@ -46,6 +46,8 @@ ld = [
 ]
 ld_html = ''.join('<script type="application/ld+json">' + json.dumps(x, ensure_ascii=False) + '</script>\n' for x in ld)
 
+# 24.11: шапку — в метки HDR, иначе build.mjs вставляет вторую (было две шапки)
+after_ld = re.sub(r'<header class="hdr">[\s\S]*?</header>', lambda m: '<!--HDR:START-->' + m.group(0) + '<!--HDR:END-->', after_ld, count=1)
 body_start = after_ld.index('<main>') + len('<main>')
 body_end = after_ld.index('</main>')
 out = head + css_link + ld_html + after_ld[:body_start] + '\n' + main + '\n' + after_ld[body_end:]
