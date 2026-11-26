@@ -690,3 +690,7 @@ html[data-theme="light"] .srv-promo { box-shadow: 0 6px 24px rgba(22, 24, 29, .0
 .reel-prog i{display:block;height:100%;width:0;background:var(--acc)}
 @media(max-width:860px){.reel-wrap{grid-template-columns:1fr;gap:34px}.reel-phone{width:min(78vw,340px);margin:0 auto;order:-1}}
 @media(prefers-reduced-motion:reduce){.reel-list button{transition:none}}
+/* 27.11: рилс внутри страниц с main.bw (восстановление) — как единое целое с главной */
+.bw .reel-sec{padding:56px 0 64px}.bw .reel-sec .wrap{padding:0;max-width:none}
+.reel-sec .reel-txt h2{font-size:clamp(30px,4vw,52px);line-height:1.05;letter-spacing:-.03em;margin:10px 0 12px}
+.reel-sec .reel-txt .sub{color:var(--muted)}

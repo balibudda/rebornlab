@@ -246,24 +246,24 @@ const home = shell({
   </div>
 </section>
 <div class="rline"></div>
-<!-- 26.11.2026 рилс «30 секунд о нас» -->
+<!-- 27.11.2026 рилс №2 «Вдохнём жизнь»; первый ролик — на /vosstanovlenie-sajta/ -->
 <section class="sec reel-sec" id="reel" aria-labelledby="reel-h"><div class="wrap reel-wrap">
   <div class="reel-txt">
-    <div class="kicker">30 секунд о нас</div>
-    <h2 id="reel-h">Чему мы научились — <em>в одном ролике</em></h2>
+    <div class="kicker">40 секунд о нас</div>
+    <h2 id="reel-h">Вдохнём в ваш сайт <em>вторую жизнь</em></h2>
     <p class="sub">Нажмите на пункт — ролик перемотается к нему.</p>
     <ol class="reel-list">
-      <li><button type="button" data-t="6.4"><span>01</span>Возвращаем сайты из веб-архива — даже без копий</button></li>
-      <li><button type="button" data-t="10.6"><span>02</span>Переносим на свой сервер в России: сайт, база, почта, заявки</button></li>
-      <li><button type="button" data-t="14.6"><span>03</span>Обновляем дизайн, сохраняя SEO</button></li>
-      <li><button type="button" data-t="18.6"><span>04</span>Telegram-бот сам следит за сайтом</button></li>
-      <li><button type="button" data-t="22.8"><span>05</span>ИИ-консультант отвечает клиентам ночью</button></li>
-      <li><button type="button" data-t="26.2"><span>06</span>Защита, ночные копии, письма с вашего домена</button></li>
+      <li><button type="button" data-t="6.8"><span>01</span>Первый результат — через 2–3 часа</button></li>
+      <li><button type="button" data-t="11"><span>02</span>Серверы, переезд, почта, защита от парсинга, автоматизация</button></li>
+      <li><button type="button" data-t="15.4"><span>03</span>Битрикс, WordPress, MODX, Webasyst, Tilda — любой сайт в конфетку</button></li>
+      <li><button type="button" data-t="19.8"><span>04</span>Современный дизайн, продуманная логика, свой кабинет</button></li>
+      <li><button type="button" data-t="24"><span>05</span>Алиса продаёт 24/7 и учится на ваших ответах</button></li>
+      <li><button type="button" data-t="30.2"><span>06</span>Сайт и Telegram-бот — одна система, заявки сразу вам</button></li>
     </ol>
     <a class="btn btn-acc" href="#task" data-goal="cta_reel">Обсудить задачу <span class="arrow">→</span></a>
   </div>
   <div class="reel-phone">
-    <video class="reel-v" muted loop playsinline preload="none" poster="/assets/video/reel-poster.jpg" aria-label="Ролик REBORN LAB: чему мы научились" data-src="/assets/video/reel.mp4"></video>
+    <video class="reel-v" muted loop playsinline preload="none" poster="/assets/video/reel2-poster.jpg" aria-label="Ролик REBORN LAB: вдохнём в ваш сайт вторую жизнь" data-src="/assets/video/reel2.mp4"></video>
     <button type="button" class="reel-snd" aria-label="Включить звук">🔈 Со звуком</button>
     <div class="reel-prog"><i></i></div>
   </div>
