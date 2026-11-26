@@ -246,6 +246,28 @@ const home = shell({
   </div>
 </section>
 <div class="rline"></div>
+<!-- 26.11.2026 рилс «30 секунд о нас» -->
+<section class="sec reel-sec" id="reel" aria-labelledby="reel-h"><div class="wrap reel-wrap">
+  <div class="reel-txt">
+    <div class="kicker">30 секунд о нас</div>
+    <h2 id="reel-h">Чему мы научились — <em>в одном ролике</em></h2>
+    <p class="sub">Нажмите на пункт — ролик перемотается к нему.</p>
+    <ol class="reel-list">
+      <li><button type="button" data-t="6.4"><span>01</span>Возвращаем сайты из веб-архива — даже без копий</button></li>
+      <li><button type="button" data-t="10.6"><span>02</span>Переносим на свой сервер в России: сайт, база, почта, заявки</button></li>
+      <li><button type="button" data-t="14.6"><span>03</span>Обновляем дизайн, сохраняя SEO</button></li>
+      <li><button type="button" data-t="18.6"><span>04</span>Telegram-бот сам следит за сайтом</button></li>
+      <li><button type="button" data-t="22.8"><span>05</span>ИИ-консультант отвечает клиентам ночью</button></li>
+      <li><button type="button" data-t="26.2"><span>06</span>Защита, ночные копии, письма с вашего домена</button></li>
+    </ol>
+    <a class="btn btn-acc" href="#task" data-goal="cta_reel">Обсудить задачу <span class="arrow">→</span></a>
+  </div>
+  <div class="reel-phone">
+    <video class="reel-v" muted loop playsinline preload="none" poster="/assets/video/reel-poster.jpg" aria-label="Ролик REBORN LAB: чему мы научились" data-src="/assets/video/reel.mp4"></video>
+    <button type="button" class="reel-snd" aria-label="Включить звук">🔈 Со звуком</button>
+    <div class="reel-prog"><i></i></div>
+  </div>
+</div></section>
 
 
 <section class="sec" style="padding-top:10px"><div class="wrap">
@@ -540,6 +562,7 @@ if (existsSync(path.join(ROOT, 'src/assets/journal'))) {   // 06.11: облож�
   mkdirSync(path.join(OUT, 'assets/journal'), { recursive: true })
   for (const f of readdirSync(path.join(ROOT, 'src/assets/journal'))) copyFileSync(path.join(ROOT, 'src/assets/journal', f), path.join(OUT, 'assets/journal', f))
 }
+if (existsSync(path.join(ROOT, 'src/assets/video'))) { mkdirSync(path.join(OUT, 'assets/video'), { recursive: true }); for (const f of readdirSync(path.join(ROOT, 'src/assets/video'))) copyFileSync(path.join(ROOT, 'src/assets/video', f), path.join(OUT, 'assets/video', f)) }   // 26.11: рилс на главной
 if (existsSync(path.join(ROOT, 'src/assets/services'))) { mkdirSync(path.join(OUT, 'assets/services'), { recursive: true }); for (const f of readdirSync(path.join(ROOT, 'src/assets/services'))) copyFileSync(path.join(ROOT, 'src/assets/services', f), path.join(OUT, 'assets/services', f)) }   // 10.11: картинки карточек услуг
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 

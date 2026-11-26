@@ -671,3 +671,22 @@ html[data-theme="light"] .srv-promo { box-shadow: 0 6px 24px rgba(22, 24, 29, .0
 /* 24.11: пункт «Серверы» в меню — подписи всегда короткие (шапка 1200 px), иначе не влезает */
 .nav .nav-x{display:none}
 .nav{gap:20px}
+
+/* 26.11.2026 рилс на главной (#reel) */
+.reel-wrap{display:grid;grid-template-columns:1fr minmax(260px,360px);gap:64px;align-items:center}
+.reel-txt h2{font-size:clamp(30px,4vw,52px);line-height:1.05;letter-spacing:-.03em;margin:10px 0 12px}
+.reel-txt h2 em{font-style:normal;color:var(--acc)}
+.reel-list{list-style:none;padding:0;margin:22px 0 28px;display:grid;gap:6px}
+.reel-list button{all:unset;cursor:pointer;display:flex;gap:16px;align-items:baseline;width:100%;box-sizing:border-box;padding:12px 16px;border-radius:14px;color:var(--text);font-size:17px;line-height:1.35;transition:background .2s,transform .2s}
+.reel-list button span{font-family:var(--mono);font-size:13px;color:var(--muted);flex:none}
+.reel-list button:hover,.reel-list button.on{background:var(--card);transform:translateX(4px)}
+.reel-list button.on span{color:var(--acc)}
+.reel-list button:focus-visible{outline:2px solid var(--acc)}
+.reel-phone{position:relative;aspect-ratio:9/16;border-radius:38px;padding:10px;background:linear-gradient(160deg,#2a2d31,#0c0d0f);box-shadow:0 30px 90px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.08),0 0 80px -20px var(--acc)}
+.reel-v{display:block;width:100%;height:100%;object-fit:cover;border-radius:29px;background:#08090a}
+.reel-snd{position:absolute;right:22px;bottom:30px;border:0;cursor:pointer;padding:10px 16px;border-radius:30px;font:600 14px/1 inherit;font-family:inherit;color:#111;background:var(--acc);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.reel-snd.on{background:rgba(20,22,25,.8);color:#fff}
+.reel-prog{position:absolute;left:28px;right:28px;bottom:18px;height:3px;border-radius:3px;background:rgba(255,255,255,.15);overflow:hidden}
+.reel-prog i{display:block;height:100%;width:0;background:var(--acc)}
+@media(max-width:860px){.reel-wrap{grid-template-columns:1fr;gap:34px}.reel-phone{width:min(78vw,340px);margin:0 auto;order:-1}}
+@media(prefers-reduced-motion:reduce){.reel-list button{transition:none}}

@@ -447,3 +447,13 @@ document.addEventListener('click', (e) => {
   try { localStorage.setItem('rl_theme', light ? 'light' : 'dark') } catch (_) {}
   try { window.ym && ym(window.RL_METRIKA, 'reachGoal', light ? 'theme_light' : 'theme_dark') } catch (_) {}
 })
+
+// 26.11.2026 рилс на главной: грузим видео при прокрутке, звук по кнопке, перемотка по пунктам
+(()=>{const s=document.getElementById('reel');if(!s)return;const v=s.querySelector('video'),snd=s.querySelector('.reel-snd'),bar=s.querySelector('.reel-prog i'),bs=[...s.querySelectorAll('.reel-list button')];
+let loaded=false;const load=()=>{if(!loaded){v.src=v.dataset.src;loaded=true}};
+new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){load();v.play().catch(()=>{})}else v.pause()}),{threshold:.35}).observe(v);
+v.addEventListener('timeupdate',()=>{bar.style.width=(v.currentTime/v.duration*100||0)+'%';let k=-1;bs.forEach((b,i)=>{if(v.currentTime>=+b.dataset.t)k=i});bs.forEach((b,i)=>b.classList.toggle('on',i===k))});
+snd.addEventListener('click',()=>{load();v.muted=!v.muted;if(!v.muted){v.currentTime=0;v.play()}snd.classList.toggle('on',!v.muted);snd.textContent=v.muted?'🔈 Со звуком':'🔇 Без звука';try{window.ym&&ym(window.RL_METRIKA,'reachGoal','reel_sound')}catch(e){}});
+bs.forEach(b=>b.addEventListener('click',()=>{load();v.currentTime=+b.dataset.t;v.play().catch(()=>{})}));
+v.addEventListener('click',()=>v.paused?v.play():v.pause());
+})();
