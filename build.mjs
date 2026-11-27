@@ -167,7 +167,7 @@ ${body}
     <div>${LOGO}<p style="margin:16px 0 0;max-width:24em;line-height:1.6">Студия цифровой инженерии: сайты, каталоги и сервисы для бизнеса, восстановление, защита и сопровождение.</p><p class="req" style="margin-top:18px">${esc(SITE.sellerShort || '')}${SITE.operatorOgrn ? '<br>ОГРНИП ' + SITE.operatorOgrn : ''}${SITE.operatorInn ? ' · ИНН ' + SITE.operatorInn : ''}<br>Работаем по договору · акты · NDA</p></div>
     <div><h4>Студия</h4><a href="/cases/">Кейсы</a><a href="/services/">Услуги</a><a href="/about/">О студии</a><a href="/journal/">Журнал</a><a href="/contact/">Контакты</a></div>
     <div><h4>Услуги</h4><a href="/services/web-development/">Сайты и сервисы</a><a href="/vosstanovlenie-sajta/">Восстановление сайтов</a><a href="/servery/">Серверы и защита</a><a href="/services/redesign/">Редизайн</a><a href="/services/ai/">AI и автоматизация</a><a href="/services/seo/">SEO и GEO</a></div>
-    <div><h4>Инструменты</h4><a href="/monitoring-saitov/">Проверка сайта</a><a href="/hosting/">Мониторинг хостингов</a><a href="/beget/">Статус Beget</a><a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">Бот мониторинга</a><a href="/banki/">Банки</a></div>
+    <div><h4>Инструменты</h4><a href="/monitoring-saitov/">Проверка сайта</a><a href="/hosting/">Мониторинг хостингов</a><a href="/beget/">Статус Beget</a><a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">Бот мониторинга</a></div>
     <div><h4>Связь</h4><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="mailto:${SITE.pdEmail}">${SITE.pdEmail}</a><a href="/rss.xml">RSS журнала</a></div>
   </div>
   <div class="ftr2-b"><span>© ${new Date().getFullYear()} REBORN LAB</span><span class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга</a>${HAS_SELLER ? '<a href="/oferta/">Оферта</a>' : ''}</span></div>
@@ -418,7 +418,6 @@ const TOOLS = [
   ['/beget/', 'Статус Beget', 'Живые замеры восстановления: серверы, сайты, графики.'],
   ['/beget/server/', 'Мониторинг серверов Beget по IP', 'Включён ли сервер, имя сервера, соседи по сети.'],
   ['/beget/vosstanovit/', 'Можно ли восстановить сайт', 'Что сохранилось в веб-архиве и Яндекс Картинках.'],
-  ['/banki/', 'Блокировки в банках', 'Разбор блокировок счетов и что делать.'],
 ]
 write('instrumenty/index.html', shell({
   title: 'Бесплатные инструменты REBORN LAB — проверка сайта, мониторинг хостингов, бот',
@@ -688,7 +687,7 @@ for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', '
 
 // 12.11: страницы мониторинга хостингов (генерит tools-mk_proverka.py publish) — в карту сайта, поиск, шапку/подвал
 const HOSTING_PAGES = existsSync(path.join(ROOT, 'hosting')) ? readdirSync(path.join(ROOT, 'hosting')).filter((d) => existsSync(path.join(ROOT, 'hosting', d, 'index.html'))).sort() : []
-const urls = [['/', today, '1.0'], ['/banki/', today, '0.8'], ['/banki/chto-delat/', today, '0.7'], ['/wbbank/', today, '0.8'], ['/banki/wb-bank/', today, '0.6'], ['/banki/ozon-bank/', today, '0.6'], ['/banki/t-bank/', today, '0.6'], ['/banki/sberbank/', today, '0.6'], ['/banki/vtb/', today, '0.6'], ['/banki/alfa-bank/', today, '0.6'], ['/banki/yandex-bank/', today, '0.6'], ['/banki/mts-bank/', today, '0.6'], ['/banki/sovcombank/', today, '0.6'], ['/banki/pochta-bank/', today, '0.6'], ['/banki/gazprombank/', today, '0.6'], ['/banki/raiffeisen/', today, '0.6'],   // 20.11 (Ник): досье WB открыто для индексации (страница собирается в ~/WebstormProjects/wb-dossier)
+const urls = [['/', today, '1.0'], // 20.11 (Ник): досье WB открыто для индексации (страница собирается в ~/WebstormProjects/wb-dossier)
   ['/cases/', today, '0.9'], ...CASES.map((c) => [`/cases/${c.slug}/`, today, '0.7']), ['/instrumenty/', today, '0.6'],
   ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/monitoring-saitov/', today, '0.9'], ['/servery/', today, '0.9'], ['/hosting/', today, '0.8'], ...HOSTING_PAGES.map((h) => [`/hosting/${h}/`, today, '0.7']), ['/beget/pravila/', today, '0.4'], ['/oferta/', today, '0.3'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
