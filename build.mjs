@@ -6,10 +6,11 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, copyFi
 import path from 'node:path'
 import { SITE, PROJECTS, SERVICES, PROBLEMS, MARKET, START_SMALL, JOURNAL_CATEGORIES } from './src/data.mjs'
 import { SERVICE_SEO } from './src/services-seo.mjs'
+import { CASES, CASE_TYPES, LAB } from './src/cases.mjs'   // 28.11: раздел /cases/
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname)
 const OUT = ROOT
-const GENERATED_DIRS = ['oferta', 'consent-order', 'services', 'projects', 'journal', 'about', 'contact', 'privacy', 'consent', 'assets']
+const GENERATED_DIRS = ['cases', 'instrumenty', 'oferta', 'consent-order', 'services', 'projects', 'journal', 'about', 'contact', 'privacy', 'consent', 'assets']
 const today = new Date().toISOString().slice(0, 10)
 const ASSET_V = createHash('md5').update(readFileSync(path.join(ROOT, 'src/styles.css'))).update(readFileSync(path.join(ROOT, 'src/main.js'))).digest('hex').slice(0, 8)
 
@@ -97,14 +98,15 @@ const HAS_SELLER = !!SITE.operator   // 10.11: оферта с ФИО самоз
 // 05.11.2026 Ник: живые проекты с сайта убраны (чтобы не привлекать к ним внимание) — раздела «Проекты» нет
 // 12.11 (Ник): «Добавить в мониторинг» на главной (тот же блок, что на /monitoring-saitov/ и /hosting/*; логика — src/main.js)
 const WATCH_BOX = "<section class=\"card wbx\" data-watch><div class=\"wbx-h\"><h2>➕ Добавить сайт или сервер на слежение</h2><p class=\"sub\">Любой сайт, IP сервера или подсеть — на любом хостинге в мире. Сразу покажем, что с ним сейчас, а следить будет бесплатный бот @rebornlab_bot и напишет в Telegram, когда упадёт или заработает. Пока сайт не открывается, бот проверяет его каждые 10 минут, работающий — раз в 3 часа, сервер по IP — каждые 5 минут.</p></div><form class=\"wbx-f\" autocomplete=\"off\"><input name=\"a\" type=\"text\" inputmode=\"url\" placeholder=\"mysite.ru, 45.130.41.12 или 45.130.41.0/24\" aria-label=\"Сайт, IP или подсеть\" required><button class=\"btn btn-acc\" type=\"submit\" data-goal=\"watch_site\">Добавить и следить</button></form><div class=\"wbx-r\" hidden></div><details class=\"wbx-how\"><summary>Как узнать IP сервера и как работает слежение?</summary><ul><li><b>Сайт</b> — открываем его как обычный посетитель: открывается ли, нет ли заглушки, ошибки PHP или проблем с сертификатом.</li><li><b>IP сервера</b> — отвечает ли сервер на портах 443 и 80. IP сайта видно в нашей <a href=\"/monitoring-saitov/\">проверке сайта</a> или командой <code>nslookup mysite.ru</code>.</li><li><b>Подсеть</b> (вида <code>45.130.41.0/24</code>) — сколько её первых серверов отвечает: видно, лежит ли вся сеть хостинга.</li><li><b>Постоянное слежение — в Telegram-боте</b>: нажмите «Следить в боте» после проверки — адрес сразу окажется в списке. До 10 сайтов и серверов на человека, бесплатно.</li><li>Хостинги, которые закрывают наши проверки (Timeweb), добавить нельзя — честно об этом скажем.</li></ul></details><div class=\"wbx-feed\"><div class=\"wbx-ft\"><span class=\"dot\"></span>Только что поставили на слежение в боте <span data-wtot></span></div><ul data-wfeed><li class=\"wbx-e\">загружаем…</li></ul></div></section>"
-const NAV = [['/monitoring-saitov/', '<svg class="nav-ic nav-ic-acc" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.2l2.4 2.4 4.6-4.8"/></svg>Мониторинг<span class="nav-x"> сайтов</span>'], ['/vosstanovlenie-sajta/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Восстановление<span class="nav-x"> сайтов</span>'], ['/servery/', '<svg class="nav-ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="18" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M7 7.5h.01M7 16.5h.01"/></svg>Серверы<span class="nav-x"> и защита</span>'], ['/journal/', 'Журнал'], ['/about/', 'Обо мне'], ['/banki/', 'Банки'], ['/beget/', 'Статус Beget']]   // 10.11 Ник: вместо «Проверка по IP» (запросы «мониторинг серверов бегет»)
+// 28.11 (Ник: «всё слабое — на задний план, дорогое — вперёд»): меню для бизнеса; Бегет, бот, банки, мониторинг — в «Инструменты»
+const NAV = [['/cases/', 'Кейсы'], ['/services/', 'Услуги'], ['/vosstanovlenie-sajta/', 'Восстановление'], ['/servery/', 'Серверы<span class="nav-x"> и защита</span>'], ['/journal/', 'Журнал'], ['/about/', 'О студии'], ['/instrumenty/', 'Инструменты']]
 
 // 07.11.2026 Ник: одна шапка везде (и на ручных страницах /beget/ — вставляется ниже, при обработке), на страницах о Beget — полоса навигации по теме
 function HEADER(current = '') {
   return `<header class="hdr"><div class="wrap">
   ${LOGO}
-  <nav class="nav" aria-label="Основное меню">${NAV.map(([h, t]) => `<a href="${h}"${current === h ? ' aria-current="page"' : ''}>${t}</a>`).join('')}<a class="nav-cta" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="bot_menu"><svg class="tg-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.9 4.6c.3-1.3-.5-1.8-1.4-1.5L2.9 9.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3zM8.6 12.4l9.4-5.9c.4-.3.8-.1.5.2l-7.7 7-.3 3.4-1.9-4.7z"/></svg>Бот мониторинга в Telegram</a></nav>
-  <a class="hdr-cta hdr-bot" href="https://t.me/rebornlab_bot" target="_blank" rel="noopener" data-goal="bot_header" title="Бесплатный мониторинг сайтов в Telegram"><svg class="tg-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.9 4.6c.3-1.3-.5-1.8-1.4-1.5L2.9 9.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3zM8.6 12.4l9.4-5.9c.4-.3.8-.1.5.2l-7.7 7-.3 3.4-1.9-4.7z"/></svg><span>Бот<span class="hb-x"> мониторинга</span></span></a>   <!-- 12.11 Ник: вместо «Обсудить идею» — кнопка бота -->
+  <nav class="nav" aria-label="Основное меню">${NAV.map(([h, t]) => `<a href="${h}"${current === h ? ' aria-current="page"' : ''}>${t}</a>`).join('')}<a class="nav-cta" href="/#contact" data-goal="cta_menu">Обсудить проект →</a></nav>
+  <a class="hdr-cta hdr-go" href="/#contact" data-goal="cta_header"><i></i>Обсудить проект</a>
   <button class="theme-btn" type="button" data-theme-toggle aria-label="Светлая или тёмная тема" title="Светлый / тёмный фон"><svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
   <button class="srch-btn" type="button" aria-label="Поиск по сайту" data-search><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16.5 16.5 21 21M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/></svg></button>
   <button class="burger" aria-label="Меню" aria-expanded="false">☰</button>
@@ -115,7 +117,8 @@ function BEGET_BAR(at = '') {
   return `<div class="bbar"><div class="wrap"><span class="bbar-t"><i></i>Бегет</span>${L.map(([h, t]) => `<a href="${h}"${h === at ? ' aria-current="page"' : ''}${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${t}</a>`).join('')}</div></div>`
 }
 // 21.11 (Ник): светлая/тёмная тема — до отрисовки, чтобы не мигало
-const THEME_TAG = `<script>try{if(localStorage.getItem('rl_theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>`
+// 28.11 (Ник: «светлей, современней»): светлая тема ПО УМОЛЧАНИЮ, тёмная — если человек сам выбрал ☾
+const THEME_TAG = `<script>try{if(localStorage.getItem('rl_theme')!=='dark')document.documentElement.setAttribute('data-theme','light')}catch(e){document.documentElement.setAttribute('data-theme','light')}</script>`
 // 16.11 (Ник): Метрика грузится сразу на ВСЕХ страницах (и на статичных /hosting/, /monitoring-saitov/, /beget/* — вставляется ниже)
 const METRIKA_TAG = SITE.metrikaId ? `<script>window.RL_METRIKA=${SITE.metrikaId};window.RL_LOAD_METRIKA=function(){if(window.RL_YM_ON)return;window.RL_YM_ON=1;(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=${SITE.metrikaId}','ym');ym(${SITE.metrikaId},'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:'dataLayer',referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true})};</script>` : ''
 function shell({ title, description, canonical, body, jsonLd = [], ogType = 'website', image = '/assets/og.jpg', current = '', noindex = false }) {
@@ -158,11 +161,17 @@ ${HEADER(current)}${/^\/(beget|journal\/beget)/.test(canonical) ? BEGET_BAR(cano
 <main>
 ${body}
 </main>
-<footer class="ftr"><div class="wrap ftr-sh" data-pageshare><b>Поделиться страницей</b><a class="btn-sh" data-sh="tg" target="_blank" rel="noopener">Telegram</a><a class="btn-sh" data-sh="vk" target="_blank" rel="noopener">ВКонтакте</a><a class="btn-sh" data-sh="wa" target="_blank" rel="noopener">WhatsApp</a><a class="btn-sh" data-sh="ok" target="_blank" rel="noopener">Одноклассники</a><button type="button" class="btn-sh" data-sh="copy">Скопировать ссылку</button></div><div class="wrap">
-  <div>${LOGO}<p style="margin:14px 0 0;max-width:30em">Цифровые продукты · AI · Автоматизация · Разработка · SEO/GEO · Дизайн.<br>Принесите задачу — соберём решение.</p><p class="ftr-copy">© ${new Date().getFullYear()} REBORN LAB</p><div class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга Beget и бота</a>${HAS_SELLER ? '<a href="/oferta/">Публичная оферта</a>' : ''}</div></div>
-  <div><a href="/#uslugi">Услуги</a><a href="/vosstanovlenie-sajta/">Восстановление сайтов</a><a href="/servery/">Серверы и защита</a><a href="/monitoring-saitov/">Проверка сайта без VPN</a><a href="/hosting/">Мониторинг хостингов</a><a href="/journal/">Журнал</a><a href="/about/">Обо мне</a><a href="/contact/">Контакты</a></div>
-  <div><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="/rss.xml">RSS журнала</a></div>
-</div></footer>
+<footer class="ftr"><div class="ftr2"><div class="px-wrap">
+  <p class="ftr2-big"><a href="/#contact" data-goal="cta_footer">Обсудим ваш проект <span class="arrow">→</span></a></p>
+  <div class="ftr2-g">
+    <div>${LOGO}<p style="margin:16px 0 0;max-width:24em;line-height:1.6">Студия цифровой инженерии: сайты, каталоги и сервисы для бизнеса, восстановление, защита и сопровождение.</p><p class="req" style="margin-top:18px">${esc(SITE.sellerShort || '')}${SITE.operatorOgrn ? '<br>ОГРНИП ' + SITE.operatorOgrn : ''}${SITE.operatorInn ? ' · ИНН ' + SITE.operatorInn : ''}<br>Работаем по договору · акты · NDA</p></div>
+    <div><h4>Студия</h4><a href="/cases/">Кейсы</a><a href="/services/">Услуги</a><a href="/about/">О студии</a><a href="/journal/">Журнал</a><a href="/contact/">Контакты</a></div>
+    <div><h4>Услуги</h4><a href="/services/web-development/">Сайты и сервисы</a><a href="/vosstanovlenie-sajta/">Восстановление сайтов</a><a href="/servery/">Серверы и защита</a><a href="/services/redesign/">Редизайн</a><a href="/services/ai/">AI и автоматизация</a><a href="/services/seo/">SEO и GEO</a></div>
+    <div><h4>Инструменты</h4><a href="/monitoring-saitov/">Проверка сайта</a><a href="/hosting/">Мониторинг хостингов</a><a href="/beget/">Статус Beget</a><a href="https://t.me/rebornlab_bot" target="_blank" rel="noopener">Бот мониторинга</a><a href="/banki/">Банки</a></div>
+    <div><h4>Связь</h4><a href="https://t.me/${SITE.telegram}" rel="noopener" target="_blank">Telegram @${SITE.telegram}</a><a href="mailto:${SITE.pdEmail}">${SITE.pdEmail}</a><a href="/rss.xml">RSS журнала</a></div>
+  </div>
+  <div class="ftr2-b"><span>© ${new Date().getFullYear()} REBORN LAB</span><span class="ftr-legal"><a href="/privacy/">Политика конфиденциальности</a><a href="/consent/">Согласие на обработку данных</a><a href="/beget/pravila/">Правила мониторинга</a>${HAS_SELLER ? '<a href="/oferta/">Оферта</a>' : ''}</span></div>
+</div></div><div class="wrap ftr-sh" data-pageshare><b>Поделиться страницей</b><a class="btn-sh" data-sh="tg" target="_blank" rel="noopener">Telegram</a><a class="btn-sh" data-sh="vk" target="_blank" rel="noopener">ВКонтакте</a><a class="btn-sh" data-sh="wa" target="_blank" rel="noopener">WhatsApp</a><a class="btn-sh" data-sh="ok" target="_blank" rel="noopener">Одноклассники</a><button type="button" class="btn-sh" data-sh="copy">Скопировать ссылку</button></div></footer>
 <div class="cookie" id="cookie" hidden><p>Сайт использует cookie и Яндекс Метрику (включая Вебвизор) для статистики посещаемости. Продолжая пользоваться сайтом, вы соглашаетесь с этим. Подробнее — в <a href="/privacy/">политике конфиденциальности</a>.</p><button type="button" class="btn btn-acc" id="cookie-ok">Понятно</button></div>
 <script src="/assets/main.js?v=${ASSET_V}" defer></script>
 </body>
@@ -183,18 +192,19 @@ function projCard(p, big = false) {
       <div class="tags">${p.stack.slice(0, big ? 8 : 4).map((s) => `<span class="tag">${esc(s)}</span>`).join('')}</div>
       <span class="card-link">Как сделано <span class="arrow">→</span></span></div></a>`
 }
-function leadForm(id, label = 'Отправить заявку') {   // 13.11 (Ник): на первом месте — восстановить / создать сайт
+const BIZ_CHIPS = { hot: ['Новый сайт или каталог', 'Редизайн'], rest: ['Восстановить сайт', 'Защита и сервер', 'AI и автоматизация', 'Другая задача'] }   // 28.11: форма для бизнеса (главная, кейсы)
+function leadForm(id, label = 'Отправить заявку', biz = false) {   // 13.11 (Ник): на первом месте — восстановить / создать сайт; biz — 28.11 премиум-вариант
   return `<form data-lead id="${id}" novalidate>
-    <p class="lf-proof"><b>Что мы делаем каждый день:</b> возвращаем сайты, которые упали вместе с хостингом, — из копии или из веб-архива, и собираем новые. В ноябре так вернули к жизни 10 сайтов клиентов: каталоги, научный журнал, сайты на Битриксе и MODX.</p>
-    <div class="chips" data-chips>${['🛟 Восстановить сайт', '✨ Создать новый сайт'].map((c) => `<button type="button" class="chip hot">${c}</button>`).join('')}${['Сайт не открывается', 'Перенести на другой хостинг', 'Автоматизация и AI', 'Другая задача'].map((c) => `<button type="button" class="chip">${c}</button>`).join('')}</div>
+    ${biz ? '' : `<p class="lf-proof"><b>Что мы делаем каждый день:</b> возвращаем сайты, которые упали вместе с хостингом, — из копии или из веб-архива, и собираем новые. В ноябре так вернули к жизни 10 сайтов клиентов: каталоги, научный журнал, сайты на Битриксе и MODX.</p>`}
+    <div class="chips" data-chips>${(biz ? BIZ_CHIPS.hot : ['🛟 Восстановить сайт', '✨ Создать новый сайт']).map((c) => `<button type="button" class="chip hot">${c}</button>`).join('')}${(biz ? BIZ_CHIPS.rest : ['Сайт не открывается', 'Перенести на другой хостинг', 'Автоматизация и AI', 'Другая задача']).map((c) => `<button type="button" class="chip">${c}</button>`).join('')}</div>
     <label class="sr" for="${id}-t">Опишите задачу</label>
-    <textarea class="ym-disable-keys" id="${id}-t" name="text" placeholder="Адрес сайта и что случилось. Например: «мой-сайт.ru не открывается с 4 ноября, копии нет» или «нужен сайт для салона красоты»"></textarea>
+    <textarea class="ym-disable-keys" id="${id}-t" name="text" placeholder="${biz ? 'Коротко о задаче: что за компания, что нужно сделать, есть ли сайт сейчас и к какому сроку' : 'Адрес сайта и что случилось. Например: «мой-сайт.ru не открывается с 4 ноября, копии нет» или «нужен сайт для салона красоты»'}"></textarea>
     <div class="form-row"><label class="sr" for="${id}-c">Контакт</label><input class="ym-disable-keys" type="text" id="${id}-c" name="contact" placeholder="Почта, Telegram или WhatsApp — мы пишем, не звоним" style="flex:1;min-width:220px"></div>
     <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
     <label class="agree"><input type="checkbox" name="agree" required> <span>Даю <a href="/consent/" target="_blank">согласие на обработку персональных данных</a> и принимаю <a href="/privacy/" target="_blank">политику конфиденциальности</a></span></label>
     <div class="form-row"><button class="btn btn-acc" type="submit" data-label="${label} →">${label} <span class="arrow">→</span></button><a class="btn btn-ghost" href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener" data-goal="telegram">Написать в Telegram</a></div>
     <p class="ok-msg">Получили ✓ Посмотрю сайт и напишу вам лично.</p>
-    <p class="hint">Отвечаю лично и письменно. Сначала смотрю сайт и что сохранилось — потом предлагаю, как вернуть.</p>
+    <p class="hint">${biz ? 'Ответим лично и письменно в течение дня: вопросы по задаче, план и следующий шаг.' : 'Отвечаю лично и письменно. Сначала смотрю сайт и что сохранилось — потом предлагаю, как вернуть.'}</p>
     <p class="err-msg">Отметьте согласие на обработку данных — без него мы не можем принять заявку.</p>
   </form>`
 }
@@ -224,97 +234,199 @@ const SYS_NODES = [
   ['ANALYTICS', 'Цифры, по которым видно, что работает и что улучшать.'],
   ['PRODUCT', 'Работающий продукт, который приносит результат и развивается.'],
 ]
-const featured = PROJECTS.filter((p) => p.featured)
+// ---------- 28.11.2026 PREMIUM: кейсы и главная ----------
+const caseImg = (c) => `/assets/cases/${c.img}.jpg`
+const hasFile = (f) => existsSync(path.join(ROOT, 'src/assets/cases', f))
+const longOk = (c) => hasFile(`${c.img}-long.jpg`) && readFileSync(path.join(ROOT, 'src/assets/cases', `${c.img}-long.jpg`)).length > 80000   // короткие файлы = пустой низ страницы (анимации не успели)
+const bframe = (c, lazy = true) => `<div class="bf"><div class="bf-bar"><i></i><i></i><i></i><span>${esc(c.domain)}</span></div><img src="${caseImg(c)}" alt="${esc(c.name)} — ${esc(c.industry)}" width="1440" height="900"${lazy ? ' loading="lazy"' : ''} decoding="async"></div>`
+const typeTag = (c) => `<span class="cc-t ${c.type}">${CASE_TYPES[c.type]}</span>`
+function caseCard(c, cls = '') {
+  const nums = (c.metrics || []).slice(0, cls === 'big' ? 4 : cls === 'third' ? 2 : 3)
+  return `<a class="cc rv ${cls}" href="/cases/${c.slug}/" data-type="${c.type}" data-goal="case_${c.slug}">${bframe(c)}
+  <div class="cc-b"><div class="cc-m">${typeTag(c)}<span>${esc(c.industry)}</span></div><h3>${esc(c.title)}</h3>${cls === 'third' ? '' : `<p>${esc(c.lead)}</p>`}
+  ${nums.length ? `<div class="cc-n">${nums.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(l)}</span></div>`).join('')}</div>` : ''}
+  <div class="cc-f"><span>Смотреть кейс <span class="arrow">→</span></span><span class="d">${esc(c.domain)}</span></div></div></a>`
+}
+const LIVE = CASES.filter((c) => c.type !== 'concept' && !c.demo)
+const FEAT = CASES.filter((c) => c.featured).sort((a, b) => a.featured - b.featured)
+const featLayout = ['big', '', '', 'third', 'third', 'third', '', '']
+const MARQUEE = LIVE.map((c) => `<a href="/cases/${c.slug}/">${esc(c.domain)}</a>`).join('')
+const DIRS = [
+  ['01', 'Сайты, каталоги и сервисы', 'Корпоративные сайты, b2b-каталоги на тысячи товаров, личные кабинеты и сервисы с оплатой.', ['1С-Битрикс, WordPress, Shop-Script или свой код', 'Подбор, калькуляторы, умный поиск', 'Перенос без потери адресов и позиций'], '/services/web-development/'],
+  ['02', 'Восстановление и переезд', 'Возвращаем сайты, которые пропали вместе с хостингом: из копии, клона или веб-архива — за часы, а не месяцы.', ['Каталоги на десятки тысяч товаров', 'Без базы данных и без бэкапа', 'Переезд на сервер в России'], '/vosstanovlenie-sajta/'],
+  ['03', 'Надёжность и защита', 'Настраиваем сервер там, где уже стоит сайт: фильтр ботов без капчи, копии, запасной сервер, сигнал в Telegram.', ['Защита от парсеров и взлома', 'Копии каждую ночь, проверка восстановления', 'Сопровождение и сторожа'], '/servery/'],
+  ['04', 'AI и автоматизация', 'ИИ-помощник на сайте, Telegram-боты, заявки и уведомления, которые доходят до нужного человека сами.', ['Помощник, который отвечает 24/7', 'Бот и сайт — одна система', 'Кабинет заявок со статусами'], '/services/ai/'],
+]
+const STEPS = [
+  ['Разбор задачи', 'Бесплатно. Смотрим сайт, бизнес и цели, задаём неудобные вопросы.'],
+  ['Демо на вашем контенте', 'За 2–3 часа показываем первый экран с вашими текстами и фото — решение о проекте принимаете, уже видя результат.', 'hl'],
+  ['Договор и этапы', 'Фиксируем объём, сроки и этапы оплаты. Акты, NDA по запросу.'],
+  ['Запуск', 'Сохраняем адреса и SEO, проверяем каждую страницу и все ширины экрана.'],
+  ['Сопровождение', 'Копии, защита, сторожа и правки — сайт не остаётся без присмотра.'],
+]
 const home = shell({
-  title: 'REBORN LAB — цифровая лаборатория: сайты, сервисы, AI и автоматизация',
-  description: 'Принесите задачу — соберём решение. Сайты, веб-сервисы, AI-ассистенты, автоматизация, SEO и GEO под конкретную задачу бизнеса. Реальные проекты и честный разбор.',
+  title: 'REBORN LAB — студия разработки и восстановления сайтов для бизнеса',
+  description: 'Сайты, b2b-каталоги и сервисы на 1С-Битрикс, WordPress и своём коде. Восстановление сайтов за часы, защита серверов, AI и автоматизация. Работаем по договору. Кейсы со ссылками на живые проекты.',
   canonical: '/',
   jsonLd: [ORG, { '@context': 'https://schema.org', '@type': 'WebSite', name: 'REBORN LAB', url: SITE.url, inLanguage: 'ru' }],
   body: `
-<section class="hero" aria-labelledby="h1">
-  <canvas id="lab" aria-hidden="true"></canvas>
-  <div class="wrap">
-    <a class="srv-promo" href="/servery/" data-goal="home_servery"><span class="sp-ic" aria-hidden="true"><i></i><i></i><i></i></span><span class="sp-tx"><span class="sp-k"><b></b>Новое · серверы и защита</span><strong>Сервер, который <em>не боится ботов</em> и аварий хостинга</strong><span class="sp-d">Настрою ваш сервер или хостинг там, где уже стоит сайт, у любого провайдера. Закрою от парсеров, сканеров и подбора паролей без капчи для людей, копии каждую ночь, запасной вариант на случай аварии, сигнал в Telegram. А вы спокойно спите.</span><span class="sp-ch"><span>3 469 запросов/с без ошибок</span><span>на вашем хостинге или VPS</span><span>фильтр ботов на всех сайтах клиентов</span></span></span><span class="sp-go"><span class="btn btn-acc">Защитить мой сайт <span class="arrow">→</span></span><span class="sp-l">Посмотреть, как работает щит</span></span></a>   <!-- 24.11 Ник: вместо «Блокировки в банках» -->
-    <div class="wbx-home">${WATCH_BOX}</div>
-    <div class="kicker">Digital laboratory · идея → система → продукт</div>
-    <h1 id="h1">Скажите, что нужно. <em>Остальное соберём.</em></h1>
-    <p class="sub">Восстанавливаем и переносим сайты, делаем так, чтобы они открывались у всех. Собираем сайты, ботов, автоматизацию и AI под вашу задачу. Можно прийти без ТЗ: с идеей или с проблемой.</p>
-    <div class="row">
-      <a class="btn btn-acc" href="#task" data-goal="cta_hero">Восстановить или создать сайт <span class="arrow">→</span></a>
-    </div>
-    <div class="hero-meta"><span>Восстановление · Переезд · Сайты · Боты · AI</span><span>от прототипа до продукта</span></div>
+<section class="px-hero" aria-labelledby="h1"><div class="px-wrap px-hero-g">
+  <div>
+    <div class="px-k">REBORN LAB · студия цифровой инженерии</div>
+    <h1 id="h1">Сайты и системы для компаний, <em>которым нельзя останавливаться</em></h1>
+    <p class="lead">Разрабатываем сайты, b2b-каталоги и сервисы на 1С-Битрикс, WordPress и собственном коде. Возвращаем к жизни упавшие проекты за часы, а не месяцы. Защищаем, сопровождаем, автоматизируем.</p>
+    <div class="row"><a class="btn btn-acc" href="#contact" data-goal="cta_hero">Обсудить проект <span class="arrow">→</span></a><a class="btn btn-ghost" href="/cases/" data-goal="cta_cases">Смотреть кейсы</a></div>
+    <div class="px-trust"><span>Работаем по договору</span><span>Демо до основного договора</span><span>Адреса и SEO сохраняем</span></div>
   </div>
-</section>
-<div class="rline"></div>
-<!-- 27.11.2026 рилс №2 «Вдохнём жизнь»; первый ролик — на /vosstanovlenie-sajta/ -->
-<section class="sec reel-sec" id="reel" aria-labelledby="reel-h"><div class="wrap reel-wrap">
+  <div class="px-col" aria-hidden="true">${['vakacademy', 'electricbrakes', 'svobodna'].map((k) => { const c = CASES.find((x) => x.img === k); return `<div class="bf"><div class="bf-bar"><i></i><i></i><i></i><span>${esc(c.domain)}</span></div><img src="${caseImg(c)}" alt="" width="1440" height="900"${k === 'svobodna' ? '' : ' loading="lazy"'}></div>` }).join('')}<div class="phone"><img src="/assets/cases/svoimirzvetov-m.jpg" alt="" width="390" height="844" loading="lazy"></div></div>
+</div></section>
+
+<div class="px-wrap"><div class="px-proof rv">
+  <div><b>${LIVE.length}</b><span>живых сайтов клиентов — разработаны или возвращены к жизни</span></div>
+  <div><b>33 325</b><span>товаров в самом большом каталоге, который мы вернули с нуля</span></div>
+  <div><b>2–3 ч</b><span>до первого демо на вашем контенте</span></div>
+  <div><b>3 469</b><span>запросов в секунду без ошибок на нашем сервере</span></div>
+</div></div>
+<div class="px-mq" aria-label="Сайты клиентов"><div class="px-mq-t">${MARQUEE}${MARQUEE}</div></div>
+
+<section class="px-sec" id="cases"><div class="px-wrap">
+  <div class="px-hd rv"><div><div class="px-k">Избранные кейсы</div><h2 class="px-h">Работа, за которую <em>не стыдно</em> поставить подпись</h2></div><p>Каждый проект ниже — живой сайт со ссылкой. Открывайте, листайте, проверяйте: адреса, скорость, мобильную версию.</p></div>
+  <div class="px-cases">${FEAT.map((c, i) => caseCard(c, featLayout[i] || '')).join('\n')}</div>
+  <p style="margin-top:40px" class="rv"><a class="btn btn-ghost" href="/cases/">Все ${CASES.length} проектов <span class="arrow">→</span></a></p>
+</div></section>
+
+<section class="px-sec" id="uslugi" style="padding-top:0"><div class="px-wrap">
+  <div class="px-hd rv"><div><div class="px-k">Что мы делаем</div><h2 class="px-h">Четыре направления. <em>Одна команда</em> на весь путь</h2></div><p>От разбора задачи до сопровождения: не нужно искать отдельно дизайнера, программиста, сисадмина и SEO-специалиста.</p></div>
+  <div class="px-dirs">${DIRS.map(([n, t, d, li, u]) => `<a class="px-dir rv" href="${u}"><span class="no">${n}</span><h3>${t}</h3><p>${d}</p><ul>${li.map((x) => `<li>${x}</li>`).join('')}</ul><span class="go">Подробнее <span class="arrow">→</span></span></a>`).join('')}</div>
+  <div class="px-more rv">${SERVICES.map((s) => `<a href="/services/${s.slug}/">${esc(s.title)}</a>`).join('')}</div>
+</div></section>
+
+<section class="px-sec" style="padding-top:0"><div class="px-wrap">
+  <div class="px-hd rv"><div><div class="px-k">Как мы работаем</div><h2 class="px-h">Вы видите результат <em>до основного договора</em></h2></div><p>Никаких «пакетов» и обещаний на словах. Сначала разбор и демо на вашем контенте, потом договор на весь проект.</p></div>
+  <div class="px-steps">${STEPS.map(([b, t, c]) => `<div class="px-step rv${c ? ' ' + c : ''}"><b>${b}</b><p>${t}</p></div>`).join('')}</div>
+</div></section>
+
+<section class="px-sec" style="padding-top:0"><div class="px-wrap"><div class="px-ink rv">
+  <div><div class="px-k">Официально и прозрачно</div><h2>Договор, акты и <em>ваша собственность</em> на всё</h2><p>Работаем как индивидуальный предприниматель: договор, закрывающие документы, оплата по этапам. Код, доступы и данные — ваши с первого дня.</p>
+  <div class="px-req">${esc(SITE.sellerShort)}<br>ОГРНИП ${SITE.operatorOgrn} · ИНН ${SITE.operatorInn}</div></div>
+  <ul>
+    <li><div><b>Договор и этапы оплаты</b><span>объём, сроки и результат каждого этапа — на бумаге</span></div></li>
+    <li><div><b>NDA по запросу</b><span>данные клиентов и коммерческие детали не уходят наружу</span></div></li>
+    <li><div><b>Всё — ваше</b><span>исходный код, админка, доступы к хостингу и домену</span></div></li>
+    <li><div><b>Данные в России</b><span>наш сервер — в России, защита и копии настроены</span></div></li>
+    <li><div><b>Сопровождение после запуска</b><span>сторожа, копии, обновления и правки</span></div></li>
+  </ul>
+</div></div></section>
+
+<section class="px-sec" style="padding-top:0"><div class="px-wrap">
+  <div class="px-hd rv"><div><div class="px-k">Лаборатория</div><h2 class="px-h">Свои продукты, <em>которыми пользуются</em> тысячи людей</h2></div><p>Мы не только делаем сайты клиентам — мы строим инструменты для себя и для всех. Так мы проверяем технологии до того, как ставим их вам.</p></div>
+  <div class="px-lab">${LAB.map((l) => `<a class="lb rv" href="${l.url}"><div class="bf"><div class="bf-bar"><i></i><i></i><i></i><span>rebornlab.ru${l.url}</span></div><img src="/assets/cases/${l.img}.jpg" alt="${esc(l.name)}" width="1440" height="900" loading="lazy"></div><small>${esc(l.tag)}</small><h3>${esc(l.name)}</h3><p>${esc(l.text)}</p></a>`).join('')}</div>
+</div></section>
+
+<section class="sec reel-sec" id="reel" aria-labelledby="reel-h" style="padding-top:0"><div class="wrap reel-wrap">
   <div class="reel-txt">
-    <div class="kicker">40 секунд о нас</div>
+    <div class="px-k">40 секунд о студии</div>
     <h2 id="reel-h">Вдохнём в ваш сайт <em>вторую жизнь</em></h2>
     <p class="sub">Нажмите на пункт — ролик перемотается к нему.</p>
     <ol class="reel-list">
       <li><button type="button" data-t="6.8"><span>01</span>Первый результат — через 2–3 часа</button></li>
       <li><button type="button" data-t="11"><span>02</span>Серверы, переезд, почта, защита от парсинга, автоматизация</button></li>
-      <li><button type="button" data-t="15.4"><span>03</span>Битрикс, WordPress, MODX, Webasyst, Tilda — любой сайт в конфетку</button></li>
+      <li><button type="button" data-t="15.4"><span>03</span>Битрикс, WordPress, MODX, Webasyst, Tilda — любой движок</button></li>
       <li><button type="button" data-t="19.8"><span>04</span>Современный дизайн, продуманная логика, свой кабинет</button></li>
-      <li><button type="button" data-t="24"><span>05</span>Алиса продаёт 24/7 и учится на ваших ответах</button></li>
+      <li><button type="button" data-t="24"><span>05</span>ИИ-помощник продаёт 24/7 и учится на ваших ответах</button></li>
       <li><button type="button" data-t="30.2"><span>06</span>Сайт и Telegram-бот — одна система, заявки сразу вам</button></li>
     </ol>
-    <a class="btn btn-acc" href="#task" data-goal="cta_reel">Обсудить задачу <span class="arrow">→</span></a>
   </div>
   <div class="reel-phone">
-    <video class="reel-v" muted loop playsinline preload="none" poster="/assets/video/reel2-poster.jpg" aria-label="Ролик REBORN LAB: вдохнём в ваш сайт вторую жизнь" data-src="/assets/video/reel2.mp4"></video>
+    <video class="reel-v" muted loop playsinline preload="none" poster="/assets/video/reel2-poster.jpg" aria-label="Ролик REBORN LAB" data-src="/assets/video/reel2.mp4"></video>
     <button type="button" class="reel-snd" aria-label="Включить звук">🔈 Со звуком</button>
     <div class="reel-prog"><i></i></div>
   </div>
 </div></section>
 
-
-<section class="sec" style="padding-top:10px"><div class="wrap">
-  <div class="sl-logo rv"><img src="/assets/svoya-liniya-logo.jpg" alt="" width="88" height="88" loading="lazy"></div>
-</div></section>
-
-<section class="sec" id="uslugi" style="padding-top:20px"><div class="wrap">
-  <div class="sec-hd rv"><div><div class="kicker">Что мы можем</div><h2>Не одна технология, <em>а целая лаборатория</em></h2></div><p>Под задачу собираем нужную связку: где-то хватит сайта, где-то нужен AI, где-то — автоматизация и интеграции. Чаще всего — всё вместе.</p></div>
-  <div class="caps">
-    ${SERVICES.map((s) => `<a class="cap rv" href="/services/${s.slug}/">${svImg(s)}<div class="sv-top">${svIcon(s)}<span class="code">${s.code}</span></div><h3>${esc(s.title)}</h3><p>${esc(s.lead)}</p>${svPains(s)}</a>`).join('\n')}
-    <a class="cap ask rv" href="#task"><span class="code">${String(SERVICES.length + 1).padStart(2, '0')}</span><h3>Ваша задача</h3><p>Не нашли своё? Это нормально. Опишите проблему — предложим, что можно сделать.</p><span class="card-link" style="margin-top:auto">Разобрать задачу <span class="arrow">→</span></span></a>
-  </div>
-</div></section>
-<div class="rline"></div>
-
-<section class="sec" id="task"><div class="wrap pain">
-  <div>
-    <div class="kicker rv">Не знаете, что именно нужно?</div>
-    <h2 class="rv" style="font-size:clamp(32px,4.4vw,56px);line-height:1.04;letter-spacing:-.03em;margin:12px 0 18px">Это нормально. <em style="font-style:normal;color:var(--acc)">Опишите, что болит.</em></h2>
-    <p class="muted rv" style="font-size:17.5px;margin:0 0 26px">Не нужно знать технологии. Расскажите проблему обычными словами — мы разберём её и предложим решение. Вот как это обычно выглядит:</p>
-    <div class="pairs">${PROBLEMS.map(([q, a]) => `<div class="pair rv"><span class="q">«${esc(q)}»</span><span class="to">→</span><span class="a">${esc(a)}</span></div>`).join('')}</div>
-  </div>
-  <div class="ask-box rv"><div class="kicker">Расскажите, что болит</div><h3>У меня есть идея / проблема…</h3>${leadForm('f-task')}</div>
-</div></section>
-
-<!-- 10.11 Ник: «что лишнее на главной — удали»: убраны «От идеи до продукта» + «AI — не игрушка» и рыночная статистика -->
-<section class="sec" style="padding-top:20px"><div class="wrap">
-  <div class="sec-hd rv"><div><div class="kicker">Не нужно покупать всё</div><h2>Можно <em>начать с малого</em></h2></div><p>Никаких обязательных пакетов. Начинаем с того шага, который даст результат быстрее всего.</p></div>
-  <div class="small">${START_SMALL.map(([a, b]) => `<div class="rv"><b>${esc(a)}</b><span>→ ${esc(b)}</span></div>`).join('')}</div>
-</div></section>
-<div class="rline"></div>
-
-${POSTS.length ? `<section class="sec"><div class="wrap">
-  <div class="sec-hd rv"><div><div class="kicker">Lab notes</div><h2>Журнал <em>лаборатории</em></h2></div><p>Разборы, кейсы и практические инструкции: AI, автоматизация, сайты, SEO и GEO — без воды.</p></div>
+${POSTS.length ? `<section class="px-sec" style="padding-top:0"><div class="px-wrap">
+  <div class="px-hd rv"><div><div class="px-k">Журнал</div><h2 class="px-h">Разборы и кейсы <em>из практики</em></h2></div><p>Пишем о том, что сделали сами: цифры, методика, что пошло не так.</p></div>
   <div class="posts">${POSTS.slice(0, 3).map(postCard).join('')}</div>
-  <p style="margin-top:26px" class="rv"><a class="btn btn-ghost" href="/journal/">Все материалы <span class="arrow">→</span></a></p>
+  <p style="margin-top:26px" class="rv"><a class="px-link" href="/journal/">Все материалы <span class="arrow">→</span></a></p>
+  <div class="sl-logo rv" style="margin-top:40px"><img src="/assets/svoya-liniya-logo.jpg" alt="" width="88" height="88" loading="lazy"></div>
 </div></section>` : ''}
 
-<section class="sec final" id="contact"><div class="wrap"><div class="final-box rv">
-  <div class="kicker">Сайт не работает или нужен новый?</div>
-  <h2>Восстановим или соберём заново. <em>Быстро.</em></h2>
-  <p class="muted" style="font-size:18px;max-width:40em;margin:0">Разберём задачу, предложим архитектуру и покажем, как превратить её в работающий цифровой продукт.</p>
-  <div class="contact-grid"><div>${leadForm('f-final')}</div>
-  <div class="contact-side"><div><div class="kicker">Напрямую</div><p style="font-size:20px;margin:8px 0 0"><a href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener" data-goal="telegram">Telegram @${SITE.telegram}</a></p></div><p>Отвечаем лично. Сначала разбираемся в задаче, потом называем срок и стоимость — без навязанных пакетов.</p></div></div>
+<section class="px-sec" id="contact" style="padding-top:0"><div class="px-wrap"><div class="px-final rv">
+  <div class="side"><div><div class="px-k">Новый проект</div><h2>Расскажите о задаче — <em>предложим решение</em></h2></div><p>Ответим лично в течение дня. Сначала разберёмся в задаче, потом назовём сроки и стоимость. Демо — до основного договора.</p>
+    <div class="px-contact"><a href="https://t.me/${SITE.telegram}" target="_blank" rel="noopener" data-goal="telegram">Telegram <span>@${SITE.telegram}</span></a><a href="mailto:${SITE.pdEmail}" data-goal="mail">Почта <span>${SITE.pdEmail}</span></a></div></div>
+  <div>${leadForm('f-final', 'Обсудить проект', true)}</div>
 </div></div></section>`,
 })
 write('index.html', home)
+
+// ---------- /cases/ ----------
+const CASE_LD = { '@context': 'https://schema.org', '@type': 'ItemList', name: 'Кейсы REBORN LAB', itemListElement: CASES.map((c, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE.url}/cases/${c.slug}/`, name: c.title })) }
+const cnt = (t) => CASES.filter((c) => !t || c.type === t).length
+write('cases/index.html', shell({
+  title: 'Кейсы REBORN LAB — сайты, каталоги и восстановление сайтов со ссылками на проекты',
+  description: `${CASES.length} проектов студии: b2b-каталоги на 1С-Битрикс, сервисы с оплатой, восстановление сайтов из веб-архива за часы, лендинги и концепты. С цифрами и ссылками на живые сайты.`,
+  canonical: '/cases/', current: '/cases/', jsonLd: [ORG, CASE_LD, crumbsLd([['Главная', '/'], ['Кейсы', '/cases/']])],
+  body: `<section class="cs-top"><div class="px-wrap">
+  <div class="px-k">Кейсы · ${CASES.length} проектов</div>
+  <h1>Проекты, которые <em>работают</em> прямо сейчас</h1>
+  <p>Разработка, восстановление и концепты. У каждого живого проекта — ссылка: откройте сайт и проверьте сами. Цифры — из наших замеров, без округлений в большую сторону.</p>
+  <div class="cs-flt" role="group" aria-label="Фильтр кейсов">${[['', 'Все'], ['build', 'Разработка'], ['rescue', 'Восстановление'], ['concept', 'Концепты']].map(([t, n], i) => `<button type="button" data-f="${t}" aria-pressed="${i ? 'false' : 'true'}">${n}<sup>${cnt(t)}</sup></button>`).join('')}</div>
+</div></section>
+<section class="px-sec" style="padding-top:10px"><div class="px-wrap"><div class="px-cases" data-cases>${CASES.map((c, i) => caseCard(c, i === 0 ? 'big' : i < 7 ? '' : 'third')).join('\n')}</div></div></section>
+<section class="px-sec" id="contact" style="padding-top:0"><div class="px-wrap"><div class="px-final rv">
+  <div class="side"><div><div class="px-k">Ваш проект — следующий</div><h2>Обсудим, каким <em>может стать</em> ваш сайт</h2></div><p>Покажем демо на вашем контенте до основного договора — решите, когда увидите результат.</p></div>
+  <div>${leadForm('f-cases', 'Обсудить проект', true)}</div>
+</div></div></section>
+<script>(function(){var b=document.querySelectorAll('.cs-flt button'),c=document.querySelectorAll('[data-cases] .cc');b.forEach(function(x){x.onclick=function(){b.forEach(function(y){y.setAttribute('aria-pressed',y===x)});var f=x.dataset.f;c.forEach(function(k){k.hidden=!!f&&k.dataset.type!==f;k.classList.add('in')})}})})();</script>`,
+}))
+CASES.forEach((c, i) => {
+  const nx = CASES[(i + 1) % CASES.length], pv = CASES[(i - 1 + CASES.length) % CASES.length]
+  const live = !c.demo && c.type !== 'concept'
+  write(`cases/${c.slug}/index.html`, shell({
+    title: `${c.name} — кейс REBORN LAB: ${c.title}`.slice(0, 140),
+    description: c.lead.slice(0, 200),
+    canonical: `/cases/${c.slug}/`, current: '/cases/', image: `/assets/cases/${c.img}.jpg`,
+    jsonLd: [ORG, crumbsLd([['Главная', '/'], ['Кейсы', '/cases/'], [c.name, `/cases/${c.slug}/`]]), { '@context': 'https://schema.org', '@type': 'CreativeWork', name: c.title, about: c.industry, url: `${SITE.url}/cases/${c.slug}/`, image: `${SITE.url}/assets/cases/${c.img}.jpg`, creator: { '@type': 'Organization', name: 'REBORN LAB', url: SITE.url } }],
+    body: `<section class="cs-hero"><div class="px-wrap">
+  <div class="cs-crumbs"><a href="/">Главная</a> / <a href="/cases/">Кейсы</a> / ${esc(c.name)}</div>
+  <h1>${esc(c.title)}</h1>
+  <div class="cs-meta"><div><span>Клиент</span><b>${esc(c.name)}</b></div><div><span>Отрасль</span><b>${esc(c.industry)}</b></div><div><span>Работа</span><b>${CASE_TYPES[c.type]}</b></div><div><span>${live ? 'Сайт' : c.type === 'concept' ? 'Концепт' : 'Наша версия'}</span><b><a href="${c.url}" target="_blank" rel="noopener" data-goal="case_open">${esc(c.domain)} ↗</a></b></div></div>
+</div></section>
+<section><div class="px-wrap"><div class="cs-shot">${bframe(c, false)}${hasFile(`${c.img}-m.jpg`) ? `<div class="phone"><img src="/assets/cases/${c.img}-m.jpg" alt="${esc(c.name)} — мобильная версия" width="390" height="844" loading="lazy"></div>` : ''}</div></div></section>
+<section class="px-sec" style="padding-bottom:0"><div class="px-wrap"><p class="cs-lead rv">${esc(c.lead)}</p>
+${c.metrics?.length ? `<div class="cs-nums rv" style="margin-top:50px">${c.metrics.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(l)}</span></div>`).join('')}</div>` : ''}</div></section>
+<section class="px-sec"><div class="px-wrap cs-g">
+  <div class="rv"><h2>Задача</h2><p class="cs-task">${esc(c.task)}</p><h2>Технологии</h2><div class="cs-stack">${c.stack.map((x) => `<span>${esc(x)}</span>`).join('')}</div>
+  <p style="margin-top:30px"><a class="btn btn-ghost" href="${c.url}" target="_blank" rel="noopener" data-goal="case_open">Открыть ${live ? 'сайт' : 'проект'} ↗</a></p></div>
+  <div class="rv"><h2>Что сделали</h2><ol>${c.did.map((d) => `<li>${esc(d)}</li>`).join('')}</ol></div>
+</div></section>
+${longOk(c) ? `<section class="px-sec" style="padding-top:0"><div class="px-wrap"><div class="bf cs-long rv"><img src="/assets/cases/${c.img}-long.jpg" alt="${esc(c.name)} — страница целиком" width="720" height="1800" loading="lazy"></div><p class="cs-long-n">Наведите на снимок — страница прокрутится</p></div></section>` : ''}
+<section class="px-sec" style="padding-top:0"><div class="px-wrap"><div class="px-final rv">
+  <div class="side"><div><div class="px-k">Похожая задача?</div><h2>Сделаем так же — <em>для вас</em></h2></div><p>Опишите задачу — ответим лично в течение дня и покажем демо до основного договора.</p></div>
+  <div>${leadForm('f-case', 'Обсудить проект', true)}</div>
+</div></div></section>
+<section class="px-sec" style="padding-top:0"><div class="px-wrap"><div class="px-k" style="margin-bottom:22px">Другие кейсы</div><div class="px-cases">${[pv, nx].map((x) => caseCard(x)).join('')}</div></div></section>`,
+  }))
+})
+
+// ---------- /instrumenty/ — бесплатные инструменты (с главной и меню убраны 28.11) ----------
+const TOOLS = [
+  ['/monitoring-saitov/', 'Проверка сайта без VPN', 'Открывается ли сайт в России и из-за рубежа, хостинг, сертификат, домен, почта — и как исправить ошибку.'],
+  ['https://t.me/rebornlab_bot', 'Бот мониторинга в Telegram', 'Следит за сайтами и серверами на любом хостинге и пишет, когда сайт упал или заработал. Бесплатно.'],
+  ['/hosting/', 'Мониторинг хостингов', 'Какой хостинг не работает сейчас: панели, DNS и сайты клиентов 27 хостингов.'],
+  ['/hosting/reyting/', 'Рейтинг хостингов по надёжности', 'Место — по нашим замерам за неделю: сбои панели и DNS, самый долгий сбой.'],
+  ['/beget/', 'Статус Beget', 'Живые замеры восстановления: серверы, сайты, графики.'],
+  ['/beget/server/', 'Мониторинг серверов Beget по IP', 'Включён ли сервер, имя сервера, соседи по сети.'],
+  ['/beget/vosstanovit/', 'Можно ли восстановить сайт', 'Что сохранилось в веб-архиве и Яндекс Картинках.'],
+  ['/banki/', 'Блокировки в банках', 'Разбор блокировок счетов и что делать.'],
+]
+write('instrumenty/index.html', shell({
+  title: 'Бесплатные инструменты REBORN LAB — проверка сайта, мониторинг хостингов, бот',
+  description: 'Проверка сайта без VPN, бот мониторинга в Telegram, мониторинг 27 хостингов, статус Beget, проверка восстановления из веб-архива. Бесплатно и без рекламы.',
+  canonical: '/instrumenty/', current: '/instrumenty/', jsonLd: [ORG, crumbsLd([['Главная', '/'], ['Инструменты', '/instrumenty/']])],
+  body: `<section class="cs-top"><div class="px-wrap"><div class="px-k">Лаборатория</div><h1>Бесплатные <em>инструменты</em></h1><p>Сделали для себя — открыли для всех. Без рекламы и регистрации.</p></div></section>
+<section class="px-sec" style="padding-top:10px"><div class="px-wrap"><div class="px-dirs" style="grid-template-columns:repeat(2,1fr)">${TOOLS.map(([u, t, d], i) => `<a class="px-dir rv" href="${u}"${u.startsWith('http') ? ' target="_blank" rel="noopener"' : ''} style="min-height:0;${i % 2 ? '' : 'padding-left:0;border-left:0;'}${i > 1 ? 'border-top:1px solid var(--line);' : ''}"><span class="no">${String(i + 1).padStart(2, '0')}</span><h3 style="margin-top:8px">${t}</h3><p>${d}</p><span class="go">Открыть <span class="arrow">→</span></span></a>`).join('')}</div></div></section>`,
+}))
 
 // ---------- SERVICES ----------
 write('services/index.html', shell({
@@ -564,11 +676,13 @@ if (existsSync(path.join(ROOT, 'src/assets/journal'))) {   // 06.11: облож�
 }
 if (existsSync(path.join(ROOT, 'src/assets/video'))) { mkdirSync(path.join(OUT, 'assets/video'), { recursive: true }); for (const f of readdirSync(path.join(ROOT, 'src/assets/video'))) copyFileSync(path.join(ROOT, 'src/assets/video', f), path.join(OUT, 'assets/video', f)) }   // 26.11: рилс на главной
 if (existsSync(path.join(ROOT, 'src/assets/services'))) { mkdirSync(path.join(OUT, 'assets/services'), { recursive: true }); for (const f of readdirSync(path.join(ROOT, 'src/assets/services'))) copyFileSync(path.join(ROOT, 'src/assets/services', f), path.join(OUT, 'assets/services', f)) }   // 10.11: картинки карточек услуг
+for (const d of ['cases', 'fonts']) if (existsSync(path.join(ROOT, 'src/assets', d))) { mkdirSync(path.join(OUT, 'assets', d), { recursive: true }); for (const f of readdirSync(path.join(ROOT, 'src/assets', d))) copyFileSync(path.join(ROOT, 'src/assets', d, f), path.join(OUT, 'assets', d, f)) }   // 28.11: кейсы и шрифты
 for (const f of ['favicon.svg', 'og.jpg', 'logo.png', 'svoya-liniya-logo.jpg', 'nick.jpg']) if (existsSync(path.join(ROOT, 'src/assets', f))) copyFileSync(path.join(ROOT, 'src/assets', f), path.join(OUT, 'assets', f))
 
 // 12.11: страницы мониторинга хостингов (генерит tools-mk_proverka.py publish) — в карту сайта, поиск, шапку/подвал
 const HOSTING_PAGES = existsSync(path.join(ROOT, 'hosting')) ? readdirSync(path.join(ROOT, 'hosting')).filter((d) => existsSync(path.join(ROOT, 'hosting', d, 'index.html'))).sort() : []
 const urls = [['/', today, '1.0'], ['/banki/', today, '0.8'], ['/banki/chto-delat/', today, '0.7'], ['/wbbank/', today, '0.8'], ['/banki/wb-bank/', today, '0.6'], ['/banki/ozon-bank/', today, '0.6'], ['/banki/t-bank/', today, '0.6'], ['/banki/sberbank/', today, '0.6'], ['/banki/vtb/', today, '0.6'], ['/banki/alfa-bank/', today, '0.6'], ['/banki/yandex-bank/', today, '0.6'], ['/banki/mts-bank/', today, '0.6'], ['/banki/sovcombank/', today, '0.6'], ['/banki/pochta-bank/', today, '0.6'], ['/banki/gazprombank/', today, '0.6'], ['/banki/raiffeisen/', today, '0.6'],   // 20.11 (Ник): досье WB открыто для индексации (страница собирается в ~/WebstormProjects/wb-dossier)
+  ['/cases/', today, '0.9'], ...CASES.map((c) => [`/cases/${c.slug}/`, today, '0.7']), ['/instrumenty/', today, '0.6'],
   ['/journal/', POSTS[0]?.date || today, '0.8'], ['/about/', today, '0.5'], ['/contact/', today, '0.6'], ['/beget/', today, '0.9'], ['/beget/server/', today, '0.8'], ['/beget/vosstanovit/', today, '0.8'], ['/beget/voprosy/', today, '0.8'], ['/vosstanovlenie-sajta/', today, '0.8'], ['/monitoring-saitov/', today, '0.9'], ['/servery/', today, '0.9'], ['/hosting/', today, '0.8'], ...HOSTING_PAGES.map((h) => [`/hosting/${h}/`, today, '0.7']), ['/beget/pravila/', today, '0.4'], ['/oferta/', today, '0.3'],
   ...SERVICES.map((s) => [`/services/${s.slug}/`, today, '0.8']), ...POSTS.map((p) => [`/journal/${p.slug}/`, p.updated || p.date, '0.7'])]
 // 09.11 (Ник): поиск по всему сайту — индекс /search.json (страницы, услуги, статьи, вопросы); noindex и закрытое сюда не попадает
@@ -585,8 +699,11 @@ const urls = [['/', today, '1.0'], ['/banki/', today, '0.8'], ['/banki/chto-dela
     ...HOSTING_PAGES.map((h) => { const f = readFileSync(path.join(ROOT, 'hosting', h, 'index.html'), 'utf8'); const n = (f.match(/<h1>Проверка ([^:<]+):/) || [])[1] || h; return { t: 'Мониторинг ' + n, u: `/hosting/${h}/`, d: `Работает ли ${n} сейчас: панель, DNS, сайты клиентов — проверка без VPN`, k: 'Хостинги' } }),
     { t: 'Восстановление сайта: тарифы и сроки', u: '/vosstanovlenie-sajta/', d: 'Вернём сайт после сбоя хостинга · демо за 2–3 часа', k: 'Услуги' },
     { t: 'Услуги', u: '/#uslugi', d: 'Сайты, сервисы, AI, автоматизация, SEO', k: 'Услуги' },
+    { t: 'Кейсы', u: '/cases/', d: 'Проекты студии со ссылками на живые сайты', k: 'Страница' },
+    ...CASES.map((c) => ({ t: c.name + ' — ' + c.title, u: `/cases/${c.slug}/`, d: c.lead, k: 'Кейсы' })),
+    { t: 'Бесплатные инструменты', u: '/instrumenty/', d: 'Проверка сайта, бот, мониторинг хостингов', k: 'Страница' },
     { t: 'Журнал', u: '/journal/', d: 'Разборы, кейсы и инструкции', k: 'Журнал' },
-    { t: 'Обо мне', u: '/about/', d: 'Николай Чечельницкий — кто стоит за REBORN LAB', k: 'Страница' },
+    { t: 'О студии', u: '/about/', d: 'Николай Чечельницкий — кто стоит за REBORN LAB', k: 'Страница' },
     { t: 'Контакты', u: '/contact/', d: 'Обсудить задачу', k: 'Страница' },
     ...SERVICES.map((s) => ({ t: s.title, u: `/services/${s.slug}/`, d: s.lead, k: 'Услуги' })),
     ...POSTS.map((p) => ({ t: p.title, u: `/journal/${p.slug}/`, d: p.description, k: 'Журнал' })),
@@ -611,7 +728,8 @@ write('llms.txt', `# REBORN LAB\n\n> ${SITE.tagline}. Принесите зад�
     const hdr = `<!--HDR:START-->${HEADER(at === '/beget/pravila/' ? '' : at.startsWith('/hosting/') ? '/monitoring-saitov/' : at)}${noBar ? '' : BEGET_BAR(at)}<!--HDR:END-->`
     let src = readFileSync(fp, 'utf8')
     if (METRIKA_TAG && !src.includes('RL_LOAD_METRIKA')) src = src.replace('</head>', () => METRIKA_TAG + '\n</head>')
-    if (!src.includes("localStorage.getItem('rl_theme')")) src = src.replace(/<head>/, () => '<head>\n' + THEME_TAG)
+    src = src.replace(/<script>try\{if\(localStorage\.getItem\('rl_theme'\)[^<]*<\/script>/, '')   // 28.11: старый тег темы (тёмная по умолчанию) → новый
+    src = src.replace(/<head>/, () => '<head>\n' + THEME_TAG)
     src = src.includes('<!--HDR:START-->') ? src.replace(/<!--HDR:START-->[\s\S]*?<!--HDR:END-->/, () => hdr) : src.replace(/<body>/, () => '<body>\n' + hdr)
     const html = src.replace(/<footer class="ftr">[\s\S]*?<\/footer>/, () => foot)
       .replace(/<!--NEWS:START-->[\s\S]*?<!--NEWS:END-->/, () => `<!--NEWS:START--><div class="news-grid">${news}</div><!--NEWS:END-->`)
