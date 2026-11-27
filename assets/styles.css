@@ -975,3 +975,4 @@ html[data-theme="light"] .chip.on { background: var(--text); color: var(--bg); b
 .px-col .phone img { border-radius: 21px; }
 @media (max-width: 1100px) { .hdr-cta.hdr-go { margin-left: auto; } } @media (max-width: 640px) { .hdr-cta.hdr-go { display: none; } }
 @media (max-width: 600px) { .cc-n { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } .cc.big { padding: 12px 12px 22px; } .cc.big .cc-b { padding: 6px 8px 0; } }
+h1, h2, .px-h { hyphens: manual; -webkit-hyphens: manual; }
