@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, copyFi
 import path from 'node:path'
 import { SITE, PROJECTS, SERVICES, PROBLEMS, MARKET, START_SMALL, JOURNAL_CATEGORIES } from './src/data.mjs'
 import { SERVICE_SEO } from './src/services-seo.mjs'
-import { CASES, CASE_TYPES, LAB } from './src/cases.mjs'   // 28.11: раздел /cases/
+import { CASES, CASE_TYPES, LAB, REVIEWS } from './src/cases.mjs'   // 28.11: раздел /cases/
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname)
 const OUT = ROOT
@@ -247,6 +247,8 @@ function caseCard(c, cls = '') {
   ${nums.length ? `<div class="cc-n">${nums.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(l)}</span></div>`).join('')}</div>` : ''}
   <div class="cc-f"><span>Смотреть кейс <span class="arrow">→</span></span><span class="d">${esc(c.domain)}</span></div></div></a>`
 }
+const revCard = (r) => { const c = CASES.find((x) => x.slug === r.case); return `<figure class="rvw rv"><blockquote>«${esc(r.text)}»</blockquote><figcaption>${r.photo ? `<img src="/assets/cases/reviews/${r.photo}" alt="" width="48" height="48" loading="lazy">` : ''}<span><b>${esc(r.who)}</b>${esc(r.role || '')}${c ? ` · <a href="/cases/${c.slug}/">${esc(c.domain)}</a>` : ''}</span></figcaption></figure>` }   // 28.11: отзывы
+const REV_BLOCK = (list) => list.length ? `<section class="px-sec" style="padding-top:0"><div class="px-wrap"><div class="px-hd rv"><div><div class="px-k">Отзывы клиентов</div><h2 class="px-h">Что говорят <em>те, кому мы помогли</em></h2></div><p>Настоящие слова клиентов — со ссылками на их сайты.</p></div><div class="rvws">${list.map(revCard).join('')}</div></div></section>` : ''
 const LIVE = CASES.filter((c) => c.type !== 'concept' && !c.demo)
 const FEAT = CASES.filter((c) => c.featured).sort((a, b) => a.featured - b.featured)
 const featLayout = ['big', '', '', 'third', 'third', 'third', '', '']
@@ -306,6 +308,7 @@ const home = shell({
   <div class="px-steps">${STEPS.map(([b, t, c]) => `<div class="px-step rv${c ? ' ' + c : ''}"><b>${b}</b><p>${t}</p></div>`).join('')}</div>
 </div></section>
 
+${REV_BLOCK(REVIEWS.slice(0, 6))}
 <section class="px-sec" style="padding-top:0"><div class="px-wrap"><div class="px-ink rv">
   <div><div class="px-k">Официально и прозрачно</div><h2>Договор, акты и <em>ваша собственность</em> на всё</h2><p>Работаем как индивидуальный предприниматель: договор, закрывающие документы, оплата по этапам. Код, доступы и данные — ваши с первого дня.</p>
   <div class="px-req">${esc(SITE.sellerShort)}<br>ОГРНИП ${SITE.operatorOgrn} · ИНН ${SITE.operatorInn}</div></div>
@@ -400,6 +403,7 @@ ${c.metrics?.length ? `<div class="cs-nums rv" style="margin-top:50px">${c.metri
   <p style="margin-top:30px"><a class="btn btn-ghost" href="${c.url}" target="_blank" rel="noopener" data-goal="case_open">Открыть ${live ? 'сайт' : 'проект'} ↗</a></p></div>
   <div class="rv"><h2>Что сделали</h2><ol>${c.did.map((d) => `<li>${esc(d)}</li>`).join('')}</ol></div>
 </div></section>
+${REV_BLOCK(REVIEWS.filter((r) => r.case === c.slug))}
 ${longOk(c) ? `<section class="px-sec" style="padding-top:0"><div class="px-wrap"><div class="bf cs-long rv"><img src="/assets/cases/${c.img}-long.jpg" alt="${esc(c.name)} — страница целиком" width="720" height="1800" loading="lazy"></div><p class="cs-long-n">Наведите на снимок — страница прокрутится</p></div></section>` : ''}
 <section class="px-sec" style="padding-top:0"><div class="px-wrap"><div class="px-final rv">
   <div class="side"><div><div class="px-k">Похожая задача?</div><h2>Сделаем так же — <em>для вас</em></h2></div><p>Опишите задачу — ответим лично в течение дня и покажем демо до основного договора.</p></div>
