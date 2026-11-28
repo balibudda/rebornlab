@@ -215,7 +215,7 @@ export const CASES = [
   },
   // ---- концепты: сделано по совести, но клиенту не ушло или ждёт решения ----
   {
-    slug: 'svobodna', img: 'svobodna', type: 'concept', name: 'Ипотека — не приговор', domain: 'svobodna.rebornlab.ru', url: 'https://svobodna.rebornlab.ru/',
+    slug: 'svobodna', img: 'svobodna', type: 'build', name: 'Ипотека — не приговор', domain: 'parvonamuradova.ru/svoboda', url: 'https://parvonamuradova.ru/svoboda/',   // 28.11: переехал к клиентке
     industry: 'Лендинг программы для людей с ипотекой', year: 'Ноябрь 2026', featured: 7,
     title: 'Граффити-лендинг, который читают до конца',
     lead: 'Чёрно-белые кадры на бетонной стене, надписи баллончиком, распыление краски под курсором, калькулятор «сколько квартиры уже твоё» и тест «в каком ты режиме».',
